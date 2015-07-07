@@ -145,7 +145,11 @@ public final class WFrameUtils {
 		JOptionPane.showMessageDialog( WApplication.getInstance(), errorMsg
 		    + ", vuelva a intentarlo o contacte al administrador.", "Error", JOptionPane.ERROR_MESSAGE );
 	}
-
+	
+	public static void showGlobalMsg( String errorMsg ) {
+		JOptionPane.showMessageDialog( WApplication.getInstance(), errorMsg, "Info", JOptionPane.INFORMATION_MESSAGE );
+	}
+	
 	public static void installFocusListener( JSpinner spinner ) {
 
 		JComponent spinnerEditor = spinner.getEditor();

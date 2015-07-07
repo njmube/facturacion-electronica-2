@@ -28,8 +28,10 @@ public class Producto extends BaseEntity {
 	@Column(name = "UBICACION")
 	private String ubicacion;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_TIPO", nullable = false)
+	@JoinColumn(name = "ID_TIPO", nullable = false, insertable = false, updatable = false)
 	private TipoProducto tipoProducto;
+	@Column(name = "ID_TIPO")
+	private long idTipo;
 
 	public String getDescripcion() {
 		return descripcion;
@@ -93,6 +95,14 @@ public class Producto extends BaseEntity {
 
 	public void setTipoProducto(TipoProducto tipoProducto) {
 		this.tipoProducto = tipoProducto;
+	}
+
+	public long getIdTipo() {
+		return idTipo;
+	}
+
+	public void setIdTipo(long idTipo) {
+		this.idTipo = idTipo;
 	}
 
 }

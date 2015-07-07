@@ -6,6 +6,7 @@ import java.util.List;
 import FEV1.dif.afip.gov.ar.AlicIva;
 import FEV1.dif.afip.gov.ar.Err;
 import FEV1.dif.afip.gov.ar.FECAECabRequest;
+import FEV1.dif.afip.gov.ar.FECAECabResponse;
 import FEV1.dif.afip.gov.ar.FECAEDetRequest;
 import FEV1.dif.afip.gov.ar.FECAEDetResponse;
 import FEV1.dif.afip.gov.ar.FECAERequest;
@@ -116,12 +117,14 @@ public class ServiceRequestParser {
 
 		String estado = response.getFeCabResp().getResultado();
 		FECAEDetResponse[] detalles = response.getFeDetResp();
-
+		FECAECabResponse cabecera = response.getFeCabResp();
+		
 		FECAEDetResponse detalle = detalles[0];
 
 		Resultado resultado = new Resultado();
 		resultado.setCae(detalle.getCAE());
 		resultado.setNroComprobante(detalle.getCbteDesde());
+		resultado.setPtoVta(cabecera.getPtoVta());
 		resultado.setFechaVtoCAE(Utils.getDateFromString(
 				detalle.getCAEFchVto(), "yyyyMMdd"));
 		resultado.setFecha(Utils.getDateFromString(detalle.getCbteFch(),

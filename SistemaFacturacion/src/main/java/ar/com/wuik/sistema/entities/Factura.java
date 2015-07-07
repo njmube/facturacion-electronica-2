@@ -1,6 +1,7 @@
 package ar.com.wuik.sistema.entities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,16 +25,12 @@ public class Factura extends BaseEntity {
 	private Long idCliente;
 	@Column(name = "FECHA_VENTA")
 	private Date fechaVenta;
-	@Column(name = "FECHA_VTO")
-	private Date fechaVto;
 	@Column(name = "FECHA_CAE")
 	private Date fechaCAE;
-	@Column(name = "NUMERO")
-	private String numero;
 	@Column(name = "CAE")
 	private String cae;
 	@Column(name = "ACTIVO")
-	private boolean activo;
+	private boolean activo = Boolean.TRUE;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "factura", cascade = CascadeType.ALL)
 	private List<Remito> remitos;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "factura", cascade = CascadeType.ALL)
@@ -46,6 +43,15 @@ public class Factura extends BaseEntity {
 	private BigDecimal total;
 	@Column(name = "PTO_VENTA")
 	private Long ptoVenta;
+	@Column(name = "NUMERO_COMPROBANTE")
+	private Long nroComprobante;
+	@Column(name = "OBSERVACIONES")
+	private String observaciones;
+
+	public Factura() {
+		this.detalles = new ArrayList<DetalleFactura>();
+		this.remitos = new ArrayList<Remito>();
+	}
 
 	public Cliente getCliente() {
 		return cliente;
@@ -71,28 +77,12 @@ public class Factura extends BaseEntity {
 		this.fechaVenta = fechaVenta;
 	}
 
-	public Date getFechaVto() {
-		return fechaVto;
-	}
-
-	public void setFechaVto(Date fechaVto) {
-		this.fechaVto = fechaVto;
-	}
-
 	public Date getFechaCAE() {
 		return fechaCAE;
 	}
 
 	public void setFechaCAE(Date fechaCAE) {
 		this.fechaCAE = fechaCAE;
-	}
-
-	public String getNumero() {
-		return numero;
-	}
-
-	public void setNumero(String numero) {
-		this.numero = numero;
 	}
 
 	public String getCae() {
@@ -157,6 +147,26 @@ public class Factura extends BaseEntity {
 
 	public void setPtoVenta(Long ptoVenta) {
 		this.ptoVenta = ptoVenta;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public Long getNroComprobante() {
+		return nroComprobante;
+	}
+
+	public void setNroComprobante(Long nroComprobante) {
+		this.nroComprobante = nroComprobante;
+	}
+	
+	public String getEstadoPago(){
+		return "IMPAGA";
 	}
 
 }

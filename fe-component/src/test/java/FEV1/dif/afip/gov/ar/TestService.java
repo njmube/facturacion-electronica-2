@@ -75,8 +75,7 @@ public class TestService {
 		comprobante.setFechaComprobante(new Date());
 		comprobante.setImporteIVA(new BigDecimal(3172.05));
 		comprobante.setImporteSubtotal(new BigDecimal(15105.00));
-		// comprobante.setImporteTotal(new BigDecimal(18277.05));
-		comprobante.setImporteTotal(new BigDecimal(10));
+		comprobante.setImporteTotal(new BigDecimal(18277.05));
 		comprobante.setTipoComprobante(TipoComprobante.FACTURA_A);
 		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
 		comprobante.setTipoMoneda(TipoMoneda.PESOS_ARGENTINOS);

@@ -4,12 +4,13 @@ import java.util.List;
 
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
-import ar.com.wuik.sistema.filters.VentaFilter;
+import ar.com.wuik.sistema.filters.FacturaFilter;
 
-public interface VentaDAO extends GenericCrudDAO<Factura> {
+public interface FacturaDAO extends GenericCrudDAO<Factura> {
 
-	List<Factura> search(VentaFilter filter)
+	List<Factura> search(FacturaFilter filter)
 			throws DataAccessException;
 
 	boolean isUtilizada(Long id) throws DataAccessException;
+
 }

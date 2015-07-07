@@ -5,10 +5,12 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.entities.Cliente;
+import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ClienteFilter;
 import ar.com.wuik.swing.utils.WUtils;
@@ -22,7 +24,15 @@ public class ClienteDAOImpl extends GenericCrudHBDAOImpl<Cliente> implements
 	
 	@Override
 	public boolean estaEnUso(Long id) throws DataAccessException {
-		return false;
+		// Valida si el Cliente tiene asociadas facturas.
+		Criteria criteria = getSession().createCriteria(Factura.class);
+		criteria.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.eq("idCliente", id));
+		Long cantidad = (Long) criteria.uniqueResult();
+		if (cantidad > 0) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 
 	@Override

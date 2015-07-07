@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.bo.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.entities.Cliente;

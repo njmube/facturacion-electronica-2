@@ -2,14 +2,23 @@ package ar.com.wuik.sistema.filters;
 
 public class ProductoFilter {
 
-	private String denominacion;
+	private String descripcion;
+	private String descripcionCodigo;
 
-	public String getDenominacion() {
-		return denominacion;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setDenominacion(String denominacion) {
-		this.denominacion = denominacion;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public String getDescripcionCodigo() {
+		return descripcionCodigo;
+	}
+
+	public void setDescripcionCodigo(String descripcionCodigo) {
+		this.descripcionCodigo = descripcionCodigo;
 	}
 
 }

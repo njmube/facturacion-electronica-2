@@ -14,6 +14,7 @@ public final class Resultado {
 	private Date fechaVtoCAE;
 	private Estado estado;
 	private long nroComprobante;
+	private long ptoVta;
 	private List<String> errores;
 
 	public String getCae() {
@@ -64,6 +65,14 @@ public final class Resultado {
 		this.errores = errores;
 	}
 
+	public long getPtoVta() {
+		return ptoVta;
+	}
+
+	public void setPtoVta(long ptoVta) {
+		this.ptoVta = ptoVta;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
@@ -76,6 +85,8 @@ public final class Resultado {
 		str.append("NRO. COMP.: " + nroComprobante);
 		str.append("\n");
 		str.append("VTO. CAE: " + fechaVtoCAE);
+		str.append("\n");
+		str.append("PTO. VTA.: " + ptoVta);
 		str.append("\n");
 		for (String error : errores) {
 			str.append("ERROR: " + error);

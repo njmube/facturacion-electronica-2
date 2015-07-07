@@ -24,7 +24,7 @@ public class AuthorizationUtil  {
 		String service = ParametrosUtil.getProperty("service");
 		String dstDN = ParametrosUtil.getProperty("dstdn");
 
-		String p12file = ParametrosUtil.getProperty("keystore");
+		String p12file = System.getProperty("user.dir") + "/" + ParametrosUtil.getProperty("keystore");
 		String signer = ParametrosUtil.getProperty("keystore-signer");
 		String p12pass = ParametrosUtil.getProperty("keystore-password");
 
@@ -40,7 +40,7 @@ public class AuthorizationUtil  {
 
 		// Set the keystore used by SSL
 		System.setProperty("javax.net.ssl.trustStore",
-				ParametrosUtil.getProperty("trustStore"));
+				System.getProperty("user.dir") + "/" + ParametrosUtil.getProperty("trustStore"));
 		System.setProperty("javax.net.ssl.trustStorePassword",
 				ParametrosUtil.getProperty("trustStore_password"));
 

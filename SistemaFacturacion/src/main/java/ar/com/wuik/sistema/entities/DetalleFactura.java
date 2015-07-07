@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "detalles_facturas")
@@ -25,6 +26,8 @@ public class DetalleFactura extends BaseEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_FACTURA", nullable = true)
 	private Factura factura;
+	@Transient
+	private Long temporalId;
 
 	public Producto getProducto() {
 		return producto;
@@ -64,6 +67,31 @@ public class DetalleFactura extends BaseEntity {
 
 	public void setFactura(Factura factura) {
 		this.factura = factura;
+	}
+	
+	public BigDecimal getSubtotal(){
+		return getPrecio().multiply(new BigDecimal(getCantidad()));
+	}
+
+	public BigDecimal getTotal() {
+		BigDecimal iva = getIva().add(new BigDecimal(100));
+		return getSubtotal().multiply(iva).divide(new BigDecimal(100));
+	}
+	
+	public BigDecimal getTotalIVA() {
+		return getTotal().subtract(getSubtotal());
+	}
+	
+	public Long getCoalesceId(){
+		return (null != getId()) ? getId() : temporalId;
+	}
+
+	public Long getTemporalId() {
+		return temporalId;
+	}
+
+	public void setTemporalId(Long temporalId) {
+		this.temporalId = temporalId;
 	}
 
 }

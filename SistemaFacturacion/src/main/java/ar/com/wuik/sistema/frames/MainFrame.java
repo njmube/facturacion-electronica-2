@@ -91,7 +91,7 @@ public class MainFrame extends WApplication {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// addIFrame(new ProductoIFrame());
+					 addIFrame(new ProductoIFrame());
 				}
 			});
 		}

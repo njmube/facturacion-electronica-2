@@ -15,24 +15,25 @@ public class FacturaModel extends WTableModel<Factura> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public FacturaModel() {
-		super(new String[] { "NÚMERO", "FECHA EMISIÓN", "FECHA VTO.",
-				"TOTAL ($)", "RESTO ($)", "ESTADO" });
+		super(new String[] { "CAE", "VTO. CAE", "FECHA VENTA",
+				"SUBTOTAL", "IVA", "TOTAL", "ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.20, 0.16, 0.16, 0.16, 0.16, 0.16 };
+		return new double[] { 0.16, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14 };
 	}
 
 	@Override
 	protected Object[] getRow(Factura t, Object[] fila) {
-		fila[0] = t.getNumero();
-		fila[1] = WUtils.getStringFromDate(t.getFechaVenta());
-		fila[2] = WUtils.getStringFromDate(t.getFechaVto());
-		fila[3] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
-		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
-		fila[5] = getEstado(t);
-		fila[6] = t.getId();
+		fila[0] = t.getCae();
+		fila[1] = WUtils.getStringFromDate(t.getFechaCAE());
+		fila[2] = WUtils.getStringFromDate(t.getFechaVenta());
+		fila[3] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
+		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getIva()));
+		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
+		fila[6] = getEstado(t);
+		fila[7] = t.getId();
 		return fila;
 	}
 
@@ -42,7 +43,7 @@ public class FacturaModel extends WTableModel<Factura> {
 		// } else {
 		// return t.getEstado();
 		// }
-		return "";
+		return "IMPAGA - HC";
 	}
 
 	@Override

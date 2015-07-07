@@ -251,7 +251,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											.estaEnUso(idCliente);
 									if (enUso) {
 										WFrameUtils
-												.showGlobalErrorMsg("El Cliente se encuentra en uso");
+												.showGlobalMsg("El Cliente se encuentra en uso");
 									} else {
 										clienteBO.eliminar(idCliente);
 										search();
@@ -365,8 +365,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							// addModalIFrame(new VentaClienteIFrame(
-							// selectedItem));
+							addModalIFrame(new VentaClienteIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
