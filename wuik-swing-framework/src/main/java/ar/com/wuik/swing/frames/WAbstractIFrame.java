@@ -283,6 +283,10 @@ public abstract class WAbstractIFrame extends JInternalFrame {
 	protected void showGlobalErrorMsg( String errorMsg ) {
 		WFrameUtils.showGlobalErrorMsg( errorMsg );
 	}
+	
+	protected void showGlobalMsg( String msg ) {
+		WFrameUtils.showGlobalMsg( msg );
+	}
 
 	protected void addKeyListener( KeyListener keyListener, JComponent... components ) {
 		for ( JComponent jComponent: components ) {

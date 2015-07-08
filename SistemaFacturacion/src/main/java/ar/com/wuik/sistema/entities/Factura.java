@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import ar.com.wuik.swing.utils.WUtils;
+
 @Entity
 @Table(name = "facturas")
 public class Factura extends BaseEntity {
@@ -167,6 +169,10 @@ public class Factura extends BaseEntity {
 	
 	public String getEstadoPago(){
 		return "IMPAGA";
+	}
+	
+	public boolean isFacturada(){
+		return WUtils.isNotEmpty(this.cae);
 	}
 
 }

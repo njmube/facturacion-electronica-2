@@ -17,9 +17,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.exceptions.BusinessException;
@@ -33,7 +30,6 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
@@ -43,8 +39,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7107533032732470914L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ClienteIFrame.class);
 	private static final String CAMPO_RAZON_SOCIAL = "razonSocial";
 	private static final String CAMPO_CONTACTO = "contacto";
 	private JPanel pnlBusqueda;
@@ -212,9 +206,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 									search();
 								}
 							} catch (BusinessException bexc) {
-								LOGGER.error("Error al Activar Cliente", bexc);
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al Activar Cliente");
+								showGlobalErrorMsg(bexc.getMessage());
 							}
 						} else {
 							WTooltipUtils
@@ -250,17 +242,14 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 									boolean enUso = clienteBO
 											.estaEnUso(idCliente);
 									if (enUso) {
-										WFrameUtils
-												.showGlobalMsg("El Cliente se encuentra en uso");
+									showGlobalMsg("El Cliente se encuentra en uso");
 									} else {
 										clienteBO.eliminar(idCliente);
 										search();
 									}
 								}
 							} catch (BusinessException bexc) {
-								LOGGER.error("Error al Eliminar Cliente", bexc);
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al Eliminar Cliente");
+								showGlobalErrorMsg(bexc.getMessage());
 							}
 						} else {
 							WTooltipUtils
@@ -297,10 +286,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 									search();
 								}
 							} catch (BusinessException bexc) {
-								LOGGER.error("Error al Desactivar Cliente",
-										bexc);
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al Desactivar Cliente");
+								showGlobalErrorMsg(bexc.getMessage());
 							}
 						} else {
 							WTooltipUtils
@@ -467,7 +453,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			List<Cliente> clientes = clienteBO.buscar(filter);
 			getTablePanel().addData(clientes);
 		} catch (BusinessException bexc) {
-			LOGGER.error("Error al buscar Clientes", bexc);
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 

@@ -28,5 +28,4 @@ public interface FacturaBO {
 	void cancelar(Long id) throws BusinessException;
 	
 	FacturaDTO obtenerDTO(Long id) throws BusinessException;
-	
 }

@@ -27,7 +27,6 @@ import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -111,13 +110,14 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_NRO_NOTA_DEB, parametro.getNroNotaDebito());
 			model.addValue(CAMPO_NRO_RECIBO, parametro.getNroRecibo());
 			model.addValue(CAMPO_NRO_REMITO, parametro.getNroRemito());
-			
+
 			model.addValue(CAMPO_P_NRO_FACTURA, parametro.getPrefFactura());
 			model.addValue(CAMPO_P_NRO_RECIBO, parametro.getPrefRecibo());
-			model.addValue(CAMPO_P_NRO_NOTA_CRED, parametro.getPrefNotaCredito());
+			model.addValue(CAMPO_P_NRO_NOTA_CRED,
+					parametro.getPrefNotaCredito());
 			model.addValue(CAMPO_P_NRO_NOTA_DEB, parametro.getPrefNotaDebito());
 			model.addValue(CAMPO_P_NRO_REMITO, parametro.getPrefRemito());
-			
+
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			LOGGER.error("Error al Obtener Parametro", bexc);
@@ -335,8 +335,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 							hideFrame();
 						} catch (BusinessException bexc) {
 							LOGGER.error("Error al guardar Parámetro", bexc);
-							WFrameUtils
-									.showGlobalErrorMsg("Se ha producido un error al guardar Parámetro");
+							showGlobalErrorMsg(bexc.getMessage());
 						}
 					}
 				}

@@ -10,5 +10,9 @@ public class BusinessException extends Exception {
 	public BusinessException(Throwable th) {
 		super(th);
 	}
+	
+	public BusinessException(Throwable th, String msg) {
+		super(msg, th);
+	}
 
 }

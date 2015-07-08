@@ -54,8 +54,7 @@ public class TestService {
 			//
 			// System.out.println(resultado);
 		} catch (ServiceException sexc) {
-			sexc.printStackTrace();
-			System.out.println(Arrays.toString(sexc.getErrores().toArray()));
+			System.out.println(sexc.getMessage());
 		}
 	}
 

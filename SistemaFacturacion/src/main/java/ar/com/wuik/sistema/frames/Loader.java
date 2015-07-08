@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.CeruleanSkin;
 import org.pushingpixels.substance.api.skin.SaharaSkin;
 
 import ar.com.wuik.sistema.utils.HibernateUtil;

@@ -2,20 +2,15 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,11 +27,7 @@ import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.ProductoFilter;
 import ar.com.wuik.sistema.model.DetalleFacturaModel;
-import ar.com.wuik.sistema.model.ProductoDetalleModel;
-import ar.com.wuik.sistema.reportes.FacturaReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
@@ -44,7 +35,6 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.listeners.WTableListener;
 import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
 import ar.com.wuik.swing.utils.WTooltipUtils;
@@ -53,23 +43,21 @@ import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
 
-public class VentaClienteVerIFrame extends WAbstractModelIFrame {
+public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = -6838619883125511589L;
-	private static final String CAMPO_NRO_COMP = "nroComprobante";
 	private static final String CAMPO_FECHA_EMISION = "fechaEmision";
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
 	private static final String CAMPO_ESTADO = "estado";
+	private static final String CAMPO_CAE = "cae";
+	private static final String CAMPO_CAE_FECHA = "caeFecha";
 	private JPanel pnlBusqueda;
 	private JLabel lblCAE;
-	private JTextField txtNro;
+	private JTextField txtCAE;
 	private JButton btnCerrar;
 	private Factura factura;
-	private JButton btnGuardar;
-	private VentaClienteIFrame facturaIFrame;
-	private JButton btnFechaEmision;
 	private JTextField txtFechaEmision;
 	private JLabel lblFechaEmisin;
 	private JLabel lblObservaciones;
@@ -78,90 +66,59 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 	private WTablePanel<Remito> tbpRemitos;
 	private JLabel lblIVA10;
 	private JTextField txtSubtotalPesos;
-	private Long idCliente;
 	private JTextField txtIVA10;
 	private JLabel lblSubtotal;
 	private JLabel lblTotal;
 	private JTextField txtTotalPesos;
 	private JLabel lblVtoCAE;
-	private JTextField txtCAE;
+	private JTextField txtFechaCAE;
 	private WTablePanel<DetalleFactura> tblDetalle;
 	private WTablePanel<Factura> tablePanel_1;
 	private JLabel lblEstado;
 	private JTextField txtEstado;
-	private WTablePanel<Producto> tblProducto;
-	private JTextField textField;
-	private JButton btnAgregar;
 	private JLabel lblIVA21;
 	private JTextField txtIVA21;
-	private JCheckBox chckbxfacturar;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public VentaClienteVerIFrame(VentaClienteIFrame facturaIFrame,
-			Long idCliente, Long idFactura) {
-		
-		initialize("Nueva Venta");
-		
-		this.facturaIFrame = facturaIFrame;
-		this.idCliente = idCliente;
-
+	public VentaClienteVistaIFrame(Long idFactura) {
+		initialize("Ver Venta");
 		WModel model = populateModel();
-		if (null == idFactura) {
+		FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
+		try {
+			this.factura = facturaBO.obtener(idFactura);
 			model.addValue(CAMPO_FECHA_EMISION,
-					WUtils.getStringFromDate(new Date()));
-			this.factura = new Factura();
-		} else {
-			initialize("Editar Venta");
-			FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
-			try {
-				this.factura = facturaBO.obtener(idFactura);
-				model.addValue(CAMPO_FECHA_EMISION,
-						WUtils.getStringFromDate(factura.getFechaVenta()));
-				model.addValue(CAMPO_OBSERVACIONES, factura.getObservaciones());
-				refreshDetalles();
-			} catch (BusinessException bexc) {
-				showGlobalErrorMsg(bexc.getMessage());
-			}
-
+					WUtils.getStringFromDate(factura.getFechaVenta()));
+			model.addValue(CAMPO_OBSERVACIONES, factura.getObservaciones());
+			model.addValue(CAMPO_CAE, factura.getCae());
+			model.addValue(CAMPO_CAE_FECHA,
+					WUtils.getStringFromDate(factura.getFechaCAE()));
+			model.addValue(CAMPO_ESTADO, factura.isFacturada() ? "FACTURADA"
+					: "SIN FACTURAR");
+			refreshDetalles();
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 		populateComponents(model);
-		getTxtEstado().setText("SIN FACTURAR");
-		getContentPane().add(getChckbxfacturar());
 	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				VentaClienteVerIFrame.class.getResource("/icons/facturas.png")));
+				VentaClienteVistaIFrame.class
+						.getResource("/icons/facturas.png")));
 		setBounds(0, 0, 1006, 612);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getBtnCerrar());
-		getContentPane().add(getBtnGuardar());
 	}
 
 	@Override
 	protected boolean validateModel(WModel model) {
-
-		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
-
-		List<String> messages = new ArrayList<String>();
-
-		if (WUtils.isEmpty(fechaEmision)) {
-			messages.add("Debe ingresar una Fecha de Emisión");
-		}
-
-		if (WUtils.isEmpty(factura.getDetalles())) {
-			messages.add("Debe ingresar al menos un Detalle");
-		}
-
-		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
-
-		return WUtils.isEmpty(messages);
+		return true;
 	}
 
 	private JPanel getPnlBusqueda() {
@@ -173,8 +130,7 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBounds(10, 11, 984, 527);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblCAE());
-			pnlBusqueda.add(getTxtNro());
-			pnlBusqueda.add(getBtnFechaEmision());
+			pnlBusqueda.add(getTxtCAE());
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
 			pnlBusqueda.add(getLblObservaciones());
@@ -188,14 +144,11 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblTotal());
 			pnlBusqueda.add(getTxtTotalPesos());
 			pnlBusqueda.add(getLblVtoCAE());
-			pnlBusqueda.add(getTxtCAE());
+			pnlBusqueda.add(getTxtFechaCAE());
 			pnlBusqueda.add(getTblDetalle());
 			pnlBusqueda.add(getTablePanel_1());
 			pnlBusqueda.add(getLblEstado());
 			pnlBusqueda.add(getTxtEstado());
-			pnlBusqueda.add(getTblProducto());
-			pnlBusqueda.add(getTextField());
-			pnlBusqueda.add(getBtnAgregar());
 			pnlBusqueda.add(getLblIVA21());
 			pnlBusqueda.add(getTxtIVA21());
 		}
@@ -211,155 +164,40 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 		return lblCAE;
 	}
 
-	private JTextField getTxtNro() {
-		if (txtNro == null) {
-			txtNro = new JTextField();
-			txtNro.setEditable(false);
-			txtNro.setName(CAMPO_NRO_COMP);
-			txtNro.setDocument(new WTextFieldLimit(50));
-			txtNro.setBounds(141, 23, 141, 25);
+	private JTextField getTxtCAE() {
+		if (txtCAE == null) {
+			txtCAE = new JTextField();
+			txtCAE.setEditable(false);
+			txtCAE.setName(CAMPO_CAE);
+			txtCAE.setDocument(new WTextFieldLimit(50));
+			txtCAE.setBounds(141, 23, 141, 25);
 		}
-		return txtNro;
+		return txtCAE;
 	}
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Cancelar");
+			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(VentaClienteVerIFrame.class
+			btnCerrar.setIcon(new ImageIcon(VentaClienteVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(778, 549, 103, 25);
+			btnCerrar.setBounds(891, 549, 103, 25);
 		}
 		return btnCerrar;
 	}
 
-	private JButton getBtnGuardar() {
-		if (btnGuardar == null) {
-			btnGuardar = new JButton("Guardar");
-			btnGuardar.setIcon(new ImageIcon(VentaClienteVerIFrame.class
-					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(891, 549, 103, 25);
-			btnGuardar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					WModel model = populateModel();
-					if (validateModel(model)) {
-						String fechaVenta = model.getValue(CAMPO_FECHA_EMISION);
-						String observaciones = model
-								.getValue(CAMPO_OBSERVACIONES);
-
-						factura.setFechaVenta(WUtils
-								.getDateFromString(fechaVenta));
-						factura.setObservaciones(observaciones);
-
-						List<Long> idsRemitos = new ArrayList<Long>();
-						// for (Remito remito : remitos) {
-						// idsRemitos.add(remito.getId());
-						// }
-						// factura.setIdsRemitos(idsRemitos);
-						factura.setIdCliente(idCliente);
-
-						try {
-							FacturaBO facturaBO = AbstractFactory
-									.getInstance(FacturaBO.class);
-							if (factura.getId() == null) {
-								if (getChckbxfacturar().isSelected()) {
-									facturaBO.guardarRegistrarAFIP(factura);
-									try {
-										FacturaReporte.generarFactura(factura
-												.getId());
-									} catch (ReportException rexc) {
-										showGlobalErrorMsg(rexc.getMessage());
-									}
-								} else {
-									facturaBO.guardar(factura);
-								}
-							} else {
-								facturaBO.actualizar(factura);
-							}
-							hideFrame();
-							facturaIFrame.search();
-						} catch (BusinessException bexc) {
-							showGlobalErrorMsg(bexc.getMessage());
-						}
-					}
-				}
-			});
-		}
-		return btnGuardar;
-	}
-
 	@Override
 	protected JComponent getFocusComponent() {
-		return getTxtNro();
+		return getTxtCAE();
 	}
 
 	@Override
 	public void enterPressed() {
-		getBtnGuardar().doClick();
-	}
-
-	private List<WToolbarButton> getToolbarButtons() {
-		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-
-		WToolbarButton buttonAdd = new WToolbarButton("Agregar Remito",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/add.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-					}
-				}, "Agregar", null);
-		WToolbarButton buttonQuitar = new WToolbarButton("Quitar Remito",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/delete.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tbpRemitos.getSelectedItemID();
-						if (null != selectedItem) {
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Item",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Quitar", null);
-
-		toolbarButtons.add(buttonAdd);
-		toolbarButtons.add(buttonQuitar);
-		return toolbarButtons;
-	}
-
-	protected List<Long> getIdsRemitos() {
-		List<Long> idsRemitos = new ArrayList<Long>();
-		// for (Remito remito : remitos) {
-		// idsRemitos.add(remito.getId());
-		// }
-		return null;
-	}
-
-	private JButton getBtnFechaEmision() {
-		if (btnFechaEmision == null) {
-			btnFechaEmision = new JButton("");
-			btnFechaEmision.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new WCalendarIFrame(txtFechaEmision));
-				}
-			});
-			btnFechaEmision.setIcon(new ImageIcon(VentaClienteVerIFrame.class
-					.getResource("/icons/calendar.png")));
-			btnFechaEmision.setBounds(257, 59, 25, 25);
-		}
-		return btnFechaEmision;
 	}
 
 	private JTextField getTxtFechaEmision() {
@@ -393,6 +231,8 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 	private JTextArea getTxaObservaciones() {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
+			txaObservaciones.setEditable(false);
+			txaObservaciones.setEnabled(false);
 			txaObservaciones.setLineWrap(true);
 			txaObservaciones.setName(CAMPO_OBSERVACIONES);
 			txaObservaciones.setDocument(new WTextFieldLimit(100));
@@ -407,83 +247,6 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
-	}
-
-	// private WTablePanel<Remito> getTbpRemitos() {
-	// if (tbpRemitos == null) {
-	// tbpRemitos = new WTablePanel(AsignacionRemitoModel.class, "Remitos");
-	// tbpRemitos.setBounds(10, 354, 371, 150);
-	// tbpRemitos.addToolbarButtons(getToolbarButtons());
-	// }
-	// return tbpRemitos;
-	// }
-
-	// private WTablePanel<DetalleFactura> getTbpDetalles() {
-	// if (tbpDetalles == null) {
-	// tbpDetalles = new WTablePanel(DetalleVentaModel.class, "Detalles");
-	// tbpDetalles.setBounds(10, 131, 515, 212);
-	// tbpDetalles.addToolbarButtons(getToolbarButtonsDetalles());
-	// }
-	// return tbpDetalles;
-	// }
-
-	private List<WToolbarButton> getToolbarButtonsDetalles() {
-		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Detalle",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
-							DetalleFactura detalle = getDetalleById(selectedItem);
-							Integer cantidadRemitida = null;
-							addModalIFrame(new EditarDetalleVerIFrame(detalle,
-									cantidadRemitida,
-									VentaClienteVerIFrame.this));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Item",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Editar", null);
-		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Detalle",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/delete.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
-							int result = JOptionPane.showConfirmDialog(
-									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
-									"Alerta", JOptionPane.OK_CANCEL_OPTION,
-									JOptionPane.WARNING_MESSAGE);
-							if (result == JOptionPane.OK_OPTION) {
-								DetalleFactura detalle = getDetalleById(selectedItem);
-								factura.getDetalles().remove(detalle);
-								refreshDetalles();
-							}
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Item",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Eliminar", null);
-
-		toolbarButtons.add(buttonEdit);
-		toolbarButtons.add(buttonEliminar);
-		return toolbarButtons;
 	}
 
 	protected DetalleFactura getDetalleById(Long selectedItem) {
@@ -574,21 +337,20 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 		return lblVtoCAE;
 	}
 
-	private JTextField getTxtCAE() {
-		if (txtCAE == null) {
-			txtCAE = new JTextField();
-			txtCAE.setEditable(false);
-			txtCAE.setName("fechaVto");
-			txtCAE.setBounds(381, 23, 106, 25);
+	private JTextField getTxtFechaCAE() {
+		if (txtFechaCAE == null) {
+			txtFechaCAE = new JTextField();
+			txtFechaCAE.setEditable(false);
+			txtFechaCAE.setName(CAMPO_CAE_FECHA);
+			txtFechaCAE.setBounds(381, 23, 106, 25);
 		}
-		return txtCAE;
+		return txtFechaCAE;
 	}
 
 	private WTablePanel<DetalleFactura> getTblDetalle() {
 		if (tblDetalle == null) {
 			tblDetalle = new WTablePanel(DetalleFacturaModel.class, "Detalles");
-			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
-			tblDetalle.setBounds(10, 288, 714, 227);
+			tblDetalle.setBounds(10, 95, 714, 227);
 		}
 		return tblDetalle;
 	}
@@ -620,26 +382,6 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 		return txtEstado;
 	}
 
-	private WTablePanel<Producto> getTblProducto() {
-		if (tblProducto == null) {
-			tblProducto = new WTablePanel(ProductoDetalleModel.class);
-			tblProducto.addWTableListener(new WTableListener() {
-
-				@Override
-				public void singleClickListener(Object[] selectedItem) {
-				}
-
-				@Override
-				public void doubleClickListener(Object[] selectedItem) {
-					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-					addDetalle(selectedId);
-				}
-			});
-			tblProducto.setBounds(10, 146, 714, 131);
-		}
-		return tblProducto;
-	}
-
 	protected void addDetalle(Long selectedId) {
 		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
 		try {
@@ -668,56 +410,6 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyReleased(KeyEvent e) {
-					search();
-				}
-			});
-			textField.setDocument(new WTextFieldLimit(100));
-			textField.setBounds(10, 110, 272, 25);
-			textField.setColumns(10);
-		}
-		return textField;
-	}
-
-	public void search() {
-		String toSearch = textField.getText();
-		if (WUtils.isNotEmpty(toSearch)) {
-			ProductoBO productoBO = AbstractFactory
-					.getInstance(ProductoBO.class);
-			ProductoFilter filter = new ProductoFilter();
-			filter.setDescripcionCodigo(toSearch);
-			try {
-				List<Producto> productos = productoBO.buscar(filter);
-				getTblProducto().addData(productos);
-			} catch (BusinessException e1) {
-			}
-		} else {
-			getTblProducto().addData(new ArrayList<Producto>());
-		}
-	}
-
-	private JButton getBtnAgregar() {
-		if (btnAgregar == null) {
-			btnAgregar = new JButton("");
-			btnAgregar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ProductoVerIFrame(
-							VentaClienteVerIFrame.this));
-				}
-			});
-			btnAgregar.setIcon(new ImageIcon(VentaClienteVerIFrame.class
-					.getResource("/icons/add.png")));
-			btnAgregar.setBounds(289, 110, 31, 25);
-		}
-		return btnAgregar;
 	}
 
 	private void calcularTotales() {
@@ -779,14 +471,5 @@ public class VentaClienteVerIFrame extends WAbstractModelIFrame {
 	public void refreshDetalles() {
 		getTblDetalle().addData(factura.getDetalles());
 		calcularTotales();
-	}
-
-	private JCheckBox getChckbxfacturar() {
-		if (chckbxfacturar == null) {
-			chckbxfacturar = new JCheckBox("\u00BFFacturar?");
-			chckbxfacturar.setSelected(true);
-			chckbxfacturar.setBounds(666, 550, 106, 23);
-		}
-		return chckbxfacturar;
 	}
 }

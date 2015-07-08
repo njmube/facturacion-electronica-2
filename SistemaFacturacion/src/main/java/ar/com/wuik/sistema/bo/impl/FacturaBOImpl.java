@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import FEV1.dif.afip.gov.ar.entities.AlicuotaIVA;
 import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
@@ -32,6 +35,8 @@ import ar.com.wuik.swing.utils.WUtils;
 
 public class FacturaBOImpl implements FacturaBO {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(FacturaBOImpl.class);
 	private FacturacionService facturacionService;
 	private FacturaDAO facturaDAO;
 	private ClienteDAO clienteDAO;
@@ -47,8 +52,14 @@ public class FacturaBOImpl implements FacturaBO {
 
 	@Override
 	public Factura obtener(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return facturaDAO.getById(id);
+		} catch (DataAccessException daexc) {
+			LOGGER.error("obtener() - Error al obtener Factura");
+			throw new BusinessException(daexc, "Error al obtener Factura");
+		} finally {
+			HibernateUtil.closeSession();
+		}
 	}
 
 	@Override
@@ -56,7 +67,8 @@ public class FacturaBOImpl implements FacturaBO {
 		try {
 			return facturaDAO.search(filter);
 		} catch (DataAccessException daexc) {
-			throw new BusinessException(daexc);
+			LOGGER.error("buscar() - Error al buscar Facturas");
+			throw new BusinessException(daexc, "Error al buscar Facturas");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -86,13 +98,12 @@ public class FacturaBOImpl implements FacturaBO {
 			HibernateUtil.commitTransaction();
 		} catch (ServiceException sexc) {
 			HibernateUtil.rollbackTransaction();
-			for (String error : sexc.getErrores()) {
-				System.out.println(error);
-			}
-			throw new BusinessException(sexc);
+			LOGGER.error("guardarRegistrarAFIP() - Problemas por Servicio - Error al registrar Factura");
+			throw new BusinessException(sexc, sexc.getMessage());
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			throw new BusinessException(daexc);
+			LOGGER.error("guardarRegistrarAFIP() - Error al registrar Factura");
+			throw new BusinessException(daexc, "Error al registrar Factura");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -201,14 +212,14 @@ public class FacturaBOImpl implements FacturaBO {
 
 	}
 
-	
 	@Override
 	public FacturaDTO obtenerDTO(Long id) throws BusinessException {
 		try {
 			Factura factura = facturaDAO.getById(id);
 			return convertToDTO(factura);
 		} catch (DataAccessException daexc) {
-			throw new BusinessException(daexc);
+			LOGGER.error("obtenerDTO() - Error al obtener Factura");
+			throw new BusinessException(daexc, "Error al obtener Factura");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -219,7 +230,8 @@ public class FacturaBOImpl implements FacturaBO {
 
 		// DATOS DEL CLIENTE.
 		Cliente cliente = factura.getCliente();
-		facturaDTO.setClienteCondIVA(cliente.getCondicionIVA().getDenominacion());
+		facturaDTO.setClienteCondIVA(cliente.getCondicionIVA()
+				.getDenominacion());
 		facturaDTO.setClienteCuit(cliente.getCuit());
 		facturaDTO.setClienteDomicilio(cliente.getDireccion());
 		facturaDTO.setClienteRazonSocial(cliente.getRazonSocial());
@@ -231,10 +243,10 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setDomicilio("Passo 50 - Rojas, Buenos Aires");
 		facturaDTO.setIngBrutos("200049746181");
 		facturaDTO.setInicioAct(WUtils.getDateFromString("01/01/1994"));
-		
+
 		// DATOS REMITOS.
 		facturaDTO.setRemitos("");
-		
+
 		// DATOS DE LA FACTURA.
 		BigDecimal subtotal = BigDecimal.ZERO;
 		BigDecimal subtotalIVA21 = BigDecimal.ZERO;
@@ -248,17 +260,20 @@ public class FacturaBOImpl implements FacturaBO {
 			detalleFacturaDTO = new DetalleFacturaDTO();
 			detalleFacturaDTO.setAlicuota(detalleFactura.getIva());
 			detalleFacturaDTO.setCantidad(detalleFactura.getCantidad());
-			detalleFacturaDTO.setCodigo(detalleFactura.getProducto().getCodigo());
+			detalleFacturaDTO.setCodigo(detalleFactura.getProducto()
+					.getCodigo());
 			detalleFacturaDTO.setPrecioUnit(detalleFactura.getPrecio());
-			detalleFacturaDTO.setProducto(detalleFactura.getProducto().getDescripcion());
+			detalleFacturaDTO.setProducto(detalleFactura.getProducto()
+					.getDescripcion());
 			detalleFacturaDTO.setSubtotal(detalleFactura.getSubtotal());
 			detalleFacturaDTO.setSubtotalConIVA(detalleFactura.getTotal());
 			detallesDTO.add(detalleFacturaDTO);
-			
+
 			if (detalleFactura.getIva().doubleValue() == 21.00) {
 				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
 			} else if (detalleFactura.getIva().doubleValue() == 10.50) {
-				subtotalIVA105 = subtotalIVA105.add(detalleFactura.getTotalIVA());
+				subtotalIVA105 = subtotalIVA105.add(detalleFactura
+						.getTotalIVA());
 			}
 			subtotal = subtotal.add(detalleFactura.getSubtotal());
 			total = total.add(detalleFactura.getTotal());

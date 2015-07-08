@@ -35,7 +35,6 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -240,8 +239,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 						    }
 					    }
 					    catch( BusinessException bexc ) {
-						    LOGGER.error( "Error al eliminar Usuarios" );
-						    WFrameUtils.showGlobalErrorMsg( "Se ha producido un error al eliminar Usuarios" );
+					    	showGlobalErrorMsg(bexc.getMessage());
 					    }
 				    } else {
 					    WTooltipUtils.showMessage( "Debe seleccionar al menos un Item", (JButton) e.getSource(),

@@ -17,9 +17,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.entities.Permisos;
 import ar.com.wuik.sistema.entities.Producto;
@@ -34,7 +31,6 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
@@ -57,8 +53,6 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton btnBuscar;
 
 	private static final String CAMPO_DESCRIPCION = "descripcion";
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ProductoIFrame.class);
 	private ProductoBO productoBO = AbstractFactory
 			.getInstance(ProductoBO.class);
 
@@ -93,7 +87,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 			List<Producto> productos = productoBO.buscar(filter);
 			getTablePanel().addData(productos);
 		} catch (BusinessException bexc) {
-			LOGGER.error("Error al buscar Productos", bexc);
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 
@@ -172,9 +166,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 											productoBO.eliminar(selectedItem);
 											search();
 										} catch (BusinessException bexc) {
-											LOGGER.error(
-													"Error al eliminar Producto",
-													bexc);
+											showGlobalErrorMsg(bexc.getMessage());
 										}
 									} else {
 										WTooltipUtils
@@ -184,10 +176,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 														MessageType.ALERTA);
 									}
 								} catch (BusinessException bexc) {
-									LOGGER.error("Error al Eliminar Producto",
-											bexc);
-									WFrameUtils
-											.showGlobalErrorMsg("Se ha producido un error al Eliminar Producto");
+									showGlobalErrorMsg(bexc.getMessage());
 								}
 							}
 						} else {
@@ -209,8 +198,8 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-//							addModalIFrame(new MovimientosProductoIFrame(
-//									selectedItem));
+							// addModalIFrame(new MovimientosProductoIFrame(
+							// selectedItem));
 						} else {
 							WTooltipUtils.showMessage(
 									"Debe seleccionar un Item",

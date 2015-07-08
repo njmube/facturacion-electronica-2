@@ -13,14 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.FacturaBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.exceptions.BusinessException;
+import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
 import ar.com.wuik.sistema.model.FacturaModel;
 import ar.com.wuik.sistema.reportes.FacturaReporte;
@@ -31,10 +29,8 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
-import ar.com.wuik.swing.utils.WUtils;
 
 public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure {
 
@@ -42,13 +38,6 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7107533032732470914L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(VentaClienteIFrame.class);
-	private static final String CAMPO_DESDE_VTO = "desdeVto";
-	private static final String CAMPO_HASTA_VTO = "hastaVto";
-	private static final String CAMPO_DESDE_EMISION = "desdeEmision";
-	private static final String CAMPO_HASTA_EMISION = "hastaEmision";
-	private static final String CAMPO_NRO = "numero";
 	private WTablePanel<Factura> tablePanel;
 	private JButton btnCerrar;
 	private Long idCliente;
@@ -66,7 +55,6 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCerrar());
-		Date hoy = new Date();
 		getContentPane().add(getTablePanel());
 		search();
 	}
@@ -104,7 +92,7 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						addModalIFrame(new VentaClienteVerIFrame(
-								VentaClienteIFrame.this, idCliente));
+								VentaClienteIFrame.this, idCliente, null));
 					}
 				}, "Nuevo", null);
 		WToolbarButton buttonEdit = new WToolbarButton("Editar Factura",
@@ -127,17 +115,16 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 									Factura factura = (Factura) facturaBO
 											.obtener(selectedItem);
 
-									boolean activa = factura.isActivo();
+									boolean facturada = factura.isFacturada();
 
-									if (activa) {
-										// addModalIFrame(new
-										// FacturaClienteVerIFrame(
-										// selectedItem,
-										// FacturaClienteIFrame.this));
+									if (!facturada) {
+										addModalIFrame(new VentaClienteVerIFrame(
+												VentaClienteIFrame.this,
+												idCliente, selectedItem));
 									} else {
 										WTooltipUtils
 												.showMessage(
-														"No es posible Editar el Item porque está Anulado.",
+														"La Factura se encuentra facturada en AFIP.",
 														(JButton) e.getSource(),
 														MessageType.ALERTA);
 									}
@@ -151,11 +138,7 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 								}
 
 							} catch (BusinessException bexc) {
-								LOGGER.error(
-										"Error al obtener detalle de Factura",
-										bexc);
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al obtener detalle de Factura");
+								showGlobalErrorMsg(bexc.getMessage());
 							}
 
 						} else {
@@ -217,9 +200,7 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 									}
 								}
 							} catch (BusinessException bexc) {
-								LOGGER.error("Error al Anular Factura", bexc);
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al Anular Factura");
+								showGlobalErrorMsg(bexc.getMessage());
 							}
 						} else {
 							WTooltipUtils
@@ -240,11 +221,8 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							// FacturaClienteVerIFrame facturaVerIFrame = new
-							// FacturaClienteVerIFrame(
-							// selectedItem, FacturaClienteIFrame.this);
-							// facturaVerIFrame.setReadOnly();
-							// addModalIFrame(facturaVerIFrame);
+							addModalIFrame(new VentaClienteVistaIFrame(
+									selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -254,51 +232,6 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 						}
 					}
 				}, "Ver", null);
-
-		WToolbarButton buttonRemitir = new WToolbarButton("Remitir Factura",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/remitos.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-
-						if (null != selectedItem) {
-							try {
-								FacturaBO facturaBO = AbstractFactory
-										.getInstance(FacturaBO.class);
-
-								Factura factura = (Factura) facturaBO
-										.obtener(selectedItem);
-
-								boolean activa = factura.isActivo();
-
-								if (activa) {
-									// addModalIFrame(new
-									// RemitirFacturaClienteIFrame(
-									// selectedItem, idCliente));
-								} else {
-									WTooltipUtils.showMessage(
-											"El Item se encuentra Anulado.",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-								}
-							} catch (BusinessException bexc) {
-								LOGGER.error("Error al Remitir Factura", bexc);
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al Remitir Factura");
-							}
-
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Item",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Remitir", null);
 
 		WToolbarButton buttonImprimir = new WToolbarButton("Imprimir",
 				new ImageIcon(WCalendarIFrame.class
@@ -311,9 +244,8 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 						if (null != selectedItem) {
 							try {
 								FacturaReporte.generarFactura(selectedItem);
-							} catch (Exception e1) {
-								WFrameUtils
-										.showGlobalErrorMsg("Se ha producido un error al imprimir la Factura");
+							} catch (ReportException rexc) {
+								showGlobalErrorMsg(rexc.getMessage());
 							}
 						} else {
 							WTooltipUtils
@@ -329,7 +261,6 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 			toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
 			toolbarButtons.add(buttonAnular);
-			toolbarButtons.add(buttonRemitir);
 			toolbarButtons.add(buttonImprimir);
 		}
 		toolbarButtons.add(buttonVer);
@@ -363,7 +294,7 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 			List<Factura> facturas = facturaBO.buscar(filter);
 			getTablePanel().addData(facturas);
 		} catch (BusinessException bexc) {
-			LOGGER.error("Error al buscar Facturas", bexc);
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 
@@ -383,7 +314,7 @@ public class VentaClienteIFrame extends WAbstractModelIFrame implements WSecure 
 			Cliente cliente = clienteBO.obtener(idCliente);
 			return cliente.isActivo();
 		} catch (BusinessException bexc) {
-			LOGGER.error("Error al obtener Cliente", bexc);
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 		return Boolean.FALSE;
 	}

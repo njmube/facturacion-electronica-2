@@ -17,9 +17,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.entities.Producto;
@@ -31,7 +28,6 @@ import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -42,8 +38,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 8951162992767740069L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ProductoVerIFrame.class);
 	private JButton btnCancelar;
 	private JButton btnGuardar;
 	private JPanel panelDatos;
@@ -236,9 +230,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 				}
 				hideFrame();
 			} catch (BusinessException bexc) {
-				LOGGER.error("Error al guardar Producto", bexc);
-				WFrameUtils
-						.showGlobalErrorMsg("Se ha producido un error al guardar Producto");
+				showGlobalErrorMsg(bexc.getMessage());
 			}
 		}
 	}

@@ -11,4 +11,8 @@ public class ReportException extends Exception {
 		super(th);
 	}
 
+	public ReportException(Throwable th, String msg) {
+		super(msg, th);
+	}
+
 }

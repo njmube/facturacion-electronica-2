@@ -3,6 +3,8 @@ package ar.com.wuik.sistema.bo.impl;
 import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ar.com.wuik.sistema.bo.ChequeBO;
 import ar.com.wuik.sistema.dao.ChequeDAO;
@@ -15,6 +17,8 @@ import ar.com.wuik.sistema.utils.HibernateUtil;
 
 public class ChequeBOImpl implements ChequeBO {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ChequeBO.class);
 	private ChequeDAO chequeDAO;
 
 	public ChequeBOImpl() {
@@ -27,7 +31,8 @@ public class ChequeBOImpl implements ChequeBO {
 			Cheque cheque = chequeDAO.getById(id);
 			return cheque;
 		} catch (DataAccessException daexc) {
-			throw new BusinessException(daexc);
+			LOGGER.error("obtener() - Error al obtener Cheque"); 
+			throw new BusinessException(daexc, "Error al obtener Cheque");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -38,7 +43,8 @@ public class ChequeBOImpl implements ChequeBO {
 		try {
 			return chequeDAO.search(filter);
 		} catch (DataAccessException daexc) {
-			throw new BusinessException(daexc);
+			LOGGER.error("buscar() - Error al buscar Cheques"); 
+			throw new BusinessException(daexc, "Error al buscar Cheques");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -52,7 +58,8 @@ public class ChequeBOImpl implements ChequeBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			throw new BusinessException(daexc);
+			LOGGER.error("guardar() - Error al guardar Cheque"); 
+			throw new BusinessException(daexc, "Error al guardar Cheque");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -66,7 +73,8 @@ public class ChequeBOImpl implements ChequeBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			throw new BusinessException(daexc);
+			LOGGER.error("actualizar() - Error al actualizar Cheque"); 
+			throw new BusinessException(daexc, "Error al actualizar Cheque");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -77,7 +85,8 @@ public class ChequeBOImpl implements ChequeBO {
 		try {
 			return chequeDAO.getAll();
 		} catch (DataAccessException daexc) {
-			throw new BusinessException(daexc);
+			LOGGER.error("obtenerTodos() - Error al obtener todos los Cheques"); 
+			throw new BusinessException(daexc, "Error al obtener todos los Cheques");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -91,7 +100,8 @@ public class ChequeBOImpl implements ChequeBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			throw new BusinessException(daexc);
+			LOGGER.error("eliminar() - Error al eliminar Cheque"); 
+			throw new BusinessException(daexc, "Error al eliminar Cheque");
 		} finally {
 			HibernateUtil.closeSession();
 		}

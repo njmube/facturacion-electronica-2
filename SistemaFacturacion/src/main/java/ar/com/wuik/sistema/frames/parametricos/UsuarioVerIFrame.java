@@ -34,8 +34,6 @@ import javax.swing.border.TitledBorder;
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.SubstanceSkin;
 import org.pushingpixels.substance.api.skin.SkinInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ar.com.wuik.sistema.bo.PermisoBO;
 import ar.com.wuik.sistema.bo.UsuarioBO;
@@ -50,7 +48,6 @@ import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -63,8 +60,6 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = - 6838619883125511589L;
-	private static final Logger LOGGER = LoggerFactory.getLogger( UsuarioVerIFrame.class );
-
 	private JPanel pnlDatos;
 
 	private JLabel lblDNI;
@@ -135,7 +130,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 				populateComponents( model );
 			}
 			catch( BusinessException bexc ) {
-				LOGGER.error( "Error al obtener Artículo", bexc );
+				showGlobalErrorMsg(bexc.getMessage());
 			}
 		}
 	}
@@ -169,8 +164,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 			lstPermisos.setModel( model );
 		}
 		catch( BusinessException bexc ) {
-			LOGGER.error( "Error al obtener permisos", bexc );
-			WFrameUtils.showGlobalErrorMsg( "Se ha producido un error al obtener permisos" );
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 
@@ -332,8 +326,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 							}
 						}
 						catch( BusinessException bexc ) {
-							LOGGER.error( "Error al guardar Usuario", bexc );
-							WFrameUtils.showGlobalErrorMsg( "Se ha producido un error al guardar el Usuario" );
+							showGlobalErrorMsg(bexc.getMessage());
 						}
 					}
 				}

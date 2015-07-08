@@ -46,17 +46,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 			// Parseo de respuesta.
 			Resultado resultado = ServiceRequestParser
 					.parseFECAEResponse(response);
-			if (null != resultado.getErrores()
-					&& !resultado.getErrores().isEmpty()) {
-				throw new ServiceException("Error al solicitar comprobante",
-						resultado.getErrores());
-			}
 			return resultado;
 		} catch (RemoteException rexc) {
 			throw new ServiceException(rexc,
 					"Se ha producido un error al conectar a los servicios");
-		} finally {
-
 		}
 	}
 
@@ -81,11 +74,6 @@ public class FacturacionServiceImpl implements FacturacionService {
 			// Parseo de respuesta.
 			Resultado resultado = ServiceRequestParser
 					.parseFECompConsResponse(response);
-			if (null != resultado.getErrores()
-					&& !resultado.getErrores().isEmpty()) {
-				throw new ServiceException("Error al consultar comprobante",
-						resultado.getErrores());
-			}
 			return resultado;
 		} catch (RemoteException rexc) {
 			throw new ServiceException(rexc,
@@ -122,12 +110,6 @@ public class FacturacionServiceImpl implements FacturacionService {
 			// Parseo de respuesta.
 			Resultado resultado = ServiceRequestParser
 					.parseFERecuperaLastCbteResponse(response);
-			if (null != resultado.getErrores()
-					&& !resultado.getErrores().isEmpty()) {
-				throw new ServiceException(
-						"Error al consultar último comprobante",
-						resultado.getErrores());
-			}
 			return resultado;
 		} catch (RemoteException rexc) {
 			throw new ServiceException(rexc,

@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.dao.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
 
@@ -16,6 +17,13 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 
 	public FacturaDAOImpl() {
 		super(Factura.class);
+	}
+	
+	@Override
+	public Factura getById(Long id) throws DataAccessException {
+		Factura factura = super.getById(id);
+		Hibernate.initialize(factura.getDetalles());
+		return factura;
 	}
 
 	@Override

@@ -20,9 +20,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.MaskFormatter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.entities.Cliente;
@@ -35,7 +32,6 @@ import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -45,8 +41,6 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = -6838619883125511589L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ClienteVerIFrame.class);
 	private JPanel pnlBusqueda;
 	private JLabel lblRazonSocial;
 	private JTextField txtRazonSocial;
@@ -100,7 +94,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_TIPO_IVA, cliente.getCondicionIVA().getId());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
-			LOGGER.error("Error al obtener Cliente", bexc);
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 
@@ -154,7 +148,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 					.getInstance(ParametricoBO.class);
 			localidades = parametricoBO.obtenerTodosLocalidades();
 		} catch (BusinessException bexc) {
-			LOGGER.error("Error al buscar Localidades", bexc);
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 
 		if (WUtils.isNotEmpty(localidades)) {
@@ -306,9 +300,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 							hideFrame();
 							clienteIFrame.search();
 						} catch (BusinessException bexc) {
-							LOGGER.error("Error al guardar Cliente", bexc);
-							WFrameUtils
-									.showGlobalErrorMsg("Se ha producido un error al guardar Cliente");
+							showGlobalErrorMsg(bexc.getMessage());
 						}
 
 					}
