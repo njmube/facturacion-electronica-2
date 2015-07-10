@@ -16,9 +16,10 @@ import ar.com.wuik.sistema.utils.HibernateUtil;
 
 public class ClienteBOImpl implements ClienteBO {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClienteBOImpl.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ClienteBOImpl.class);
 	private ClienteDAO clienteDAO;
-	
+
 	public ClienteBOImpl() {
 		clienteDAO = AbstractFactory.getInstance(ClienteDAO.class);
 	}
@@ -29,7 +30,7 @@ public class ClienteBOImpl implements ClienteBO {
 			Cliente cliente = clienteDAO.getById(id);
 			return cliente;
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtener() - Error al obtener Cliente"); 
+			LOGGER.error("obtener() - Error al obtener Cliente", daexc);
 			throw new BusinessException(daexc, "Error al obtener Cliente");
 		} finally {
 			HibernateUtil.closeSession();
@@ -41,7 +42,7 @@ public class ClienteBOImpl implements ClienteBO {
 		try {
 			return clienteDAO.search(filter);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("buscar() - Error al buscar Clientes"); 
+			LOGGER.error("buscar() - Error al buscar Clientes", daexc);
 			throw new BusinessException(daexc, "Error al buscar Clientes");
 		} finally {
 			HibernateUtil.closeSession();
@@ -56,7 +57,7 @@ public class ClienteBOImpl implements ClienteBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("guardar() - Error al guardar Cliente"); 
+			LOGGER.error("guardar() - Error al guardar Cliente", daexc);
 			throw new BusinessException(daexc, "Error al guardar Cliente");
 		} finally {
 			HibernateUtil.closeSession();
@@ -71,7 +72,7 @@ public class ClienteBOImpl implements ClienteBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("actualizar() - Error al actualizar Cliente"); 
+			LOGGER.error("actualizar() - Error al actualizar Cliente", daexc);
 			throw new BusinessException(daexc, "Error al actualizar Cliente");
 		} finally {
 			HibernateUtil.closeSession();
@@ -86,7 +87,7 @@ public class ClienteBOImpl implements ClienteBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("eliminar() - Error al eliminar Cliente"); 
+			LOGGER.error("eliminar() - Error al eliminar Cliente", daexc);
 			throw new BusinessException(daexc, "Error al eliminar Cliente");
 		} finally {
 			HibernateUtil.closeSession();
@@ -103,7 +104,7 @@ public class ClienteBOImpl implements ClienteBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("activar() - Error al activar Cliente"); 
+			LOGGER.error("activar() - Error al activar Cliente", daexc);
 			throw new BusinessException(daexc, "Error al activar Cliente");
 		} finally {
 			HibernateUtil.closeSession();
@@ -120,7 +121,7 @@ public class ClienteBOImpl implements ClienteBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("deactivar() - Error al desactivar Cliente"); 
+			LOGGER.error("deactivar() - Error al desactivar Cliente", daexc);
 			throw new BusinessException(daexc, "Error al desactivar Cliente");
 		} finally {
 			HibernateUtil.closeSession();
@@ -132,20 +133,24 @@ public class ClienteBOImpl implements ClienteBO {
 		try {
 			return clienteDAO.getAll();
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtenerTodos() - Error al obtener todos los Cliente"); 
-			throw new BusinessException(daexc, "Error al obtener todos los Cliente");
+			LOGGER.error("obtenerTodos() - Error al obtener todos los Cliente",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al obtener todos los Cliente");
 		} finally {
 			HibernateUtil.closeSession();
 		}
 	}
-	
+
 	@Override
 	public boolean estaEnUso(Long id) throws BusinessException {
 		try {
 			return clienteDAO.estaEnUso(id);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("estaEnUso() - Error al validar uso del Cliente"); 
-			throw new BusinessException(daexc, "Error al validar uso del Cliente");
+			LOGGER.error("estaEnUso() - Error al validar uso del Cliente",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al validar uso del Cliente");
 		} finally {
 			HibernateUtil.closeSession();
 		}

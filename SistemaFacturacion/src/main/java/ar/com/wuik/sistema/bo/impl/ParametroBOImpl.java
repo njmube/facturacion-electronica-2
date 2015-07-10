@@ -45,8 +45,7 @@ public class ParametroBOImpl implements ParametroBO {
 	public String getNroRecibo() throws BusinessException {
 		try {
 			Parametro parametro = parametroDAO.getById(1L);
-			return parametro.getPrefRecibo() + "-"
-					+ WUtils.leftPadding(parametro.getNroRecibo() + "", 8, "0");
+			return WUtils.leftPadding(parametro.getNroRecibo() + "", 8, "0");
 		} catch (DataAccessException daexc) {
 			throw new BusinessException(daexc);
 		} finally {
@@ -58,8 +57,7 @@ public class ParametroBOImpl implements ParametroBO {
 	public String getNroRemito() throws BusinessException {
 		try {
 			Parametro parametro = parametroDAO.getById(1L);
-			return parametro.getPrefRemito() + "-"
-					+ WUtils.leftPadding(parametro.getNroRemito() + "", 8, "0");
+			return WUtils.leftPadding(parametro.getNroRemito() + "", 8, "0");
 		} catch (DataAccessException daexc) {
 			throw new BusinessException(daexc);
 		} finally {

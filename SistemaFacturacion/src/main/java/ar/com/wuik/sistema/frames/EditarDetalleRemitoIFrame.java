@@ -17,10 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ar.com.wuik.sistema.entities.DetalleFactura;
+import ar.com.wuik.sistema.entities.DetalleRemito;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
@@ -28,16 +25,14 @@ import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
-public class EditarDetalleVerIFrame extends WAbstractModelIFrame {
+public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = -6838619883125511589L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(EditarDetalleVerIFrame.class);
 	private JPanel pnlBusqueda;
 	private JButton btnCerrar;
-	private DetalleFactura detalle;
+	private DetalleRemito detalle;
 	private JButton btnGuardar;
 
 	private static final String CAMPO_CANTIDAD = "cantidad";
@@ -47,17 +42,15 @@ public class EditarDetalleVerIFrame extends WAbstractModelIFrame {
 	private JTextField txtProductoSeleccionado;
 	private JLabel lblProductoSeleccionado;
 	private Integer cantidadRemitida;
-	private VentaClienteVerIFrame ventaClienteVerIFrame;
+	private RemitoClienteVerIFrame remitoClienteVerIFrame;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public EditarDetalleVerIFrame(DetalleFactura detalle,
-			Integer cantidadRemitida,
-			VentaClienteVerIFrame ventaClienteVerIFrame) {
+	public EditarDetalleRemitoIFrame(DetalleRemito detalle,
+			RemitoClienteVerIFrame remitoClienteVerIFrame) {
 		this.detalle = detalle;
-		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
-		this.cantidadRemitida = cantidadRemitida;
+		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 		initialize("Editar Detalle");
 		WModel model = populateModel();
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
@@ -70,7 +63,7 @@ public class EditarDetalleVerIFrame extends WAbstractModelIFrame {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				EditarDetalleVerIFrame.class
+				EditarDetalleRemitoIFrame.class
 						.getResource("/icons/productos.png")));
 		setBounds(0, 0, 508, 181);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -133,7 +126,7 @@ public class EditarDetalleVerIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(EditarDetalleVerIFrame.class
+			btnCerrar.setIcon(new ImageIcon(EditarDetalleRemitoIFrame.class
 					.getResource("/icons/cancel.png")));
 			btnCerrar.setBounds(280, 117, 103, 25);
 		}
@@ -143,7 +136,7 @@ public class EditarDetalleVerIFrame extends WAbstractModelIFrame {
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
-			btnGuardar.setIcon(new ImageIcon(EditarDetalleVerIFrame.class
+			btnGuardar.setIcon(new ImageIcon(EditarDetalleRemitoIFrame.class
 					.getResource("/icons/ok.png")));
 			btnGuardar.setBounds(393, 117, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
@@ -153,7 +146,7 @@ public class EditarDetalleVerIFrame extends WAbstractModelIFrame {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						detalle.setCantidad(WUtils.getValue(cantidad)
 								.intValue());
-						ventaClienteVerIFrame.refreshDetalles();
+						remitoClienteVerIFrame.refreshDetalles();
 						hideFrame();
 					}
 

@@ -60,7 +60,6 @@ public class FacturaReporte {
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
 
-			// JasperPrintManager.printReport(jasperPrint, Boolean.TRUE);
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {
 			throw new ReportException(bexc, "Error al obtener Factura");

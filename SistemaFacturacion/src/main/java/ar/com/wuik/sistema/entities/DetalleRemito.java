@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "detalles_remitos")
@@ -21,6 +22,8 @@ public class DetalleRemito extends BaseEntity {
 	private Integer cantidad;
 	@Column(name = "DETALLE")
 	private String detalle;
+	@Transient
+	private Long temporalId;
 
 	public Remito getRemito() {
 		return remito;
@@ -52,6 +55,18 @@ public class DetalleRemito extends BaseEntity {
 
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
+	}
+	
+	public Long getCoalesceId(){
+		return (null != getId()) ? getId() : temporalId;
+	}
+
+	public Long getTemporalId() {
+		return temporalId;
+	}
+
+	public void setTemporalId(Long temporalId) {
+		this.temporalId = temporalId;
 	}
 
 }

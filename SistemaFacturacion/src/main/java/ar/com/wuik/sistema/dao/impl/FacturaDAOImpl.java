@@ -23,6 +23,7 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 	public Factura getById(Long id) throws DataAccessException {
 		Factura factura = super.getById(id);
 		Hibernate.initialize(factura.getDetalles());
+		Hibernate.initialize(factura.getRemitos());
 		return factura;
 	}
 

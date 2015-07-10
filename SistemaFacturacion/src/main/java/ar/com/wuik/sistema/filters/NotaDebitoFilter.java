@@ -1,16 +1,16 @@
 package ar.com.wuik.sistema.filters;
 
 
-public class NotaDebitoFilter extends ComprobanteFilter {
+public class NotaDebitoFilter {
 
-	private Boolean pagas;
+	private Long idCliente;
 
-	public Boolean getPagas() {
-		return pagas;
+	public Long getIdCliente() {
+		return idCliente;
 	}
 
-	public void setPagas(Boolean pagas) {
-		this.pagas = pagas;
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 
 }

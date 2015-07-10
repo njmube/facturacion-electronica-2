@@ -55,7 +55,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_CODIGO = "codigo";
 	private static final String CAMPO_UBICACION = "ubicacion";
 	private ProductoIFrame productoIFrame;
-	private VentaClienteVerIFrame ventaClienteVerIFrame;
+	private FacturaVerIFrame ventaClienteVerIFrame;
+	private RemitoClienteVerIFrame remitoClienteVerIFrame;
 	private Producto producto;
 	private WTextFieldDecimal txfCosto;
 	private JLabel lblCodigo;
@@ -76,9 +77,15 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		this.producto = new Producto();
 	}
 	
-	public ProductoVerIFrame(VentaClienteVerIFrame ventaClienteVerIFrame) {
+	public ProductoVerIFrame(FacturaVerIFrame ventaClienteVerIFrame) {
 		initializate("Nuevo Producto");
 		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
+		this.producto = new Producto();
+	}
+	
+	public ProductoVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
+		initializate("Nuevo Producto");
+		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 		this.producto = new Producto();
 	}
 
@@ -98,9 +105,9 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_PRECIO, producto.getPrecio());
 			model.addValue(CAMPO_UBICACION, producto.getUbicacion());
 			populateComponents(model);
-		} catch (BusinessException e) {
-			e.printStackTrace();
-		}
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		} 
 	}
 
 	private void initializate(String title) {
@@ -227,6 +234,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 					productoIFrame.search();
 				} else if (null != ventaClienteVerIFrame) {
 					ventaClienteVerIFrame.search();
+				} else if (null != remitoClienteVerIFrame) {
+					remitoClienteVerIFrame.search();
 				}
 				hideFrame();
 			} catch (BusinessException bexc) {

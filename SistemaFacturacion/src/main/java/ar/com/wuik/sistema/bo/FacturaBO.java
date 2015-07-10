@@ -19,12 +19,6 @@ public interface FacturaBO {
 
 	void actualizar(Factura factura) throws BusinessException;
 
-	void eliminar(Long id) throws BusinessException;
-
-	boolean estaEnUso(Long id) throws BusinessException;
-
-	List<Factura> obtenerTodos() throws BusinessException;
-
 	void cancelar(Long id) throws BusinessException;
 	
 	FacturaDTO obtenerDTO(Long id) throws BusinessException;

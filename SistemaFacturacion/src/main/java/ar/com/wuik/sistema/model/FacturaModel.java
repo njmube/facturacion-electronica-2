@@ -15,8 +15,8 @@ public class FacturaModel extends WTableModel<Factura> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public FacturaModel() {
-		super(new String[] { "CAE", "VTO. CAE", "FECHA VENTA",
-				"SUBTOTAL", "IVA", "TOTAL", "ESTADO" });
+		super(new String[] { "CAE", "VTO. CAE", "FECHA VENTA", "SUBTOTAL",
+				"IVA", "TOTAL", "ESTADO" });
 	}
 
 	@Override
@@ -38,12 +38,15 @@ public class FacturaModel extends WTableModel<Factura> {
 	}
 
 	private String getEstado(Factura t) {
-		// if (t.isActivo()) {
-		// return t.getEstado() + " - " + t.getEstadoPago();
-		// } else {
-		// return t.getEstado();
-		// }
-		return "IMPAGA - HC";
+		if (t.isActivo()) {
+			return "ACTIVA"
+					+ (WUtils.isEmpty(t.getCae()) ? " - SIN FACTURAR"
+							: " - FACTURADA");
+		} else {
+			return "ANULADA"
+					+ (WUtils.isEmpty(t.getCae()) ? " - SIN FACTURAR"
+							: " - FACTURADA");
+		}
 	}
 
 	@Override

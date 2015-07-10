@@ -137,7 +137,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 									ProductoIFrame.this));
 						} else {
 							WTooltipUtils.showMessage(
-									"Debe seleccionar un Item",
+									"Debe seleccionar un Producto",
 									(JButton) e.getSource(), MessageType.ALERTA);
 						}
 					}
@@ -154,7 +154,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 						if (null != selectedItem) {
 							int result = JOptionPane.showConfirmDialog(
 									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
+									"¿Desea eliminar el Producto seleccionado?",
 									"Alerta", JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
@@ -182,7 +182,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos un Producto",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -202,7 +202,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 							// selectedItem));
 						} else {
 							WTooltipUtils.showMessage(
-									"Debe seleccionar un Item",
+									"Debe seleccionar un Producto",
 									(JButton) e.getSource(), MessageType.ALERTA);
 						}
 					}

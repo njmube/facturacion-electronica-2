@@ -25,6 +25,7 @@ import ar.com.wuik.sistema.dao.FacturaDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleFactura;
 import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
@@ -55,7 +56,7 @@ public class FacturaBOImpl implements FacturaBO {
 		try {
 			return facturaDAO.getById(id);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtener() - Error al obtener Factura");
+			LOGGER.error("obtener() - Error al obtener Factura", daexc);
 			throw new BusinessException(daexc, "Error al obtener Factura");
 		} finally {
 			HibernateUtil.closeSession();
@@ -67,7 +68,7 @@ public class FacturaBOImpl implements FacturaBO {
 		try {
 			return facturaDAO.search(filter);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("buscar() - Error al buscar Facturas");
+			LOGGER.error("buscar() - Error al buscar Facturas", daexc);
 			throw new BusinessException(daexc, "Error al buscar Facturas");
 		} finally {
 			HibernateUtil.closeSession();
@@ -76,8 +77,17 @@ public class FacturaBOImpl implements FacturaBO {
 
 	@Override
 	public void guardar(Factura factura) throws BusinessException {
-		// TODO Auto-generated method stub
-
+		try {
+			HibernateUtil.startTransaction();
+			facturaDAO.saveOrUpdate(factura);
+			HibernateUtil.commitTransaction();
+		} catch (DataAccessException daexc) {
+			HibernateUtil.rollbackTransaction();
+			LOGGER.error("guardar() - Error al guardar Factura", daexc);
+			throw new BusinessException(daexc, "Error al guardar Factura");
+		} finally {
+			HibernateUtil.closeSession();
+		}
 	}
 
 	@Override
@@ -98,11 +108,14 @@ public class FacturaBOImpl implements FacturaBO {
 			HibernateUtil.commitTransaction();
 		} catch (ServiceException sexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("guardarRegistrarAFIP() - Problemas por Servicio - Error al registrar Factura");
+			LOGGER.error(
+					"guardarRegistrarAFIP() - Problemas por Servicio - Error al registrar Factura",
+					sexc);
 			throw new BusinessException(sexc, sexc.getMessage());
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("guardarRegistrarAFIP() - Error al registrar Factura");
+			LOGGER.error("guardarRegistrarAFIP() - Error al registrar Factura",
+					daexc);
 			throw new BusinessException(daexc, "Error al registrar Factura");
 		} finally {
 			HibernateUtil.closeSession();
@@ -184,32 +197,35 @@ public class FacturaBOImpl implements FacturaBO {
 
 	@Override
 	public void actualizar(Factura factura) throws BusinessException {
-		// TODO Auto-generated method stub
-
+		try {
+			HibernateUtil.startTransaction();
+			facturaDAO.saveOrUpdate(factura);
+			HibernateUtil.commitTransaction();
+		} catch (DataAccessException daexc) {
+			HibernateUtil.rollbackTransaction();
+			LOGGER.error("actualizar() - Error al actualizar Factura", daexc);
+			throw new BusinessException(daexc, "Error al actualizar Factura");
+		} finally {
+			HibernateUtil.closeSession();
+		}
 	}
 
-	@Override
-	public void eliminar(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean estaEnUso(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<Factura> obtenerTodos() throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void cancelar(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
-
+		try {
+			HibernateUtil.startTransaction();
+			Factura factura = facturaDAO.getById(id);
+			factura.setActivo(Boolean.FALSE);
+			facturaDAO.saveOrUpdate(factura);
+			HibernateUtil.commitTransaction();
+		} catch (DataAccessException daexc) {
+			HibernateUtil.rollbackTransaction();
+			LOGGER.error("actualizar() - Error al actualizar Factura", daexc);
+			throw new BusinessException(daexc, "Error al actualizar Factura");
+		} finally {
+			HibernateUtil.closeSession();
+		}
 	}
 
 	@Override
@@ -218,7 +234,7 @@ public class FacturaBOImpl implements FacturaBO {
 			Factura factura = facturaDAO.getById(id);
 			return convertToDTO(factura);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtenerDTO() - Error al obtener Factura");
+			LOGGER.error("obtenerDTO() - Error al obtener Factura", daexc);
 			throw new BusinessException(daexc, "Error al obtener Factura");
 		} finally {
 			HibernateUtil.closeSession();
@@ -245,7 +261,15 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setInicioAct(WUtils.getDateFromString("01/01/1994"));
 
 		// DATOS REMITOS.
-		facturaDTO.setRemitos("");
+		List<Remito> remitos = factura.getRemitos();
+		if (WUtils.isNotEmpty(remitos)) {
+			String detalleRemitos = "";
+			for (Remito remito : remitos) {
+				detalleRemitos += remito.getNumero() + " - ";
+			}
+			facturaDTO.setRemitos(detalleRemitos.substring(0,
+					detalleRemitos.length() - 3));
+		}
 
 		// DATOS DE LA FACTURA.
 		BigDecimal subtotal = BigDecimal.ZERO;

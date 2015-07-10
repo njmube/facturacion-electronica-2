@@ -176,7 +176,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -211,7 +211,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos un Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -242,7 +242,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 									boolean enUso = clienteBO
 											.estaEnUso(idCliente);
 									if (enUso) {
-									showGlobalMsg("El Cliente se encuentra en uso");
+										showGlobalMsg("El Cliente se encuentra en uso");
 									} else {
 										clienteBO.eliminar(idCliente);
 										search();
@@ -254,7 +254,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos un Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -291,7 +291,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos un Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -313,7 +313,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -335,7 +335,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -351,11 +351,11 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new VentaClienteIFrame(selectedItem));
+							addModalIFrame(new FacturaIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -371,12 +371,11 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							// addModalIFrame(new
-							// RemitoClienteIFrame(selectedItem));
+							addModalIFrame(new RemitoClienteIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -397,7 +396,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Cliente",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}

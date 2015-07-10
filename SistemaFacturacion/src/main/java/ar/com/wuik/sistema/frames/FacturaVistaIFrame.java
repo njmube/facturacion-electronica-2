@@ -3,7 +3,6 @@ package ar.com.wuik.sistema.frames;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -28,22 +27,19 @@ import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.DetalleFacturaModel;
+import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.table.WTablePanel;
-import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
-import ar.com.wuik.swing.utils.WTooltipUtils;
-import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
 
-public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
+public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
@@ -63,7 +59,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblObservaciones;
 	private JTextArea txaObservaciones;
 	private JScrollPane scrollPane;
-	private WTablePanel<Remito> tbpRemitos;
+	private WTablePanel<Remito> tblRemitos;
 	private JLabel lblIVA10;
 	private JTextField txtSubtotalPesos;
 	private JTextField txtIVA10;
@@ -73,7 +69,6 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblVtoCAE;
 	private JTextField txtFechaCAE;
 	private WTablePanel<DetalleFactura> tblDetalle;
-	private WTablePanel<Factura> tablePanel_1;
 	private JLabel lblEstado;
 	private JTextField txtEstado;
 	private JLabel lblIVA21;
@@ -82,7 +77,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public VentaClienteVistaIFrame(Long idFactura) {
+	public FacturaVistaIFrame(Long idFactura) {
 		initialize("Ver Venta");
 		WModel model = populateModel();
 		FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
@@ -94,21 +89,36 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_CAE, factura.getCae());
 			model.addValue(CAMPO_CAE_FECHA,
 					WUtils.getStringFromDate(factura.getFechaCAE()));
-			model.addValue(CAMPO_ESTADO, factura.isFacturada() ? "FACTURADA"
-					: "SIN FACTURAR");
+			if (factura.isActivo()) {
+				model.addValue(
+						CAMPO_ESTADO,
+						"ACTIVA"
+								+ (WUtils.isEmpty(factura.getCae()) ? " - SIN FACTURAR"
+										: " - FACTURADA"));
+			} else {
+				model.addValue(
+						CAMPO_ESTADO,
+						"ANULADA"
+								+ (WUtils.isEmpty(factura.getCae()) ? " - SIN FACTURAR"
+										: " - FACTURADA"));
+			}
 			refreshDetalles();
+			refreshRemitos();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 		populateComponents(model);
 	}
 
+	protected void refreshRemitos() {
+		getTblRemitos().addData(factura.getRemitos());
+	}
+
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				VentaClienteVistaIFrame.class
-						.getResource("/icons/facturas.png")));
+				FacturaVistaIFrame.class.getResource("/icons/facturas.png")));
 		setBounds(0, 0, 1006, 612);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -135,8 +145,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblFechaEmisin());
 			pnlBusqueda.add(getLblObservaciones());
 			pnlBusqueda.add(getScrollPane());
-			// pnlBusqueda.add(getTbpRemitos());
-			// pnlBusqueda.add(getTbpDetalles());
+			pnlBusqueda.add(getTblRemitos());
 			pnlBusqueda.add(getLblIVA10());
 			pnlBusqueda.add(getTxtSubtotalPesos());
 			pnlBusqueda.add(getTxtIVA10());
@@ -146,7 +155,6 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblVtoCAE());
 			pnlBusqueda.add(getTxtFechaCAE());
 			pnlBusqueda.add(getTblDetalle());
-			pnlBusqueda.add(getTablePanel_1());
 			pnlBusqueda.add(getLblEstado());
 			pnlBusqueda.add(getTxtEstado());
 			pnlBusqueda.add(getLblIVA21());
@@ -184,7 +192,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(VentaClienteVistaIFrame.class
+			btnCerrar.setIcon(new ImageIcon(FacturaVistaIFrame.class
 					.getResource("/icons/cancel.png")));
 			btnCerrar.setBounds(891, 549, 103, 25);
 		}
@@ -212,7 +220,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblFechaEmisin() {
 		if (lblFechaEmisin == null) {
-			lblFechaEmisin = new JLabel("* Fecha Emisi\u00F3n:");
+			lblFechaEmisin = new JLabel("Fecha Emisi\u00F3n:");
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFechaEmisin.setBounds(10, 59, 121, 25);
 		}
@@ -223,7 +231,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(734, 229, 93, 25);
+			lblObservaciones.setBounds(10, 333, 93, 25);
 		}
 		return lblObservaciones;
 	}
@@ -232,7 +240,6 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
 			txaObservaciones.setEditable(false);
-			txaObservaciones.setEnabled(false);
 			txaObservaciones.setLineWrap(true);
 			txaObservaciones.setName(CAMPO_OBSERVACIONES);
 			txaObservaciones.setDocument(new WTextFieldLimit(100));
@@ -243,7 +250,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(734, 265, 192, 60);
+			scrollPane.setBounds(10, 369, 192, 60);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -355,14 +362,6 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 		return tblDetalle;
 	}
 
-	private WTablePanel<Factura> getTablePanel_1() {
-		if (tablePanel_1 == null) {
-			tablePanel_1 = new WTablePanel();
-			tablePanel_1.setBounds(734, 74, 240, 104);
-		}
-		return tablePanel_1;
-	}
-
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
@@ -377,7 +376,7 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 			txtEstado = new JTextField();
 			txtEstado.setName(CAMPO_ESTADO);
 			txtEstado.setEditable(false);
-			txtEstado.setBounds(637, 23, 121, 25);
+			txtEstado.setBounds(637, 23, 268, 25);
 		}
 		return txtEstado;
 	}
@@ -407,8 +406,8 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 			}
 			getTblDetalle().addData(detalles);
 			calcularTotales();
-		} catch (BusinessException e) {
-			e.printStackTrace();
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 
@@ -466,6 +465,15 @@ public class VentaClienteVistaIFrame extends WAbstractModelIFrame {
 			txtIVA21.setBounds(849, 418, 125, 25);
 		}
 		return txtIVA21;
+	}
+
+	private WTablePanel<Remito> getTblRemitos() {
+		if (tblRemitos == null) {
+			tblRemitos = new WTablePanel(DetalleFacturaRemitoModel.class,
+					"Remitos");
+			tblRemitos.setBounds(734, 95, 240, 227);
+		}
+		return tblRemitos;
 	}
 
 	public void refreshDetalles() {

@@ -4,13 +4,14 @@ import java.util.List;
 
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.filters.ClienteFilter;
+import ar.com.wuik.sistema.filters.RemitoFilter;
+import ar.com.wuik.sistema.reportes.entities.RemitoDTO;
 
 public interface RemitoBO {
 
 	Remito obtener(Long id) throws BusinessException;
 
-	List<Remito> buscar(ClienteFilter filter) throws BusinessException;
+	List<Remito> buscar(RemitoFilter filter) throws BusinessException;
 
 	void guardar(Remito remito) throws BusinessException;
 
@@ -23,5 +24,7 @@ public interface RemitoBO {
 	List<Remito> obtenerTodos() throws BusinessException;
 
 	void cancelar(Long id) throws BusinessException;
+
+	RemitoDTO obtenerDTO(Long id) throws BusinessException;
 
 }
