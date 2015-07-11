@@ -9,18 +9,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.ClienteBO;
-import ar.com.wuik.sistema.bo.FacturaBO;
+import ar.com.wuik.sistema.bo.NotaCreditoBO;
 import ar.com.wuik.sistema.entities.Cliente;
-import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.FacturaFilter;
-import ar.com.wuik.sistema.model.FacturaModel;
-import ar.com.wuik.sistema.reportes.FacturaReporte;
+import ar.com.wuik.sistema.filters.NotaCreditoFilter;
+import ar.com.wuik.sistema.model.NotaCreditoModel;
+import ar.com.wuik.sistema.reportes.NotaCreditoReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.security.WSecure;
@@ -31,25 +30,25 @@ import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
-public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
+public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 
 	/**
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7107533032732470914L;
-	private WTablePanel<Factura> tablePanel;
+	private WTablePanel<NotaCredito> tablePanel;
 	private JButton btnCerrar;
 	private Long idCliente;
 
 	/**
 	 * Create the frame.
 	 */
-	public FacturaIFrame(Long idCliente) {
+	public NotaCreditoIFrame(Long idCliente) {
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
-		setTitle("Ventas");
+		setTitle("Notas de Crédito");
 		setFrameIcon(new ImageIcon(
-				FacturaIFrame.class.getResource("/icons/facturas.png")));
+				NotaCreditoIFrame.class.getResource("/icons/notas_credito.png")));
 		setBounds(0, 0, 1000, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -71,9 +70,9 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 		return false;
 	}
 
-	private WTablePanel<Factura> getTablePanel() {
+	private WTablePanel<NotaCredito> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(FacturaModel.class, Boolean.FALSE);
+			tablePanel = new WTablePanel(NotaCreditoModel.class, Boolean.FALSE);
 			tablePanel.setBounds(10, 11, 978, 429);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
@@ -83,18 +82,18 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 	private List<WToolbarButton> getToolbarButtons() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
-		WToolbarButton buttonAdd = new WToolbarButton("Nueva Factura",
+		WToolbarButton buttonAdd = new WToolbarButton("Nueva Nota de Crédito",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/add.png")),
 				new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new FacturaVerIFrame(FacturaIFrame.this,
-								idCliente, null));
+						addModalIFrame(new NotaCreditoVerIFrame(
+								NotaCreditoIFrame.this, idCliente, null));
 					}
 				}, "Nuevo", null);
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Factura",
+		WToolbarButton buttonEdit = new WToolbarButton("Editar Nota de Crédito",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/edit.png")),
 				new ActionListener() {
@@ -103,23 +102,23 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							FacturaBO facturaBO = AbstractFactory
-									.getInstance(FacturaBO.class);
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
 							try {
 
-								Factura factura = (Factura) facturaBO
+								NotaCredito notaCredito = notaCreditoBO
 										.obtener(selectedItem);
 
-								boolean facturada = factura.isFacturada();
+								boolean facturada = notaCredito.isFacturada();
 
 								if (!facturada) {
-									addModalIFrame(new FacturaVerIFrame(
-											FacturaIFrame.this, idCliente,
+									addModalIFrame(new NotaCreditoVerIFrame(
+											NotaCreditoIFrame.this, idCliente,
 											selectedItem));
 								} else {
 									WTooltipUtils
 											.showMessage(
-													"No es posible editar la Factura porque se encuentra facturada en AFIP.",
+													"No es posible editar la Nota de Crédito porque se encuentra facturada en AFIP.",
 													(JButton) e.getSource(),
 													MessageType.ALERTA);
 								}
@@ -131,64 +130,14 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar una sola Factura",
+											"Debe seleccionar una sola Nota de Crédito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
 					}
 				}, "Editar", null);
-		WToolbarButton buttonAnular = new WToolbarButton("Anular Factura",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cancel2.png")),
-				new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-							try {
-								int result = JOptionPane
-										.showConfirmDialog(
-												getParent(),
-												"¿Desea anular la Factura seleccionada?",
-												"Alerta",
-												JOptionPane.OK_CANCEL_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								if (result == JOptionPane.OK_OPTION) {
-									FacturaBO facturaBO = AbstractFactory
-											.getInstance(FacturaBO.class);
-
-									Factura factura = (Factura) facturaBO
-											.obtener(selectedItem);
-
-									boolean activa = factura.isActivo();
-
-									if (activa) {
-										facturaBO.cancelar(selectedItem);
-										search();
-									} else {
-
-										WTooltipUtils
-												.showMessage(
-														"La Factura se encuentra Anulada.",
-														(JButton) e.getSource(),
-														MessageType.ALERTA);
-									}
-								}
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
-							}
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar una sola Factura",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Anular", null);
-
-		WToolbarButton buttonVer = new WToolbarButton("Ver Factura",
+		WToolbarButton buttonVer = new WToolbarButton("Ver Nota de Crédito",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/ver.png")),
 				new ActionListener() {
@@ -197,11 +146,11 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new FacturaVistaIFrame(selectedItem));
+							addModalIFrame(new NotaCreditoVistaIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar una sola Factura",
+											"Debe seleccionar una sola Nota de Crédito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -217,16 +166,17 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							FacturaBO facturaBO = AbstractFactory
-									.getInstance(FacturaBO.class);
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
 							try {
-								Factura factura = facturaBO
+								NotaCredito notaCredito = notaCreditoBO
 										.obtener(selectedItem);
-								if (!factura.isFacturada()) {
-									facturaBO.guardarRegistrarAFIP(factura);
+
+								if (!notaCredito.isFacturada()) {
+									notaCreditoBO.guardarRegistrarAFIP(notaCredito);
 									try {
-										FacturaReporte
-												.generarFactura(selectedItem);
+										NotaCreditoReporte
+												.generarNotaCredito(selectedItem);
 									} catch (ReportException rexc) {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
@@ -234,7 +184,7 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 								} else {
 									WTooltipUtils
 											.showMessage(
-													"La Factura se encuentra facturada.",
+													"La Nota de Crédito se encuentra facturada.",
 													(JButton) e.getSource(),
 													MessageType.ALERTA);
 								}
@@ -244,7 +194,7 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar una sola Factura",
+											"Debe seleccionar una sola Nota de Crédito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -261,30 +211,22 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 
-							FacturaBO facturaBO = AbstractFactory
-									.getInstance(FacturaBO.class);
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
 							try {
-								Factura factura = facturaBO
+								NotaCredito notaCredito = notaCreditoBO
 										.obtener(selectedItem);
-								if (factura.isFacturada()) {
-									if (factura.isActivo()) {
-										try {
-											FacturaReporte
-													.generarFactura(selectedItem);
-										} catch (ReportException rexc) {
-											showGlobalErrorMsg(rexc
-													.getMessage());
-										}
-									} else {
-										WTooltipUtils
-												.showMessage(
-														"La Factura debe estar activa.",
-														(JButton) e.getSource(),
-														MessageType.ALERTA);
+
+								if (notaCredito.isFacturada()) {
+									try {
+										NotaCreditoReporte
+												.generarNotaCredito(selectedItem);
+									} catch (ReportException rexc) {
+										showGlobalErrorMsg(rexc.getMessage());
 									}
 								} else {
 									WTooltipUtils.showMessage(
-											"La Factura debe estar facturada.",
+											"La Nota de Crédito debe estar facturada.",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 								}
@@ -295,7 +237,7 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar una sola Factura",
+											"Debe seleccionar una sola Nota de Crédito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -305,7 +247,6 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 		if (isClienteActivo()) {
 			toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
-			toolbarButtons.add(buttonAnular);
 			toolbarButtons.add(buttonFacturar);
 			toolbarButtons.add(buttonImprimir);
 		}
@@ -323,7 +264,7 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(FacturaIFrame.class
+			btnCerrar.setIcon(new ImageIcon(NotaCreditoIFrame.class
 					.getResource("/icons/cancel.png")));
 			btnCerrar.setBounds(885, 451, 103, 25);
 		}
@@ -332,13 +273,14 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 
 	public void search() {
 		// Filtro
-		FacturaFilter filter = new FacturaFilter();
+		NotaCreditoFilter filter = new NotaCreditoFilter();
 		filter.setIdCliente(idCliente);
 
 		try {
-			FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
-			List<Factura> facturas = facturaBO.buscar(filter);
-			getTablePanel().addData(facturas);
+			NotaCreditoBO notaCreditoBO = AbstractFactory
+					.getInstance(NotaCreditoBO.class);
+			List<NotaCredito> notasCredito = notaCreditoBO.buscar(filter);
+			getTablePanel().addData(notasCredito);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}

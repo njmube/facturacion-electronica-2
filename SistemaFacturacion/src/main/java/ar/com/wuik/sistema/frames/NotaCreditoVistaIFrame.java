@@ -19,13 +19,13 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.bo.FacturaBO;
-import ar.com.wuik.sistema.entities.DetalleFactura;
+import ar.com.wuik.sistema.bo.NotaCreditoBO;
+import ar.com.wuik.sistema.entities.DetalleNotaCredito;
 import ar.com.wuik.sistema.entities.Factura;
-import ar.com.wuik.sistema.entities.Remito;
+import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.model.DetalleFacturaModel;
-import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
+import ar.com.wuik.sistema.model.DetalleNotaCreditoFacturaModel;
+import ar.com.wuik.sistema.model.DetalleNotaCreditoModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
@@ -37,7 +37,7 @@ import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
 
-public class FacturaVistaIFrame extends WAbstractModelIFrame {
+public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
@@ -51,13 +51,13 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblCAE;
 	private JTextField txtCAE;
 	private JButton btnCerrar;
-	private Factura factura;
+	private NotaCredito notaCredito;
 	private JTextField txtFechaEmision;
 	private JLabel lblFechaEmisin;
 	private JLabel lblObservaciones;
 	private JTextArea txaObservaciones;
 	private JScrollPane scrollPane;
-	private WTablePanel<Remito> tblRemitos;
+	private WTablePanel<Factura> tblRemitos;
 	private JLabel lblIVA10;
 	private JTextField txtSubtotalPesos;
 	private JTextField txtIVA10;
@@ -66,7 +66,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	private JTextField txtTotalPesos;
 	private JLabel lblVtoCAE;
 	private JTextField txtFechaCAE;
-	private WTablePanel<DetalleFactura> tblDetalle;
+	private WTablePanel<DetalleNotaCredito> tblDetalle;
 	private JLabel lblEstado;
 	private JTextField txtEstado;
 	private JLabel lblIVA21;
@@ -75,49 +75,49 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public FacturaVistaIFrame(Long idFactura) {
-		initialize("Ver Venta");
+	public NotaCreditoVistaIFrame(Long idFactura) {
+		initialize("Ver Nota de Crédito");
 		WModel model = populateModel();
-		FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
+		NotaCreditoBO notaCreditoBO = AbstractFactory.getInstance(NotaCreditoBO.class);
 		try {
-			this.factura = facturaBO.obtener(idFactura);
+			this.notaCredito = notaCreditoBO.obtener(idFactura);
 			model.addValue(CAMPO_FECHA_EMISION,
-					WUtils.getStringFromDate(factura.getFechaVenta()));
-			model.addValue(CAMPO_OBSERVACIONES, factura.getObservaciones());
-			model.addValue(CAMPO_CAE, factura.getCae());
+					WUtils.getStringFromDate(notaCredito.getFechaVenta()));
+			model.addValue(CAMPO_OBSERVACIONES, notaCredito.getObservaciones());
+			model.addValue(CAMPO_CAE, notaCredito.getCae());
 			model.addValue(CAMPO_CAE_FECHA,
-					WUtils.getStringFromDate(factura.getFechaCAE()));
-			if (factura.isActivo()) {
+					WUtils.getStringFromDate(notaCredito.getFechaCAE()));
+			if (notaCredito.isActivo()) {
 				model.addValue(
 						CAMPO_ESTADO,
 						"ACTIVA"
-								+ (WUtils.isEmpty(factura.getCae()) ? " - SIN FACTURAR"
+								+ (WUtils.isEmpty(notaCredito.getCae()) ? " - SIN FACTURAR"
 										: " - FACTURADA"));
 			} else {
 				model.addValue(
 						CAMPO_ESTADO,
 						"ANULADA"
-								+ (WUtils.isEmpty(factura.getCae()) ? " - SIN FACTURAR"
+								+ (WUtils.isEmpty(notaCredito.getCae()) ? " - SIN FACTURAR"
 										: " - FACTURADA"));
 			}
 			refreshDetalles();
-			refreshRemitos();
+			refreshFacturas();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 		populateComponents(model);
 	}
 
-	protected void refreshRemitos() {
-		getTblRemitos().addData(factura.getRemitos());
+	protected void refreshFacturas() {
+		getTblRemitos().addData(notaCredito.getFacturas());
 	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				FacturaVistaIFrame.class.getResource("/icons/facturas.png")));
-		setBounds(0, 0, 807, 559);
+				NotaCreditoVistaIFrame.class.getResource("/icons/notas_credito.png")));
+		setBounds(0, 0, 808, 492);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -135,7 +135,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 786, 476);
+			pnlBusqueda.setBounds(10, 11, 786, 409);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblCAE());
 			pnlBusqueda.add(getTxtCAE());
@@ -190,9 +190,9 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(FacturaVistaIFrame.class
+			btnCerrar.setIcon(new ImageIcon(NotaCreditoVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(693, 498, 103, 25);
+			btnCerrar.setBounds(693, 431, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -228,8 +228,8 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
-			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(381, 333, 93, 25);
+			lblObservaciones.setHorizontalAlignment(SwingConstants.CENTER);
+			lblObservaciones.setBounds(381, 263, 164, 25);
 		}
 		return lblObservaciones;
 	}
@@ -248,7 +248,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(381, 369, 164, 92);
+			scrollPane.setBounds(381, 296, 164, 92);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -258,7 +258,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		if (lblIVA10 == null) {
 			lblIVA10 = new JLabel("IVA 10.5%: $");
 			lblIVA10.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA10.setBounds(565, 404, 76, 25);
+			lblIVA10.setBounds(565, 335, 76, 25);
 		}
 		return lblIVA10;
 	}
@@ -269,7 +269,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 			txtSubtotalPesos.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtSubtotalPesos.setEditable(false);
 			txtSubtotalPesos.setText("$ 0.00");
-			txtSubtotalPesos.setBounds(651, 333, 125, 25);
+			txtSubtotalPesos.setBounds(651, 263, 125, 25);
 			txtSubtotalPesos.setColumns(10);
 			txtSubtotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -286,7 +286,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtIVA10.setEditable(false);
 			txtIVA10.setColumns(10);
-			txtIVA10.setBounds(651, 404, 125, 25);
+			txtIVA10.setBounds(651, 335, 125, 25);
 		}
 		return txtIVA10;
 	}
@@ -295,7 +295,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		if (lblSubtotal == null) {
 			lblSubtotal = new JLabel("Subtotal: $");
 			lblSubtotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblSubtotal.setBounds(565, 333, 76, 25);
+			lblSubtotal.setBounds(565, 263, 76, 25);
 		}
 		return lblSubtotal;
 	}
@@ -304,7 +304,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Total: $");
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotal.setBounds(565, 440, 76, 25);
+			lblTotal.setBounds(565, 371, 76, 25);
 		}
 		return lblTotal;
 	}
@@ -318,7 +318,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtTotalPesos.setEditable(false);
 			txtTotalPesos.setColumns(10);
-			txtTotalPesos.setBounds(651, 440, 125, 25);
+			txtTotalPesos.setBounds(651, 371, 125, 25);
 		}
 		return txtTotalPesos;
 	}
@@ -342,10 +342,10 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		return txtFechaCAE;
 	}
 
-	private WTablePanel<DetalleFactura> getTblDetalle() {
+	private WTablePanel<DetalleNotaCredito> getTblDetalle() {
 		if (tblDetalle == null) {
-			tblDetalle = new WTablePanel(DetalleFacturaModel.class, "Detalles");
-			tblDetalle.setBounds(10, 95, 766, 227);
+			tblDetalle = new WTablePanel(DetalleNotaCreditoModel.class, "Detalles");
+			tblDetalle.setBounds(10, 95, 766, 157);
 		}
 		return tblDetalle;
 	}
@@ -354,7 +354,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
 			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblEstado.setBounds(504, 23, 76, 25);
+			lblEstado.setBounds(507, 23, 76, 25);
 		}
 		return lblEstado;
 	}
@@ -362,14 +362,12 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtEstado() {
 		if (txtEstado == null) {
 			txtEstado = new JTextField();
-			txtEstado.setHorizontalAlignment(SwingConstants.CENTER);
 			txtEstado.setName(CAMPO_ESTADO);
 			txtEstado.setEditable(false);
-			txtEstado.setBounds(591, 23, 185, 25);
+			txtEstado.setBounds(594, 23, 182, 25);
 		}
 		return txtEstado;
 	}
-
 
 	private void calcularTotales() {
 
@@ -378,37 +376,37 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		BigDecimal subtotalIVA105 = BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
 
-		List<DetalleFactura> detalles = factura.getDetalles();
-		for (DetalleFactura detalleFactura : detalles) {
-			if (detalleFactura.getIva().doubleValue() == 21.00) {
-				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
-			} else if (detalleFactura.getIva().doubleValue() == 10.50) {
-				subtotalIVA105 = subtotalIVA105.add(detalleFactura
+		List<DetalleNotaCredito> detalles = notaCredito.getDetalles();
+		for (DetalleNotaCredito detalleNotaCredito : detalles) {
+			if (detalleNotaCredito.getIva().doubleValue() == 21.00) {
+				subtotalIVA21 = subtotalIVA21.add(detalleNotaCredito.getTotalIVA());
+			} else if (detalleNotaCredito.getIva().doubleValue() == 10.50) {
+				subtotalIVA105 = subtotalIVA105.add(detalleNotaCredito
 						.getTotalIVA());
 			}
-			subtotal = subtotal.add(detalleFactura.getSubtotal());
-			total = total.add(detalleFactura.getTotal());
+			subtotal = subtotal.add(detalleNotaCredito.getSubtotal());
+			total = total.add(detalleNotaCredito.getTotal());
 		}
 
-		factura.setSubtotal(subtotal);
-		factura.setTotal(total);
-		factura.setIva(total.subtract(subtotal));
+		notaCredito.setSubtotal(subtotal);
+		notaCredito.setTotal(total);
+		notaCredito.setIva(total.subtract(subtotal));
 
 		getTxtSubtotalPesos().setText(
-				WUtils.getValue(factura.getSubtotal()).toEngineeringString());
+				WUtils.getValue(notaCredito.getSubtotal()).toEngineeringString());
 		getTxtIVA10().setText(
 				WUtils.getValue(subtotalIVA105).toEngineeringString());
 		getTxtIVA21().setText(
 				WUtils.getValue(subtotalIVA21).toEngineeringString());
 		getTxtTotalPesos().setText(
-				WUtils.getValue(factura.getTotal()).toEngineeringString());
+				WUtils.getValue(notaCredito.getTotal()).toEngineeringString());
 	}
 
 	private JLabel getLblIVA21() {
 		if (lblIVA21 == null) {
 			lblIVA21 = new JLabel("IVA 21%: $");
 			lblIVA21.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA21.setBounds(565, 368, 76, 25);
+			lblIVA21.setBounds(565, 298, 76, 25);
 		}
 		return lblIVA21;
 	}
@@ -422,22 +420,22 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtIVA21.setEditable(false);
 			txtIVA21.setColumns(10);
-			txtIVA21.setBounds(651, 368, 125, 25);
+			txtIVA21.setBounds(651, 299, 125, 25);
 		}
 		return txtIVA21;
 	}
 
-	private WTablePanel<Remito> getTblRemitos() {
+	private WTablePanel<Factura> getTblRemitos() {
 		if (tblRemitos == null) {
-			tblRemitos = new WTablePanel(DetalleFacturaRemitoModel.class,
-					"Remitos");
-			tblRemitos.setBounds(10, 322, 361, 143);
+			tblRemitos = new WTablePanel(DetalleNotaCreditoFacturaModel.class,
+					"Facturas");
+			tblRemitos.setBounds(10, 263, 361, 132);
 		}
 		return tblRemitos;
 	}
 
 	public void refreshDetalles() {
-		getTblDetalle().addData(factura.getDetalles());
+		getTblDetalle().addData(notaCredito.getDetalles());
 		calcularTotales();
 	}
 }

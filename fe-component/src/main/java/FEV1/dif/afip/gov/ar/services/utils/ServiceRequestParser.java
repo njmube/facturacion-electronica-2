@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import FEV1.dif.afip.gov.ar.AlicIva;
+import FEV1.dif.afip.gov.ar.CbteAsoc;
 import FEV1.dif.afip.gov.ar.Err;
 import FEV1.dif.afip.gov.ar.FECAECabRequest;
 import FEV1.dif.afip.gov.ar.FECAECabResponse;
@@ -18,6 +19,7 @@ import FEV1.dif.afip.gov.ar.FERecuperaLastCbteResponse;
 import FEV1.dif.afip.gov.ar.Obs;
 import FEV1.dif.afip.gov.ar.entities.AlicuotaIVA;
 import FEV1.dif.afip.gov.ar.entities.Comprobante;
+import FEV1.dif.afip.gov.ar.entities.ComprobanteAsociado;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
 import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
 import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
@@ -55,6 +57,21 @@ public class ServiceRequestParser {
 		detalle.setMonCotiz((null != comprobante.getCotizacion()) ? comprobante
 				.getCotizacion().doubleValue() : comprobante.getTipoMoneda()
 				.getCotizacion().doubleValue());
+
+		// Comprobantes Asociados.
+		List<ComprobanteAsociado> comprobantesAsoc = comprobante
+				.getComprobantesAsociados();
+		if (null != comprobantesAsoc && !comprobantesAsoc.isEmpty()) {
+			List<CbteAsoc> cbtesAsoc = new ArrayList<CbteAsoc>();
+			for (ComprobanteAsociado comprobanteAsociado: comprobantesAsoc) {
+				CbteAsoc cbteAsoc = new CbteAsoc();
+				cbteAsoc.setNro(comprobanteAsociado.getNumero());
+				cbteAsoc.setPtoVta(comprobanteAsociado.getPtoVta());
+				cbteAsoc.setTipo(comprobanteAsociado.getTipoComprobante().getId());
+				cbtesAsoc.add(cbteAsoc);
+			}
+			detalle.setCbtesAsoc(cbtesAsoc.toArray(new CbteAsoc[0]));
+		}
 
 		// Alicuotas IVA.
 		List<AlicuotaIVA> alicuotasComprobantes = comprobante.getAlicuotas();
@@ -118,7 +135,7 @@ public class ServiceRequestParser {
 		String estado = response.getFeCabResp().getResultado();
 		FECAEDetResponse[] detalles = response.getFeDetResp();
 		FECAECabResponse cabecera = response.getFeCabResp();
-		
+
 		FECAEDetResponse detalle = detalles[0];
 
 		Resultado resultado = new Resultado();

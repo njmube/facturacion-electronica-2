@@ -308,8 +308,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							// addModalIFrame(new NotaCreditoClienteIFrame(
-							// selectedItem));
+							addModalIFrame(new NotaCreditoIFrame(
+									selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(

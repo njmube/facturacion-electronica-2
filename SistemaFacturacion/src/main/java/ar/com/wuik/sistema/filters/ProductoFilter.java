@@ -4,6 +4,7 @@ public class ProductoFilter {
 
 	private String descripcion;
 	private String descripcionCodigo;
+	private String codigo;
 
 	public String getDescripcion() {
 		return descripcion;
@@ -19,6 +20,14 @@ public class ProductoFilter {
 
 	public void setDescripcionCodigo(String descripcionCodigo) {
 		this.descripcionCodigo = descripcionCodigo;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 }

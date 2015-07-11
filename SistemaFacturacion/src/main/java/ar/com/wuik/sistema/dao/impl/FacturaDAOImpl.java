@@ -6,11 +6,13 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import ar.com.wuik.sistema.dao.FacturaDAO;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
+import ar.com.wuik.swing.utils.WUtils;
 
 public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		FacturaDAO {
@@ -18,7 +20,7 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 	public FacturaDAOImpl() {
 		super(Factura.class);
 	}
-	
+
 	@Override
 	public Factura getById(Long id) throws DataAccessException {
 		Factura factura = super.getById(id);
@@ -32,7 +34,16 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 			throws DataAccessException {
 		try {
 			Criteria criteria = buildCriteria(filter);
-			return criteria.list();
+			List<Factura> facturas = criteria.list();
+			if (WUtils.isNotEmpty(facturas)) {
+				Boolean inicializarDetalles = filter.getInicializarDetalles();
+				if (null != inicializarDetalles && inicializarDetalles) {
+					for (Factura factura : facturas) {
+						Hibernate.initialize(factura.getDetalles());
+					}
+				}
+			}
+			return facturas;
 		} catch (HibernateException hbexc) {
 			throw new DataAccessException(hbexc);
 		}
@@ -43,9 +54,44 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		Criteria criteria = getSession().createCriteria(Factura.class);
 
 		Long idCliente = filter.getIdCliente();
+		Boolean asignado = filter.getAsignado();
+		Boolean activo = filter.getActivo();
+		List<Long> idsToExclude = filter.getIdsToExclude();
+		List<Long> idsToInclude = filter.getIdsToInclude();
+		Boolean facturado = filter.getFacturado();
 
 		if (null != idCliente) {
 			criteria.add(Restrictions.eq("idCliente", idCliente));
+		}
+
+		if (null != asignado) {
+			criteria.createAlias("notaCredito", "notaCredito",
+					JoinType.LEFT_OUTER_JOIN);
+			if (asignado) {
+				criteria.add(Restrictions.isNotNull("notaCredito.id"));
+			} else {
+				criteria.add(Restrictions.isNull("notaCredito.id"));
+			}
+		}
+
+		if (null != facturado) {
+			if (facturado) {
+				criteria.add(Restrictions.isNotNull("cae"));
+			} else {
+				criteria.add(Restrictions.isNull("cae"));
+			}
+		}
+
+		if (null != activo) {
+			criteria.add(Restrictions.eq("activo", activo));
+		}
+
+		if (WUtils.isNotEmpty(idsToInclude)) {
+			criteria.add(Restrictions.in("id", idsToInclude));
+		}
+
+		if (WUtils.isNotEmpty(idsToExclude)) {
+			criteria.add(Restrictions.not(Restrictions.in("id", idsToExclude)));
 		}
 
 		return criteria;

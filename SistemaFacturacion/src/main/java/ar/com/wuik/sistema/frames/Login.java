@@ -52,8 +52,6 @@ public class Login extends WAbstractModelFrame {
 	protected static final Logger LOGGER = LoggerFactory.getLogger(Login.class);
 	private JLabel lblAplicacion = null;
 	private JLabel lblNewLabel;
-	private JLabel lblCotizacion;
-	private WTextFieldDecimal textFieldDecimal;
 	private JComboBox comboBox;
 
 	/**
@@ -64,7 +62,7 @@ public class Login extends WAbstractModelFrame {
 	private JTextField getTxtUsuario() {
 		if (txtUsuario == null) {
 			txtUsuario = new JTextField();
-			txtUsuario.setBounds(new Rectangle(100, 8, 213, 25));
+			txtUsuario.setBounds(new Rectangle(104, 82, 213, 25));
 			txtUsuario.setDocument(new WTextFieldLimit(50));
 			txtUsuario.setName(CAMPO_DNI);
 			txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -95,7 +93,7 @@ public class Login extends WAbstractModelFrame {
 	private JPasswordField getTxpPassword() {
 		if (txpPassword == null) {
 			txpPassword = new JPasswordField();
-			txpPassword.setBounds(new Rectangle(100, 44, 213, 25));
+			txpPassword.setBounds(new Rectangle(104, 118, 213, 25));
 			txpPassword.setName(CAMPO_PASSWORD);
 			txpPassword.setDocument(new WTextFieldLimit(50));
 			txpPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -120,7 +118,7 @@ public class Login extends WAbstractModelFrame {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton();
 			btnAceptar.setIcon(new ImageIcon(Login.class.getResource("/icons/ok.png")));
-			btnAceptar.setBounds(new Rectangle(101, 135, 212, 30));
+			btnAceptar.setBounds(new Rectangle(105, 154, 212, 30));
 			btnAceptar.setText("Iniciar");
 			btnAceptar.addActionListener(new java.awt.event.ActionListener() {
 
@@ -176,7 +174,7 @@ public class Login extends WAbstractModelFrame {
 		if (btnCerrar == null) {
 			btnCerrar = new JButton();
 			btnCerrar.setIcon(new ImageIcon(Login.class.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(new Rectangle(6, 135, 90, 30));
+			btnCerrar.setBounds(new Rectangle(10, 154, 90, 30));
 			btnCerrar.setText("Salir");
 			btnCerrar.addActionListener(new java.awt.event.ActionListener() {
 
@@ -203,7 +201,7 @@ public class Login extends WAbstractModelFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(325, 255);
+		this.setSize(333, 260);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Inicio de Sesión");
 		this.setResizable(Boolean.FALSE);
@@ -221,16 +219,16 @@ public class Login extends WAbstractModelFrame {
 		if (jContentPane == null) {
 			lblAplicacion = new JLabel();
 			lblAplicacion.setVerticalAlignment(SwingConstants.BOTTOM);
-			lblAplicacion.setBounds(new Rectangle(6, 190, 188, 26));
+			lblAplicacion.setBounds(new Rectangle(253, 197, 56, 26));
 			lblAplicacion.setText(AppUtils.getAppVersion());
 			lblAplicacion.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPassword = new JLabel();
 			lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPassword.setBounds(new Rectangle(6, 44, 84, 25));
+			lblPassword.setBounds(new Rectangle(10, 118, 84, 25));
 			lblPassword.setText("Password:");
 			lblUsuario = new JLabel();
 			lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblUsuario.setBounds(new Rectangle(6, 8, 84, 25));
+			lblUsuario.setBounds(new Rectangle(10, 82, 84, 25));
 			lblUsuario.setText("DNI:");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
@@ -242,8 +240,6 @@ public class Login extends WAbstractModelFrame {
 			jContentPane.add(getBtnCerrar(), null);
 			jContentPane.add(lblAplicacion, null);
 			jContentPane.add(getLblNewLabel());
-			jContentPane.add(getLblCotizacion());
-			jContentPane.add(getTextFieldDecimal());
 		}
 		return jContentPane;
 	}
@@ -291,30 +287,12 @@ public class Login extends WAbstractModelFrame {
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
+			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNewLabel.setIcon(new ImageIcon(Login.class
 					.getResource("/images/login-logo.png")));
-			lblNewLabel.setBounds(204, 176, 109, 40);
+			lblNewLabel.setBounds(10, 11, 299, 51);
 		}
 		return lblNewLabel;
-	}
-
-	private JLabel getLblCotizacion() {
-		if (lblCotizacion == null) {
-			lblCotizacion = new JLabel();
-			lblCotizacion.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCotizacion.setText("Cotizaci\u00F3n U$S:");
-			lblCotizacion.setBounds(new Rectangle(6, 38, 68, 25));
-			lblCotizacion.setBounds(104, 91, 90, 25);
-		}
-		return lblCotizacion;
-	}
-
-	private WTextFieldDecimal getTextFieldDecimal() {
-		if (textFieldDecimal == null) {
-			textFieldDecimal = new WTextFieldDecimal();
-			textFieldDecimal.setBounds(204, 91, 109, 25);
-		}
-		return textFieldDecimal;
 	}
 
 }

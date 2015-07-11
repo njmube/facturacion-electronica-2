@@ -51,7 +51,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 		setTitle("Remitos");
 		setFrameIcon(new ImageIcon(
 				RemitoClienteIFrame.class.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 1000, 519);
+		setBounds(0, 0, 660, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCerrar());
@@ -75,7 +75,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 	private WTablePanel<Remito> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(RemitoModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 11, 978, 429);
+			tablePanel.setBounds(10, 11, 634, 429);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -161,11 +161,13 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 							try {
-								int result = JOptionPane.showConfirmDialog(
-										getParent(),
-										"¿Desea anular el Remito seleccionado?",
-										"Alerta", JOptionPane.OK_CANCEL_OPTION,
-										JOptionPane.WARNING_MESSAGE);
+								int result = JOptionPane
+										.showConfirmDialog(
+												getParent(),
+												"¿Desea anular el Remito seleccionado?",
+												"Alerta",
+												JOptionPane.OK_CANCEL_OPTION,
+												JOptionPane.WARNING_MESSAGE);
 								if (result == JOptionPane.OK_OPTION) {
 									RemitoBO remitoBO = AbstractFactory
 											.getInstance(RemitoBO.class);
@@ -244,10 +246,27 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 							try {
-								RemitoReporte.generarRemito(selectedItem);
-							} catch (ReportException rexc) {
-								showGlobalErrorMsg(rexc.getMessage());
+								RemitoBO remitoBO = AbstractFactory
+										.getInstance(RemitoBO.class);
+								Remito remito = remitoBO.obtener(selectedItem);
+								boolean activo = remito.isActivo();
+								if (activo) {
+									try {
+										RemitoReporte
+												.generarRemito(selectedItem);
+									} catch (ReportException rexc) {
+										showGlobalErrorMsg(rexc.getMessage());
+									}
+								} else {
+									WTooltipUtils.showMessage(
+											"El Remito se encuentra Anulado.",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+								}
+							} catch (BusinessException bexc) {
+								showGlobalErrorMsg(bexc.getMessage());
 							}
+
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -280,7 +299,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 			});
 			btnCerrar.setIcon(new ImageIcon(RemitoClienteIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(885, 451, 103, 25);
+			btnCerrar.setBounds(541, 451, 103, 25);
 		}
 		return btnCerrar;
 	}

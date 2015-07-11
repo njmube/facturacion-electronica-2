@@ -17,7 +17,7 @@ public final class Comprobante {
 	private TipoMoneda tipoMoneda;
 	private BigDecimal cotizacion;
 	private List<AlicuotaIVA> alicuotas;
-	private List<Comprobante> comprobantesAsociados;
+	private List<ComprobanteAsociado> comprobantesAsociados;
 
 	// Datos para comprobantes asociados.
 	private int ptoVenta;
@@ -95,11 +95,12 @@ public final class Comprobante {
 		this.alicuotas = alicuotas;
 	}
 
-	public List<Comprobante> getComprobantesAsociados() {
+	public List<ComprobanteAsociado> getComprobantesAsociados() {
 		return comprobantesAsociados;
 	}
 
-	public void setComprobantesAsociados(List<Comprobante> comprobantesAsociados) {
+	public void setComprobantesAsociados(
+			List<ComprobanteAsociado> comprobantesAsociados) {
 		this.comprobantesAsociados = comprobantesAsociados;
 	}
 

@@ -49,6 +49,9 @@ public class Factura extends BaseEntity {
 	private Long nroComprobante;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ID_NOTA_CREDITO", nullable = true)
+	private NotaCredito notaCredito;
 
 	public Factura() {
 		this.detalles = new ArrayList<DetalleFactura>();
@@ -166,13 +169,21 @@ public class Factura extends BaseEntity {
 	public void setNroComprobante(Long nroComprobante) {
 		this.nroComprobante = nroComprobante;
 	}
-	
-	public String getEstadoPago(){
+
+	public String getEstadoPago() {
 		return "IMPAGA";
 	}
-	
-	public boolean isFacturada(){
+
+	public boolean isFacturada() {
 		return WUtils.isNotEmpty(this.cae);
+	}
+
+	public NotaCredito getNotaCredito() {
+		return notaCredito;
+	}
+
+	public void setNotaCredito(NotaCredito notaCredito) {
+		this.notaCredito = notaCredito;
 	}
 
 }

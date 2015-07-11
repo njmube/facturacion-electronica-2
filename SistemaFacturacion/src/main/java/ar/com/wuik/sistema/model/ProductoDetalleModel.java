@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.model;
 import java.math.BigDecimal;
 
 import ar.com.wuik.sistema.entities.Producto;
+import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
 
 public class ProductoDetalleModel extends WTableModel<Producto> {
@@ -28,7 +29,7 @@ public class ProductoDetalleModel extends WTableModel<Producto> {
 		fila[1] = t.getDescripcion();
 		fila[2] = t.getTipoProducto().getNombre();
 		fila[3] = t.getUbicacion();
-		fila[4] = t.getPrecio();
+		fila[4] = AppUtils.formatPeso(t.getPrecio());
 		fila[5] = t.getId();
 		return fila;
 	}

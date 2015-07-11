@@ -22,6 +22,7 @@ import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.TipoProducto;
 import ar.com.wuik.sistema.exceptions.BusinessException;
+import ar.com.wuik.sistema.filters.ProductoFilter;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
@@ -57,6 +58,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private ProductoIFrame productoIFrame;
 	private FacturaVerIFrame ventaClienteVerIFrame;
 	private RemitoClienteVerIFrame remitoClienteVerIFrame;
+	private NotaCreditoVerIFrame notaCreditoVerIFrame;
 	private Producto producto;
 	private WTextFieldDecimal txfCosto;
 	private JLabel lblCodigo;
@@ -76,16 +78,22 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		this.productoIFrame = productoIFrame;
 		this.producto = new Producto();
 	}
-	
+
 	public ProductoVerIFrame(FacturaVerIFrame ventaClienteVerIFrame) {
 		initializate("Nuevo Producto");
 		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
 		this.producto = new Producto();
 	}
-	
+
 	public ProductoVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
 		initializate("Nuevo Producto");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
+		this.producto = new Producto();
+	}
+	
+	public ProductoVerIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame) {
+		initializate("Nuevo Producto");
+		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
 		this.producto = new Producto();
 	}
 
@@ -107,7 +115,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
-		} 
+		}
 	}
 
 	private void initializate(String title) {
@@ -136,6 +144,20 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isEmpty(codigo)) {
 			messages.add("Debe ingresar un Código");
+		} else {
+			ProductoBO productoBO = AbstractFactory
+					.getInstance(ProductoBO.class);
+			ProductoFilter filter = new ProductoFilter();
+			filter.setCodigo(codigo);
+			try {
+				List<Producto> productos = productoBO.buscar(filter);
+				if (productos.size() > 0) {
+					messages.add("Ya existe un Producto con el Código: \""
+							+ codigo + "\"");
+				}
+			} catch (BusinessException bexc) {
+				showGlobalErrorMsg(bexc.getMessage());
+			}
 		}
 
 		if (WUtils.isEmpty(descripcion)) {
@@ -236,6 +258,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 					ventaClienteVerIFrame.search();
 				} else if (null != remitoClienteVerIFrame) {
 					remitoClienteVerIFrame.search();
+				} else if (null != notaCreditoVerIFrame) {
+					notaCreditoVerIFrame.search();
 				}
 				hideFrame();
 			} catch (BusinessException bexc) {
@@ -271,7 +295,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblCosto() {
 		if (lblCosto == null) {
-			lblCosto = new JLabel("* Costo:");
+			lblCosto = new JLabel("* Costo: $");
 			lblCosto.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblCosto.setBounds(10, 128, 128, 25);
 		}
@@ -373,7 +397,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblIVA() {
 		if (lblIVA == null) {
-			lblIVA = new JLabel("* IVA:");
+			lblIVA = new JLabel("* IVA: %");
 			lblIVA.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblIVA.setBounds(10, 164, 128, 25);
 		}
@@ -391,7 +415,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblPrecio() {
 		if (lblPrecio == null) {
-			lblPrecio = new JLabel("* Precio:");
+			lblPrecio = new JLabel("* Precio: $");
 			lblPrecio.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblPrecio.setBounds(10, 200, 128, 25);
 		}

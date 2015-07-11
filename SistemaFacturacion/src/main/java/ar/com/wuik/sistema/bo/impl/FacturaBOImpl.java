@@ -210,7 +210,6 @@ public class FacturaBOImpl implements FacturaBO {
 		}
 	}
 
-
 	@Override
 	public void cancelar(Long id) throws BusinessException {
 		try {
@@ -221,8 +220,8 @@ public class FacturaBOImpl implements FacturaBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("actualizar() - Error al actualizar Factura", daexc);
-			throw new BusinessException(daexc, "Error al actualizar Factura");
+			LOGGER.error("cancelar() - Error al cancelar Factura", daexc);
+			throw new BusinessException(daexc, "Error al cancelar Factura");
 		} finally {
 			HibernateUtil.closeSession();
 		}

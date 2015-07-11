@@ -20,8 +20,6 @@ import javax.swing.SwingUtilities;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.skin.SaharaSkin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import ar.com.wuik.sistema.entities.Permiso;
 import ar.com.wuik.sistema.entities.Permisos;
@@ -50,14 +48,13 @@ public class MainFrame extends WApplication {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 4667090445204195673L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(MainFrame.class);
 
 	// Menu Administraciones ------------
 	private WMenuItemSecurity itemProducto = null;
 	private WMenuItemSecurity itemCliente = null;
 	private WMenuItemSecurity itemUsuario = null;
 	private WMenuItemSecurity itemParametro = null;
+	private WMenuItemSecurity itemCheque = null;
 
 	// Menu Archivo -------------
 	private WMenuItemSecurity itemEditarDatosPersonales = null;
@@ -186,6 +183,26 @@ public class MainFrame extends WApplication {
 		}
 		return itemCerrarSesion;
 	}
+	
+	
+
+	private WMenuItemSecurity getItemCheque() {
+		if (null == itemCheque) {
+			itemCheque = new WMenuItemSecurity("Cheques", null,
+					new ImageIcon(
+							MainFrame.class.getResource("/icons32/cheque.png")));
+			itemCheque.setVisible(Boolean.TRUE);
+			itemCheque.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addModalIFrame(new ChequeIFrame());
+				}
+			});
+		}
+		return itemCheque;
+	}
+	
 
 	protected void addMenuItems(JMenuBar menu, WMenuSecurity menuArchivo) {
 		menuArchivo.add(getItemCerrarSesion(), menuArchivo.getComponentCount());
@@ -200,7 +217,7 @@ public class MainFrame extends WApplication {
 			menuAdministraciones = new WMenuSecurity("Administraciones",
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/administraciones.png")),
-					getItemCliente(),  getItemProducto());
+					getItemCliente(),  getItemProducto(), getItemCheque());
 		}
 		return menuAdministraciones;
 	}
@@ -284,7 +301,7 @@ public class MainFrame extends WApplication {
 	 */
 	@Override
 	protected String getApplicationName() {
-		return "Agrosumma " + AppUtils.getAppVersion() + " :: "
+		return "Administración " + AppUtils.getAppVersion() + " :: "
 				+ usuarioLogin.getNombre();
 	}
 

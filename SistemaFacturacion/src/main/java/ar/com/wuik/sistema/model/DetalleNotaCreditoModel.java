@@ -2,30 +2,30 @@ package ar.com.wuik.sistema.model;
 
 import java.math.BigDecimal;
 
-import ar.com.wuik.sistema.entities.DetalleFactura;
+import ar.com.wuik.sistema.entities.DetalleNotaCredito;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
 import ar.com.wuik.swing.utils.WUtils;
 
-public class DetalleFacturaModel extends WTableModel<DetalleFactura> {
+public class DetalleNotaCreditoModel extends WTableModel<DetalleNotaCredito> {
 
 	/**
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = -3277760177146580417L;
 
-	public DetalleFacturaModel() {
+	public DetalleNotaCreditoModel() {
 		super(new String[] { "CODIGO", "PRODUCTO", "CANTIDAD", "PRECIO UNIT.",
-				"SUBTOTAL", "ALICUOTA IVA", "SUBTOTAL C/IVA" });
+				"SUBTOTAL", "ALICUOTA IVA", "SUBTOTAL C/IVA", "COMENTARIO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.32, 0.08, 0.12, 0.12, 0.12, 0.14 };
+		return new double[] { 0.10, 0.18, 0.08, 0.12, 0.12, 0.12, 0.14,0.14 };
 	}
 
 	@Override
-	protected Object[] getRow(DetalleFactura t, Object[] fila) {
+	protected Object[] getRow(DetalleNotaCredito t, Object[] fila) {
 		fila[0] = t.getProducto().getCodigo();
 		fila[1] = t.getProducto().getDescripcion();
 		fila[2] = t.getCantidad();
@@ -33,7 +33,8 @@ public class DetalleFacturaModel extends WTableModel<DetalleFactura> {
 		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
 		fila[5] = t.getIva() + " %";
 		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
-		fila[7] = t.getCoalesceId();
+		fila[7] = t.getComentario();
+		fila[8] = t.getCoalesceId();
 		return fila;
 	}
 

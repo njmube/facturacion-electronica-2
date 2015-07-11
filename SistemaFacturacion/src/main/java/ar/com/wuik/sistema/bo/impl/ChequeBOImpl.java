@@ -109,7 +109,14 @@ public class ChequeBOImpl implements ChequeBO {
 
 	@Override
 	public boolean estaEnUso(Long id) throws BusinessException {
-		throw new NotImplementedException();
+		try {
+			return chequeDAO.estaEnUso(id);
+		} catch (DataAccessException daexc) {
+			LOGGER.error("estaEnUso() - Error al validar uso de Cheque",daexc);
+			throw new BusinessException(daexc, "Error al validar uso de Cheque");
+		} finally {
+			HibernateUtil.closeSession();
+		}
 	}
 
 }

@@ -21,6 +21,8 @@ public class Recibo extends BaseEntity {
 	private Long idCliente;
 	@Column(name = "FECHA")
 	private Date fecha;
+	@Column(name = "NUMERO")
+	private Long numero;
 
 	public Cliente getCliente() {
 		return cliente;
@@ -44,6 +46,14 @@ public class Recibo extends BaseEntity {
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
+	}
+
+	public Long getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Long numero) {
+		this.numero = numero;
 	}
 
 }

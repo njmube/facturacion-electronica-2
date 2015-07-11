@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import ar.com.wuik.sistema.dao.ChequeDAO;
@@ -39,8 +40,14 @@ public class ChequeDAOImpl extends GenericCrudHBDAOImpl<Cheque> implements
 		}
 
 		if (WUtils.isNotEmpty(recibidoDe)) {
-			criteria.add(Restrictions.eq("recibidoDe", recibidoDe));
+			criteria.add(Restrictions.like("recibidoDe", recibidoDe, MatchMode.ANYWHERE));
 		}
 		return criteria;
+	}
+	
+	@Override
+	public boolean estaEnUso(Long id) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

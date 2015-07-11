@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.model;
 import java.math.BigDecimal;
 
 import ar.com.wuik.sistema.entities.Cheque;
+import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
 import ar.com.wuik.swing.utils.WUtils;
 
@@ -15,12 +16,12 @@ public class ChequeModel extends WTableModel<Cheque> {
 
 	public ChequeModel() {
 		super(new String[] { "NUMERO", "BANCO", "FECHA EMISIÓN", "FECHA COBRO",
-				"RECIBIDO", "IMPORTE", "ESTADO" });
+				"RECIBIDO", "IMPORTE" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10 };
+		return new double[] { 0.16, 0.20, 0.16, 0.16, 0.16, 0.16 };
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class ChequeModel extends WTableModel<Cheque> {
 		fila[2] = WUtils.getStringFromDate(t.getFechaEmision());
 		fila[3] = WUtils.getStringFromDate(t.getFechaPago());
 		fila[4] = t.getRecibidoDe();
-		fila[5] = t.getImporte();
+		fila[5] = AppUtils.formatPeso(t.getImporte());
 		fila[6] = t.getId();
 		return fila;
 	}
@@ -41,7 +42,7 @@ public class ChequeModel extends WTableModel<Cheque> {
 		case 0:
 			return String.class;
 		case 1:
-			return BigDecimal.class;
+			return String.class;
 		case 2:
 			return String.class;
 		case 3:
@@ -49,7 +50,7 @@ public class ChequeModel extends WTableModel<Cheque> {
 		case 4:
 			return String.class;
 		case 5:
-			return String.class;
+			return BigDecimal.class;
 		}
 		return Object.class;
 	}

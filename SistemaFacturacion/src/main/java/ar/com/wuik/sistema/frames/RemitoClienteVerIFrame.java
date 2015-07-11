@@ -82,6 +82,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 	private WTablePanel<Producto> tblProducto;
 	private JTextField textField;
 	private JButton btnAgregar;
+	private JLabel lblBuscar;
 
 	/**
 	 * @wbp.parser.constructor
@@ -131,8 +132,8 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				RemitoClienteVerIFrame.class.getResource("/icons/facturas.png")));
-		setBounds(0, 0, 758, 679);
+				RemitoClienteVerIFrame.class.getResource("/icons/remitos.png")));
+		setBounds(0, 0, 758, 616);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -166,7 +167,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 734, 595);
+			pnlBusqueda.setBounds(10, 11, 734, 531);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblNro());
 			pnlBusqueda.add(getTxtNro());
@@ -183,6 +184,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTblProducto());
 			pnlBusqueda.add(getTextField());
 			pnlBusqueda.add(getBtnAgregar());
+			pnlBusqueda.add(getLblBuscar());
 		}
 		return pnlBusqueda;
 	}
@@ -218,7 +220,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(528, 617, 103, 25);
+			btnCerrar.setBounds(528, 553, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -228,7 +230,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(641, 617, 103, 25);
+			btnGuardar.setBounds(641, 553, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -315,7 +317,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(20, 526, 93, 25);
+			lblObservaciones.setBounds(10, 462, 93, 25);
 		}
 		return lblObservaciones;
 	}
@@ -333,7 +335,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(141, 525, 192, 60);
+			scrollPane.setBounds(113, 461, 192, 60);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -412,7 +414,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 			txtCantidad.setText("0");
 			txtCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtCantidad.setEditable(false);
-			txtCantidad.setBounds(591, 560, 125, 25);
+			txtCantidad.setBounds(594, 496, 125, 25);
 			txtCantidad.setColumns(10);
 			txtCantidad.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -424,7 +426,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("Cantidad:");
 			lblCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCantidad.setBounds(505, 560, 76, 25);
+			lblCantidad.setBounds(508, 496, 76, 25);
 		}
 		return lblCantidad;
 	}
@@ -433,7 +435,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		if (tblDetalle == null) {
 			tblDetalle = new WTablePanel(DetalleRemitoModel.class, "Detalles");
 			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
-			tblDetalle.setBounds(10, 288, 714, 227);
+			tblDetalle.setBounds(10, 266, 714, 185);
 		}
 		return tblDetalle;
 	}
@@ -472,7 +474,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 					addDetalle(selectedId);
 				}
 			});
-			tblProducto.setBounds(10, 146, 714, 131);
+			tblProducto.setBounds(10, 131, 714, 131);
 		}
 		return tblProducto;
 	}
@@ -515,7 +517,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 				}
 			});
 			textField.setDocument(new WTextFieldLimit(100));
-			textField.setBounds(10, 110, 272, 25);
+			textField.setBounds(141, 95, 272, 25);
 			textField.setColumns(10);
 		}
 		return textField;
@@ -549,7 +551,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnAgregar.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
 					.getResource("/icons/add.png")));
-			btnAgregar.setBounds(289, 110, 31, 25);
+			btnAgregar.setBounds(420, 95, 31, 25);
 		}
 		return btnAgregar;
 	}
@@ -566,5 +568,13 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 	public void refreshDetalles() {
 		getTblDetalle().addData(remito.getDetalles());
 		calcularTotales();
+	}
+	private JLabel getLblBuscar() {
+		if (lblBuscar == null) {
+			lblBuscar = new JLabel("B\u00FAsqueda:");
+			lblBuscar.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblBuscar.setBounds(10, 95, 121, 25);
+		}
+		return lblBuscar;
 	}
 }

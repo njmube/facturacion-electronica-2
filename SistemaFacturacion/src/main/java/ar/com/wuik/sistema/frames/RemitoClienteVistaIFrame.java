@@ -2,7 +2,6 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -19,7 +18,6 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.bo.RemitoBO;
 import ar.com.wuik.sistema.entities.DetalleRemito;
@@ -47,6 +45,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_FECHA_EMISION = "fechaEmision";
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
 	private static final String CAMPO_ESTADO = "estado";
+	private static final String CAMPO_FACTURA = "factura";
 	private JPanel pnlBusqueda;
 	private JLabel lblNro;
 	private JTextField txtNro;
@@ -62,43 +61,29 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 	private WTablePanel<DetalleRemito> tblDetalle;
 	private JLabel lblEstado;
 	private JTextField txtEstado;
+	private JLabel lblFactura;
+	private JTextField txtFactura;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public RemitoClienteVistaIFrame(Long idRemito) {
 
-		initialize("Ver Remito");
-
 		WModel model = populateModel();
-		if (null == idRemito) {
+		initialize("Ver Remito");
+		RemitoBO remitoBO = AbstractFactory.getInstance(RemitoBO.class);
+		try {
+			this.remito = remitoBO.obtener(idRemito);
 			model.addValue(CAMPO_FECHA_EMISION,
-					WUtils.getStringFromDate(new Date()));
-			this.remito = new Remito();
-			try {
-				ParametroBO parametroBO = AbstractFactory
-						.getInstance(ParametroBO.class);
-				String nroRemito = parametroBO.getNroRemito();
-				this.remito.setNumero(nroRemito);
-				model.addValue(CAMPO_NRO_COMP, nroRemito);
-				model.addValue(CAMPO_ESTADO, "ACTIVO");
-			} catch (BusinessException bexc) {
-				showGlobalErrorMsg(bexc.getMessage());
-			}
-		} else {
-			initialize("Editar Remito");
-			RemitoBO remitoBO = AbstractFactory.getInstance(RemitoBO.class);
-			try {
-				this.remito = remitoBO.obtener(idRemito);
-				model.addValue(CAMPO_FECHA_EMISION,
-						WUtils.getStringFromDate(remito.getFecha()));
-				model.addValue(CAMPO_OBSERVACIONES, remito.getObservaciones());
-				model.addValue(CAMPO_NRO_COMP, remito.getNumero());
-				model.addValue(CAMPO_ESTADO, remito.isActivo() ? "ACTIVO": "ANULADO");
-				refreshDetalles();
-			} catch (BusinessException bexc) {
-				showGlobalErrorMsg(bexc.getMessage());
-			}
+					WUtils.getStringFromDate(remito.getFecha()));
+			model.addValue(CAMPO_OBSERVACIONES, remito.getObservaciones());
+			model.addValue(CAMPO_NRO_COMP, remito.getNumero());
+			model.addValue(CAMPO_ESTADO, remito.isActivo() ? "ACTIVO"
+					: "ANULADO");
+			model.addValue(CAMPO_FACTURA, (null !=  remito.getFactura()) ? remito.getFactura().getCae() : "");
+			refreshDetalles();
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
 
 		}
 		populateComponents(model);
@@ -109,7 +94,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				RemitoClienteVistaIFrame.class
-						.getResource("/icons/facturas.png")));
+						.getResource("/icons/remitos.png")));
 		setBounds(0, 0, 758, 493);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -141,13 +126,15 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTblDetalle());
 			pnlBusqueda.add(getLblEstado());
 			pnlBusqueda.add(getTxtEstado());
+			pnlBusqueda.add(getLblFactura());
+			pnlBusqueda.add(getTxtFactura());
 		}
 		return pnlBusqueda;
 	}
 
 	private JLabel getLblNro() {
 		if (lblNro == null) {
-			lblNro = new JLabel("Nro.:");
+			lblNro = new JLabel("N\u00FAmero:");
 			lblNro.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblNro.setBounds(10, 23, 121, 25);
 		}
@@ -254,7 +241,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 			txtCantidad.setText("0");
 			txtCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtCantidad.setEditable(false);
-			txtCantidad.setBounds(594, 334, 125, 25);
+			txtCantidad.setBounds(599, 368, 125, 25);
 			txtCantidad.setColumns(10);
 			txtCantidad.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -266,7 +253,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("Cantidad:");
 			lblCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCantidad.setBounds(508, 334, 76, 25);
+			lblCantidad.setBounds(513, 368, 76, 25);
 		}
 		return lblCantidad;
 	}
@@ -283,7 +270,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
 			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblEstado.setBounds(508, 23, 76, 25);
+			lblEstado.setBounds(335, 23, 76, 25);
 		}
 		return lblEstado;
 	}
@@ -293,7 +280,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 			txtEstado = new JTextField();
 			txtEstado.setName(CAMPO_ESTADO);
 			txtEstado.setEditable(false);
-			txtEstado.setBounds(595, 23, 121, 25);
+			txtEstado.setBounds(421, 23, 178, 25);
 		}
 		return txtEstado;
 	}
@@ -337,5 +324,24 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 	public void refreshDetalles() {
 		getTblDetalle().addData(remito.getDetalles());
 		calcularTotales();
+	}
+
+	private JLabel getLblFactura() {
+		if (lblFactura == null) {
+			lblFactura = new JLabel("Factura:");
+			lblFactura.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblFactura.setBounds(290, 59, 121, 25);
+		}
+		return lblFactura;
+	}
+
+	private JTextField getTxtFactura() {
+		if (txtFactura == null) {
+			txtFactura = new JTextField();
+			txtFactura.setName(CAMPO_FACTURA);
+			txtFactura.setEditable(false);
+			txtFactura.setBounds(421, 59, 178, 25);
+		}
+		return txtFactura;
 	}
 }
