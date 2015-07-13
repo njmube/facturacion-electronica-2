@@ -35,6 +35,7 @@ public class ProductoDAOImpl extends GenericCrudHBDAOImpl<Producto> implements
 
 		String descripcion = filter.getDescripcion();
 		String descripcionCodigo = filter.getDescripcionCodigo();
+		String codigo = filter.getCodigo();
 		
 		if (null != descripcion) {
 			criteria.add(Restrictions.like("descripcion", descripcion,
@@ -44,6 +45,9 @@ public class ProductoDAOImpl extends GenericCrudHBDAOImpl<Producto> implements
 			criteria.add(Restrictions.or(Restrictions.like("descripcion", descripcionCodigo,
 					MatchMode.ANYWHERE), Restrictions.like("codigo", descripcionCodigo,
 					MatchMode.ANYWHERE)));
+		}
+		if (null != codigo) {
+			criteria.add(Restrictions.eq("codigo", codigo));
 		}
 		
 		return criteria;

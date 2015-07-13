@@ -7,11 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
+import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.bo.RemitoBO;
 import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.dao.RemitoDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleRemito;
+import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
@@ -19,7 +21,6 @@ import ar.com.wuik.sistema.filters.RemitoFilter;
 import ar.com.wuik.sistema.reportes.entities.DetalleFacturaDTO;
 import ar.com.wuik.sistema.reportes.entities.RemitoDTO;
 import ar.com.wuik.sistema.utils.HibernateUtil;
-import ar.com.wuik.swing.utils.WUtils;
 
 public class RemitoBOImpl implements RemitoBO {
 
@@ -27,10 +28,12 @@ public class RemitoBOImpl implements RemitoBO {
 			.getLogger(RemitoBOImpl.class);
 	private RemitoDAO remitoDAO;
 	private ParametroDAO parametroDAO;
+	private ParametroBO parametroBO;
 
 	public RemitoBOImpl() {
 		remitoDAO = AbstractFactory.getInstance(RemitoDAO.class);
 		parametroDAO = AbstractFactory.getInstance(ParametroDAO.class);
+		parametroBO =  AbstractFactory.getInstance(ParametroBO.class);
 	}
 
 	@Override
@@ -158,7 +161,7 @@ public class RemitoBOImpl implements RemitoBO {
 		}
 	}
 
-	private RemitoDTO convertToDTO(Remito remito) {
+	private RemitoDTO convertToDTO(Remito remito) throws BusinessException {
 		RemitoDTO remitoDTO = new RemitoDTO();
 
 		// DATOS DEL CLIENTE.
@@ -169,13 +172,14 @@ public class RemitoBOImpl implements RemitoBO {
 		remitoDTO.setClienteDomicilio(cliente.getDireccion());
 		remitoDTO.setClienteRazonSocial(cliente.getRazonSocial());
 
-		// DATOS PROPIOS. TODO: PONER EN PARAMETRICOS.
-		remitoDTO.setRazonSocial("VAN DER BEKEN FRANCISCO NICOLAS");
-		remitoDTO.setCondIVA("IVA Responsable Inscripto");
-		remitoDTO.setCuit("20-04974118-1");
-		remitoDTO.setDomicilio("Passo 50 - Rojas, Buenos Aires");
-		remitoDTO.setIngBrutos("200049746181");
-		remitoDTO.setInicioAct(WUtils.getDateFromString("01/01/1994"));
+		// DATOS PROPIOS. 
+		Parametro parametro = parametroBO.getParametro();
+		remitoDTO.setRazonSocial(parametro.getRazonSocial());
+		remitoDTO.setCondIVA(parametro.getCondIVA());
+		remitoDTO.setCuit(parametro.getCuit());
+		remitoDTO.setDomicilio(parametro.getDomicilio());
+		remitoDTO.setIngBrutos(parametro.getIngresosBrutos());
+		remitoDTO.setInicioAct(parametro.getInicioActividad());
 
 		List<DetalleRemito> detalles = remito.getDetalles();
 		List<DetalleFacturaDTO> detallesDTO = new ArrayList<DetalleFacturaDTO>();
