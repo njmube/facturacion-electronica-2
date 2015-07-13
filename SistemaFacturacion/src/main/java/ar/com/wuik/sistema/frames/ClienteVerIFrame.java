@@ -361,8 +361,6 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 				formatter = new MaskFormatter("##-########-#");
 				formatter.setPlaceholderCharacter('#');
 			} catch (java.text.ParseException exc) {
-				System.err.println("formatter is bad: " + exc.getMessage());
-				System.exit(-1);
 			}
 			txfCuit = new JFormattedTextField(formatter);
 			txfCuit.setName(CAMPO_CUIT);

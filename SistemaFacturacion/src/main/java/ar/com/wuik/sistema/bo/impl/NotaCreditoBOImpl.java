@@ -22,12 +22,14 @@ import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
 import ar.com.wuik.sistema.bo.NotaCreditoBO;
+import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.dao.NotaCreditoDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleNotaCredito;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.NotaCredito;
+import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.NotaCreditoFilter;
@@ -43,6 +45,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 	private FacturacionService facturacionService;
 	private NotaCreditoDAO notaCreditoDAO;
 	private ClienteDAO clienteDAO;
+	private ParametroBO parametroBO;
 
 	public NotaCreditoBOImpl() {
 		facturacionService = AbstractFactory
@@ -51,6 +54,8 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				.getInstance(NotaCreditoDAO.class);
 		clienteDAO = ar.com.wuik.sistema.utils.AbstractFactory
 				.getInstance(ClienteDAO.class);
+		parametroBO = ar.com.wuik.sistema.utils.AbstractFactory
+				.getInstance(ParametroBO.class);
 	}
 
 	@Override
@@ -178,7 +183,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		comprobante.setTipoComprobante(TipoComprobante.NOTA_CREDITO_A);
 		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
 
-		// DETALLES DE LA FACTURA.
+		// DETALLES DE LA NOTA DE CREDITO.
 		List<AlicuotaIVA> alicuotas = new ArrayList<AlicuotaIVA>();
 
 		BigDecimal subtotal21 = BigDecimal.ZERO;
@@ -251,7 +256,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		}
 	}
 
-	private NotaCreditoDTO convertToDTO(NotaCredito notaCredito) {
+	private NotaCreditoDTO convertToDTO(NotaCredito notaCredito) throws BusinessException {
 		NotaCreditoDTO notaCreditoDTO = new NotaCreditoDTO();
 
 		// DATOS DEL CLIENTE.
@@ -262,13 +267,15 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		notaCreditoDTO.setClienteDomicilio(cliente.getDireccion());
 		notaCreditoDTO.setClienteRazonSocial(cliente.getRazonSocial());
 
-		// DATOS PROPIOS. TODO: PONER EN PARAMETRICOS.
-		notaCreditoDTO.setRazonSocial("VAN DER BEKEN FRANCISCO NICOLAS");
-		notaCreditoDTO.setCondIVA("IVA Responsable Inscripto");
-		notaCreditoDTO.setCuit("20-04974118-1");
-		notaCreditoDTO.setDomicilio("Passo 50 - Rojas, Buenos Aires");
-		notaCreditoDTO.setIngBrutos("200049746181");
-		notaCreditoDTO.setInicioAct(WUtils.getDateFromString("01/01/1994"));
+
+		// DATOS PROPIOS. 
+		Parametro parametro = parametroBO.getParametro();
+		notaCreditoDTO.setRazonSocial(parametro.getRazonSocial());
+		notaCreditoDTO.setCondIVA(parametro.getCondIVA());
+		notaCreditoDTO.setCuit(parametro.getCuit());
+		notaCreditoDTO.setDomicilio(parametro.getDomicilio());
+		notaCreditoDTO.setIngBrutos(parametro.getIngresosBrutos());
+		notaCreditoDTO.setInicioAct(parametro.getInicioActividad());
 
 		// DATOS DE LA NOTA DE CREDITO.
 		BigDecimal subtotal = BigDecimal.ZERO;

@@ -20,11 +20,13 @@ import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
 import ar.com.wuik.sistema.bo.FacturaBO;
+import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.dao.FacturaDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleFactura;
 import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
@@ -41,6 +43,7 @@ public class FacturaBOImpl implements FacturaBO {
 	private FacturacionService facturacionService;
 	private FacturaDAO facturaDAO;
 	private ClienteDAO clienteDAO;
+	private ParametroBO parametroBO;
 
 	public FacturaBOImpl() {
 		facturacionService = AbstractFactory
@@ -49,6 +52,8 @@ public class FacturaBOImpl implements FacturaBO {
 				.getInstance(FacturaDAO.class);
 		clienteDAO = ar.com.wuik.sistema.utils.AbstractFactory
 				.getInstance(ClienteDAO.class);
+		parametroBO = ar.com.wuik.sistema.utils.AbstractFactory
+				.getInstance(ParametroBO.class);
 	}
 
 	@Override
@@ -240,7 +245,7 @@ public class FacturaBOImpl implements FacturaBO {
 		}
 	}
 
-	private FacturaDTO convertToDTO(Factura factura) {
+	private FacturaDTO convertToDTO(Factura factura) throws BusinessException {
 		FacturaDTO facturaDTO = new FacturaDTO();
 
 		// DATOS DEL CLIENTE.
@@ -251,13 +256,14 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setClienteDomicilio(cliente.getDireccion());
 		facturaDTO.setClienteRazonSocial(cliente.getRazonSocial());
 
-		// DATOS PROPIOS. TODO: PONER EN PARAMETRICOS.
-		facturaDTO.setRazonSocial("VAN DER BEKEN FRANCISCO NICOLAS");
-		facturaDTO.setCondIVA("IVA Responsable Inscripto");
-		facturaDTO.setCuit("20-04974118-1");
-		facturaDTO.setDomicilio("Passo 50 - Rojas, Buenos Aires");
-		facturaDTO.setIngBrutos("200049746181");
-		facturaDTO.setInicioAct(WUtils.getDateFromString("01/01/1994"));
+		// DATOS PROPIOS. 
+		Parametro parametro = parametroBO.getParametro();
+		facturaDTO.setRazonSocial(parametro.getRazonSocial());
+		facturaDTO.setCondIVA(parametro.getCondIVA());
+		facturaDTO.setCuit(parametro.getCuit());
+		facturaDTO.setDomicilio(parametro.getDomicilio());
+		facturaDTO.setIngBrutos(parametro.getIngresosBrutos());
+		facturaDTO.setInicioAct(parametro.getInicioActividad());
 
 		// DATOS REMITOS.
 		List<Remito> remitos = factura.getRemitos();

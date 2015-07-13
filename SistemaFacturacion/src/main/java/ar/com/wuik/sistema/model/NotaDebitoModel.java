@@ -2,7 +2,6 @@ package ar.com.wuik.sistema.model;
 
 import java.math.BigDecimal;
 
-import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.entities.NotaDebito;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
