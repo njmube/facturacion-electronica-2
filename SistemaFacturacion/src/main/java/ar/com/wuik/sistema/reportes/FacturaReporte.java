@@ -54,7 +54,7 @@ public class FacturaReporte {
 
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(FacturaReporte.class
-							.getResourceAsStream("/reportes/factura_a.jasper"));
+							.getResourceAsStream("/reportes/comprobante.jasper"));
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(

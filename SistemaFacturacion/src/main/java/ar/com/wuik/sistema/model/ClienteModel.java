@@ -13,13 +13,13 @@ public class ClienteModel extends WTableModel<Cliente> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public ClienteModel() {
-		super(new String[] { "RAZÓN SOCIAL", "CUIT", "DIRECCION", "TELÉFONO",
-				"CELULAR", "LOCALIDAD", "TIPO IVA", "ESTADO" });
+		super(new String[] { "RAZÓN SOCIAL", "CUIT", "DIRECCIÓN", "TELÉFONO",
+				"CELULAR", "LOCALIDAD", "COND. IVA", "ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10 };
+		return new double[] { 0.18, 0.09, 0.22, 0.09, 0.09, 0.16, 0.06, 0.06 };
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 		fila[3] = t.getTelefono();
 		fila[4] = t.getCelular();
 		fila[5] = t.getLocalidad().getNombre();
-		fila[6] = t.getCondicionIVA().getDenominacion();
+		fila[6] = t.getCondicionIVA().getAbreviacion();
 		fila[7] = t.isActivo() ? "ACTIVO" : "INACTIVO";
 		fila[8] = t.getId();
 		return fila;

@@ -54,7 +54,7 @@ public class NotaCreditoReporte {
 
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(NotaCreditoReporte.class
-							.getResourceAsStream("/reportes/nota_credito_a.jasper"));
+							.getResourceAsStream("/reportes/comprobante.jasper"));
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(

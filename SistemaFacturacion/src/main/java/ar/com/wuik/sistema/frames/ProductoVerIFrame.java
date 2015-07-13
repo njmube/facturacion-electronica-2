@@ -59,6 +59,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private FacturaVerIFrame ventaClienteVerIFrame;
 	private RemitoClienteVerIFrame remitoClienteVerIFrame;
 	private NotaCreditoVerIFrame notaCreditoVerIFrame;
+	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 	private Producto producto;
 	private WTextFieldDecimal txfCosto;
 	private JLabel lblCodigo;
@@ -94,6 +95,12 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	public ProductoVerIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame) {
 		initializate("Nuevo Producto");
 		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
+		this.producto = new Producto();
+	}
+	
+	public ProductoVerIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame) {
+		initializate("Nuevo Producto");
+		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
 		this.producto = new Producto();
 	}
 
@@ -260,6 +267,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 					remitoClienteVerIFrame.search();
 				} else if (null != notaCreditoVerIFrame) {
 					notaCreditoVerIFrame.search();
+				} else if (null != notaDebitoVerIFrame) {
+					notaDebitoVerIFrame.search();
 				}
 				hideFrame();
 			} catch (BusinessException bexc) {

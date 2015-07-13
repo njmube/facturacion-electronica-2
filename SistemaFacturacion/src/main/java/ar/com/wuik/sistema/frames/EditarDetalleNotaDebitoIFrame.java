@@ -17,7 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.entities.DetalleNotaCredito;
+import ar.com.wuik.sistema.entities.DetalleNotaDebito;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
@@ -33,7 +33,7 @@ public class EditarDetalleNotaDebitoIFrame extends WAbstractModelIFrame {
 	private static final long serialVersionUID = -6838619883125511589L;
 	private JPanel pnlBusqueda;
 	private JButton btnCerrar;
-	private DetalleNotaCredito detalle;
+	private DetalleNotaDebito detalle;
 	private JButton btnGuardar;
 
 	private static final String CAMPO_CANTIDAD = "cantidad";
@@ -44,17 +44,17 @@ public class EditarDetalleNotaDebitoIFrame extends WAbstractModelIFrame {
 	private JTextField txtProductoSeleccionado;
 	private JLabel lblProductoSeleccionado;
 	private Integer cantidadRemitida;
-	private NotaCreditoVerIFrame notaCreditoVerIFrame;
+	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 	private JTextField txtComentario;
 	private JLabel lblComentario;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public EditarDetalleNotaDebitoIFrame(DetalleNotaCredito detalle,
-			NotaCreditoVerIFrame notaCreditoVerIFrame) {
+	public EditarDetalleNotaDebitoIFrame(DetalleNotaDebito detalle,
+			NotaDebitoVerIFrame notaDebitoVerIFrame) {
 		this.detalle = detalle;
-		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
+		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
 		initialize("Editar Detalle");
 		WModel model = populateModel();
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
@@ -155,7 +155,7 @@ public class EditarDetalleNotaDebitoIFrame extends WAbstractModelIFrame {
 						detalle.setCantidad(WUtils.getValue(cantidad)
 								.intValue());
 						detalle.setComentario(comentario);
-						notaCreditoVerIFrame.refreshDetalles();
+						notaDebitoVerIFrame.refreshDetalles();
 						hideFrame();
 					}
 

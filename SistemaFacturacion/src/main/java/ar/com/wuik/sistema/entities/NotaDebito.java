@@ -1,16 +1,24 @@
 package ar.com.wuik.sistema.entities;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import ar.com.wuik.swing.utils.WUtils;
 
 @Entity
 @Table(name = "notas_debitos")
@@ -23,18 +31,34 @@ public class NotaDebito extends BaseEntity {
 	private Long idCliente;
 	@Column(name = "FECHA_VENTA")
 	private Date fechaVenta;
-	@Column(name = "FECHA_VTO")
-	private Date fechaVto;
 	@Column(name = "FECHA_CAE")
 	private Date fechaCAE;
-	@Column(name = "NUMERO")
-	private String numero;
 	@Column(name = "CAE")
 	private String cae;
 	@Column(name = "ACTIVO")
-	private boolean activo;
+	private boolean activo = Boolean.TRUE;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "notaDebito", cascade = CascadeType.ALL)
 	private List<DetalleNotaDebito> detalles;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "notas_debitos_facturas", joinColumns = { @JoinColumn(name = "ID_NOTA_DEBITO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) })
+	private Set<Factura> facturas;
+	@Column(name = "SUBTOTAL")
+	private BigDecimal subtotal;
+	@Column(name = "IVA")
+	private BigDecimal iva;
+	@Column(name = "TOTAL")
+	private BigDecimal total;
+	@Column(name = "PTO_VENTA")
+	private Long ptoVenta;
+	@Column(name = "NUMERO_COMPROBANTE")
+	private Long nroComprobante;
+	@Column(name = "OBSERVACIONES")
+	private String observaciones;
+
+	public NotaDebito() {
+		this.detalles = new ArrayList<DetalleNotaDebito>();
+		this.facturas = new HashSet<Factura>();
+	}
 
 	public Cliente getCliente() {
 		return cliente;
@@ -60,28 +84,12 @@ public class NotaDebito extends BaseEntity {
 		this.fechaVenta = fechaVenta;
 	}
 
-	public Date getFechaVto() {
-		return fechaVto;
-	}
-
-	public void setFechaVto(Date fechaVto) {
-		this.fechaVto = fechaVto;
-	}
-
 	public Date getFechaCAE() {
 		return fechaCAE;
 	}
 
 	public void setFechaCAE(Date fechaCAE) {
 		this.fechaCAE = fechaCAE;
-	}
-
-	public String getNumero() {
-		return numero;
-	}
-
-	public void setNumero(String numero) {
-		this.numero = numero;
 	}
 
 	public String getCae() {
@@ -108,4 +116,63 @@ public class NotaDebito extends BaseEntity {
 		this.detalles = detalles;
 	}
 
+	public BigDecimal getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(BigDecimal subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public BigDecimal getIva() {
+		return iva;
+	}
+
+	public void setIva(BigDecimal iva) {
+		this.iva = iva;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public Long getPtoVenta() {
+		return ptoVenta;
+	}
+
+	public void setPtoVenta(Long ptoVenta) {
+		this.ptoVenta = ptoVenta;
+	}
+
+	public Long getNroComprobante() {
+		return nroComprobante;
+	}
+
+	public void setNroComprobante(Long nroComprobante) {
+		this.nroComprobante = nroComprobante;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public Set<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(Set<Factura> facturas) {
+		this.facturas = facturas;
+	}
+
+	public boolean isFacturada() {
+		return WUtils.isNotEmpty(this.cae);
+	}
 }

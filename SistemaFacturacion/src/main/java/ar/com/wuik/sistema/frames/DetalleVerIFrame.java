@@ -18,7 +18,7 @@ import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.entities.DetalleFactura;
 import ar.com.wuik.sistema.entities.DetalleNotaCredito;
-import ar.com.wuik.sistema.entities.Producto;
+import ar.com.wuik.sistema.entities.DetalleNotaDebito;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
@@ -45,7 +45,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 	private FacturaVerIFrame ventaClienteVerIFrame;
 	private RemitoClienteVerIFrame remitoClienteVerIFrame;
 	private NotaCreditoVerIFrame notaCreditoVerIFrame;
-	private Producto producto;
+	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 	private JLabel lblIVA;
 	private WTextFieldDecimal txfIVA;
 	private JLabel lblPrecio;
@@ -54,19 +54,21 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 	public DetalleVerIFrame(FacturaVerIFrame ventaClienteVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
-		this.producto = new Producto();
 	}
 
 	public DetalleVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
-		this.producto = new Producto();
 	}
 
 	public DetalleVerIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
-		this.producto = new Producto();
+	}
+	
+	public DetalleVerIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame) {
+		initializate("Nuevo Detalle");
+		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
 	}
 
 	private void initializate(String title) {
@@ -170,6 +172,14 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 				detalle.setPrecio(WUtils.getValue(precio));
 				detalle.setTemporalId(System.currentTimeMillis());
 				notaCreditoVerIFrame.addDetalle(detalle);
+			} else if (null != notaDebitoVerIFrame){
+				DetalleNotaDebito detalle = new DetalleNotaDebito();
+				detalle.setCantidad(1);
+				detalle.setDetalle(descripcion);
+				detalle.setIva(WUtils.getValue(iva));
+				detalle.setPrecio(WUtils.getValue(precio));
+				detalle.setTemporalId(System.currentTimeMillis());
+				notaDebitoVerIFrame.addDetalle(detalle);
 			}
 			hideFrame();
 		}

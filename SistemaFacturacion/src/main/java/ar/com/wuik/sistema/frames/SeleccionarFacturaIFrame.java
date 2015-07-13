@@ -39,7 +39,7 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 	private Long idCliente;
 	private List<Long> idsFacturasToExclude;
 	private NotaCreditoVerIFrame notaCreditoVerIFrame;
-//	private NotaDebitoVerIFrame notaDebitoVerIFrame;
+	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 
 	/**
 	 * Create the frame.
@@ -62,23 +62,23 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 		search();
 	}
 
-//	public SeleccionarFacturaIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame,
-//			List<Long> idsFacturasToExclude, Long idCliente) {
-//		this.idsFacturasToExclude = idsFacturasToExclude;
-//		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
-//		this.idCliente = idCliente;
-//		setBorder(new LineBorder(null, 1, true));
-//		setTitle("Facturas");
-//		setFrameIcon(new ImageIcon(
-//				SeleccionarFacturaIFrame.class
-//						.getResource("/icons/facturas.png")));
-//		setBounds(0, 0, 636, 271);
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		getContentPane().setLayout(null);
-//		getContentPane().add(getTablePanel());
-//		getContentPane().add(getBtnCerrar());
-//		search();
-//	}
+	public SeleccionarFacturaIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame,
+			List<Long> idsFacturasToExclude, Long idCliente) {
+		this.idsFacturasToExclude = idsFacturasToExclude;
+		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
+		this.idCliente = idCliente;
+		setBorder(new LineBorder(null, 1, true));
+		setTitle("Facturas");
+		setFrameIcon(new ImageIcon(
+				SeleccionarFacturaIFrame.class
+						.getResource("/icons/facturas.png")));
+		setBounds(0, 0, 751, 424);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
+		getContentPane().add(getTablePanel());
+		getContentPane().add(getBtnCerrar());
+		search();
+	}
 
 	/**
 	 * @see ar.com.wuik.swing.components.security.WSecure#applySecurity(java.util.List)
@@ -126,8 +126,8 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 										.buscar(filter);
 								if (null != notaCreditoVerIFrame) {
 									notaCreditoVerIFrame.addFacturas(facturas);
-//								} else if (null != notaDebitoVerIFrame) {
-//									notaDebitoVerIFrame.addFacturas(facturas);
+								} else if (null != notaDebitoVerIFrame) {
+									notaDebitoVerIFrame.addFacturas(facturas);
 								}
 								hideFrame();
 							} catch (BusinessException bexc) {
@@ -137,7 +137,7 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos una Factura",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}

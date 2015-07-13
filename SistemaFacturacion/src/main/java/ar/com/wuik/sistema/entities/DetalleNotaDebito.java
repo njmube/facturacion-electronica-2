@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "detalles_notas_debitos")
@@ -25,6 +26,12 @@ public class DetalleNotaDebito extends BaseEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_NOTA_DEBITO", nullable = true)
 	private NotaDebito notaDebito;
+	@Transient
+	private Long temporalId;
+	@Column(name = "COMENTARIO")
+	private String comentario;
+	@Column(name = "DETALLE")
+	private String detalle;
 
 	public Producto getProducto() {
 		return producto;
@@ -66,4 +73,44 @@ public class DetalleNotaDebito extends BaseEntity {
 		this.notaDebito = notaDebito;
 	}
 
+	public Long getTemporalId() {
+		return temporalId;
+	}
+
+	public void setTemporalId(Long temporalId) {
+		this.temporalId = temporalId;
+	}
+
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
+	}
+
+	public BigDecimal getSubtotal() {
+		return getPrecio().multiply(new BigDecimal(getCantidad()));
+	}
+
+	public BigDecimal getTotal() {
+		BigDecimal iva = getIva().add(new BigDecimal(100));
+		return getSubtotal().multiply(iva).divide(new BigDecimal(100));
+	}
+
+	public BigDecimal getTotalIVA() {
+		return getTotal().subtract(getSubtotal());
+	}
+
+	public Long getCoalesceId() {
+		return (null != getId()) ? getId() : temporalId;
+	}
 }

@@ -12,14 +12,14 @@ import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.ClienteBO;
-import ar.com.wuik.sistema.bo.NotaCreditoBO;
+import ar.com.wuik.sistema.bo.NotaDebitoBO;
 import ar.com.wuik.sistema.entities.Cliente;
-import ar.com.wuik.sistema.entities.NotaCredito;
+import ar.com.wuik.sistema.entities.NotaDebito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.NotaCreditoFilter;
-import ar.com.wuik.sistema.model.NotaCreditoModel;
-import ar.com.wuik.sistema.reportes.NotaCreditoReporte;
+import ar.com.wuik.sistema.filters.NotaDebitoFilter;
+import ar.com.wuik.sistema.model.NotaDebitoModel;
+import ar.com.wuik.sistema.reportes.NotaDebitoReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.security.WSecure;
@@ -36,7 +36,7 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7107533032732470914L;
-	private WTablePanel<NotaCredito> tablePanel;
+	private WTablePanel<NotaDebito> tablePanel;
 	private JButton btnCerrar;
 	private Long idCliente;
 
@@ -48,7 +48,7 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Notas de Débito");
 		setFrameIcon(new ImageIcon(
-				NotaDebitoIFrame.class.getResource("/icons/notas_credito.png")));
+				NotaDebitoIFrame.class.getResource("/icons/notas_debito.png")));
 		setBounds(0, 0, 1000, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -70,9 +70,9 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 		return false;
 	}
 
-	private WTablePanel<NotaCredito> getTablePanel() {
+	private WTablePanel<NotaDebito> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(NotaCreditoModel.class, Boolean.FALSE);
+			tablePanel = new WTablePanel(NotaDebitoModel.class, Boolean.FALSE);
 			tablePanel.setBounds(10, 11, 978, 429);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
@@ -89,8 +89,8 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-//						addModalIFrame(new NotaDebitoVerIFrame(
-//								NotaDebitoIFrame.this, idCliente, null));
+						addModalIFrame(new NotaDebitoVerIFrame(
+								NotaDebitoIFrame.this, idCliente, null));
 					}
 				}, "Nuevo", null);
 		WToolbarButton buttonEdit = new WToolbarButton("Editar Nota de Débito",
@@ -102,19 +102,19 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							NotaCreditoBO notaCreditoBO = AbstractFactory
-									.getInstance(NotaCreditoBO.class);
+							NotaDebitoBO NotaDebitoBO = AbstractFactory
+									.getInstance(NotaDebitoBO.class);
 							try {
 
-								NotaCredito notaCredito = notaCreditoBO
+								NotaDebito NotaDebito = NotaDebitoBO
 										.obtener(selectedItem);
 
-								boolean facturada = notaCredito.isFacturada();
+								boolean facturada = NotaDebito.isFacturada();
 
 								if (!facturada) {
-//									addModalIFrame(new NotaDebitoVerIFrame(
-//											NotaDebitoIFrame.this, idCliente,
-//											selectedItem));
+									addModalIFrame(new NotaDebitoVerIFrame(
+											NotaDebitoIFrame.this, idCliente,
+											selectedItem));
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -146,7 +146,7 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new NotaCreditoVistaIFrame(selectedItem));
+							addModalIFrame(new NotaDebitoVistaIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -166,17 +166,17 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							NotaCreditoBO notaCreditoBO = AbstractFactory
-									.getInstance(NotaCreditoBO.class);
+							NotaDebitoBO notaDebitoBO = AbstractFactory
+									.getInstance(NotaDebitoBO.class);
 							try {
-								NotaCredito notaCredito = notaCreditoBO
+								NotaDebito notaDebito = notaDebitoBO
 										.obtener(selectedItem);
 
-								if (!notaCredito.isFacturada()) {
-									notaCreditoBO.guardarRegistrarAFIP(notaCredito);
+								if (!notaDebito.isFacturada()) {
+									notaDebitoBO.guardarRegistrarAFIP(notaDebito);
 									try {
-										NotaCreditoReporte
-												.generarNotaCredito(selectedItem);
+										NotaDebitoReporte
+												.generarNotaDebito(selectedItem);
 									} catch (ReportException rexc) {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
@@ -211,16 +211,16 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 
-							NotaCreditoBO notaCreditoBO = AbstractFactory
-									.getInstance(NotaCreditoBO.class);
+							NotaDebitoBO notaDebitoBO = AbstractFactory
+									.getInstance(NotaDebitoBO.class);
 							try {
-								NotaCredito notaCredito = notaCreditoBO
+								NotaDebito notaDebito = notaDebitoBO
 										.obtener(selectedItem);
 
-								if (notaCredito.isFacturada()) {
+								if (notaDebito.isFacturada()) {
 									try {
-										NotaCreditoReporte
-												.generarNotaCredito(selectedItem);
+										NotaDebitoReporte
+												.generarNotaDebito(selectedItem);
 									} catch (ReportException rexc) {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
@@ -273,13 +273,13 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 
 	public void search() {
 		// Filtro
-		NotaCreditoFilter filter = new NotaCreditoFilter();
+		NotaDebitoFilter filter = new NotaDebitoFilter();
 		filter.setIdCliente(idCliente);
 
 		try {
-			NotaCreditoBO notaCreditoBO = AbstractFactory
-					.getInstance(NotaCreditoBO.class);
-			List<NotaCredito> notasCredito = notaCreditoBO.buscar(filter);
+			NotaDebitoBO notaDebitoBO = AbstractFactory
+					.getInstance(NotaDebitoBO.class);
+			List<NotaDebito> notasCredito = notaDebitoBO.buscar(filter);
 			getTablePanel().addData(notasCredito);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());

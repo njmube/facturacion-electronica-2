@@ -2,7 +2,7 @@ package ar.com.wuik.sistema.reportes.entities;
 
 import java.math.BigDecimal;
 
-public class DetalleFacturaDTO {
+public class DetalleNotaDebitoDTO {
 
 	private String codigo;
 	private String producto;
