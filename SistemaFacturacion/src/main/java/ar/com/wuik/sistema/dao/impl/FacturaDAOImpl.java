@@ -65,12 +65,12 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		}
 
 		if (null != asignado) {
-			criteria.createAlias("notaCredito", "notaCredito",
+			criteria.createAlias("notasCredito", "notasCredito",
 					JoinType.LEFT_OUTER_JOIN);
 			if (asignado) {
-				criteria.add(Restrictions.isNotNull("notaCredito.id"));
+				criteria.add(Restrictions.sizeGt("notasCredito", 0));
 			} else {
-				criteria.add(Restrictions.isNull("notaCredito.id"));
+				criteria.add(Restrictions.sizeEq("notasCredito", 0));
 			}
 		}
 

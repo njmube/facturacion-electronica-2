@@ -39,26 +39,46 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 	private Long idCliente;
 	private List<Long> idsFacturasToExclude;
 	private NotaCreditoVerIFrame notaCreditoVerIFrame;
+//	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public SeleccionarFacturaIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame,  List<Long> idsFacturasToExclude,
-			Long idCliente) {
+	public SeleccionarFacturaIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame,
+			List<Long> idsFacturasToExclude, Long idCliente) {
 		this.idsFacturasToExclude = idsFacturasToExclude;
 		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Facturas");
 		setFrameIcon(new ImageIcon(
-				SeleccionarFacturaIFrame.class.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 636, 271);
+				SeleccionarFacturaIFrame.class
+						.getResource("/icons/facturas.png")));
+		setBounds(0, 0, 751, 424);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getTablePanel());
 		getContentPane().add(getBtnCerrar());
 		search();
 	}
+
+//	public SeleccionarFacturaIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame,
+//			List<Long> idsFacturasToExclude, Long idCliente) {
+//		this.idsFacturasToExclude = idsFacturasToExclude;
+//		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
+//		this.idCliente = idCliente;
+//		setBorder(new LineBorder(null, 1, true));
+//		setTitle("Facturas");
+//		setFrameIcon(new ImageIcon(
+//				SeleccionarFacturaIFrame.class
+//						.getResource("/icons/facturas.png")));
+//		setBounds(0, 0, 636, 271);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		getContentPane().setLayout(null);
+//		getContentPane().add(getTablePanel());
+//		getContentPane().add(getBtnCerrar());
+//		search();
+//	}
 
 	/**
 	 * @see ar.com.wuik.swing.components.security.WSecure#applySecurity(java.util.List)
@@ -76,7 +96,7 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 	private WTablePanel<Factura> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(FacturaModel.class, Boolean.FALSE);
-			tablePanel.setBounds(8, 11, 617, 184);
+			tablePanel.setBounds(8, 11, 731, 340);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -102,8 +122,13 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 							filter.setIdsToInclude(selectedItems);
 							filter.setInicializarDetalles(Boolean.TRUE);
 							try {
-								List<Factura> facturas = facturaBO.buscar(filter);
-								notaCreditoVerIFrame.addFacturas(facturas);
+								List<Factura> facturas = facturaBO
+										.buscar(filter);
+								if (null != notaCreditoVerIFrame) {
+									notaCreditoVerIFrame.addFacturas(facturas);
+//								} else if (null != notaDebitoVerIFrame) {
+//									notaDebitoVerIFrame.addFacturas(facturas);
+								}
 								hideFrame();
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
@@ -135,22 +160,17 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 			});
 			btnCerrar.setIcon(new ImageIcon(SeleccionarFacturaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(522, 206, 103, 25);
+			btnCerrar.setBounds(636, 361, 103, 25);
 		}
 		return btnCerrar;
-	}
-
-	private void reset() {
 	}
 
 	public void search() {
 		FacturaFilter filter = new FacturaFilter();
 		filter.setIdCliente(idCliente);
-		filter.setAsignado(Boolean.FALSE);
-		filter.setActivo(Boolean.FALSE);
 		filter.setIdsToExclude(idsFacturasToExclude);
 		filter.setFacturado(Boolean.TRUE);
-		
+
 		List<Factura> facturas = new ArrayList<Factura>();
 		try {
 			FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);

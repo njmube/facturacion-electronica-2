@@ -173,10 +173,6 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 		return getTxtNro();
 	}
 
-	@Override
-	public void enterPressed() {
-	}
-
 	private JTextField getTxtFechaEmision() {
 		if (txtFechaEmision == null) {
 			txtFechaEmision = new JTextField();

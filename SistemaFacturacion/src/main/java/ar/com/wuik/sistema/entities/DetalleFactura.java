@@ -26,6 +26,8 @@ public class DetalleFactura extends BaseEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_FACTURA", nullable = true)
 	private Factura factura;
+	@Column(name = "DETALLE")
+	private String detalle;
 	@Transient
 	private Long temporalId;
 
@@ -68,8 +70,8 @@ public class DetalleFactura extends BaseEntity {
 	public void setFactura(Factura factura) {
 		this.factura = factura;
 	}
-	
-	public BigDecimal getSubtotal(){
+
+	public BigDecimal getSubtotal() {
 		return getPrecio().multiply(new BigDecimal(getCantidad()));
 	}
 
@@ -77,12 +79,12 @@ public class DetalleFactura extends BaseEntity {
 		BigDecimal iva = getIva().add(new BigDecimal(100));
 		return getSubtotal().multiply(iva).divide(new BigDecimal(100));
 	}
-	
+
 	public BigDecimal getTotalIVA() {
 		return getTotal().subtract(getSubtotal());
 	}
-	
-	public Long getCoalesceId(){
+
+	public Long getCoalesceId() {
 		return (null != getId()) ? getId() : temporalId;
 	}
 
@@ -92,6 +94,14 @@ public class DetalleFactura extends BaseEntity {
 
 	public void setTemporalId(Long temporalId) {
 		this.temporalId = temporalId;
+	}
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
 	}
 
 }

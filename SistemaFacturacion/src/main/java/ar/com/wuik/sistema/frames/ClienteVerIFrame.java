@@ -354,11 +354,6 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		return txtTelefono;
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnGuardar().doClick();
-	}
-
 	private JFormattedTextField getTxfCuit() {
 		if (txfCuit == null) {
 			MaskFormatter formatter = null;

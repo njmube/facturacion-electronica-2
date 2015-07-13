@@ -2,6 +2,7 @@ package ar.com.wuik.swing.components.table;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 

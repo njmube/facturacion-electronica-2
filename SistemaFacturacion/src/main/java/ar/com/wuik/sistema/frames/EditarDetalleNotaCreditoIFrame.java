@@ -38,15 +38,21 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 
 	private static final String CAMPO_CANTIDAD = "cantidad";
 	private static final String CAMPO_PRODUCTO = "producto";
+	private static final String CAMPO_PRECIO = "precio";
+	private static final String CAMPO_IVA = "iva";
 	private static final String CAMPO_COMENTARIO = "comentario";
 	private JLabel lblCantidad;
 	private WTextFieldNumeric txfCantidad;
 	private JTextField txtProductoSeleccionado;
 	private JLabel lblProductoSeleccionado;
-	private Integer cantidadRemitida;
 	private NotaCreditoVerIFrame notaCreditoVerIFrame;
 	private JTextField txtComentario;
 	private JLabel lblComentario;
+	private boolean editaDetalle;
+	private JLabel lblPrecio;
+	private WTextFieldNumeric txfPrecio;
+	private JLabel lblIva;
+	private WTextFieldNumeric txfIVA;
 
 	/**
 	 * @wbp.parser.constructor
@@ -58,9 +64,26 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 		initialize("Editar Detalle");
 		WModel model = populateModel();
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
-		model.addValue(CAMPO_PRODUCTO, detalle.getProducto().getCodigo() + " "
-				+ detalle.getProducto().getDescripcion());
+		model.addValue(CAMPO_PRECIO, detalle.getPrecio());
+		model.addValue(CAMPO_IVA, detalle.getIva());
+		model.addValue(
+				CAMPO_PRODUCTO,
+				(null != detalle.getProducto()) ? detalle.getProducto()
+						.getCodigo()
+						+ " "
+						+ detalle.getProducto().getDescripcion() : detalle
+						.getDetalle());
 		model.addValue(CAMPO_COMENTARIO, detalle.getComentario());
+		editaDetalle = null == detalle.getProducto();
+		if (editaDetalle) {
+			getLblProductoSeleccionado().setText("* Detalle:");
+			getTxtProductoSeleccionado().setEditable(Boolean.TRUE);
+			getLblIva().setText("* " + getLblIva().getText());
+			getTxfIVA().setEditable(Boolean.TRUE);
+			getLblPrecio().setText("* " + getLblPrecio().getText());
+			getTxfPrecio().setEditable(Boolean.TRUE);
+		}
+
 		populateComponents(model);
 	}
 
@@ -70,7 +93,7 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 		setFrameIcon(new ImageIcon(
 				EditarDetalleNotaCreditoIFrame.class
 						.getResource("/icons/productos.png")));
-		setBounds(0, 0, 508, 222);
+		setBounds(0, 0, 508, 286);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -91,13 +114,21 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 			Integer cantidadProducto = Integer.valueOf(cantidad);
 			if (cantidadProducto == 0) {
 				messages.add("Debe ingresar una Cantidad mayor a 0");
-			} else {
-				if (null != cantidadRemitida) {
+			}
+		}
 
-					if (cantidadProducto.intValue() < cantidadRemitida) {
-						messages.add("Debe ingresar una Cantidad igual o mayor a la Remitida");
-					}
-				}
+		if (editaDetalle) {
+			String detalle = model.getValue(CAMPO_PRODUCTO);
+			String iva = model.getValue(CAMPO_IVA);
+			String precio = model.getValue(CAMPO_PRECIO);
+			if (WUtils.isEmpty(detalle)) {
+				messages.add("Debe ingresar un Detalle");
+			}
+			if (WUtils.isEmpty(iva)) {
+				messages.add("Debe ingresar un % de IVA");
+			}
+			if (WUtils.isEmpty(precio)) {
+				messages.add("Debe ingresar un Precio");
 			}
 		}
 
@@ -112,7 +143,7 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 486, 135);
+			pnlBusqueda.setBounds(10, 11, 486, 202);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblCantidad());
 			pnlBusqueda.add(getTxfCantidad());
@@ -120,6 +151,10 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblProductoSeleccionado());
 			pnlBusqueda.add(getTxtComentario());
 			pnlBusqueda.add(getLblComentario());
+			pnlBusqueda.add(getLblPrecio());
+			pnlBusqueda.add(getTxfPrecio());
+			pnlBusqueda.add(getLblIva());
+			pnlBusqueda.add(getTxfIVA());
 		}
 		return pnlBusqueda;
 	}
@@ -133,9 +168,10 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(EditarDetalleNotaCreditoIFrame.class
-					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(280, 157, 103, 25);
+			btnCerrar.setIcon(new ImageIcon(
+					EditarDetalleNotaCreditoIFrame.class
+							.getResource("/icons/cancel.png")));
+			btnCerrar.setBounds(280, 224, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -143,17 +179,29 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
-			btnGuardar.setIcon(new ImageIcon(EditarDetalleNotaCreditoIFrame.class
-					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(393, 157, 103, 25);
+			btnGuardar.setIcon(new ImageIcon(
+					EditarDetalleNotaCreditoIFrame.class
+							.getResource("/icons/ok.png")));
+			btnGuardar.setBounds(393, 224, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
 					if (validateModel(model)) {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						String comentario = model.getValue(CAMPO_COMENTARIO);
+
 						detalle.setCantidad(WUtils.getValue(cantidad)
 								.intValue());
+
+						if (editaDetalle) {
+							String detalleDescripcion = model
+									.getValue(CAMPO_PRODUCTO);
+							String precio = model.getValue(CAMPO_PRECIO);
+							String iva = model.getValue(CAMPO_IVA);
+							detalle.setDetalle(detalleDescripcion);
+							detalle.setPrecio(WUtils.getValue(precio));
+							detalle.setIva(WUtils.getValue(iva));
+						}
 						detalle.setComentario(comentario);
 						notaCreditoVerIFrame.refreshDetalles();
 						hideFrame();
@@ -170,16 +218,11 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 		return getTxfCantidad();
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnGuardar().doClick();
-	}
-
 	private JLabel getLblCantidad() {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("* Cantidad:");
 			lblCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCantidad.setBounds(10, 57, 121, 25);
+			lblCantidad.setBounds(10, 129, 121, 25);
 		}
 		return lblCantidad;
 	}
@@ -187,7 +230,7 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 	private WTextFieldNumeric getTxfCantidad() {
 		if (txfCantidad == null) {
 			txfCantidad = new WTextFieldNumeric();
-			txfCantidad.setBounds(141, 57, 121, 25);
+			txfCantidad.setBounds(141, 129, 121, 25);
 			txfCantidad.setName(CAMPO_CANTIDAD);
 		}
 		return txfCantidad;
@@ -200,6 +243,7 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 			txtProductoSeleccionado.setBounds(141, 21, 331, 25);
 			txtProductoSeleccionado.setColumns(10);
 			txtProductoSeleccionado.setName(CAMPO_PRODUCTO);
+			txtProductoSeleccionado.setDocument(new WTextFieldLimit(100));
 		}
 		return txtProductoSeleccionado;
 	}
@@ -213,21 +257,55 @@ public class EditarDetalleNotaCreditoIFrame extends WAbstractModelIFrame {
 		}
 		return lblProductoSeleccionado;
 	}
+
 	private JTextField getTxtComentario() {
 		if (txtComentario == null) {
 			txtComentario = new JTextField();
 			txtComentario.setName(CAMPO_COMENTARIO);
-			txtComentario.setBounds(141, 93, 331, 25);
+			txtComentario.setBounds(141, 165, 331, 25);
 			txtComentario.setDocument(new WTextFieldLimit(100));
 		}
 		return txtComentario;
 	}
+
 	private JLabel getLblComentario() {
 		if (lblComentario == null) {
 			lblComentario = new JLabel("Comentario:");
 			lblComentario.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblComentario.setBounds(10, 93, 121, 25);
+			lblComentario.setBounds(10, 165, 121, 25);
 		}
 		return lblComentario;
+	}
+	private JLabel getLblPrecio() {
+		if (lblPrecio == null) {
+			lblPrecio = new JLabel("Precio:");
+			lblPrecio.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblPrecio.setBounds(10, 57, 121, 25);
+		}
+		return lblPrecio;
+	}
+	private WTextFieldNumeric getTxfPrecio() {
+		if (txfPrecio == null) {
+			txfPrecio = new WTextFieldNumeric();
+			txfPrecio.setName(CAMPO_PRECIO);
+			txfPrecio.setBounds(141, 57, 121, 25);
+		}
+		return txfPrecio;
+	}
+	private JLabel getLblIva() {
+		if (lblIva == null) {
+			lblIva = new JLabel("IVA:");
+			lblIva.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblIva.setBounds(10, 93, 121, 25);
+		}
+		return lblIva;
+	}
+	private WTextFieldNumeric getTxfIVA() {
+		if (txfIVA == null) {
+			txfIVA = new WTextFieldNumeric();
+			txfIVA.setName(CAMPO_IVA);
+			txfIVA.setBounds(141, 93, 121, 25);
+		}
+		return txfIVA;
 	}
 }

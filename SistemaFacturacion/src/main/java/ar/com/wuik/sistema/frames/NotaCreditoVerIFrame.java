@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -60,13 +60,10 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = -6838619883125511589L;
-	private static final String CAMPO_NRO_COMP = "nroComprobante";
 	private static final String CAMPO_FECHA_EMISION = "fechaEmision";
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
 	private static final String CAMPO_ESTADO = "estado";
 	private JPanel pnlBusqueda;
-	private JLabel lblCAE;
-	private JTextField txtNro;
 	private JButton btnCerrar;
 	private NotaCredito notaCredito;
 	private JButton btnGuardar;
@@ -84,19 +81,17 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblSubtotal;
 	private JLabel lblTotal;
 	private JTextField txtTotalPesos;
-	private JLabel lblVtoCAE;
-	private JTextField txtCAE;
 	private WTablePanel<DetalleNotaCredito> tblDetalle;
 	private WTablePanel<Factura> tblFacturas;
 	private JLabel lblEstado;
 	private JTextField txtEstado;
 	private WTablePanel<Producto> tblProducto;
-	private JTextField textField;
-	private JButton btnAgregar;
+	private JTextField txtBusqueda;
 	private JLabel lblIVA21;
 	private JTextField txtIVA21;
-	private JCheckBox chckbxfacturar;
 	private JLabel lblBusqueda;
+	private JPanel panel;
+	private JButton btnGuardarYFacturar;
 
 	/**
 	 * @wbp.parser.constructor
@@ -133,7 +128,9 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		}
 		populateComponents(model);
 		getTxtEstado().setText("SIN FACTURAR");
-		getContentPane().add(getChckbxfacturar());
+		getContentPane().add(getBtnGuardarYFacturar());
+		getContentPane().add(getTxtEstado());
+		getContentPane().add(getLblEstado());
 	}
 
 	private void initialize(String title) {
@@ -142,7 +139,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(new ImageIcon(
 				NotaCreditoVerIFrame.class
 						.getResource("/icons/notas_credito.png")));
-		setBounds(0, 0, 807, 648);
+		setBounds(0, 0, 1024, 559);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -151,7 +148,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	}
 
 	@Override
-	protected boolean validateModel(WModel model) {
+	protected boolean validateModel(WModel model, JComponent component) {
 
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
 
@@ -165,7 +162,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			messages.add("Debe ingresar al menos un Detalle");
 		}
 
-		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
+		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);
 
 		return WUtils.isEmpty(messages);
 	}
@@ -174,12 +171,10 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (pnlBusqueda == null) {
 			pnlBusqueda = new JPanel();
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
-					.getBorder("TitledBorder.border"), "Datos",
+					.getBorder("TitledBorder.border"), "",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 786, 563);
+			pnlBusqueda.setBounds(10, 11, 1002, 474);
 			pnlBusqueda.setLayout(null);
-			pnlBusqueda.add(getLblCAE());
-			pnlBusqueda.add(getTxtNro());
 			pnlBusqueda.add(getBtnFechaEmision());
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
@@ -191,40 +186,13 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblSubtotal());
 			pnlBusqueda.add(getLblTotal());
 			pnlBusqueda.add(getTxtTotalPesos());
-			pnlBusqueda.add(getLblVtoCAE());
-			pnlBusqueda.add(getTxtCAE());
 			pnlBusqueda.add(getTblDetalle());
-			pnlBusqueda.add(getLblEstado());
-			pnlBusqueda.add(getTxtEstado());
-			pnlBusqueda.add(getTblProducto());
-			pnlBusqueda.add(getTextField());
-			pnlBusqueda.add(getBtnAgregar());
 			pnlBusqueda.add(getLblIVA21());
 			pnlBusqueda.add(getTxtIVA21());
 			pnlBusqueda.add(getTblFacturas());
-			pnlBusqueda.add(getLblBusqueda());
+			pnlBusqueda.add(getPanel());
 		}
 		return pnlBusqueda;
-	}
-
-	private JLabel getLblCAE() {
-		if (lblCAE == null) {
-			lblCAE = new JLabel("CAE:");
-			lblCAE.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCAE.setBounds(10, 23, 121, 25);
-		}
-		return lblCAE;
-	}
-
-	private JTextField getTxtNro() {
-		if (txtNro == null) {
-			txtNro = new JTextField();
-			txtNro.setEditable(false);
-			txtNro.setName(CAMPO_NRO_COMP);
-			txtNro.setDocument(new WTextFieldLimit(50));
-			txtNro.setBounds(141, 23, 141, 25);
-		}
-		return txtNro;
 	}
 
 	private JButton getBtnCerrar() {
@@ -238,7 +206,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(NotaCreditoVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(570, 585, 103, 25);
+			btnCerrar.setBounds(638, 496, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -248,11 +216,11 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(NotaCreditoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(683, 585, 103, 25);
+			btnGuardar.setBounds(751, 496, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
-					if (validateModel(model)) {
+					if (validateModel(model, btnGuardar)) {
 						String fechaVenta = model.getValue(CAMPO_FECHA_EMISION);
 						String observaciones = model
 								.getValue(CAMPO_OBSERVACIONES);
@@ -266,19 +234,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 							NotaCreditoBO notaCreditoBO = AbstractFactory
 									.getInstance(NotaCreditoBO.class);
 							if (notaCredito.getId() == null) {
-								if (getChckbxfacturar().isSelected()) {
-									notaCreditoBO
-											.guardarRegistrarAFIP(notaCredito);
-									try {
-										NotaCreditoReporte
-												.generarNotaCredito(notaCredito
-														.getId());
-									} catch (ReportException rexc) {
-										showGlobalErrorMsg(rexc.getMessage());
-									}
-								} else {
-									notaCreditoBO.guardar(notaCredito);
-								}
+								notaCreditoBO.guardar(notaCredito);
 							} else {
 								notaCreditoBO.actualizar(notaCredito);
 							}
@@ -296,12 +252,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 
 	@Override
 	protected JComponent getFocusComponent() {
-		return getTxtNro();
-	}
-
-	@Override
-	public void enterPressed() {
-		getBtnGuardar().doClick();
+		return getTxtBusqueda();
 	}
 
 	private List<WToolbarButton> getToolbarButtons() {
@@ -335,7 +286,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Remito",
+											"Debe seleccionar una sola Factura",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -349,7 +300,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 
 	protected List<Long> getIdsFacturas() {
 		List<Long> ids = new ArrayList<Long>();
-		List<Factura> facturas = notaCredito.getFacturas();
+		Set<Factura> facturas = notaCredito.getFacturas();
 		for (Factura factura : facturas) {
 			ids.add(factura.getId());
 		}
@@ -357,11 +308,11 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	}
 
 	protected void refreshFacturas() {
-		getTblFacturas().addData(notaCredito.getFacturas());
+		getTblFacturas().addData(new ArrayList<Factura>(notaCredito.getFacturas()));
 	}
 
 	protected Factura getFacturaById(Long selectedItem) {
-		List<Factura> facturas = notaCredito.getFacturas();
+		Set<Factura> facturas = notaCredito.getFacturas();
 		for (Factura factura : facturas) {
 			if (factura.getId().equals(selectedItem)) {
 				return factura;
@@ -380,7 +331,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnFechaEmision.setIcon(new ImageIcon(NotaCreditoVerIFrame.class
 					.getResource("/icons/calendar.png")));
-			btnFechaEmision.setBounds(257, 59, 25, 25);
+			btnFechaEmision.setBounds(257, 11, 25, 25);
 		}
 		return btnFechaEmision;
 	}
@@ -390,7 +341,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			txtFechaEmision = new JTextField();
 			txtFechaEmision.setName(CAMPO_FECHA_EMISION);
 			txtFechaEmision.setEditable(false);
-			txtFechaEmision.setBounds(141, 59, 106, 25);
+			txtFechaEmision.setBounds(141, 11, 106, 25);
 		}
 		return txtFechaEmision;
 	}
@@ -399,7 +350,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (lblFechaEmisin == null) {
 			lblFechaEmisin = new JLabel("* Fecha Emisi\u00F3n:");
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFechaEmisin.setBounds(10, 59, 121, 25);
+			lblFechaEmisin.setBounds(10, 11, 121, 25);
 		}
 		return lblFechaEmisin;
 	}
@@ -407,8 +358,8 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
-			lblObservaciones.setHorizontalAlignment(SwingConstants.CENTER);
-			lblObservaciones.setBounds(360, 420, 164, 25);
+			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblObservaciones.setBounds(292, 12, 164, 25);
 		}
 		return lblObservaciones;
 	}
@@ -426,7 +377,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(360, 456, 164, 92);
+			scrollPane.setBounds(466, 11, 164, 38);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -444,7 +395,6 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 						Long selectedItem = tblDetalle.getSelectedItemID();
 						if (null != selectedItem) {
 							DetalleNotaCredito detalle = getDetalleById(selectedItem);
-							Integer cantidadRemitida = null;
 							addModalIFrame(new EditarDetalleNotaCreditoIFrame(
 									detalle, NotaCreditoVerIFrame.this));
 						} else {
@@ -504,7 +454,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (lblIVA10 == null) {
 			lblIVA10 = new JLabel("IVA 10.5%: $");
 			lblIVA10.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA10.setBounds(562, 487, 76, 25);
+			lblIVA10.setBounds(781, 402, 76, 25);
 		}
 		return lblIVA10;
 	}
@@ -515,7 +465,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			txtSubtotalPesos.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtSubtotalPesos.setEditable(false);
 			txtSubtotalPesos.setText("$ 0.00");
-			txtSubtotalPesos.setBounds(648, 416, 125, 25);
+			txtSubtotalPesos.setBounds(867, 331, 125, 25);
 			txtSubtotalPesos.setColumns(10);
 			txtSubtotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -532,7 +482,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtIVA10.setEditable(false);
 			txtIVA10.setColumns(10);
-			txtIVA10.setBounds(648, 487, 125, 25);
+			txtIVA10.setBounds(867, 402, 125, 25);
 		}
 		return txtIVA10;
 	}
@@ -541,7 +491,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (lblSubtotal == null) {
 			lblSubtotal = new JLabel("Subtotal: $");
 			lblSubtotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblSubtotal.setBounds(562, 416, 76, 25);
+			lblSubtotal.setBounds(781, 331, 76, 25);
 		}
 		return lblSubtotal;
 	}
@@ -550,7 +500,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Total: $");
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotal.setBounds(562, 523, 76, 25);
+			lblTotal.setBounds(781, 438, 76, 25);
 		}
 		return lblTotal;
 	}
@@ -564,28 +514,9 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtTotalPesos.setEditable(false);
 			txtTotalPesos.setColumns(10);
-			txtTotalPesos.setBounds(648, 523, 125, 25);
+			txtTotalPesos.setBounds(867, 438, 125, 25);
 		}
 		return txtTotalPesos;
-	}
-
-	private JLabel getLblVtoCAE() {
-		if (lblVtoCAE == null) {
-			lblVtoCAE = new JLabel("Vto. CAE:");
-			lblVtoCAE.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblVtoCAE.setBounds(295, 23, 76, 25);
-		}
-		return lblVtoCAE;
-	}
-
-	private JTextField getTxtCAE() {
-		if (txtCAE == null) {
-			txtCAE = new JTextField();
-			txtCAE.setEditable(false);
-			txtCAE.setName("fechaVto");
-			txtCAE.setBounds(381, 23, 106, 25);
-		}
-		return txtCAE;
 	}
 
 	private WTablePanel<DetalleNotaCredito> getTblDetalle() {
@@ -593,7 +524,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			tblDetalle = new WTablePanel(DetalleNotaCreditoModel.class,
 					"Detalles");
 			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
-			tblDetalle.setBounds(10, 260, 766, 149);
+			tblDetalle.setBounds(10, 293, 761, 170);
 		}
 		return tblDetalle;
 	}
@@ -602,7 +533,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (tblFacturas == null) {
 			tblFacturas = new WTablePanel(DetalleNotaCreditoFacturaModel.class,
 					"Facturas Asociadas");
-			tblFacturas.setBounds(10, 420, 340, 132);
+			tblFacturas.setBounds(705, 75, 287, 149);
 			tblFacturas.addToolbarButtons(getToolbarButtons());
 		}
 		return tblFacturas;
@@ -611,8 +542,8 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
+			lblEstado.setBounds(10, 496, 76, 25);
 			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblEstado.setBounds(497, 23, 76, 25);
 		}
 		return lblEstado;
 	}
@@ -620,18 +551,19 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtEstado() {
 		if (txtEstado == null) {
 			txtEstado = new JTextField();
+			txtEstado.setBounds(96, 496, 190, 25);
 			txtEstado.setHorizontalAlignment(SwingConstants.CENTER);
 			txtEstado.setName(CAMPO_ESTADO);
 			txtEstado.setEditable(false);
-			txtEstado.setBounds(583, 23, 190, 25);
 		}
 		return txtEstado;
 	}
 
 	private WTablePanel<Producto> getTblProducto() {
 		if (tblProducto == null) {
-			tblProducto = new WTablePanel(ProductoDetalleModel.class,
-					"Búsqueda de Productos");
+			tblProducto = new WTablePanel(ProductoDetalleModel.class, "");
+			tblProducto.setBounds(10, 71, 665, 125);
+			tblProducto.addToolbarButtons(getToolbarButtonsProducto());
 			tblProducto.addWTableListener(new WTableListener() {
 
 				@Override
@@ -644,9 +576,38 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 					addDetalle(selectedId);
 				}
 			});
-			tblProducto.setBounds(10, 131, 766, 118);
 		}
 		return tblProducto;
+	}
+
+	private List<WToolbarButton> getToolbarButtonsProducto() {
+		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
+		WToolbarButton buttonNuevoProducto = new WToolbarButton(
+				"Nuevo Producto", new ImageIcon(
+						WCalendarIFrame.class.getResource("/icons/add.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addModalIFrame(new ProductoVerIFrame(
+								NotaCreditoVerIFrame.this));
+					}
+				}, "Nuevo Producto", null);
+		WToolbarButton buttonNuevoDetalle = new WToolbarButton("Nuevo Detalle",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/add.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addModalIFrame(new DetalleVerIFrame(
+								NotaCreditoVerIFrame.this));
+					}
+				}, "Nuevo Detalle", null);
+
+		toolbarButtons.add(buttonNuevoProducto);
+		toolbarButtons.add(buttonNuevoDetalle);
+		return toolbarButtons;
 	}
 
 	protected void addDetalle(Long selectedId) {
@@ -656,7 +617,9 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			List<DetalleNotaCredito> detalles = notaCredito.getDetalles();
 			boolean existeEnDetalle = false;
 			for (DetalleNotaCredito detalleFactura : detalles) {
-				if (detalleFactura.getProducto().getId().equals(selectedId)) {
+				if (null != detalleFactura.getProducto()
+						&& detalleFactura.getProducto().getId()
+								.equals(selectedId)) {
 					detalleFactura
 							.setCantidad(detalleFactura.getCantidad() + 1);
 					existeEnDetalle = true;
@@ -679,25 +642,25 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		}
 	}
 
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.addKeyListener(new KeyAdapter() {
+	private JTextField getTxtBusqueda() {
+		if (txtBusqueda == null) {
+			txtBusqueda = new JTextField();
+			txtBusqueda.setBounds(141, 35, 272, 25);
+			txtBusqueda.addKeyListener(new KeyAdapter() {
 
 				@Override
 				public void keyReleased(KeyEvent e) {
 					search();
 				}
 			});
-			textField.setDocument(new WTextFieldLimit(100));
-			textField.setBounds(141, 95, 272, 25);
-			textField.setColumns(10);
+			txtBusqueda.setDocument(new WTextFieldLimit(100));
+			txtBusqueda.setColumns(10);
 		}
-		return textField;
+		return txtBusqueda;
 	}
 
 	public void search() {
-		String toSearch = textField.getText();
+		String toSearch = txtBusqueda.getText();
 		if (WUtils.isNotEmpty(toSearch)) {
 			ProductoBO productoBO = AbstractFactory
 					.getInstance(ProductoBO.class);
@@ -711,22 +674,6 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		} else {
 			getTblProducto().addData(new ArrayList<Producto>());
 		}
-	}
-
-	private JButton getBtnAgregar() {
-		if (btnAgregar == null) {
-			btnAgregar = new JButton("Nuevo Producto");
-			btnAgregar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ProductoVerIFrame(
-							NotaCreditoVerIFrame.this));
-				}
-			});
-			btnAgregar.setIcon(new ImageIcon(NotaCreditoVerIFrame.class
-					.getResource("/icons/add.png")));
-			btnAgregar.setBounds(423, 95, 141, 25);
-		}
-		return btnAgregar;
 	}
 
 	private void calcularTotales() {
@@ -767,7 +714,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		if (lblIVA21 == null) {
 			lblIVA21 = new JLabel("IVA 21%: $");
 			lblIVA21.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA21.setBounds(562, 451, 76, 25);
+			lblIVA21.setBounds(781, 366, 76, 25);
 		}
 		return lblIVA21;
 	}
@@ -781,7 +728,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtIVA21.setEditable(false);
 			txtIVA21.setColumns(10);
-			txtIVA21.setBounds(648, 451, 125, 25);
+			txtIVA21.setBounds(867, 366, 125, 25);
 		}
 		return txtIVA21;
 	}
@@ -791,36 +738,98 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 		calcularTotales();
 	}
 
-	private JCheckBox getChckbxfacturar() {
-		if (chckbxfacturar == null) {
-			chckbxfacturar = new JCheckBox("\u00BFFacturar?");
-			chckbxfacturar.setSelected(true);
-			chckbxfacturar.setBounds(458, 586, 106, 23);
-		}
-		return chckbxfacturar;
-	}
-
 	public void addFacturas(List<Factura> facturas) {
 		for (Factura factura : facturas) {
 			if (!notaCredito.getFacturas().contains(factura)) {
 				List<DetalleFactura> detallesFactura = factura.getDetalles();
 				for (DetalleFactura detalleFactura : detallesFactura) {
 					for (int i = 0; i < detalleFactura.getCantidad(); i++) {
-						addDetalle(detalleFactura.getProducto().getId());
+						if (null != detalleFactura.getProducto()) {
+							addDetalle(detalleFactura.getProducto().getId());
+						}
 					}
 				}
-				factura.setNotaCredito(notaCredito);
 				notaCredito.getFacturas().add(factura);
 			}
 		}
 		refreshFacturas();
 	}
+
 	private JLabel getLblBusqueda() {
 		if (lblBusqueda == null) {
-			lblBusqueda = new JLabel("B\u00FAsqueda:");
+			lblBusqueda = new JLabel("Código/Nombre:");
+			lblBusqueda.setBounds(10, 35, 121, 25);
 			lblBusqueda.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblBusqueda.setBounds(10, 95, 121, 25);
 		}
 		return lblBusqueda;
+	}
+
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setBorder(new TitledBorder(null,
+					"B\u00FAsqueda de Productos", TitledBorder.LEADING,
+					TitledBorder.TOP, null, null));
+			panel.setBounds(10, 75, 685, 207);
+			panel.setLayout(null);
+			panel.add(getTblProducto());
+			panel.add(getLblBusqueda());
+			panel.add(getTxtBusqueda());
+		}
+		return panel;
+	}
+
+	private JButton getBtnGuardarYFacturar() {
+		if (btnGuardarYFacturar == null) {
+			btnGuardarYFacturar = new JButton("Guardar y Facturar");
+			btnGuardarYFacturar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					WModel model = populateModel();
+					if (validateModel(model, btnGuardarYFacturar)) {
+						String fechaVenta = model.getValue(CAMPO_FECHA_EMISION);
+						String observaciones = model
+								.getValue(CAMPO_OBSERVACIONES);
+
+						notaCredito.setFechaVenta(WUtils
+								.getDateFromString(fechaVenta));
+						notaCredito.setObservaciones(observaciones);
+						notaCredito.setIdCliente(idCliente);
+
+						try {
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
+							if (notaCredito.getId() == null) {
+								notaCreditoBO.guardarRegistrarAFIP(notaCredito);
+								try {
+									NotaCreditoReporte
+											.generarNotaCredito(notaCredito
+													.getId());
+								} catch (ReportException rexc) {
+									showGlobalErrorMsg(rexc.getMessage());
+								}
+							} else {
+								notaCreditoBO.actualizar(notaCredito);
+							}
+							hideFrame();
+							notaCreditoIFrame.search();
+						} catch (BusinessException bexc) {
+							showGlobalErrorMsg(bexc.getMessage());
+						}
+					}
+				}
+			});
+			btnGuardarYFacturar.setIcon(new ImageIcon(
+					NotaCreditoVerIFrame.class.getResource("/icons/add.png")));
+			btnGuardarYFacturar.setBounds(864, 496, 148, 25);
+		}
+		return btnGuardarYFacturar;
+	}
+
+	public void addDetalle(DetalleNotaCredito detalle) {
+		detalle.setNotaCredito(notaCredito);
+		List<DetalleNotaCredito> detalles = notaCredito.getDetalles();
+		detalles.add(detalle);
+		getTblDetalle().addData(detalles);
+		calcularTotales();
 	}
 }

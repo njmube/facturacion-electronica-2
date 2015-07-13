@@ -5,16 +5,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.styles.BalloonTipStyle;
 import net.java.balloontip.styles.RoundedBalloonStyle;
 import net.java.balloontip.utils.TimingUtils;
+
 import org.apache.commons.lang.WordUtils;
+
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
 

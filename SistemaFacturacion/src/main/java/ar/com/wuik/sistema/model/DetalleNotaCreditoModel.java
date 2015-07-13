@@ -15,7 +15,7 @@ public class DetalleNotaCreditoModel extends WTableModel<DetalleNotaCredito> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public DetalleNotaCreditoModel() {
-		super(new String[] { "CODIGO", "PRODUCTO", "CANTIDAD", "PRECIO UNIT.",
+		super(new String[] { "CODIGO", "PRODUCTO/DETALLE", "CANTIDAD", "PRECIO UNIT.",
 				"SUBTOTAL", "ALICUOTA IVA", "SUBTOTAL C/IVA", "COMENTARIO" });
 	}
 
@@ -26,8 +26,9 @@ public class DetalleNotaCreditoModel extends WTableModel<DetalleNotaCredito> {
 
 	@Override
 	protected Object[] getRow(DetalleNotaCredito t, Object[] fila) {
-		fila[0] = t.getProducto().getCodigo();
-		fila[1] = t.getProducto().getDescripcion();
+		fila[0] = (null != t.getProducto()) ? t.getProducto().getCodigo() : "0";
+		fila[1] = (null != t.getProducto()) ? t.getProducto().getDescripcion()
+				: t.getDetalle();
 		fila[2] = t.getCantidad();
 		fila[3] = AppUtils.formatPeso(t.getPrecio());
 		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));

@@ -3,17 +3,16 @@ package ar.com.wuik.swing.components.table;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
 import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableCellRenderer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ar.com.wuik.swing.components.WImagePreview;
+
 import ar.com.wuik.swing.components.security.WSecure;
 import ar.com.wuik.swing.events.WTableStatisticsUpdaterEvent;
 import ar.com.wuik.swing.listeners.WTableListener;

@@ -274,11 +274,6 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		return getTxtNro();
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnGuardar().doClick();
-	}
-
 	private JButton getBtnFechaEmision() {
 		if (btnFechaEmision == null) {
 			btnFechaEmision = new JButton("");

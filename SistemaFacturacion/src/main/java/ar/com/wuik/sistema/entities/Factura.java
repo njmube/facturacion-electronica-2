@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -49,9 +52,9 @@ public class Factura extends BaseEntity {
 	private Long nroComprobante;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_NOTA_CREDITO", nullable = true)
-	private NotaCredito notaCredito;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "notas_creditos_facturas", joinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_NOTA_CREDITO", nullable = false, updatable = false) })
+	private Set<NotaCredito> notasCredito;
 
 	public Factura() {
 		this.detalles = new ArrayList<DetalleFactura>();
@@ -178,12 +181,12 @@ public class Factura extends BaseEntity {
 		return WUtils.isNotEmpty(this.cae);
 	}
 
-	public NotaCredito getNotaCredito() {
-		return notaCredito;
+	public Set<NotaCredito> getNotasCredito() {
+		return notasCredito;
 	}
 
-	public void setNotaCredito(NotaCredito notaCredito) {
-		this.notaCredito = notaCredito;
+	public void setNotasCredito(Set<NotaCredito> notasCredito) {
+		this.notasCredito = notasCredito;
 	}
 
 }

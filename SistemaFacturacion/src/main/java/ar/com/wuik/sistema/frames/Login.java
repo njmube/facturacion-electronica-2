@@ -29,7 +29,6 @@ import ar.com.wuik.sistema.filters.UsuarioFilter;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.WModel;
-import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.frames.WAbstractModelFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;

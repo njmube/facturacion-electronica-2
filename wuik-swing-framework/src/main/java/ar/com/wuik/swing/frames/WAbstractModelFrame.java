@@ -3,6 +3,7 @@ package ar.com.wuik.swing.frames;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -15,8 +16,10 @@ import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JViewport;
 import javax.swing.text.JTextComponent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.utils.WUtils;

@@ -161,11 +161,6 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 		return getTxfCantidad();
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnGuardar().doClick();
-	}
-
 	private JLabel getLblCantidad() {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("* Cantidad:");

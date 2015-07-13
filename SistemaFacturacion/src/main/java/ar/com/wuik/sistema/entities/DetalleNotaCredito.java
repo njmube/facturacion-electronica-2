@@ -30,6 +30,9 @@ public class DetalleNotaCredito extends BaseEntity {
 	private Long temporalId;
 	@Column(name = "COMENTARIO")
 	private String comentario;
+	@Column(name = "DETALLE")
+	private String detalle;
+
 
 	public Producto getProducto() {
 		return producto;
@@ -104,4 +107,13 @@ public class DetalleNotaCredito extends BaseEntity {
 		this.comentario = comentario;
 	}
 
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
+	}
+
+	
 }

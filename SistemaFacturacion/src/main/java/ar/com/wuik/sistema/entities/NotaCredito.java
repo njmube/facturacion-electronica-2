@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.entities;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,8 +39,9 @@ public class NotaCredito extends BaseEntity {
 	private boolean activo = Boolean.TRUE;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "notaCredito", cascade = CascadeType.ALL)
 	private List<DetalleNotaCredito> detalles;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "notaCredito", cascade = CascadeType.ALL)
-	private List<Factura> facturas;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "notas_creditos_facturas", joinColumns = { @JoinColumn(name = "ID_NOTA_CREDITO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) })
+	private Set<Factura> facturas;
 	@Column(name = "SUBTOTAL")
 	private BigDecimal subtotal;
 	@Column(name = "IVA")
@@ -52,10 +54,10 @@ public class NotaCredito extends BaseEntity {
 	private Long nroComprobante;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
-	
+
 	public NotaCredito() {
 		this.detalles = new ArrayList<DetalleNotaCredito>();
-		this.facturas = new ArrayList<Factura>();
+		this.facturas = new HashSet<Factura>();
 	}
 
 	public Cliente getCliente() {
@@ -162,11 +164,11 @@ public class NotaCredito extends BaseEntity {
 		this.observaciones = observaciones;
 	}
 
-	public List<Factura> getFacturas() {
+	public Set<Factura> getFacturas() {
 		return facturas;
 	}
 
-	public void setFacturas(List<Factura> facturas) {
+	public void setFacturas(Set<Factura> facturas) {
 		this.facturas = facturas;
 	}
 

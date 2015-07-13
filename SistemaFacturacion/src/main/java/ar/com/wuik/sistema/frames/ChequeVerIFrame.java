@@ -329,11 +329,6 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		return txtFechaCobro;
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnGuardar().doClick();
-	}
-
 	private JComboBox getCmbBancos() {
 		if (cmbBancos == null) {
 			cmbBancos = new JComboBox();

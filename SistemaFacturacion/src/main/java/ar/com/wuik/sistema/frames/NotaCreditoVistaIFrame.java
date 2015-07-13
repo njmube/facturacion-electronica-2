@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.frames;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -109,7 +110,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	}
 
 	protected void refreshFacturas() {
-		getTblRemitos().addData(notaCredito.getFacturas());
+		getTblRemitos().addData(new ArrayList<Factura>(notaCredito.getFacturas()));
 	}
 
 	private void initialize(String title) {
@@ -117,11 +118,13 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				NotaCreditoVistaIFrame.class.getResource("/icons/notas_credito.png")));
-		setBounds(0, 0, 808, 492);
+		setBounds(0, 0, 808, 459);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getBtnCerrar());
+		getContentPane().add(getLblEstado());
+		getContentPane().add(getTxtEstado());
 	}
 
 	@Override
@@ -135,7 +138,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 786, 409);
+			pnlBusqueda.setBounds(10, 11, 786, 373);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblCAE());
 			pnlBusqueda.add(getTxtCAE());
@@ -153,8 +156,6 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblVtoCAE());
 			pnlBusqueda.add(getTxtFechaCAE());
 			pnlBusqueda.add(getTblDetalle());
-			pnlBusqueda.add(getLblEstado());
-			pnlBusqueda.add(getTxtEstado());
 			pnlBusqueda.add(getLblIVA21());
 			pnlBusqueda.add(getTxtIVA21());
 		}
@@ -192,7 +193,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(NotaCreditoVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(693, 431, 103, 25);
+			btnCerrar.setBounds(693, 395, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -202,16 +203,12 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		return getTxtCAE();
 	}
 
-	@Override
-	public void enterPressed() {
-	}
-
 	private JTextField getTxtFechaEmision() {
 		if (txtFechaEmision == null) {
 			txtFechaEmision = new JTextField();
 			txtFechaEmision.setName(CAMPO_FECHA_EMISION);
 			txtFechaEmision.setEditable(false);
-			txtFechaEmision.setBounds(141, 59, 106, 25);
+			txtFechaEmision.setBounds(670, 23, 106, 25);
 		}
 		return txtFechaEmision;
 	}
@@ -220,7 +217,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblFechaEmisin == null) {
 			lblFechaEmisin = new JLabel("Fecha Emisi\u00F3n:");
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFechaEmisin.setBounds(10, 59, 121, 25);
+			lblFechaEmisin.setBounds(539, 23, 121, 25);
 		}
 		return lblFechaEmisin;
 	}
@@ -229,7 +226,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
 			lblObservaciones.setHorizontalAlignment(SwingConstants.CENTER);
-			lblObservaciones.setBounds(381, 263, 164, 25);
+			lblObservaciones.setBounds(381, 228, 164, 25);
 		}
 		return lblObservaciones;
 	}
@@ -248,7 +245,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(381, 296, 164, 92);
+			scrollPane.setBounds(381, 261, 164, 52);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -258,7 +255,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblIVA10 == null) {
 			lblIVA10 = new JLabel("IVA 10.5%: $");
 			lblIVA10.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA10.setBounds(565, 335, 76, 25);
+			lblIVA10.setBounds(565, 300, 76, 25);
 		}
 		return lblIVA10;
 	}
@@ -269,7 +266,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 			txtSubtotalPesos.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtSubtotalPesos.setEditable(false);
 			txtSubtotalPesos.setText("$ 0.00");
-			txtSubtotalPesos.setBounds(651, 263, 125, 25);
+			txtSubtotalPesos.setBounds(651, 228, 125, 25);
 			txtSubtotalPesos.setColumns(10);
 			txtSubtotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -286,7 +283,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtIVA10.setEditable(false);
 			txtIVA10.setColumns(10);
-			txtIVA10.setBounds(651, 335, 125, 25);
+			txtIVA10.setBounds(651, 300, 125, 25);
 		}
 		return txtIVA10;
 	}
@@ -295,7 +292,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblSubtotal == null) {
 			lblSubtotal = new JLabel("Subtotal: $");
 			lblSubtotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblSubtotal.setBounds(565, 263, 76, 25);
+			lblSubtotal.setBounds(565, 228, 76, 25);
 		}
 		return lblSubtotal;
 	}
@@ -304,7 +301,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Total: $");
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotal.setBounds(565, 371, 76, 25);
+			lblTotal.setBounds(565, 336, 76, 25);
 		}
 		return lblTotal;
 	}
@@ -318,7 +315,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtTotalPesos.setEditable(false);
 			txtTotalPesos.setColumns(10);
-			txtTotalPesos.setBounds(651, 371, 125, 25);
+			txtTotalPesos.setBounds(651, 336, 125, 25);
 		}
 		return txtTotalPesos;
 	}
@@ -327,7 +324,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblVtoCAE == null) {
 			lblVtoCAE = new JLabel("Vto. CAE:");
 			lblVtoCAE.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblVtoCAE.setBounds(295, 23, 76, 25);
+			lblVtoCAE.setBounds(337, 23, 76, 25);
 		}
 		return lblVtoCAE;
 	}
@@ -337,7 +334,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 			txtFechaCAE = new JTextField();
 			txtFechaCAE.setEditable(false);
 			txtFechaCAE.setName(CAMPO_CAE_FECHA);
-			txtFechaCAE.setBounds(381, 23, 106, 25);
+			txtFechaCAE.setBounds(423, 23, 106, 25);
 		}
 		return txtFechaCAE;
 	}
@@ -345,7 +342,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	private WTablePanel<DetalleNotaCredito> getTblDetalle() {
 		if (tblDetalle == null) {
 			tblDetalle = new WTablePanel(DetalleNotaCreditoModel.class, "Detalles");
-			tblDetalle.setBounds(10, 95, 766, 157);
+			tblDetalle.setBounds(10, 59, 766, 157);
 		}
 		return tblDetalle;
 	}
@@ -353,8 +350,8 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
+			lblEstado.setBounds(10, 395, 76, 25);
 			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblEstado.setBounds(507, 23, 76, 25);
 		}
 		return lblEstado;
 	}
@@ -362,9 +359,9 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtEstado() {
 		if (txtEstado == null) {
 			txtEstado = new JTextField();
+			txtEstado.setBounds(97, 395, 182, 25);
 			txtEstado.setName(CAMPO_ESTADO);
 			txtEstado.setEditable(false);
-			txtEstado.setBounds(594, 23, 182, 25);
 		}
 		return txtEstado;
 	}
@@ -406,7 +403,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (lblIVA21 == null) {
 			lblIVA21 = new JLabel("IVA 21%: $");
 			lblIVA21.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA21.setBounds(565, 298, 76, 25);
+			lblIVA21.setBounds(565, 263, 76, 25);
 		}
 		return lblIVA21;
 	}
@@ -420,7 +417,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtIVA21.setEditable(false);
 			txtIVA21.setColumns(10);
-			txtIVA21.setBounds(651, 299, 125, 25);
+			txtIVA21.setBounds(651, 264, 125, 25);
 		}
 		return txtIVA21;
 	}
@@ -429,7 +426,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		if (tblRemitos == null) {
 			tblRemitos = new WTablePanel(DetalleNotaCreditoFacturaModel.class,
 					"Facturas");
-			tblRemitos.setBounds(10, 263, 361, 132);
+			tblRemitos.setBounds(10, 228, 361, 132);
 		}
 		return tblRemitos;
 	}

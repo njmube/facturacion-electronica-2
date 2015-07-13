@@ -286,11 +286,6 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 		return btnBuscar;
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnBuscar().doClick();
-	}
-
 	private JTextField getTxtRecibido() {
 		if (txtRecibido == null) {
 			txtRecibido = new JTextField();

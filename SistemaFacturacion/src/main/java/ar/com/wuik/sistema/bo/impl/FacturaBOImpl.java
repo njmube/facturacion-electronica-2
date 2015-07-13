@@ -283,11 +283,13 @@ public class FacturaBOImpl implements FacturaBO {
 			detalleFacturaDTO = new DetalleFacturaDTO();
 			detalleFacturaDTO.setAlicuota(detalleFactura.getIva());
 			detalleFacturaDTO.setCantidad(detalleFactura.getCantidad());
-			detalleFacturaDTO.setCodigo(detalleFactura.getProducto()
-					.getCodigo());
+			detalleFacturaDTO
+					.setCodigo((null != detalleFactura.getProducto()) ? detalleFactura
+							.getProducto().getCodigo() : "0");
 			detalleFacturaDTO.setPrecioUnit(detalleFactura.getPrecio());
-			detalleFacturaDTO.setProducto(detalleFactura.getProducto()
-					.getDescripcion());
+			detalleFacturaDTO
+					.setProducto((null != detalleFactura.getProducto()) ? detalleFactura
+							.getProducto().getDescripcion() : detalleFactura.getDetalle());
 			detalleFacturaDTO.setSubtotal(detalleFactura.getSubtotal());
 			detalleFacturaDTO.setSubtotalConIVA(detalleFactura.getTotal());
 			detallesDTO.add(detalleFacturaDTO);

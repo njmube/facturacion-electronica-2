@@ -9,18 +9,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.ClienteBO;
-import ar.com.wuik.sistema.bo.RemitoBO;
+import ar.com.wuik.sistema.bo.NotaCreditoBO;
 import ar.com.wuik.sistema.entities.Cliente;
-import ar.com.wuik.sistema.entities.Remito;
+import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.RemitoFilter;
-import ar.com.wuik.sistema.model.RemitoModel;
-import ar.com.wuik.sistema.reportes.RemitoReporte;
+import ar.com.wuik.sistema.filters.NotaCreditoFilter;
+import ar.com.wuik.sistema.model.NotaCreditoModel;
+import ar.com.wuik.sistema.reportes.NotaCreditoReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.security.WSecure;
@@ -31,27 +30,26 @@ import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
-public class RemitoClienteIFrame extends WAbstractModelIFrame implements
-		WSecure {
+public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 
 	/**
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7107533032732470914L;
-	private WTablePanel<Remito> tablePanel;
+	private WTablePanel<NotaCredito> tablePanel;
 	private JButton btnCerrar;
 	private Long idCliente;
 
 	/**
 	 * Create the frame.
 	 */
-	public RemitoClienteIFrame(Long idCliente) {
+	public NotaDebitoIFrame(Long idCliente) {
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
-		setTitle("Remitos");
+		setTitle("Notas de Débito");
 		setFrameIcon(new ImageIcon(
-				RemitoClienteIFrame.class.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 660, 519);
+				NotaDebitoIFrame.class.getResource("/icons/notas_credito.png")));
+		setBounds(0, 0, 1000, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCerrar());
@@ -72,10 +70,10 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 		return false;
 	}
 
-	private WTablePanel<Remito> getTablePanel() {
+	private WTablePanel<NotaCredito> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(RemitoModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 11, 634, 429);
+			tablePanel = new WTablePanel(NotaCreditoModel.class, Boolean.FALSE);
+			tablePanel.setBounds(10, 11, 978, 429);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -84,18 +82,18 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 	private List<WToolbarButton> getToolbarButtons() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
-		WToolbarButton buttonAdd = new WToolbarButton("Nueva Remito",
+		WToolbarButton buttonAdd = new WToolbarButton("Nueva Nota de Débito",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/add.png")),
 				new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new RemitoClienteVerIFrame(
-								RemitoClienteIFrame.this, idCliente, null));
+//						addModalIFrame(new NotaDebitoVerIFrame(
+//								NotaDebitoIFrame.this, idCliente, null));
 					}
 				}, "Nuevo", null);
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Remito",
+		WToolbarButton buttonEdit = new WToolbarButton("Editar Nota de Débito",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/edit.png")),
 				new ActionListener() {
@@ -104,36 +102,23 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
 							try {
-								RemitoBO remitoBO = AbstractFactory
-										.getInstance(RemitoBO.class);
 
-								boolean estaEnUso = remitoBO
-										.estaEnUso(selectedItem);
+								NotaCredito notaCredito = notaCreditoBO
+										.obtener(selectedItem);
 
-								if (!estaEnUso) {
+								boolean facturada = notaCredito.isFacturada();
 
-									Remito remito = (Remito) remitoBO
-											.obtener(selectedItem);
-
-									boolean activo = remito.isActivo();
-
-									if (activo) {
-										addModalIFrame(new RemitoClienteVerIFrame(
-												RemitoClienteIFrame.this,
-												idCliente, selectedItem));
-									} else {
-
-										WTooltipUtils
-												.showMessage(
-														"El Remito se encuentra Anulado.",
-														(JButton) e.getSource(),
-														MessageType.ALERTA);
-									}
+								if (!facturada) {
+//									addModalIFrame(new NotaDebitoVerIFrame(
+//											NotaDebitoIFrame.this, idCliente,
+//											selectedItem));
 								} else {
 									WTooltipUtils
 											.showMessage(
-													"No es posible Anular el Remito porque está asociado a una Factura.",
+													"No es posible editar la Nota de Débito porque se encuentra facturada en AFIP.",
 													(JButton) e.getSource(),
 													MessageType.ALERTA);
 								}
@@ -145,77 +130,14 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Remito",
+											"Debe seleccionar una sola Nota de Débito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
 					}
 				}, "Editar", null);
-		WToolbarButton buttonAnular = new WToolbarButton("Anular Remito",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cancel2.png")),
-				new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-							try {
-								int result = JOptionPane
-										.showConfirmDialog(
-												getParent(),
-												"¿Desea anular el Remito seleccionado?",
-												"Alerta",
-												JOptionPane.OK_CANCEL_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								if (result == JOptionPane.OK_OPTION) {
-									RemitoBO remitoBO = AbstractFactory
-											.getInstance(RemitoBO.class);
-
-									boolean estaEnUso = remitoBO
-											.estaEnUso(selectedItem);
-
-									if (!estaEnUso) {
-
-										Remito remito = (Remito) remitoBO
-												.obtener(selectedItem);
-
-										boolean activo = remito.isActivo();
-
-										if (activo) {
-											remitoBO.cancelar(selectedItem);
-											search();
-										} else {
-
-											WTooltipUtils
-													.showMessage(
-															"El Remito se encuentra Anulado.",
-															(JButton) e
-																	.getSource(),
-															MessageType.ALERTA);
-										}
-									} else {
-										WTooltipUtils
-												.showMessage(
-														"No es posible Anular el Remito porque está asociado a una Factura.",
-														(JButton) e.getSource(),
-														MessageType.ALERTA);
-									}
-								}
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
-							}
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Remito",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Anular", null);
-
-		WToolbarButton buttonVer = new WToolbarButton("Ver Remito",
+		WToolbarButton buttonVer = new WToolbarButton("Ver Nota de Débito",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/ver.png")),
 				new ActionListener() {
@@ -224,17 +146,60 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new RemitoClienteVistaIFrame(
-									selectedItem));
+							addModalIFrame(new NotaCreditoVistaIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Remito",
+											"Debe seleccionar una sola Nota de Débito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
 					}
 				}, "Ver", null);
+
+		WToolbarButton buttonFacturar = new WToolbarButton("Facturar",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/ver.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
+							try {
+								NotaCredito notaCredito = notaCreditoBO
+										.obtener(selectedItem);
+
+								if (!notaCredito.isFacturada()) {
+									notaCreditoBO.guardarRegistrarAFIP(notaCredito);
+									try {
+										NotaCreditoReporte
+												.generarNotaCredito(selectedItem);
+									} catch (ReportException rexc) {
+										showGlobalErrorMsg(rexc.getMessage());
+									}
+									search();
+								} else {
+									WTooltipUtils
+											.showMessage(
+													"La Nota de Débito se encuentra facturada.",
+													(JButton) e.getSource(),
+													MessageType.ALERTA);
+								}
+							} catch (BusinessException bexc) {
+								showGlobalErrorMsg(bexc.getMessage());
+							}
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar una sola Nota de Débito",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Facturar", null);
 
 		WToolbarButton buttonImprimir = new WToolbarButton("Imprimir",
 				new ImageIcon(WCalendarIFrame.class
@@ -245,21 +210,23 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
+
+							NotaCreditoBO notaCreditoBO = AbstractFactory
+									.getInstance(NotaCreditoBO.class);
 							try {
-								RemitoBO remitoBO = AbstractFactory
-										.getInstance(RemitoBO.class);
-								Remito remito = remitoBO.obtener(selectedItem);
-								boolean activo = remito.isActivo();
-								if (activo) {
+								NotaCredito notaCredito = notaCreditoBO
+										.obtener(selectedItem);
+
+								if (notaCredito.isFacturada()) {
 									try {
-										RemitoReporte
-												.generarRemito(selectedItem);
+										NotaCreditoReporte
+												.generarNotaCredito(selectedItem);
 									} catch (ReportException rexc) {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
 								} else {
 									WTooltipUtils.showMessage(
-											"El Remito se encuentra Anulado.",
+											"La Nota de Débito debe estar facturada.",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 								}
@@ -270,7 +237,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Remito",
+											"Debe seleccionar una sola Nota de Débito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -280,7 +247,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 		if (isClienteActivo()) {
 			toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
-			toolbarButtons.add(buttonAnular);
+			toolbarButtons.add(buttonFacturar);
 			toolbarButtons.add(buttonImprimir);
 		}
 		toolbarButtons.add(buttonVer);
@@ -297,22 +264,23 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(RemitoClienteIFrame.class
+			btnCerrar.setIcon(new ImageIcon(NotaDebitoIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(541, 451, 103, 25);
+			btnCerrar.setBounds(885, 451, 103, 25);
 		}
 		return btnCerrar;
 	}
 
 	public void search() {
 		// Filtro
-		RemitoFilter filter = new RemitoFilter();
+		NotaCreditoFilter filter = new NotaCreditoFilter();
 		filter.setIdCliente(idCliente);
 
 		try {
-			RemitoBO remitoBO = AbstractFactory.getInstance(RemitoBO.class);
-			List<Remito> facturas = remitoBO.buscar(filter);
-			getTablePanel().addData(facturas);
+			NotaCreditoBO notaCreditoBO = AbstractFactory
+					.getInstance(NotaCreditoBO.class);
+			List<NotaCredito> notasCredito = notaCreditoBO.buscar(filter);
+			getTablePanel().addData(notasCredito);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}

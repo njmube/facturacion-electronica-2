@@ -3,6 +3,7 @@ package ar.com.wuik.swing.frames;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -10,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.listeners.WGenericSelectorListener;

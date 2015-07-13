@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyVetoException;
 import java.util.Vector;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -29,6 +30,7 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+
 import ar.com.wuik.swing.utils.WFrameUtils;
 
 

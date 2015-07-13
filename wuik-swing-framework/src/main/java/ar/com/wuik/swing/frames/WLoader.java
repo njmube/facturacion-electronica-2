@@ -2,12 +2,14 @@ package ar.com.wuik.swing.frames;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,6 +3,7 @@ package ar.com.wuik.swing.components;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
+
 import javax.swing.JTextField;
 
 

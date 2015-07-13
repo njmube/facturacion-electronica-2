@@ -10,14 +10,17 @@ import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ar.com.wuik.swing.frames.WAbstractFrame;
 import ar.com.wuik.swing.frames.WAbstractIFrame;
 import ar.com.wuik.swing.frames.WApplication;
@@ -34,7 +37,8 @@ public final class WFrameUtils {
 	private static final String FONT_NAME = "Arial";
 	private static final Logger LOGGER = LoggerFactory.getLogger( WFrameUtils.class );
 	private static double zoomFactor = 0;
-	private static final int H_SIZE = 1360;
+//	private static final int H_SIZE = 1360;
+	private static final int H_SIZE = 1500;
 	private static int fontSize = 0;
 
 	public enum FontSize {

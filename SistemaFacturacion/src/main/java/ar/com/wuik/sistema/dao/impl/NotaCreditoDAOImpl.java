@@ -6,14 +6,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 
 import ar.com.wuik.sistema.dao.NotaCreditoDAO;
-import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.NotaCreditoFilter;
-import ar.com.wuik.swing.utils.WUtils;
 
 public class NotaCreditoDAOImpl extends GenericCrudHBDAOImpl<NotaCredito>
 		implements NotaCreditoDAO {

@@ -3,6 +3,7 @@ package ar.com.wuik.swing.components.security;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
+
 import ar.com.wuik.swing.frames.WCalendarIFrame;
 
 public class WMenuItemSecurity extends JMenuItem {

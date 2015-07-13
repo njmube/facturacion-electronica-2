@@ -15,19 +15,20 @@ public class DetalleFacturaModel extends WTableModel<DetalleFactura> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public DetalleFacturaModel() {
-		super(new String[] { "CODIGO", "PRODUCTO", "CANTIDAD", "PRECIO UNIT.",
-				"SUBTOTAL", "ALICUOTA IVA", "SUBTOTAL C/IVA" });
+		super(new String[] { "CODIGO", "PRODUCTO/DETALLE", "CANT.",
+				"PRECIO X U", "SUBTOTAL", "% IVA", "TOTAL" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.32, 0.08, 0.12, 0.12, 0.12, 0.14 };
+		return new double[] { 0.10, 0.47, 0.05, 0.10, 0.10, 0.08, 0.10 };
 	}
 
 	@Override
 	protected Object[] getRow(DetalleFactura t, Object[] fila) {
-		fila[0] = t.getProducto().getCodigo();
-		fila[1] = t.getProducto().getDescripcion();
+		fila[0] = (null != t.getProducto()) ? t.getProducto().getCodigo() : "0";
+		fila[1] = (null != t.getProducto()) ? t.getProducto().getDescripcion()
+				: t.getDetalle();
 		fila[2] = t.getCantidad();
 		fila[3] = AppUtils.formatPeso(t.getPrecio());
 		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
@@ -51,6 +52,8 @@ public class DetalleFacturaModel extends WTableModel<DetalleFactura> {
 		case 4:
 			return BigDecimal.class;
 		case 5:
+			return BigDecimal.class;
+		case 6:
 			return BigDecimal.class;
 		}
 		return Object.class;

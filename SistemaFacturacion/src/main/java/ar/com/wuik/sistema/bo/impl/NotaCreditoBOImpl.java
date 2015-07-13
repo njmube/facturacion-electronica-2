@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,7 +153,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		comprobante.setCotizacion(null);
 
 		// COMPROBANTES ASOCIADOS.
-		List<Factura> facturas = notaCredito.getFacturas();
+		Set<Factura> facturas = notaCredito.getFacturas();
 		if (WUtils.isNotEmpty(facturas)) {
 			List<ComprobanteAsociado> comprobantesAsociados = new ArrayList<ComprobanteAsociado>();
 			ComprobanteAsociado comprobanteAsociado = null;
@@ -160,7 +161,8 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				comprobanteAsociado = new ComprobanteAsociado();
 				comprobanteAsociado.setNumero(factura.getNroComprobante());
 				comprobanteAsociado.setPtoVta(factura.getPtoVenta().intValue());
-				comprobanteAsociado.setTipoComprobante(TipoComprobante.FACTURA_A);
+				comprobanteAsociado
+						.setTipoComprobante(TipoComprobante.FACTURA_A);
 				comprobantesAsociados.add(comprobanteAsociado);
 			}
 			comprobante.setComprobantesAsociados(comprobantesAsociados);
@@ -281,15 +283,18 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 			detalleNotaCreditoDTO = new DetalleNotaCreditoDTO();
 			detalleNotaCreditoDTO.setAlicuota(detalleNotaCredito.getIva());
 			detalleNotaCreditoDTO.setCantidad(detalleNotaCredito.getCantidad());
-			detalleNotaCreditoDTO.setCodigo(detalleNotaCredito.getProducto()
-					.getCodigo());
+			detalleNotaCreditoDTO.setCodigo((null != detalleNotaCredito
+					.getProducto()) ? detalleNotaCredito.getProducto()
+					.getCodigo() : "0");
 			detalleNotaCreditoDTO.setPrecioUnit(detalleNotaCredito.getPrecio());
-			detalleNotaCreditoDTO.setProducto(detalleNotaCredito.getProducto()
-					.getDescripcion());
+			detalleNotaCreditoDTO.setProducto((null != detalleNotaCredito
+					.getProducto()) ? detalleNotaCredito.getProducto()
+					.getDescripcion() : detalleNotaCredito.getDetalle());
 			detalleNotaCreditoDTO.setSubtotal(detalleNotaCredito.getSubtotal());
 			detalleNotaCreditoDTO.setSubtotalConIVA(detalleNotaCredito
 					.getTotal());
-			detalleNotaCreditoDTO.setComentario(detalleNotaCredito.getComentario());
+			detalleNotaCreditoDTO.setComentario(detalleNotaCredito
+					.getComentario());
 			detallesDTO.add(detalleNotaCreditoDTO);
 
 			if (detalleNotaCredito.getIva().doubleValue() == 21.00) {

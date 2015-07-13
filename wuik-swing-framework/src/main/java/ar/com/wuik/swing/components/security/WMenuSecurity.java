@@ -1,8 +1,10 @@
 package ar.com.wuik.swing.components.security;
 
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JMenu;
+
 import ar.com.wuik.swing.utils.WUtils;
 
 public class WMenuSecurity extends JMenu {

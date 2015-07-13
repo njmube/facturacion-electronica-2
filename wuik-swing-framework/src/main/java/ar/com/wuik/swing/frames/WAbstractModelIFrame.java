@@ -3,6 +3,7 @@ package ar.com.wuik.swing.frames;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -15,8 +16,10 @@ import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.JViewport;
 import javax.swing.text.JTextComponent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.utils.WUtils;
@@ -243,7 +246,22 @@ public abstract class WAbstractModelIFrame extends WAbstractIFrame {
 	 *            WModel - El Model a validar.
 	 * @return Si el Model es valido o no.
 	 */
-	protected abstract boolean validateModel(WModel model);
+	protected boolean validateModel(WModel model) {
+		return Boolean.FALSE;
+	}
+
+	/**
+	 * Valida la informacion del Model.
+	 * 
+	 * @param model
+	 *            WModel - El Model a validar.
+	 * @param component
+	 *            JComponent - El componente target de la validacion.
+	 * @return Si el Model es valido o no.
+	 */
+	protected boolean validateModel(WModel model, JComponent component) {
+		return Boolean.FALSE;
+	}
 
 	protected abstract JComponent getFocusComponent();
 

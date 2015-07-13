@@ -15,13 +15,13 @@ public class FacturaModel extends WTableModel<Factura> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public FacturaModel() {
-		super(new String[] { "CAE", "VTO. CAE", "FECHA VENTA", "SUBTOTAL",
-				"IVA", "TOTAL", "ESTADO" });
+		super(new String[] { "CAE", "VTO. CAE", "F. VTA.", "SUBTOTAL",
+				"TOTAL IVA", "TOTAL", "ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.16, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14 };
+		return new double[] { 0.16, 0.10, 0.10, 0.12, 0.12, 0.12, 0.24 };
 	}
 
 	@Override
@@ -59,18 +59,12 @@ public class FacturaModel extends WTableModel<Factura> {
 		case 2:
 			return String.class;
 		case 3:
-			return String.class;
+			return BigDecimal.class;
 		case 4:
 			return BigDecimal.class;
 		case 5:
 			return BigDecimal.class;
 		case 6:
-			return BigDecimal.class;
-		case 7:
-			return BigDecimal.class;
-		case 8:
-			return BigDecimal.class;
-		case 9:
 			return String.class;
 		}
 		return Object.class;

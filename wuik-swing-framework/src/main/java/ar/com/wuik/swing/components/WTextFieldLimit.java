@@ -1,6 +1,7 @@
 package ar.com.wuik.swing.components;
 
 import java.util.Locale;
+
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;

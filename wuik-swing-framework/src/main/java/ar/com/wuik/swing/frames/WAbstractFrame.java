@@ -1,7 +1,9 @@
 package ar.com.wuik.swing.frames;
 
 import java.awt.Cursor;
+
 import javax.swing.JFrame;
+
 import ar.com.wuik.swing.utils.WFrameUtils;
 
 

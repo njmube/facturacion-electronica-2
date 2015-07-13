@@ -5,6 +5,7 @@ package ar.com.wuik.swing.components;
 
 import java.awt.BorderLayout;
 import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 

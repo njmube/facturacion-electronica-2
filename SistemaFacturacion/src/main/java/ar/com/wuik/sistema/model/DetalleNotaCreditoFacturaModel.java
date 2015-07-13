@@ -18,7 +18,7 @@ public class DetalleNotaCreditoFacturaModel extends WTableModel<Factura> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.34, 0.33, 0.33 };
+		return new double[] { 0.40, 0.30, 0.30 };
 	}
 
 	@Override

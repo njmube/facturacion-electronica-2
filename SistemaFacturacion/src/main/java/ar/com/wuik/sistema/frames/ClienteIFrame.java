@@ -461,11 +461,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 		return getTxtRazonSocial();
 	}
 
-	@Override
-	public void enterPressed() {
-		search();
-	}
-
 	private JTextField getTxtRazonSocial() {
 		if (txtRazonSocial == null) {
 			txtRazonSocial = new JTextField();

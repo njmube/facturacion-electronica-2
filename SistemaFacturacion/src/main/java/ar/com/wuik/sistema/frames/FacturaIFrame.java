@@ -349,11 +349,6 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 		return null;
 	}
 
-	@Override
-	public void enterPressed() {
-		search();
-	}
-
 	private boolean isClienteActivo() {
 		ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
 		try {

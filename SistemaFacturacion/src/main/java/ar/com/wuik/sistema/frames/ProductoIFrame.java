@@ -300,9 +300,4 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 		return btnBuscar;
 	}
 
-	@Override
-	public void enterPressed() {
-		getBtnBuscar().doClick();
-	}
-
 }
