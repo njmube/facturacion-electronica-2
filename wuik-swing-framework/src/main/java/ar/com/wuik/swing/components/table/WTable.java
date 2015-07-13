@@ -9,6 +9,12 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -55,6 +61,53 @@ public final class WTable<T> extends JTable {
 					+ " ]", iaexc);
 		}
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+		if (LOGGER.isDebugEnabled()) {
+			this.getColumnModel().addColumnModelListener(
+					new TableColumnModelListener() {
+
+						@Override
+						public void columnSelectionChanged(ListSelectionEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void columnRemoved(TableColumnModelEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void columnMoved(TableColumnModelEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void columnMarginChanged(ChangeEvent e) {
+
+							final TableColumnModel tModel = getColumnModel();
+							int columns = ((WTableModel) getModel())
+									.getColumnPercentSize().length;
+							for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
+								final TableColumn column = tModel
+										.getColumn(columnIndex);
+								LOGGER.debug("COLUMN: "
+										+ column.getHeaderValue()
+										+ " LONGITUD: " + column.getWidth()
+										+ " PORCENTAJE: "
+										+ (column.getWidth() * FACTOR));
+							}
+						}
+
+						@Override
+						public void columnAdded(TableColumnModelEvent e) {
+							// TODO Auto-generated method stub
+
+						}
+					});
+		}
 
 		int columnCount = getModel().getColumnCount();
 		Class<?> columnClass = null;
@@ -154,7 +207,7 @@ public final class WTable<T> extends JTable {
 		if (WUtils.isNotEmpty(items)) {
 			if (items.size() > 1) {
 				return null;
-			}  else {
+			} else {
 				return items.get(0);
 			}
 		}
@@ -172,7 +225,7 @@ public final class WTable<T> extends JTable {
 		if (WUtils.isNotEmpty(items)) {
 			if (items.size() > 1) {
 				return null;
-			}  else {
+			} else {
 				return items.get(0);
 			}
 		}
@@ -184,7 +237,7 @@ public final class WTable<T> extends JTable {
 		if (WUtils.isNotEmpty(ids)) {
 			if (ids.size() > 1) {
 				return null;
-			}  else {
+			} else {
 				return ids.get(0);
 			}
 		}
@@ -196,7 +249,7 @@ public final class WTable<T> extends JTable {
 		if (WUtils.isNotEmpty(ids)) {
 			if (ids.size() > 1) {
 				return null;
-			}  else {
+			} else {
 				return ids.get(0);
 			}
 		}
