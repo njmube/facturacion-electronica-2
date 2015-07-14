@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "recibos")
-public class Recibo extends BaseEntity {
+public class ReciboPago extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "ID_CLIENTE", nullable = false, insertable = false, updatable = false)
@@ -35,6 +35,7 @@ public class Recibo extends BaseEntity {
 	private Set<NotaDebito> notasDebito;
 	
 //	private boolean entrega;
+//
 //	private List<PagoReciboCheque> pagosCheque;
 //	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 //	@JoinColumn(name = "ID_PAGO_EFECTIVO", nullable = false, insertable = false, updatable = false)

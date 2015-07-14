@@ -152,19 +152,17 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private List<WToolbarButton> getToolbarButtons() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
-		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Cliente",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/add.png")),
+		WToolbarButton buttonAdd = new WToolbarButton("Nuevo", new ImageIcon(
+				WCalendarIFrame.class.getResource("/icons/add.png")),
 				new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						addModalIFrame(new ClienteVerIFrame(ClienteIFrame.this));
 					}
-				}, "Nuevo", null);
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Cliente",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
+				}, "Nuevo Cliente", null);
+		WToolbarButton buttonEdit = new WToolbarButton("Editar", new ImageIcon(
+				WCalendarIFrame.class.getResource("/icons/edit.png")),
 				new ActionListener() {
 
 					@Override
@@ -181,8 +179,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Editar", null);
-		WToolbarButton buttonActivar = new WToolbarButton("Activar Cliente",
+				}, "Editar Cliente", null);
+		WToolbarButton buttonActivar = new WToolbarButton("Activar/Desactivar",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/activar-desactivar.png")),
 				new ActionListener() {
@@ -192,18 +190,34 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						Long idCliente = tablePanel.getSelectedItemID();
 						if (null != idCliente) {
 							try {
-								int result = JOptionPane
-										.showConfirmDialog(
-												getParent(),
-												"¿Desea Activar el Cliente seleccionado?",
-												"Alerta",
-												JOptionPane.OK_CANCEL_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								if (result == JOptionPane.OK_OPTION) {
-									ClienteBO clienteBO = AbstractFactory
-											.getInstance(ClienteBO.class);
-									clienteBO.activar(idCliente);
-									search();
+								ClienteBO clienteBO = AbstractFactory
+										.getInstance(ClienteBO.class);
+								Cliente cliente = clienteBO.obtener(idCliente);
+								if (cliente.isActivo()) {
+									int result = JOptionPane
+											.showConfirmDialog(
+													getParent(),
+													"¿Desea Desactivar el Cliente seleccionado?",
+													"Alerta",
+													JOptionPane.OK_CANCEL_OPTION,
+													JOptionPane.WARNING_MESSAGE);
+									if (result == JOptionPane.OK_OPTION) {
+
+										clienteBO.desactivar(idCliente);
+										search();
+									}
+								} else {
+									int result = JOptionPane
+											.showConfirmDialog(
+													getParent(),
+													"¿Desea Activar el Cliente seleccionado?",
+													"Alerta",
+													JOptionPane.OK_CANCEL_OPTION,
+													JOptionPane.WARNING_MESSAGE);
+									if (result == JOptionPane.OK_OPTION) {
+										clienteBO.activar(idCliente);
+										search();
+									}
 								}
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
@@ -216,9 +230,9 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Activar", null);
+				}, "Activar/Desactivar Cliente", null);
 
-		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Cliente",
+		WToolbarButton buttonDelete = new WToolbarButton("Eliminar",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
 				new ActionListener() {
@@ -259,44 +273,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Eliminar", null);
-
-		WToolbarButton buttonDesactivar = new WToolbarButton(
-				"Desactivar Cliente", new ImageIcon(
-						WCalendarIFrame.class
-								.getResource("/icons/activar-desactivar.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long idCliente = tablePanel.getSelectedItemID();
-						if (null != idCliente) {
-							try {
-								int result = JOptionPane
-										.showConfirmDialog(
-												getParent(),
-												"¿Desea Desactivar el Cliente seleccionado?",
-												"Alerta",
-												JOptionPane.OK_CANCEL_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								if (result == JOptionPane.OK_OPTION) {
-									ClienteBO clienteBO = AbstractFactory
-											.getInstance(ClienteBO.class);
-									clienteBO.desactivar(idCliente);
-									search();
-								}
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
-							}
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar al menos un Cliente",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Desactivar", null);
+				}, "Eliminar Cliente", null);
 
 		WToolbarButton buttonNotasCreditos = new WToolbarButton(
 				"Notas de Crédito", new ImageIcon(
@@ -405,7 +382,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
 		toolbarButtons.add(buttonActivar);
-		toolbarButtons.add(buttonDesactivar);
 		toolbarButtons.add(buttonNotasCreditos);
 		toolbarButtons.add(buttonNotasDebitos);
 		toolbarButtons.add(buttonFacturas);

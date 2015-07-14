@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "recibos")
-public class Recibo extends BaseEntity {
+public class ReciboEntrega extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "ID_CLIENTE", nullable = false, insertable = false, updatable = false)
@@ -34,12 +34,14 @@ public class Recibo extends BaseEntity {
 	@JoinTable(name = "recibos_notas_debito", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_NOTA_DEBITO", nullable = false, updatable = false) })
 	private Set<NotaDebito> notasDebito;
 	
-//	private boolean entrega;
-//	private List<PagoReciboCheque> pagosCheque;
-//	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-//	@JoinColumn(name = "ID_PAGO_EFECTIVO", nullable = false, insertable = false, updatable = false)
-//	private PagoReciboEfectivo pagoEfectivo;
-//	private List<PagoReciboNotaCredito> pagosNotasCredito;
+	private boolean entrega;
+
+	private List<PagoReciboCheque> pagosCheque;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "ID_PAGO_EFECTIVO", nullable = false, insertable = false, updatable = false)
+	private PagoReciboEfectivo pagoEfectivo;
+	
+	private List<PagoReciboNotaCredito> pagosNotasCredito;
 
 	public Cliente getCliente() {
 		return cliente;
