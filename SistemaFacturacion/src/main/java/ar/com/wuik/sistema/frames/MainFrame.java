@@ -22,7 +22,6 @@ import org.pushingpixels.substance.api.SubstanceLookAndFeel;
 import org.pushingpixels.substance.api.skin.SaharaSkin;
 
 import ar.com.wuik.sistema.entities.Permiso;
-import ar.com.wuik.sistema.entities.Permisos;
 import ar.com.wuik.sistema.entities.Usuario;
 import ar.com.wuik.sistema.frames.parametricos.ParametroIFrame;
 import ar.com.wuik.sistema.frames.parametricos.UsuarioIFrame;

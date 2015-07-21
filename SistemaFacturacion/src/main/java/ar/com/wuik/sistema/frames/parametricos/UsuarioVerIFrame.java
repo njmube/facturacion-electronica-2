@@ -38,7 +38,6 @@ import org.pushingpixels.substance.api.skin.SkinInfo;
 import ar.com.wuik.sistema.bo.PermisoBO;
 import ar.com.wuik.sistema.bo.UsuarioBO;
 import ar.com.wuik.sistema.entities.Permiso;
-import ar.com.wuik.sistema.entities.Permisos;
 import ar.com.wuik.sistema.entities.Usuario;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.frames.MainFrame;
