@@ -87,19 +87,7 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_CAE, factura.getCae());
 			model.addValue(CAMPO_CAE_FECHA,
 					WUtils.getStringFromDate(factura.getFechaCAE()));
-			if (factura.isActivo()) {
-				model.addValue(
-						CAMPO_ESTADO,
-						"ACTIVA"
-								+ (WUtils.isEmpty(factura.getCae()) ? " - SIN FACTURAR"
-										: " - FACTURADA"));
-			} else {
-				model.addValue(
-						CAMPO_ESTADO,
-						"ANULADA"
-								+ (WUtils.isEmpty(factura.getCae()) ? " - SIN FACTURAR"
-										: " - FACTURADA"));
-			}
+			model.addValue(CAMPO_ESTADO, factura.getEstado());
 			refreshDetalles();
 			refreshRemitos();
 		} catch (BusinessException bexc) {
@@ -365,7 +353,6 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 		}
 		return txtEstado;
 	}
-
 
 	private void calcularTotales() {
 

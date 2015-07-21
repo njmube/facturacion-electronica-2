@@ -15,38 +15,27 @@ public class NotaCreditoModel extends WTableModel<NotaCredito> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public NotaCreditoModel() {
-		super(new String[] { "CAE", "VTO. CAE", "FECHA", "SUBTOTAL",
+		super(new String[] { "NRO","CAE", "VTO. CAE", "FECHA", "SUBTOTAL",
 				"IVA", "TOTAL", "ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.16, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14 };
+		return new double[] { 0.05, 0.16, 0.10, 0.10, 0.12, 0.12, 0.12, 0.19 };
 	}
 
 	@Override
 	protected Object[] getRow(NotaCredito t, Object[] fila) {
-		fila[0] = t.getCae();
-		fila[1] = WUtils.getStringFromDate(t.getFechaCAE());
-		fila[2] = WUtils.getStringFromDate(t.getFechaVenta());
-		fila[3] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
-		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getIva()));
-		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
-		fila[6] = getEstado(t);
-		fila[7] = t.getId();
+		fila[0] = t.getNroComprobante();
+		fila[1] = t.getCae();
+		fila[2] = WUtils.getStringFromDate(t.getFechaCAE());
+		fila[3] = WUtils.getStringFromDate(t.getFechaVenta());
+		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
+		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getIva()));
+		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
+		fila[7] = t.getEstado();
+		fila[8] = t.getId();
 		return fila;
-	}
-
-	private String getEstado(NotaCredito t) {
-		if (t.isActivo()) {
-			return "ACTIVA"
-					+ (WUtils.isEmpty(t.getCae()) ? " - SIN FACTURAR"
-							: " - FACTURADA");
-		} else {
-			return "ANULADA"
-					+ (WUtils.isEmpty(t.getCae()) ? " - SIN FACTURAR"
-							: " - FACTURADA");
-		}
 	}
 
 	@Override

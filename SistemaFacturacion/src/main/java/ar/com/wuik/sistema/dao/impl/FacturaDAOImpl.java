@@ -10,6 +10,7 @@ import org.hibernate.sql.JoinType;
 
 import ar.com.wuik.sistema.dao.FacturaDAO;
 import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
 import ar.com.wuik.swing.utils.WUtils;
@@ -58,7 +59,7 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		Boolean activo = filter.getActivo();
 		List<Long> idsToExclude = filter.getIdsToExclude();
 		List<Long> idsToInclude = filter.getIdsToInclude();
-		Boolean facturado = filter.getFacturado();
+		EstadoFacturacion estadoFacturacion= filter.getEstadoFacturacion();
 
 		if (null != idCliente) {
 			criteria.add(Restrictions.eq("idCliente", idCliente));
@@ -74,12 +75,8 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 			}
 		}
 
-		if (null != facturado) {
-			if (facturado) {
-				criteria.add(Restrictions.isNotNull("cae"));
-			} else {
-				criteria.add(Restrictions.isNull("cae"));
-			}
+		if (null != estadoFacturacion) {
+				criteria.add(Restrictions.eq("estadoFacturacion", estadoFacturacion));
 		}
 
 		if (null != activo) {

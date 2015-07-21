@@ -401,7 +401,7 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -414,22 +414,25 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
+						List<Long> selectedItems = tblDetalle
+								.getSelectedItemsID();
+						if (WUtils.isNotEmpty(selectedItems)) {
 							int result = JOptionPane.showConfirmDialog(
 									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
+									"¿Desea eliminar los Detalles seleccionados?",
 									"Alerta", JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
-								DetalleNotaDebito detalle = getDetalleById(selectedItem);
-								notaDebito.getDetalles().remove(detalle);
+								for (Long selectedItem : selectedItems) {
+									DetalleNotaDebito detalle = getDetalleById(selectedItem);
+									notaDebito.getDetalles().remove(detalle);
+								}
 								refreshDetalles();
 							}
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar al menos un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -812,10 +815,11 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 							} else {
 								notaDebitoBO.actualizar(notaDebito);
 							}
-							hideFrame();
-							notaDebitoIFrame.search();
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
+						} finally {
+							hideFrame();
+							notaDebitoIFrame.search();
 						}
 					}
 				}

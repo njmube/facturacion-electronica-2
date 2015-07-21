@@ -124,10 +124,11 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());
 			}
+			getBtnGuardarYFacturar().setVisible(Boolean.FALSE);
 
 		}
 		populateComponents(model);
-		getTxtEstado().setText("SIN FACTURAR");
+		getTxtEstado().setText(notaCredito.getEstado());
 		getContentPane().add(getBtnGuardarYFacturar());
 		getContentPane().add(getTxtEstado());
 		getContentPane().add(getLblEstado());
@@ -308,7 +309,8 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 	}
 
 	protected void refreshFacturas() {
-		getTblFacturas().addData(new ArrayList<Factura>(notaCredito.getFacturas()));
+		getTblFacturas().addData(
+				new ArrayList<Factura>(notaCredito.getFacturas()));
 	}
 
 	protected Factura getFacturaById(Long selectedItem) {
@@ -400,7 +402,7 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -413,22 +415,27 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
-							int result = JOptionPane.showConfirmDialog(
-									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
-									"Alerta", JOptionPane.OK_CANCEL_OPTION,
-									JOptionPane.WARNING_MESSAGE);
+						List<Long> selectedItems = tblDetalle
+								.getSelectedItemsID();
+						if (WUtils.isNotEmpty(selectedItems)) {
+							int result = JOptionPane
+									.showConfirmDialog(
+											getParent(),
+											"¿Desea eliminar los Detalles seleccionados?",
+											"Alerta",
+											JOptionPane.OK_CANCEL_OPTION,
+											JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
-								DetalleNotaCredito detalle = getDetalleById(selectedItem);
-								notaCredito.getDetalles().remove(detalle);
+								for (Long selectedItem : selectedItems) {
+									DetalleNotaCredito detalle = getDetalleById(selectedItem);
+									notaCredito.getDetalles().remove(detalle);
+								}
 								refreshDetalles();
 							}
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un solo Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -810,10 +817,11 @@ public class NotaCreditoVerIFrame extends WAbstractModelIFrame {
 							} else {
 								notaCreditoBO.actualizar(notaCredito);
 							}
-							hideFrame();
-							notaCreditoIFrame.search();
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
+						} finally {
+							hideFrame();
+							notaCreditoIFrame.search();
 						}
 					}
 				}

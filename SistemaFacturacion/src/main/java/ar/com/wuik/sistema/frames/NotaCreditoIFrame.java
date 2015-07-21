@@ -15,6 +15,7 @@ import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.NotaCreditoBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.NotaCredito;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.filters.NotaCreditoFilter;
@@ -93,9 +94,9 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 								NotaCreditoIFrame.this, idCliente, null));
 					}
 				}, "Nuevo", null);
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Nota de Crédito",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
+		WToolbarButton buttonEdit = new WToolbarButton(
+				"Editar Nota de Crédito", new ImageIcon(
+						WCalendarIFrame.class.getResource("/icons/edit.png")),
 				new ActionListener() {
 
 					@Override
@@ -109,12 +110,21 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 								NotaCredito notaCredito = notaCreditoBO
 										.obtener(selectedItem);
 
-								boolean facturada = notaCredito.isFacturada();
-
-								if (!facturada) {
-									addModalIFrame(new NotaCreditoVerIFrame(
-											NotaCreditoIFrame.this, idCliente,
-											selectedItem));
+								if (!notaCredito.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									if (!notaCredito
+											.getEstadoFacturacion()
+											.equals(EstadoFacturacion.FACTURADO_ERROR)) {
+										addModalIFrame(new NotaCreditoVerIFrame(
+												NotaCreditoIFrame.this,
+												idCliente, selectedItem));
+									} else {
+										WTooltipUtils
+												.showMessage(
+														"No es posible editar la Nota de Crédito porque se encuentra facturada con error.",
+														(JButton) e.getSource(),
+														MessageType.ALERTA);
+									}
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -146,7 +156,8 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new NotaCreditoVistaIFrame(selectedItem));
+							addModalIFrame(new NotaCreditoVistaIFrame(
+									selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -172,15 +183,15 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 								NotaCredito notaCredito = notaCreditoBO
 										.obtener(selectedItem);
 
-								if (!notaCredito.isFacturada()) {
-									notaCreditoBO.guardarRegistrarAFIP(notaCredito);
+								if (!notaCredito.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									notaCreditoBO.registrarAFIP(notaCredito);
 									try {
 										NotaCreditoReporte
 												.generarNotaCredito(selectedItem);
 									} catch (ReportException rexc) {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
-									search();
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -190,6 +201,8 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 								}
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
+							} finally{
+								search();
 							}
 						} else {
 							WTooltipUtils
@@ -217,18 +230,29 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 								NotaCredito notaCredito = notaCreditoBO
 										.obtener(selectedItem);
 
-								if (notaCredito.isFacturada()) {
-									try {
-										NotaCreditoReporte
-												.generarNotaCredito(selectedItem);
-									} catch (ReportException rexc) {
-										showGlobalErrorMsg(rexc.getMessage());
+								if (notaCredito.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									if (notaCredito.isActivo()) {
+										try {
+											NotaCreditoReporte
+													.generarNotaCredito(selectedItem);
+										} catch (ReportException rexc) {
+											showGlobalErrorMsg(rexc
+													.getMessage());
+										}
+									} else {
+										WTooltipUtils
+												.showMessage(
+														"La Nota de Crédito debe estar activa.",
+														(JButton) e.getSource(),
+														MessageType.ALERTA);
 									}
 								} else {
-									WTooltipUtils.showMessage(
-											"La Nota de Crédito debe estar facturada.",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
+									WTooltipUtils
+											.showMessage(
+													"La Nota de Crédito debe estar facturada.",
+													(JButton) e.getSource(),
+													MessageType.ALERTA);
 								}
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
@@ -290,7 +314,6 @@ public class NotaCreditoIFrame extends WAbstractModelIFrame implements WSecure {
 	protected JComponent getFocusComponent() {
 		return null;
 	}
-
 
 	private boolean isClienteActivo() {
 		ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);

@@ -22,14 +22,15 @@ import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
 import ar.com.wuik.sistema.bo.NotaDebitoBO;
-import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.dao.NotaDebitoDAO;
+import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleNotaDebito;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.NotaDebito;
 import ar.com.wuik.sistema.entities.Parametro;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.NotaDebitoFilter;
@@ -45,7 +46,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 	private FacturacionService facturacionService;
 	private NotaDebitoDAO notaDebitoDAO;
 	private ClienteDAO clienteDAO;
-	private ParametroBO parametroBO;
+	private ParametroDAO parametroDAO;
 
 	public NotaDebitoBOImpl() {
 		facturacionService = AbstractFactory
@@ -54,8 +55,8 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 				.getInstance(NotaDebitoDAO.class);
 		clienteDAO = ar.com.wuik.sistema.utils.AbstractFactory
 				.getInstance(ClienteDAO.class);
-		parametroBO = ar.com.wuik.sistema.utils.AbstractFactory
-				.getInstance(ParametroBO.class);
+		parametroDAO = ar.com.wuik.sistema.utils.AbstractFactory
+				.getInstance(ParametroDAO.class);
 	}
 
 	@Override
@@ -106,31 +107,140 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 			throws BusinessException {
 		try {
 			HibernateUtil.startTransaction();
-			notaDebitoDAO.saveOrUpdate(notaDebito);
-			Comprobante comprobante = crearComprobante(notaDebito);
-			Resultado resultado = facturacionService
-					.solicitarComprobante(comprobante);
 
-			notaDebito.setCae(resultado.getCae());
-			notaDebito.setFechaCAE(resultado.getFechaVtoCAE());
-			notaDebito.setNroComprobante(resultado.getNroComprobante());
-			notaDebito.setPtoVenta(resultado.getPtoVta());
+			boolean errorServicios = Boolean.FALSE;
 
+			// Obtengo el Nro de Nota de Debito.
+			Long nroNotaDebito = parametroDAO.obtenerNroNotaDebito();
+			notaDebito.setNroComprobante(nroNotaDebito);
+			parametroDAO.incrementarNroNotaDebito();
+
+			Resultado resultado = null;
+			try {
+				// Solicito Autorizacion a AFIP.
+				Comprobante comprobante = crearComprobante(notaDebito);
+				resultado = facturacionService
+						.solicitarComprobante(comprobante);
+
+			} catch (ServiceException sexc) {
+				errorServicios = Boolean.TRUE;
+			}
+
+			// Si existen errores en el resultado los retorno como Exception.
+			if (null != resultado && WUtils.isNotEmpty(resultado.getErrores())) {
+				HibernateUtil.rollbackTransaction();
+				HibernateUtil.closeSession();
+				LOGGER.error("guardarRegistrarAFIP() - Error al registrar Nota de Debito");
+				throw new BusinessException(resultado.getMensajeErrores());
+			}
+
+			// Si hubo errores en los Servicios, marco la Nota de Debito con error.
+			if (errorServicios) {
+				notaDebito.setEstadoFacturacion(EstadoFacturacion.FACTURADO_ERROR);
+			} else {
+				// Datos de AFIP
+				notaDebito.setCae(resultado.getCae());
+				notaDebito.setFechaCAE(resultado.getFechaVtoCAE());
+				notaDebito.setPtoVenta(resultado.getPtoVta());
+				notaDebito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+			}
+
+			// Guardo la Nota de Debito con los datos de AFIP.
 			notaDebitoDAO.saveOrUpdate(notaDebito);
 			HibernateUtil.commitTransaction();
-		} catch (ServiceException sexc) {
-			HibernateUtil.rollbackTransaction();
-			LOGGER.error(
-					"guardarRegistrarAFIP() - Problemas por Servicio - Error al registrar Nota de Débito",
-					sexc);
-			throw new BusinessException(sexc, sexc.getMessage());
+			
+			if (errorServicios) {
+				HibernateUtil.closeSession();
+				LOGGER.error("guardarRegistrarAFIP() - Error en Servicios");
+				throw new BusinessException("Ha ocurrido un error al conectar a AFIP, la Nota de Débito se ha marcado con error");
+			}
+
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error(
-					"guardarRegistrarAFIP() - Error al registrar Nota de Débito",
+			LOGGER.error("guardarRegistrarAFIP() - Error al registrar Nota de Débito",
 					daexc);
-			throw new BusinessException(daexc,
-					"Error al registrar Nota de Débito");
+			throw new BusinessException(daexc, "Error al registrar Nota de Débito");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+	
+	@Override
+	public void registrarAFIP(NotaDebito notaDebito) throws BusinessException {
+		try {
+			HibernateUtil.startTransaction();
+
+			Long nroNotaDebito = notaDebito.getNroComprobante();
+			Resultado resultado = null;
+			boolean errorServicios = Boolean.FALSE;
+
+			if (null == nroNotaDebito) {
+				// Asigno el Nro. de Nota Debito y lo incremento.
+				nroNotaDebito = parametroDAO.obtenerNroNotaDebito();
+				notaDebito.setNroComprobante(nroNotaDebito);
+				parametroDAO.incrementarNroNotaDebito();
+
+				try {
+					// Solicito Autorizacion a AFIP.
+					Comprobante comprobante = crearComprobante(notaDebito);
+					resultado = facturacionService
+							.solicitarComprobante(comprobante);
+
+				} catch (ServiceException sexc) {
+					errorServicios = Boolean.TRUE;
+				}
+			} else {
+				try {
+					// Consulto si el comprobante con el Nro. de Nota de Debito existe
+					// en AFIP.
+					resultado = facturacionService.consultarComprobante(
+							nroNotaDebito, TipoComprobante.NOTA_CREDITO_A);
+
+					// Si no existe lo envio a Autorizar a AFIP.
+					if (null == resultado.getCae()) {
+						Comprobante comprobante = crearComprobante(notaDebito);
+						resultado = facturacionService
+								.solicitarComprobante(comprobante);
+					}
+				} catch (ServiceException sexc) {
+					errorServicios = Boolean.TRUE;
+				}
+			}
+
+			// Si existen errores en el resultado los retorno como Exception.
+			if (null != resultado && WUtils.isNotEmpty(resultado.getErrores())) {
+				HibernateUtil.rollbackTransaction();
+				LOGGER.error("registrarAFIP() - Error al registrar Nota de Debito");
+				throw new BusinessException(resultado.getMensajeErrores());
+			}
+
+			// Si hubo errores en los Servicios, marco la Nota de Debito con error.
+			if (errorServicios) {
+				notaDebito.setEstadoFacturacion(EstadoFacturacion.FACTURADO_ERROR);
+			} else {
+				// Datos de AFIP
+				notaDebito.setCae(resultado.getCae());
+				notaDebito.setFechaCAE(resultado.getFechaVtoCAE());
+				notaDebito.setPtoVenta(resultado.getPtoVta());
+				notaDebito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+			}
+
+			// Guardo la Nota de Debito con los datos de AFIP.
+			notaDebitoDAO.saveOrUpdate(notaDebito);
+			HibernateUtil.commitTransaction();
+
+			if (errorServicios) {
+				HibernateUtil.closeSession();
+				LOGGER.error("registrarAFIP() - Error en Servicios");
+				throw new BusinessException(
+						"Ha ocurrido un error al conectar a AFIP, la Nota de Débito se ha marcado con error");
+			}
+
+		} catch (DataAccessException daexc) {
+			HibernateUtil.rollbackTransaction();
+			LOGGER.error("registrarAFIP() - Error al registrar Nota de Débito",
+					daexc);
+			throw new BusinessException(daexc, "Error al registrar Nota de Débito");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -140,6 +250,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 			throws DataAccessException {
 
 		Cliente cliente = clienteDAO.getById(notaDebito.getIdCliente());
+		long nroNotaCredito = notaDebito.getNroComprobante();
 
 		String cuit = cliente.getCuit().replaceAll("-", "");
 		Date fechaComprobante = notaDebito.getFechaVenta();
@@ -182,6 +293,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		comprobante.setFechaComprobante(fechaComprobante);
 		comprobante.setTipoComprobante(TipoComprobante.NOTA_DEBITO_A);
 		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
+		comprobante.setNroComprobante(nroNotaCredito);
 
 		// DETALLES DE LA NOTA DE DEBITO.
 		List<AlicuotaIVA> alicuotas = new ArrayList<AlicuotaIVA>();
@@ -256,7 +368,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		}
 	}
 
-	private NotaDebitoDTO convertToDTO(NotaDebito notaDebito) throws BusinessException {
+	private NotaDebitoDTO convertToDTO(NotaDebito notaDebito) throws DataAccessException {
 		
 		NotaDebitoDTO notaDebitoDTO = new NotaDebitoDTO();
 
@@ -269,7 +381,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		notaDebitoDTO.setClienteRazonSocial(cliente.getRazonSocial());
 		
 		// DATOS PROPIOS. 
-		Parametro parametro = parametroBO.getParametro();
+		Parametro parametro = parametroDAO.getParametro();
 		notaDebitoDTO.setRazonSocial(parametro.getRazonSocial());
 		notaDebitoDTO.setCondIVA(parametro.getCondIVA());
 		notaDebitoDTO.setCuit(parametro.getCuit());
@@ -328,4 +440,16 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		notaDebitoDTO.setTotal(total);
 		return notaDebitoDTO;
 	}
+	
+	@Override
+	public Long obtenerUltimoNroComprobante() throws BusinessException {
+		try {
+			Resultado resultado = facturacionService.consultarUltimoComprobante(TipoComprobante.NOTA_DEBITO_A);
+			return resultado.getNroComprobante();
+		} catch (ServiceException sexc) {
+			LOGGER.error("obtenerUltimoNroComprobante() - Error al obtener último Nro. de Nota de Débito", sexc);
+			throw new BusinessException(sexc, "Error al obtener último Nro. de Nota de Débito");
+		}
+	}
+
 }

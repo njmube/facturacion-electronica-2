@@ -16,6 +16,7 @@ import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.FacturaBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
@@ -110,12 +111,20 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 								Factura factura = (Factura) facturaBO
 										.obtener(selectedItem);
 
-								boolean facturada = factura.isFacturada();
-
-								if (!facturada) {
-									addModalIFrame(new FacturaVerIFrame(
-											FacturaIFrame.this, idCliente,
-											selectedItem));
+								if (!factura.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									if (!factura.getEstadoFacturacion().equals(
+											EstadoFacturacion.FACTURADO_ERROR)) {
+										addModalIFrame(new FacturaVerIFrame(
+												FacturaIFrame.this, idCliente,
+												selectedItem));
+									} else {
+										WTooltipUtils
+												.showMessage(
+														"No es posible editar la Factura porque se encuentra facturada con error.",
+														(JButton) e.getSource(),
+														MessageType.ALERTA);
+									}
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -161,11 +170,21 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 									Factura factura = (Factura) facturaBO
 											.obtener(selectedItem);
 
-									boolean activa = factura.isActivo();
+									if (factura.isActivo()) {
+										if (!factura
+												.getEstadoFacturacion()
+												.equals(EstadoFacturacion.FACTURADO_ERROR)) {
+											facturaBO.cancelar(selectedItem);
+											search();
+										} else {
+											WTooltipUtils
+													.showMessage(
+															"No es posible editar la Factura porque se encuentra facturada con error.",
+															(JButton) e
+																	.getSource(),
+															MessageType.ALERTA);
+										}
 
-									if (activa) {
-										facturaBO.cancelar(selectedItem);
-										search();
 									} else {
 
 										WTooltipUtils
@@ -222,15 +241,15 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 							try {
 								Factura factura = facturaBO
 										.obtener(selectedItem);
-								if (!factura.isFacturada()) {
-									facturaBO.guardarRegistrarAFIP(factura);
+								if (!factura.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									facturaBO.registrarAFIP(factura);
 									try {
 										FacturaReporte
 												.generarFactura(selectedItem);
 									} catch (ReportException rexc) {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
-									search();
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -240,6 +259,8 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 								}
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
+							} finally{
+								search();
 							}
 						} else {
 							WTooltipUtils
@@ -266,7 +287,8 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 							try {
 								Factura factura = facturaBO
 										.obtener(selectedItem);
-								if (factura.isFacturada()) {
+								if (factura.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
 									if (factura.isActivo()) {
 										try {
 											FacturaReporte

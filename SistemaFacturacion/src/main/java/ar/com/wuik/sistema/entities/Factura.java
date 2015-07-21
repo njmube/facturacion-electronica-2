@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -17,7 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import ar.com.wuik.swing.utils.WUtils;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 
 @Entity
 @Table(name = "facturas")
@@ -55,10 +57,14 @@ public class Factura extends BaseEntity {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "notas_creditos_facturas", joinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_NOTA_CREDITO", nullable = false, updatable = false) })
 	private Set<NotaCredito> notasCredito;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "ESTADO_FACTURACION")
+	private EstadoFacturacion estadoFacturacion;
 
 	public Factura() {
 		this.detalles = new ArrayList<DetalleFactura>();
 		this.remitos = new ArrayList<Remito>();
+		this.estadoFacturacion = EstadoFacturacion.SIN_FACTURAR;
 	}
 
 	public Cliente getCliente() {
@@ -177,10 +183,6 @@ public class Factura extends BaseEntity {
 		return "IMPAGA";
 	}
 
-	public boolean isFacturada() {
-		return WUtils.isNotEmpty(this.cae);
-	}
-
 	public Set<NotaCredito> getNotasCredito() {
 		return notasCredito;
 	}
@@ -189,4 +191,20 @@ public class Factura extends BaseEntity {
 		this.notasCredito = notasCredito;
 	}
 
+	public EstadoFacturacion getEstadoFacturacion() {
+		return estadoFacturacion;
+	}
+
+	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
+		this.estadoFacturacion = estadoFacturacion;
+	}
+
+	public String getEstado(){
+		if (activo) {
+			return "ACTIVA - " + getEstadoFacturacion().getDenominacion();
+		} else {
+			return "ANULADA - " + getEstadoFacturacion().getDenominacion();
+		}
+	}
+	
 }

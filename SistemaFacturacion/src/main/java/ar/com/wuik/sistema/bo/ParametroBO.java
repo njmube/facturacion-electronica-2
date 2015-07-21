@@ -13,5 +13,11 @@ public interface ParametroBO {
 
 	String getNroRemito() throws BusinessException;
 
+	String getNroFactura() throws BusinessException;
+	
+	String getNroNotaCredito() throws BusinessException;
+	
+	String getNroNotaDebito() throws BusinessException;
+	
 	Parametro getParametro() throws BusinessException;
 }

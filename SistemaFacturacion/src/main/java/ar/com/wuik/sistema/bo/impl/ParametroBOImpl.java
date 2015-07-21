@@ -66,6 +66,55 @@ public class ParametroBOImpl implements ParametroBO {
 	}
 
 	@Override
+	public String getNroFactura() throws BusinessException {
+		try {
+			Parametro parametro = parametroDAO.getById(1L);
+			return WUtils.leftPadding(parametro.getNroFactura() + "", 8, "0");
+		} catch (DataAccessException daexc) {
+			LOGGER.error("getNroFactura() - Error al obtener Nro. de Factura",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al obtener Nro. de Factura");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+
+	@Override
+	public String getNroNotaCredito() throws BusinessException {
+		try {
+			Parametro parametro = parametroDAO.getById(1L);
+			return WUtils.leftPadding(parametro.getNroNotaCredito() + "", 8,
+					"0");
+		} catch (DataAccessException daexc) {
+			LOGGER.error(
+					"getNroNotaCredito() - Error al obtener Nro. Nota de Crédito",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al obtener Nro. Nota de Crédito");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+
+	@Override
+	public String getNroNotaDebito() throws BusinessException {
+		try {
+			Parametro parametro = parametroDAO.getById(1L);
+			return WUtils
+					.leftPadding(parametro.getNroNotaDebito() + "", 8, "0");
+		} catch (DataAccessException daexc) {
+			LOGGER.error(
+					"getNroNotaDebito() - Error al obtener Nro. Nota de Débito",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al obtener Nro. Nota de Débito");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+
+	@Override
 	public String getNroRemito() throws BusinessException {
 		try {
 			Parametro parametro = parametroDAO.getById(1L);

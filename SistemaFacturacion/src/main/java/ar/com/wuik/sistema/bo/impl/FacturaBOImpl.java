@@ -20,14 +20,15 @@ import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
 import ar.com.wuik.sistema.bo.FacturaBO;
-import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.dao.FacturaDAO;
+import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleFactura;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Remito;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
@@ -43,7 +44,7 @@ public class FacturaBOImpl implements FacturaBO {
 	private FacturacionService facturacionService;
 	private FacturaDAO facturaDAO;
 	private ClienteDAO clienteDAO;
-	private ParametroBO parametroBO;
+	private ParametroDAO parametroDAO;
 
 	public FacturaBOImpl() {
 		facturacionService = AbstractFactory
@@ -52,8 +53,8 @@ public class FacturaBOImpl implements FacturaBO {
 				.getInstance(FacturaDAO.class);
 		clienteDAO = ar.com.wuik.sistema.utils.AbstractFactory
 				.getInstance(ClienteDAO.class);
-		parametroBO = ar.com.wuik.sistema.utils.AbstractFactory
-				.getInstance(ParametroBO.class);
+		parametroDAO = ar.com.wuik.sistema.utils.AbstractFactory
+				.getInstance(ParametroDAO.class);
 	}
 
 	@Override
@@ -97,26 +98,57 @@ public class FacturaBOImpl implements FacturaBO {
 
 	@Override
 	public void guardarRegistrarAFIP(Factura factura) throws BusinessException {
+
 		try {
 			HibernateUtil.startTransaction();
-			facturaDAO.saveOrUpdate(factura);
-			Comprobante comprobante = crearComprobante(factura);
-			Resultado resultado = facturacionService
-					.solicitarComprobante(comprobante);
 
-			factura.setCae(resultado.getCae());
-			factura.setFechaCAE(resultado.getFechaVtoCAE());
-			factura.setNroComprobante(resultado.getNroComprobante());
-			factura.setPtoVenta(resultado.getPtoVta());
+			boolean errorServicios = Boolean.FALSE;
 
+			// Obtengo el Nro de Factura.
+			Long nroFactura = parametroDAO.obtenerNroFactura();
+			factura.setNroComprobante(nroFactura);
+			parametroDAO.incrementarNroFactura();
+
+			Resultado resultado = null;
+			try {
+				// Solicito Autorizacion a AFIP.
+				Comprobante comprobante = crearComprobante(factura);
+				resultado = facturacionService
+						.solicitarComprobante(comprobante);
+
+			} catch (ServiceException sexc) {
+				errorServicios = Boolean.TRUE;
+			}
+
+			// Si existen errores en el resultado los retorno como Exception.
+			if (null != resultado && WUtils.isNotEmpty(resultado.getErrores())) {
+				HibernateUtil.rollbackTransaction();
+				HibernateUtil.closeSession();
+				LOGGER.error("guardarRegistrarAFIP() - Error al registrar Factura");
+				throw new BusinessException(resultado.getMensajeErrores());
+			}
+
+			// Si hubo errores en los Servicios, marco la Factura con error.
+			if (errorServicios) {
+				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO_ERROR);
+			} else {
+				// Datos de AFIP
+				factura.setCae(resultado.getCae());
+				factura.setFechaCAE(resultado.getFechaVtoCAE());
+				factura.setPtoVenta(resultado.getPtoVta());
+				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+			}
+
+			// Guardo la Factura con los datos de AFIP.
 			facturaDAO.saveOrUpdate(factura);
 			HibernateUtil.commitTransaction();
-		} catch (ServiceException sexc) {
-			HibernateUtil.rollbackTransaction();
-			LOGGER.error(
-					"guardarRegistrarAFIP() - Problemas por Servicio - Error al registrar Factura",
-					sexc);
-			throw new BusinessException(sexc, sexc.getMessage());
+			
+			if (errorServicios) {
+				HibernateUtil.closeSession();
+				LOGGER.error("guardarRegistrarAFIP() - Error en Servicios");
+				throw new BusinessException("Ha ocurrido un error al conectar a AFIP, la Factura se ha marcado con error");
+			}
+
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
 			LOGGER.error("guardarRegistrarAFIP() - Error al registrar Factura",
@@ -127,10 +159,90 @@ public class FacturaBOImpl implements FacturaBO {
 		}
 	}
 
+	@Override
+	public void registrarAFIP(Factura factura) throws BusinessException {
+		try {
+			HibernateUtil.startTransaction();
+
+			Long nroFactura = factura.getNroComprobante();
+			Resultado resultado = null;
+			boolean errorServicios = Boolean.FALSE;
+
+			if (null == nroFactura) {
+				// Asigno el Nro. de Factura y lo incremento.
+				nroFactura = parametroDAO.obtenerNroFactura();
+				factura.setNroComprobante(nroFactura);
+				parametroDAO.incrementarNroFactura();
+
+				try {
+					// Solicito Autorizacion a AFIP.
+					Comprobante comprobante = crearComprobante(factura);
+					resultado = facturacionService
+							.solicitarComprobante(comprobante);
+
+				} catch (ServiceException sexc) {
+					errorServicios = Boolean.TRUE;
+				}
+			} else {
+				try {
+					// Consulto si el comprobante con el Nro. de Factura existe
+					// en AFIP.
+					resultado = facturacionService.consultarComprobante(
+							nroFactura, TipoComprobante.FACTURA_A);
+
+					// Si no existe lo envio a Autorizar a AFIP.
+					if (null == resultado.getCae()) {
+						Comprobante comprobante = crearComprobante(factura);
+						resultado = facturacionService
+								.solicitarComprobante(comprobante);
+					}
+				} catch (ServiceException sexc) {
+					errorServicios = Boolean.TRUE;
+				}
+			}
+
+			// Si existen errores en el resultado los retorno como Exception.
+			if (null != resultado && WUtils.isNotEmpty(resultado.getErrores())) {
+				HibernateUtil.rollbackTransaction();
+				LOGGER.error("registrarAFIP() - Error al registrar Factura");
+				throw new BusinessException(resultado.getMensajeErrores());
+			}
+
+			// Si hubo errores en los Servicios, marco la Factura con error.
+			if (errorServicios) {
+				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO_ERROR);
+			} else {
+				// Datos de AFIP
+				factura.setCae(resultado.getCae());
+				factura.setFechaCAE(resultado.getFechaVtoCAE());
+				factura.setPtoVenta(resultado.getPtoVta());
+				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+			}
+
+			// Guardo la Factura con los datos de AFIP.
+			facturaDAO.saveOrUpdate(factura);
+			HibernateUtil.commitTransaction();
+			
+			if (errorServicios) {
+				HibernateUtil.closeSession();
+				LOGGER.error("registrarAFIP() - Error en Servicios");
+				throw new BusinessException("Ha ocurrido un error al conectar a AFIP, la Factura se ha marcado con error");
+			}
+			
+		} catch (DataAccessException daexc) {
+			HibernateUtil.rollbackTransaction();
+			LOGGER.error("registrarAFIP() - Error al registrar Factura", daexc);
+			throw new BusinessException(daexc, "Error al registrar Factura");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+
 	private Comprobante crearComprobante(Factura factura)
 			throws DataAccessException {
 
 		Cliente cliente = clienteDAO.getById(factura.getIdCliente());
+		long nroFactura = factura.getNroComprobante();
 
 		String cuit = cliente.getCuit().replaceAll("-", "");
 		Date fechaComprobante = factura.getFechaVenta();
@@ -158,6 +270,7 @@ public class FacturaBOImpl implements FacturaBO {
 		comprobante.setTipoComprobante(TipoComprobante.FACTURA_A);
 		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
 		comprobante.setComprobantesAsociados(null);
+		comprobante.setNroComprobante(nroFactura);
 
 		// DETALLES DE LA FACTURA.
 		List<AlicuotaIVA> alicuotas = new ArrayList<AlicuotaIVA>();
@@ -245,7 +358,7 @@ public class FacturaBOImpl implements FacturaBO {
 		}
 	}
 
-	private FacturaDTO convertToDTO(Factura factura) throws BusinessException {
+	private FacturaDTO convertToDTO(Factura factura) throws DataAccessException {
 		FacturaDTO facturaDTO = new FacturaDTO();
 
 		// DATOS DEL CLIENTE.
@@ -256,8 +369,8 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setClienteDomicilio(cliente.getDireccion());
 		facturaDTO.setClienteRazonSocial(cliente.getRazonSocial());
 
-		// DATOS PROPIOS. 
-		Parametro parametro = parametroBO.getParametro();
+		// DATOS PROPIOS.
+		Parametro parametro = parametroDAO.getParametro();
 		facturaDTO.setRazonSocial(parametro.getRazonSocial());
 		facturaDTO.setCondIVA(parametro.getCondIVA());
 		facturaDTO.setCuit(parametro.getCuit());
@@ -295,7 +408,8 @@ public class FacturaBOImpl implements FacturaBO {
 			detalleFacturaDTO.setPrecioUnit(detalleFactura.getPrecio());
 			detalleFacturaDTO
 					.setProducto((null != detalleFactura.getProducto()) ? detalleFactura
-							.getProducto().getDescripcion() : detalleFactura.getDetalle());
+							.getProducto().getDescripcion() : detalleFactura
+							.getDetalle());
 			detalleFacturaDTO.setSubtotal(detalleFactura.getSubtotal());
 			detalleFacturaDTO.setSubtotalConIVA(detalleFactura.getTotal());
 			detallesDTO.add(detalleFacturaDTO);
@@ -322,5 +436,20 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setTipo("FACTURA");
 		facturaDTO.setTotal(total);
 		return facturaDTO;
+	}
+
+	@Override
+	public Long obtenerUltimoNroComprobante() throws BusinessException {
+		try {
+			Resultado resultado = facturacionService
+					.consultarUltimoComprobante(TipoComprobante.FACTURA_A);
+			return resultado.getNroComprobante();
+		} catch (ServiceException sexc) {
+			LOGGER.error(
+					"obtenerUltimoNroComprobante() - Error al obtener último Nro. de Factura",
+					sexc);
+			throw new BusinessException(sexc,
+					"Error al obtener último Nro. de Factura");
+		}
 	}
 }

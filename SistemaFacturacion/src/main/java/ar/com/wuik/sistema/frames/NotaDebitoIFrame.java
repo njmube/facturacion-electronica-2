@@ -15,6 +15,7 @@ import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.NotaDebitoBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.NotaDebito;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.filters.NotaDebitoFilter;
@@ -106,15 +107,24 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 									.getInstance(NotaDebitoBO.class);
 							try {
 
-								NotaDebito NotaDebito = NotaDebitoBO
+								NotaDebito notaDebito = NotaDebitoBO
 										.obtener(selectedItem);
 
-								boolean facturada = NotaDebito.isFacturada();
-
-								if (!facturada) {
-									addModalIFrame(new NotaDebitoVerIFrame(
-											NotaDebitoIFrame.this, idCliente,
-											selectedItem));
+								if (!notaDebito.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									if (!notaDebito
+											.getEstadoFacturacion()
+											.equals(EstadoFacturacion.FACTURADO_ERROR)) {
+										addModalIFrame(new NotaDebitoVerIFrame(
+												NotaDebitoIFrame.this,
+												idCliente, selectedItem));
+									} else {
+										WTooltipUtils
+												.showMessage(
+														"No es posible editar la Nota de Débito porque se encuentra facturada con error.",
+														(JButton) e.getSource(),
+														MessageType.ALERTA);
+									}
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -146,7 +156,8 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new NotaDebitoVistaIFrame(selectedItem));
+							addModalIFrame(new NotaDebitoVistaIFrame(
+									selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -172,8 +183,9 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 								NotaDebito notaDebito = notaDebitoBO
 										.obtener(selectedItem);
 
-								if (!notaDebito.isFacturada()) {
-									notaDebitoBO.guardarRegistrarAFIP(notaDebito);
+								if (!notaDebito.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+									notaDebitoBO.registrarAFIP(notaDebito);
 									try {
 										NotaDebitoReporte
 												.generarNotaDebito(selectedItem);
@@ -217,7 +229,8 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 								NotaDebito notaDebito = notaDebitoBO
 										.obtener(selectedItem);
 
-								if (notaDebito.isFacturada()) {
+								if (notaDebito.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
 									try {
 										NotaDebitoReporte
 												.generarNotaDebito(selectedItem);
@@ -225,10 +238,11 @@ public class NotaDebitoIFrame extends WAbstractModelIFrame implements WSecure {
 										showGlobalErrorMsg(rexc.getMessage());
 									}
 								} else {
-									WTooltipUtils.showMessage(
-											"La Nota de Débito debe estar facturada.",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
+									WTooltipUtils
+											.showMessage(
+													"La Nota de Débito debe estar facturada.",
+													(JButton) e.getSource(),
+													MessageType.ALERTA);
 								}
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());

@@ -79,7 +79,8 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	public NotaCreditoVistaIFrame(Long idFactura) {
 		initialize("Ver Nota de Crédito");
 		WModel model = populateModel();
-		NotaCreditoBO notaCreditoBO = AbstractFactory.getInstance(NotaCreditoBO.class);
+		NotaCreditoBO notaCreditoBO = AbstractFactory
+				.getInstance(NotaCreditoBO.class);
 		try {
 			this.notaCredito = notaCreditoBO.obtener(idFactura);
 			model.addValue(CAMPO_FECHA_EMISION,
@@ -88,19 +89,7 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_CAE, notaCredito.getCae());
 			model.addValue(CAMPO_CAE_FECHA,
 					WUtils.getStringFromDate(notaCredito.getFechaCAE()));
-			if (notaCredito.isActivo()) {
-				model.addValue(
-						CAMPO_ESTADO,
-						"ACTIVA"
-								+ (WUtils.isEmpty(notaCredito.getCae()) ? " - SIN FACTURAR"
-										: " - FACTURADA"));
-			} else {
-				model.addValue(
-						CAMPO_ESTADO,
-						"ANULADA"
-								+ (WUtils.isEmpty(notaCredito.getCae()) ? " - SIN FACTURAR"
-										: " - FACTURADA"));
-			}
+			model.addValue(CAMPO_ESTADO, notaCredito.getEstado());
 			refreshDetalles();
 			refreshFacturas();
 		} catch (BusinessException bexc) {
@@ -110,14 +99,16 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 	}
 
 	protected void refreshFacturas() {
-		getTblRemitos().addData(new ArrayList<Factura>(notaCredito.getFacturas()));
+		getTblRemitos().addData(
+				new ArrayList<Factura>(notaCredito.getFacturas()));
 	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				NotaCreditoVistaIFrame.class.getResource("/icons/notas_credito.png")));
+				NotaCreditoVistaIFrame.class
+						.getResource("/icons/notas_credito.png")));
 		setBounds(0, 0, 808, 459);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -341,7 +332,8 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 
 	private WTablePanel<DetalleNotaCredito> getTblDetalle() {
 		if (tblDetalle == null) {
-			tblDetalle = new WTablePanel(DetalleNotaCreditoModel.class, "Detalles");
+			tblDetalle = new WTablePanel(DetalleNotaCreditoModel.class,
+					"Detalles");
 			tblDetalle.setBounds(10, 59, 766, 157);
 		}
 		return tblDetalle;
@@ -376,7 +368,8 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		List<DetalleNotaCredito> detalles = notaCredito.getDetalles();
 		for (DetalleNotaCredito detalleNotaCredito : detalles) {
 			if (detalleNotaCredito.getIva().doubleValue() == 21.00) {
-				subtotalIVA21 = subtotalIVA21.add(detalleNotaCredito.getTotalIVA());
+				subtotalIVA21 = subtotalIVA21.add(detalleNotaCredito
+						.getTotalIVA());
 			} else if (detalleNotaCredito.getIva().doubleValue() == 10.50) {
 				subtotalIVA105 = subtotalIVA105.add(detalleNotaCredito
 						.getTotalIVA());
@@ -390,7 +383,8 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 		notaCredito.setIva(total.subtract(subtotal));
 
 		getTxtSubtotalPesos().setText(
-				WUtils.getValue(notaCredito.getSubtotal()).toEngineeringString());
+				WUtils.getValue(notaCredito.getSubtotal())
+						.toEngineeringString());
 		getTxtIVA10().setText(
 				WUtils.getValue(subtotalIVA105).toEngineeringString());
 		getTxtIVA21().setText(

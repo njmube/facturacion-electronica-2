@@ -12,6 +12,12 @@ public class Parametro extends BaseEntity {
 
 	@Column(name = "NRO_RECIBO")
 	private Long nroRecibo;
+	@Column(name = "NRO_FACTURA")
+	private Long nroFactura;
+	@Column(name = "NRO_NOTA_CREDITO")
+	private Long nroNotaCredito;
+	@Column(name = "NRO_NOTA_DEBITO")
+	private Long nroNotaDebito;
 	@Column(name = "NRO_REMITO")
 	private Long nroRemito;
 	@Column(name = "PREF_REMITO")
@@ -109,6 +115,30 @@ public class Parametro extends BaseEntity {
 
 	public void setInicioActividad(Date inicioActividad) {
 		this.inicioActividad = inicioActividad;
+	}
+
+	public Long getNroFactura() {
+		return nroFactura;
+	}
+
+	public void setNroFactura(Long nroFactura) {
+		this.nroFactura = nroFactura;
+	}
+
+	public Long getNroNotaCredito() {
+		return nroNotaCredito;
+	}
+
+	public void setNroNotaCredito(Long nroNotaCredito) {
+		this.nroNotaCredito = nroNotaCredito;
+	}
+
+	public Long getNroNotaDebito() {
+		return nroNotaDebito;
+	}
+
+	public void setNroNotaDebito(Long nroNotaDebito) {
+		this.nroNotaDebito = nroNotaDebito;
 	}
 
 }

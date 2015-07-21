@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 
 import ar.com.wuik.sistema.entities.Banco;
 import ar.com.wuik.sistema.entities.Cheque;
@@ -39,7 +41,6 @@ public class HibernateUtil {
 	private static SessionFactory sessionFactory = null;
 	private static Transaction tx;
 
-	@SuppressWarnings("deprecation")
 	private static SessionFactory buildSessionFactory() {
 		try {
 			final Configuration cfg = new Configuration();
@@ -50,7 +51,9 @@ public class HibernateUtil {
 			cfg.setProperty("hibernate.connection.username", user);
 			cfg.setProperty("hibernate.connection.password", password);
 			getClasses(cfg);
-			return cfg.buildSessionFactory();
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
+					.applySettings(cfg.getProperties()).buildServiceRegistry();
+			return cfg.buildSessionFactory(serviceRegistry);
 		} catch (Throwable ex) {
 			// Make sure you log the exception, as it might be swallowed
 			System.err.println("Initial SessionFactory creation failed." + ex);
@@ -81,12 +84,14 @@ public class HibernateUtil {
 	public static void commitTransaction() {
 		if (null != session && null != tx) {
 			tx.commit();
+			tx = null;
 		}
 	}
 
 	public static void rollbackTransaction() {
 		if (null != session && null != tx) {
 			tx.rollback();
+			tx = null;
 		}
 	}
 

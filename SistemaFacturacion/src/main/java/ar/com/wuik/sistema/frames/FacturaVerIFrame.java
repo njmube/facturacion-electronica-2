@@ -110,6 +110,7 @@ public class FacturaVerIFrame extends WAbstractModelIFrame {
 			this.factura = new Factura();
 		} else {
 			initialize("Editar Venta");
+			getBtnGuardarYFacturar().setVisible(Boolean.FALSE);
 			FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
 			try {
 				this.factura = facturaBO.obtener(idFactura);
@@ -124,7 +125,7 @@ public class FacturaVerIFrame extends WAbstractModelIFrame {
 
 		}
 		populateComponents(model);
-		getTxtEstado().setText("SIN FACTURAR");
+		getTxtEstado().setText(this.factura.getEstado());
 		getContentPane().add(getLblEstado());
 		getContentPane().add(getTxtEstado());
 		getContentPane().add(getBtnGuardarYFacturar());
@@ -439,22 +440,24 @@ public class FacturaVerIFrame extends WAbstractModelIFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
+						List<Long> selectedItems = tblDetalle.getSelectedItemsID();
+						if (WUtils.isNotEmpty(selectedItems)) {
 							int result = JOptionPane.showConfirmDialog(
 									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
+									"¿Desea eliminar los Items seleccionados?",
 									"Alerta", JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
-								DetalleFactura detalle = getDetalleById(selectedItem);
-								factura.getDetalles().remove(detalle);
+								for (Long selectedItem : selectedItems) {
+									DetalleFactura detalle = getDetalleById(selectedItem);
+									factura.getDetalles().remove(detalle);
+								}
 								refreshDetalles();
 							}
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar al menos un Item",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -791,21 +794,17 @@ public class FacturaVerIFrame extends WAbstractModelIFrame {
 						try {
 							FacturaBO facturaBO = AbstractFactory
 									.getInstance(FacturaBO.class);
-							if (factura.getId() == null) {
-								facturaBO.guardarRegistrarAFIP(factura);
-								try {
-									FacturaReporte.generarFactura(factura
-											.getId());
-								} catch (ReportException rexc) {
-									showGlobalErrorMsg(rexc.getMessage());
-								}
-							} else {
-								facturaBO.actualizar(factura);
+							facturaBO.guardarRegistrarAFIP(factura);
+							try {
+								FacturaReporte.generarFactura(factura.getId());
+							} catch (ReportException rexc) {
+								showGlobalErrorMsg(rexc.getMessage());
 							}
-							hideFrame();
-							facturaIFrame.search();
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
+						} finally {
+							hideFrame();
+							facturaIFrame.search();
 						}
 					}
 				}

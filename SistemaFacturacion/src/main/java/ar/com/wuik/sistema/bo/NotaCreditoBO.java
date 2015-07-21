@@ -16,9 +16,12 @@ public interface NotaCreditoBO {
 	void guardar(NotaCredito notaCredito) throws BusinessException;
 
 	void guardarRegistrarAFIP(NotaCredito notaCredito) throws BusinessException;
+	
+	void registrarAFIP(NotaCredito notaCredito) throws BusinessException;
 
 	void actualizar(NotaCredito notaCredito) throws BusinessException;
 
 	NotaCreditoDTO obtenerDTO(Long id) throws BusinessException;
 
+	Long obtenerUltimoNroComprobante() throws BusinessException;
 }

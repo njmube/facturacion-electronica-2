@@ -16,10 +16,14 @@ public interface FacturaBO {
 	void guardar(Factura factura) throws BusinessException;
 	
 	void guardarRegistrarAFIP(Factura factura) throws BusinessException;
-
+	
+	void registrarAFIP(Factura factura) throws BusinessException;
+	
 	void actualizar(Factura factura) throws BusinessException;
 
 	void cancelar(Long id) throws BusinessException;
 	
 	FacturaDTO obtenerDTO(Long id) throws BusinessException;
+	
+	Long obtenerUltimoNroComprobante() throws BusinessException;
 }

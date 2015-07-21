@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -18,7 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import ar.com.wuik.swing.utils.WUtils;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 
 @Entity
 @Table(name = "notas_creditos")
@@ -54,10 +56,14 @@ public class NotaCredito extends BaseEntity {
 	private Long nroComprobante;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "ESTADO_FACTURACION")
+	private EstadoFacturacion estadoFacturacion;
 
 	public NotaCredito() {
 		this.detalles = new ArrayList<DetalleNotaCredito>();
 		this.facturas = new HashSet<Factura>();
+		this.estadoFacturacion = EstadoFacturacion.SIN_FACTURAR;
 	}
 
 	public Cliente getCliente() {
@@ -172,7 +178,20 @@ public class NotaCredito extends BaseEntity {
 		this.facturas = facturas;
 	}
 
-	public boolean isFacturada() {
-		return WUtils.isNotEmpty(this.cae);
+	public EstadoFacturacion getEstadoFacturacion() {
+		return estadoFacturacion;
 	}
+
+	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
+		this.estadoFacturacion = estadoFacturacion;
+	}
+	
+	public String getEstado(){
+		if (activo) {
+			return "ACTIVA - " + getEstadoFacturacion().getDenominacion();
+		} else {
+			return "ANULADA - " + getEstadoFacturacion().getDenominacion();
+		}
+	}
+
 }

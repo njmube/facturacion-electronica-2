@@ -2,6 +2,8 @@ package ar.com.wuik.sistema.filters;
 
 import java.util.List;
 
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
+
 public class FacturaFilter {
 
 	private Long idCliente;
@@ -10,7 +12,7 @@ public class FacturaFilter {
 	private List<Long> idsToExclude;
 	private List<Long> idsToInclude;
 	private Boolean inicializarDetalles;
-	private Boolean facturado;
+	private EstadoFacturacion estadoFacturacion;
 
 	public Long getIdCliente() {
 		return idCliente;
@@ -60,12 +62,12 @@ public class FacturaFilter {
 		this.inicializarDetalles = inicializarDetalles;
 	}
 
-	public Boolean getFacturado() {
-		return facturado;
+	public EstadoFacturacion getEstadoFacturacion() {
+		return estadoFacturacion;
 	}
 
-	public void setFacturado(Boolean facturado) {
-		this.facturado = facturado;
+	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
+		this.estadoFacturacion = estadoFacturacion;
 	}
 
 }

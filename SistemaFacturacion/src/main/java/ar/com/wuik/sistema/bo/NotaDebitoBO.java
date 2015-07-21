@@ -16,10 +16,13 @@ public interface NotaDebitoBO {
 	void guardar(NotaDebito notaDebito) throws BusinessException;
 
 	void guardarRegistrarAFIP(NotaDebito notaDebito) throws BusinessException;
+	
+	void registrarAFIP(NotaDebito notaDebito) throws BusinessException;
 
 	void actualizar(NotaDebito notaDebito) throws BusinessException;
 
 	NotaDebitoDTO obtenerDTO(Long id) throws BusinessException;
 
+	Long obtenerUltimoNroComprobante() throws BusinessException;
 }
 

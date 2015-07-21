@@ -13,6 +13,7 @@ import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.FacturaBO;
 import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
 import ar.com.wuik.sistema.model.FacturaModel;
@@ -169,7 +170,7 @@ public class SeleccionarFacturaIFrame extends WAbstractModelIFrame implements
 		FacturaFilter filter = new FacturaFilter();
 		filter.setIdCliente(idCliente);
 		filter.setIdsToExclude(idsFacturasToExclude);
-		filter.setFacturado(Boolean.TRUE);
+		filter.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 
 		List<Factura> facturas = new ArrayList<Factura>();
 		try {
