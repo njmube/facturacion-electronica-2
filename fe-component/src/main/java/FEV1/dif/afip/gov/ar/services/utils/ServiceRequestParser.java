@@ -22,13 +22,13 @@ import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.ComprobanteAsociado;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
 import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
+import FEV1.dif.afip.gov.ar.utils.ErrorsUtil;
 import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
 import FEV1.dif.afip.gov.ar.utils.Utils;
 
 public class ServiceRequestParser {
 
-	public static FECAERequest getFECAERequest(Comprobante comprobante,
-			long nroComprobante) {
+	public static FECAERequest getFECAERequest(Comprobante comprobante) {
 
 		FECAERequest request = new FECAERequest();
 
@@ -43,8 +43,8 @@ public class ServiceRequestParser {
 		// Detalle
 		FECAEDetRequest[] detalles = new FECAEDetRequest[1];
 		FECAEDetRequest detalle = new FECAEDetRequest();
-		detalle.setCbteDesde(nroComprobante);
-		detalle.setCbteHasta(nroComprobante);
+		detalle.setCbteDesde(comprobante.getNroComprobante());
+		detalle.setCbteHasta(comprobante.getNroComprobante());
 		detalle.setCbteFch(Utils.getStringFromDate(
 				comprobante.getFechaComprobante(), "yyyyMMdd"));
 		detalle.setConcepto(comprobante.getTipoConcepto().getId());
@@ -63,11 +63,12 @@ public class ServiceRequestParser {
 				.getComprobantesAsociados();
 		if (null != comprobantesAsoc && !comprobantesAsoc.isEmpty()) {
 			List<CbteAsoc> cbtesAsoc = new ArrayList<CbteAsoc>();
-			for (ComprobanteAsociado comprobanteAsociado: comprobantesAsoc) {
+			for (ComprobanteAsociado comprobanteAsociado : comprobantesAsoc) {
 				CbteAsoc cbteAsoc = new CbteAsoc();
 				cbteAsoc.setNro(comprobanteAsociado.getNumero());
 				cbteAsoc.setPtoVta(comprobanteAsociado.getPtoVta());
-				cbteAsoc.setTipo(comprobanteAsociado.getTipoComprobante().getId());
+				cbteAsoc.setTipo(comprobanteAsociado.getTipoComprobante()
+						.getId());
 				cbtesAsoc.add(cbteAsoc);
 			}
 			detalle.setCbtesAsoc(cbtesAsoc.toArray(new CbteAsoc[0]));
@@ -108,10 +109,14 @@ public class ServiceRequestParser {
 
 		// Datos del comprobante
 		FECompConsResponse datosComprobante = response.getResultGet();
+
 		if (null != datosComprobante) {
 			resultado.setCae(datosComprobante.getCodAutorizacion());
+			resultado.setPtoVta(datosComprobante.getPtoVta());
 			resultado.setEstado(Resultado.Estado.valueOf(datosComprobante
 					.getResultado()));
+			resultado.setFechaVtoCAE(Utils.getDateFromString(
+					datosComprobante.getFchVto(), "yyyyMMdd"));
 			resultado.setFecha(Utils.getDateFromString(
 					datosComprobante.getCbteFch(), "yyyyMMdd"));
 			resultado.setNroComprobante(datosComprobante.getCbteDesde());
@@ -121,8 +126,10 @@ public class ServiceRequestParser {
 		// Errores
 		Err[] errors = response.getErrors();
 		if (null != errors) {
+			String msg = "";
 			for (Err err : errors) {
-				errores.add("[" + err.getCode() + "] " + err.getMsg());
+				msg = ErrorsUtil.getProperty("" + err.getCode(), err.getMsg());
+				errores.add("[" + err.getCode() + "] " + msg);
 			}
 		}
 		resultado.setErrores(errores);
@@ -160,8 +167,10 @@ public class ServiceRequestParser {
 		// Errores
 		Err[] errors = response.getErrors();
 		if (null != errors) {
+			String msg = "";
 			for (Err err : errors) {
-				errores.add("[" + err.getCode() + "] " + err.getMsg());
+				msg = ErrorsUtil.getProperty("" + err.getCode(), err.getMsg());
+				errores.add("[" + err.getCode() + "] " + msg);
 			}
 		}
 		resultado.setErrores(errores);
@@ -178,9 +187,10 @@ public class ServiceRequestParser {
 		// Errores
 		Err[] errors = response.getErrors();
 		if (null != errors) {
+			String msg = "";
 			for (Err err : errors) {
-				resultado.getErrores().add(
-						"[" + err.getCode() + "] " + err.getMsg());
+				msg = ErrorsUtil.getProperty("" + err.getCode(), err.getMsg());
+				resultado.getErrores().add("[" + err.getCode() + "] " + msg);
 			}
 		}
 		return resultado;

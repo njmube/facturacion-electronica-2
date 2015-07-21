@@ -35,26 +35,35 @@ public class TestService {
 	public void testService() {
 
 		try {
-			// Resultado resultado =
+			 Resultado resultado =
 			// facturacionService.consultarUltimoComprobante(TipoComprobante.FACTURA_A);
 			// System.out.println(resultado);
 
-			Comprobante comprobante = crearComprobante();
-			Resultado resultado = facturacionService
-					.solicitarComprobante(comprobante);
+//			Comprobante comprobante = crearComprobante();
+//			Resultado resultado = facturacionService
+//					.solicitarComprobante(comprobante);
 
-			System.out.println(resultado);
+//			System.out.println(resultado);
 
 			// long nroComprobante = 10;
 			// TipoComprobante tipoComprobante = TipoComprobante.FACTURA_B;
 			//
-			// resultado =
-			// facturacionService.consultarComprobante(nroComprobante,
-			// tipoComprobante);
+			 resultado =
+			 facturacionService.consultarComprobante(20,
+			 TipoComprobante.FACTURA_A);
+			 
+			 resultado =
+					 facturacionService.consultarComprobante(20,
+					 TipoComprobante.NOTA_CREDITO_A);
+			 
+			 resultado =
+					 facturacionService.consultarComprobante(20,
+					 TipoComprobante.NOTA_DEBITO_A);
 			//
-			// System.out.println(resultado);
+			 System.out.println(resultado);
 		} catch (ServiceException sexc) {
 			System.out.println(sexc.getMessage());
+			sexc.printStackTrace();
 		}
 	}
 

@@ -9,6 +9,7 @@ public final class Comprobante {
 	private TipoComprobante tipoComprobante;
 	private Date fechaComprobante;
 	private Long docNro;
+	private long nroComprobante;
 	private TipoDocumento docTipo;
 	private TipoConcepto tipoConcepto;
 	private BigDecimal importeTotal;
@@ -134,6 +135,14 @@ public final class Comprobante {
 
 	public void setCotizacion(BigDecimal cotizacion) {
 		this.cotizacion = cotizacion;
+	}
+
+	public long getNroComprobante() {
+		return nroComprobante;
+	}
+
+	public void setNroComprobante(long nroComprobante) {
+		this.nroComprobante = nroComprobante;
 	}
 
 }

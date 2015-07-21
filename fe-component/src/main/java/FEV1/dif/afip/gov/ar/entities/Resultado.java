@@ -72,6 +72,16 @@ public final class Resultado {
 	public void setPtoVta(long ptoVta) {
 		this.ptoVta = ptoVta;
 	}
+	
+	public String getMensajeErrores(){
+		StringBuilder str = new StringBuilder();
+		for (String error : errores) {
+			str.append("ERROR: " + error);
+			str.append("\n");
+		}
+		return str.toString();
+	}
+	
 
 	@Override
 	public String toString() {

@@ -9,9 +9,10 @@ public class ParametrosUtil {
 
 	private final static String PROPERTIES_PATH = "/wsaa_client.properties";
 	public static final String IDLE_TIME = "idle.time.out";
-
-	public static Properties getProperties() {
-		final Properties properties = new Properties();
+	private static Properties properties;
+	
+	static{
+		properties = new Properties();
 		FileInputStream fInput = null;
 		try {
 			fInput = new FileInputStream(new File(System
@@ -29,6 +30,9 @@ public class ParametrosUtil {
 				}
 			}
 		}
+	}
+
+	public static Properties getProperties() {
 		return properties;
 	}
 

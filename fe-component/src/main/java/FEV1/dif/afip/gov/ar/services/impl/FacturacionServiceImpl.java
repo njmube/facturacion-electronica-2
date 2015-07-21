@@ -29,15 +29,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 
 		try {
 			ServiceSoapProxy service = new ServiceSoapProxy();
-			Resultado resultadoUltComp = consultarUltimoComprobante(
-					comprobante.getTipoComprobante(), authRequest);
-			// Evaluo los nros de comprobantes
-			long nroComprobante = resultadoUltComp.getNroComprobante();
-			long proxNroComprobante = nroComprobante + 1;
 
 			// Request del Servicio.
 			FECAERequest caeRequest = ServiceRequestParser.getFECAERequest(
-					comprobante, proxNroComprobante);
+					comprobante);
 
 			// Response del Servicio.
 			FECAEResponse response = service.FECAESolicitar(authRequest,
@@ -87,14 +82,6 @@ public class FacturacionServiceImpl implements FacturacionService {
 
 		// Autorizacion.
 		FEAuthRequest authRequest = AuthorizationUtil.getAuthorization();
-
-		// Consulta de Comprobante
-		return consultarUltimoComprobante(tipoComprobante, authRequest);
-	}
-
-	private Resultado consultarUltimoComprobante(
-			TipoComprobante tipoComprobante, FEAuthRequest authRequest)
-			throws ServiceException {
 
 		// Punto de Venta.
 		int ptoVta = Integer.valueOf(ParametrosUtil.getProperty("puntoventa"));
