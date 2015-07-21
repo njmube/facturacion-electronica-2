@@ -72,7 +72,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	 */
 	@Override
 	public void applySecurity(List<String> permisos) {
-		getTablePanel().applySecurity(permisos);
 	}
 
 	@Override
@@ -152,7 +151,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private List<WToolbarButton> getToolbarButtons() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
-		WToolbarButton buttonAdd = new WToolbarButton("Nuevo", new ImageIcon(
+		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Cliente", new ImageIcon(
 				WCalendarIFrame.class.getResource("/icons/add.png")),
 				new ActionListener() {
 
@@ -160,8 +159,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						addModalIFrame(new ClienteVerIFrame(ClienteIFrame.this));
 					}
-				}, "Nuevo Cliente", null);
-		WToolbarButton buttonEdit = new WToolbarButton("Editar", new ImageIcon(
+				}, "Nuevo", null);
+		WToolbarButton buttonEdit = new WToolbarButton("Editar Cliente", new ImageIcon(
 				WCalendarIFrame.class.getResource("/icons/edit.png")),
 				new ActionListener() {
 
@@ -179,8 +178,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Editar Cliente", null);
-		WToolbarButton buttonActivar = new WToolbarButton("Activar/Desactivar",
+				}, "Editar", null);
+		WToolbarButton buttonActivar = new WToolbarButton("Activar/Desactivar Cliente",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/activar-desactivar.png")),
 				new ActionListener() {
@@ -230,9 +229,9 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Activar/Desactivar Cliente", null);
+				}, "Activar/Desactivar", null);
 
-		WToolbarButton buttonDelete = new WToolbarButton("Eliminar",
+		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Cliente",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
 				new ActionListener() {
@@ -273,7 +272,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Eliminar Cliente", null);
+				}, "Eliminar", null);
 
 		WToolbarButton buttonNotasCreditos = new WToolbarButton(
 				"Notas de Crédito", new ImageIcon(

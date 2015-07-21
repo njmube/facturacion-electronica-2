@@ -65,7 +65,6 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 	 */
 	@Override
 	public void applySecurity(List<String> permisos) {
-		getTablePanel().applySecurity(permisos);
 	}
 
 	@Override

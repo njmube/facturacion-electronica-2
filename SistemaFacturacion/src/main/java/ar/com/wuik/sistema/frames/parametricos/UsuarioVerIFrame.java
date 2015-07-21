@@ -102,14 +102,14 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 		getContentPane().add( getBtnGuardar() );
 		getContentPane().add(getComboBox());
 		loadPermisos();
-		if ( ! MainFrame.getInstance().getPermisos().contains( Permisos.EDI_USU.getCodPermiso() ) ) {
-			getScrLstPermisos().setVisible( Boolean.FALSE );
-			getLblPermisos().setVisible( Boolean.FALSE );
-			pnlDatos.setBounds( 10, 11, 275, 216 );
-			setBounds( 0, 0, 296, 301 );
-			getBtnCerrar().setBounds( 85, 198, 94, 25 );
-			getBtnGuardar().setBounds( 184, 198, 94, 25 );
-		}
+//		if ( ! MainFrame.getInstance().getPermisos().contains( Permisos.EDI_USU.getCodPermiso() ) ) {
+//			getScrLstPermisos().setVisible( Boolean.FALSE );
+//			getLblPermisos().setVisible( Boolean.FALSE );
+//			pnlDatos.setBounds( 10, 11, 275, 216 );
+//			setBounds( 0, 0, 296, 301 );
+//			getBtnCerrar().setBounds( 85, 198, 94, 25 );
+//			getBtnGuardar().setBounds( 184, 198, 94, 25 );
+//		}
 
 		if ( null == idUsuario ) {
 			usuario = new Usuario();

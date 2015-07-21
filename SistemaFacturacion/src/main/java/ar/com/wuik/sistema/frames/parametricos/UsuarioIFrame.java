@@ -84,7 +84,6 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	 */
 	@Override
 	public void applySecurity( List<String> permisos ) {
-		getTablePanel().applySecurity( permisos );
 	}
 
 	@Override

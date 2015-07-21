@@ -80,7 +80,7 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity getItemProducto() {
 		if (null == itemProducto) {
 			itemProducto = new WMenuItemSecurity("Productos",
-					Permisos.ING_ART.getCodPermiso(), new ImageIcon(
+					null, new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/productos.png")));
 			itemProducto.setVisible(Boolean.TRUE);
@@ -98,7 +98,7 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity getItemCliente() {
 		if (null == itemCliente) {
 			itemCliente = new WMenuItemSecurity("Clientes",
-					Permisos.ING_CLI.getCodPermiso(), new ImageIcon(
+					null, new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/clientes.png")));
 			itemCliente.setVisible(Boolean.TRUE);
@@ -116,7 +116,7 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity getItemParametro() {
 		if (null == itemParametro) {
 			itemParametro = new WMenuItemSecurity("Parámetros",
-					Permisos.ING_VTA.getCodPermiso(), new ImageIcon(
+					null, new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/parametros.png")));
 			itemParametro.setVisible(Boolean.TRUE);
@@ -134,7 +134,7 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity getItemUsuario() {
 		if (null == itemUsuario) {
 			itemUsuario = new WMenuItemSecurity("Usuarios",
-					Permisos.ING_USU.getCodPermiso(), new ImageIcon(
+					null, new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/usuarios.png")));
 			itemUsuario.setVisible(Boolean.TRUE);
@@ -290,7 +290,7 @@ public class MainFrame extends WApplication {
 							Long.valueOf(ParametrosUtil
 									.getProperty(ParametrosUtil.IDLE_TIME)));
 				}
-				((MainFrame) instance).setPermisos(permisos);
+//				((MainFrame) instance).setPermisos(permisos);
 				((MainFrame) instance).showFrame();
 			}
 		});
