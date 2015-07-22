@@ -123,13 +123,19 @@ public class BackupIFrame extends WAbstractIFrame {
 										} catch (final Exception exc) {
 											error = Boolean.TRUE;
 											java.awt.EventQueue
-											.invokeLater(new Runnable() {
+													.invokeLater(new Runnable() {
 
-												@Override
-												public void run() {
-													showGlobalErrorMsg(exc.getMessage());
-												}
-											});
+														@Override
+														public void run() {
+															btnGuardar
+																	.setEnabled(Boolean.TRUE);
+															getProgressBar()
+																	.setVisible(
+																			Boolean.FALSE);
+															showGlobalErrorMsg(exc
+																	.getMessage());
+														}
+													});
 										} finally {
 
 											if (!error) {

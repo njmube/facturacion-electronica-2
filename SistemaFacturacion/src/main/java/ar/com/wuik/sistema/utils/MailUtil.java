@@ -14,7 +14,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MailUtil {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(MailUtil.class);
 
 	public static void sendMailBackup(String file) throws Exception {
 
@@ -61,7 +67,8 @@ public class MailUtil {
 			transport.sendMessage(message, message.getAllRecipients());
 			transport.close();
 		} catch (MessagingException mexc) {
-			throw new Exception("Error al Enviar Mail",mexc);
+			LOGGER.error("Error al enviar Mail", mexc);
+			throw new Exception("Error al enviar Mail", mexc);
 		}
 	}
 
