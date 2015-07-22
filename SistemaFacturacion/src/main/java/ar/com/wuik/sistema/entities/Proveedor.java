@@ -17,11 +17,17 @@ public class Proveedor extends BaseEntity {
 	private String direccion;
 	@Column(name = "TELEFONO")
 	private String telefono;
+	@Column(name = "MAIL")
+	private String mail;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_LOCALIDAD", nullable = false)
+	@JoinColumn(name = "ID_LOCALIDAD", nullable = false, insertable = false, updatable = false)
 	private Localidad localidad;
+	@Column(name = "ID_LOCALIDAD")
+	private Long idLocalidad;
 	@Column(name = "CUIT")
 	private String cuit;
+	@Column(name = "ACTIVO")
+	private boolean activo = Boolean.TRUE;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -61,6 +67,30 @@ public class Proveedor extends BaseEntity {
 
 	public void setCuit(String cuit) {
 		this.cuit = cuit;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public Long getIdLocalidad() {
+		return idLocalidad;
+	}
+
+	public void setIdLocalidad(Long idLocalidad) {
+		this.idLocalidad = idLocalidad;
 	}
 
 }

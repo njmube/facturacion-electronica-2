@@ -20,11 +20,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.MaskFormatter;
 
-import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.ParametricoBO;
-import ar.com.wuik.sistema.entities.Cliente;
-import ar.com.wuik.sistema.entities.CondicionIVA;
+import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Localidad;
+import ar.com.wuik.sistema.entities.Proveedor;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.AppUtils;
@@ -36,7 +35,7 @@ import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
-public class ClienteVerIFrame extends WAbstractModelIFrame {
+public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
@@ -45,118 +44,104 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblRazonSocial;
 	private JTextField txtRazonSocial;
 	private JButton btnCerrar;
-	private Cliente cliente;
+	private Proveedor proveedor;
 	private JButton btnGuardar;
 	private JLabel lblDireccion;
-	private JLabel lblCelular;
+	private JLabel lblTelefono;
 
 	private static final String CAMPO_RAZON_SOCIAL = "razonSocial";
 	private static final String CAMPO_DIRECCION = "direccion";
 	private static final String CAMPO_TELEFONO = "telefono";
-	private static final String CAMPO_CELULAR = "celular";
 	private static final String CAMPO_LOCALIDAD = "localidad";
 	private static final String CAMPO_CUIT = "cuit";
-	private static final String CAMPO_TIPO_IVA = "tipoIva";
-	private ClienteIFrame clienteIFrame;
+	private static final String CAMPO_MAIL = "mail";
+	private ProveedorIFrame proveedorIFrame;
+	private MovimientoProductoVerIFrame movimientoProductoVerIFrame;
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
 	private JFormattedTextField txfCuit;
 	private JLabel lblCuit;
 	private JLabel lblLocalidad;
-	private JTextField txtCelular;
-	private JLabel lblTipoIva;
+	private JTextField txtMail;
 	private JComboBox cmbLocalidad;
-	private JComboBox cmbTipoIva;
-	private JLabel lblTelefono;
+	private JLabel lblTelfono;
 
 	/**
 	 * Create the frame.
 	 * 
 	 * @wbp.parser.constructor
 	 */
-	public ClienteVerIFrame(Long idCliente, ClienteIFrame clienteIFrame) {
-		initialize("Editar Cliente");
-		this.clienteIFrame = clienteIFrame;
-		loadCliente(idCliente);
+	public ProveedorVerIFrame(Long idProveedor, ProveedorIFrame proveedorIFrame) {
+		initialize("Editar Proveedor");
+		this.proveedorIFrame = proveedorIFrame;
+		loadProveedor(idProveedor);
 	}
 
-	private void loadCliente(Long idCliente) {
-		ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
+	private void loadProveedor(Long idProveedor) {
+		ProveedorBO proveedorBO = AbstractFactory
+				.getInstance(ProveedorBO.class);
 		try {
-			this.cliente = clienteBO.obtener(idCliente);
+			this.proveedor = proveedorBO.obtener(idProveedor);
 			WModel model = populateModel();
-			model.addValue(CAMPO_RAZON_SOCIAL, cliente.getRazonSocial());
-			model.addValue(CAMPO_DIRECCION, cliente.getDireccion());
-			model.addValue(CAMPO_TELEFONO, cliente.getTelefono());
-			model.addValue(CAMPO_LOCALIDAD, cliente.getLocalidad().getId());
-			model.addValue(CAMPO_CUIT, cliente.getCuit());
-			model.addValue(CAMPO_CELULAR, cliente.getCelular());
-			model.addValue(CAMPO_TIPO_IVA, cliente.getCondicionIVA().getId());
+			model.addValue(CAMPO_RAZON_SOCIAL, proveedor.getRazonSocial());
+			model.addValue(CAMPO_CUIT, proveedor.getCuit());
+			model.addValue(CAMPO_DIRECCION, proveedor.getDireccion());
+			model.addValue(CAMPO_TELEFONO, proveedor.getTelefono());
+			model.addValue(CAMPO_MAIL, proveedor.getMail());
+			model.addValue(CAMPO_LOCALIDAD, proveedor.getLocalidad().getId());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
 
-	public ClienteVerIFrame(ClienteIFrame clienteIFrame) {
-		initialize("Nuevo Cliente");
-		this.clienteIFrame = clienteIFrame;
-		this.cliente = new Cliente();
+	public ProveedorVerIFrame(ProveedorIFrame proveedorIFrame) {
+		initialize("Nuevo Proveedor");
+		this.proveedorIFrame = proveedorIFrame;
+		this.proveedor = new Proveedor();
+	}
+
+	public ProveedorVerIFrame(
+			MovimientoProductoVerIFrame movimientoProductoVerIFrame) {
+		initialize("Nuevo Proveedor");
+		this.movimientoProductoVerIFrame = movimientoProductoVerIFrame;
+		this.proveedor = new Proveedor();
 	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				ClienteVerIFrame.class.getResource("/icons/clientes.png")));
-		setBounds(0, 0, 445, 369);
+				ProveedorVerIFrame.class.getResource("/icons/proveedores.png")));
+		setBounds(0, 0, 470, 326);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getBtnCerrar());
 		getContentPane().add(getBtnGuardar());
 		loadLocalidad();
-		loadTiposIva();
-	}
-
-	private void loadTiposIva() {
-		getCmbTipoIva().addItem(WOption.getWOptionSelecione());
-		ParametricoBO parametricoBO = AbstractFactory
-				.getInstance(ParametricoBO.class);
-		try {
-			List<CondicionIVA> condiciones = parametricoBO
-					.obtenerTodosCondicionesIVA();
-			if (WUtils.isNotEmpty(condiciones)) {
-				for (CondicionIVA condicionIVA : condiciones) {
-					getCmbTipoIva().addItem(
-							new WOption((long) condicionIVA.getId(),
-									condicionIVA.getDenominacion()));
-				}
-			}
-		} catch (BusinessException e) {
-		}
 	}
 
 	private void loadLocalidad() {
 
-		getCmbLocalidad().removeAllItems();
 		getCmbLocalidad().addItem(WOption.getWOptionSelecione());
 
-		List<Localidad> localidades = null;
 		try {
 			ParametricoBO parametricoBO = AbstractFactory
 					.getInstance(ParametricoBO.class);
-			localidades = parametricoBO.obtenerTodosLocalidades();
+			List<Localidad> localidades = parametricoBO
+					.obtenerTodosLocalidades();
+			if (WUtils.isNotEmpty(localidades)) {
+				for (Localidad localidad : localidades) {
+					getCmbLocalidad().addItem(
+							new WOption(localidad.getId(), localidad
+									.getNombre()));
+				}
+			}
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 
-		if (WUtils.isNotEmpty(localidades)) {
-			for (Localidad localidad : localidades) {
-				getCmbLocalidad().addItem(
-						new WOption(localidad.getId(), localidad.getNombre()));
-			}
-		}
 	}
 
 	@Override
@@ -167,7 +152,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		String telefono = model.getValue(CAMPO_TELEFONO);
 		WOption localidad = model.getValue(CAMPO_LOCALIDAD);
 		String cuit = model.getValue(CAMPO_CUIT);
-		WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
+		String mail = model.getValue(CAMPO_MAIL);
 
 		List<String> messages = new ArrayList<String>();
 
@@ -187,12 +172,12 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			messages.add("Debe ingresar un Teléfono");
 		}
 
-		if (WOption.getIdWOptionSeleccion().equals(localidad.getValue())) {
-			messages.add("Debe seleccionar una Localidad");
+		if (WUtils.isEmpty(mail)) {
+			messages.add("Debe ingresar un Mail");
 		}
 
-		if (WOption.getIdWOptionSeleccion().equals(tipoIva.getValue())) {
-			messages.add("Debe seleccionar un Tipo de Iva");
+		if (WOption.getIdWOptionSeleccion().equals(localidad.getValue())) {
+			messages.add("Debe seleccionar una Localidad");
 		}
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
@@ -206,22 +191,20 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 421, 281);
+			pnlBusqueda.setBounds(10, 11, 448, 242);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getTxtRazonSocial());
 			pnlBusqueda.add(getLblDireccion());
-			pnlBusqueda.add(getLblCelular());
+			pnlBusqueda.add(getLblTelefono());
 			pnlBusqueda.add(getTxtDireccion());
 			pnlBusqueda.add(getTxtTelefono());
 			pnlBusqueda.add(getTxfCuit());
 			pnlBusqueda.add(getLblCuit());
 			pnlBusqueda.add(getLblLocalidad());
-			pnlBusqueda.add(getTxtCelular());
-			pnlBusqueda.add(getLblTipoIva());
+			pnlBusqueda.add(getTxtMail());
 			pnlBusqueda.add(getCmbLocalidad());
-			pnlBusqueda.add(getCmbTipoIva());
-			pnlBusqueda.add(getLblTelefono());
+			pnlBusqueda.add(getLblTelfono());
 		}
 		return pnlBusqueda;
 	}
@@ -254,9 +237,9 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(ClienteVerIFrame.class
+			btnCerrar.setIcon(new ImageIcon(ProveedorVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(215, 303, 103, 25);
+			btnCerrar.setBounds(242, 264, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -266,7 +249,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(328, 303, 103, 25);
+			btnGuardar.setBounds(355, 264, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -277,31 +260,32 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						String telefono = model.getValue(CAMPO_TELEFONO);
 						WOption localidad = model.getValue(CAMPO_LOCALIDAD);
 						String cuit = model.getValue(CAMPO_CUIT);
-						String celular = model.getValue(CAMPO_CELULAR);
-						WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
+						String mail = model.getValue(CAMPO_MAIL);
 
-						cliente.setRazonSocial(razonSocial);
-						cliente.setDireccion(direccion);
-						cliente.setTelefono(telefono);
-						cliente.setIdLocalidad(localidad.getValue());
-						cliente.setCuit(cuit);
-						cliente.setCelular(celular);
-						cliente.setIdCondicionIVA(tipoIva.getValue());
+						proveedor.setRazonSocial(razonSocial);
+						proveedor.setDireccion(direccion);
+						proveedor.setTelefono(telefono);
+						proveedor.setIdLocalidad(localidad.getValue());
+						proveedor.setCuit(cuit);
+						proveedor.setMail(mail);
 
-						ClienteBO clienteBO = AbstractFactory
-								.getInstance(ClienteBO.class);
+						ProveedorBO proveedorBO = AbstractFactory
+								.getInstance(ProveedorBO.class);
 						try {
-							if (cliente.getId() == null) {
-								clienteBO.guardar(cliente);
+							if (proveedor.getId() == null) {
+								proveedorBO.guardar(proveedor);
 							} else {
-								clienteBO.actualizar(cliente);
+								proveedorBO.actualizar(proveedor);
+							}
+							if (null != proveedorIFrame) {
+								proveedorIFrame.search();
+							} else if (null != movimientoProductoVerIFrame) {
+								movimientoProductoVerIFrame.loadProveedores();
 							}
 							hideFrame();
-							clienteIFrame.search();
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						}
-
 					}
 
 				}
@@ -324,19 +308,19 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		return lblDireccion;
 	}
 
-	private JLabel getLblCelular() {
-		if (lblCelular == null) {
-			lblCelular = new JLabel("Celular:");
-			lblCelular.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCelular.setBounds(10, 167, 121, 25);
+	private JLabel getLblTelefono() {
+		if (lblTelefono == null) {
+			lblTelefono = new JLabel("* Mail:");
+			lblTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTelefono.setBounds(10, 167, 121, 25);
 		}
-		return lblCelular;
+		return lblTelefono;
 	}
 
 	private JTextField getTxtDireccion() {
 		if (txtDireccion == null) {
 			txtDireccion = new JTextField();
-			txtDireccion.setBounds(141, 95, 263, 25);
+			txtDireccion.setBounds(141, 95, 297, 25);
 			txtDireccion.setDocument(new WTextFieldLimit(100));
 			txtDireccion.setName(CAMPO_DIRECCION);
 		}
@@ -360,6 +344,8 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 				formatter = new MaskFormatter("##-########-#");
 				formatter.setPlaceholderCharacter('#');
 			} catch (java.text.ParseException exc) {
+				System.err.println("formatter is bad: " + exc.getMessage());
+				System.exit(-1);
 			}
 			txfCuit = new JFormattedTextField(formatter);
 			txfCuit.setName(CAMPO_CUIT);
@@ -386,23 +372,14 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		return lblLocalidad;
 	}
 
-	private JTextField getTxtCelular() {
-		if (txtCelular == null) {
-			txtCelular = new JTextField();
-			txtCelular.setName(CAMPO_CELULAR);
-			txtCelular.setBounds(141, 167, 145, 25);
-			txtCelular.setDocument(new WTextFieldLimit(50, Boolean.TRUE));
+	private JTextField getTxtMail() {
+		if (txtMail == null) {
+			txtMail = new JTextField();
+			txtMail.setName(CAMPO_MAIL);
+			txtMail.setBounds(141, 167, 219, 25);
+			txtMail.setDocument(new WTextFieldLimit(50, Boolean.TRUE));
 		}
-		return txtCelular;
-	}
-
-	private JLabel getLblTipoIva() {
-		if (lblTipoIva == null) {
-			lblTipoIva = new JLabel("* Tipo IVA:");
-			lblTipoIva.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTipoIva.setBounds(10, 239, 121, 25);
-		}
-		return lblTipoIva;
+		return txtMail;
 	}
 
 	private JComboBox getCmbLocalidad() {
@@ -414,22 +391,13 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		return cmbLocalidad;
 	}
 
-	private JComboBox getCmbTipoIva() {
-		if (cmbTipoIva == null) {
-			cmbTipoIva = new JComboBox();
-			cmbTipoIva.setName(CAMPO_TIPO_IVA);
-			cmbTipoIva.setBounds(141, 239, 163, 25);
+	private JLabel getLblTelfono() {
+		if (lblTelfono == null) {
+			lblTelfono = new JLabel("* Tel\u00E9fono:");
+			lblTelfono.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTelfono.setBounds(10, 131, 121, 25);
 		}
-		return cmbTipoIva;
-	}
-
-	private JLabel getLblTelefono() {
-		if (lblTelefono == null) {
-			lblTelefono = new JLabel("* Tel\u00E9fono:");
-			lblTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTelefono.setBounds(10, 131, 121, 25);
-		}
-		return lblTelefono;
+		return lblTelfono;
 	}
 
 }

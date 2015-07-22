@@ -10,4 +10,5 @@ public interface ProveedorDAO extends GenericCrudDAO<Proveedor> {
 
 	List<Proveedor> search(ProveedorFilter filter) throws DataAccessException;
 
+	boolean estaEnUso(Long id) throws DataAccessException;
 }

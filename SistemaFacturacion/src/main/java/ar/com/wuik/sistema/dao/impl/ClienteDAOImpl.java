@@ -11,6 +11,9 @@ import org.hibernate.criterion.Restrictions;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.NotaCredito;
+import ar.com.wuik.sistema.entities.NotaDebito;
+import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ClienteFilter;
 import ar.com.wuik.swing.utils.WUtils;
@@ -24,13 +27,41 @@ public class ClienteDAOImpl extends GenericCrudHBDAOImpl<Cliente> implements
 	
 	@Override
 	public boolean estaEnUso(Long id) throws DataAccessException {
-		// Valida si el Cliente tiene asociadas facturas.
+		// Valida si el Cliente tiene asociadas Facturas.
 		Criteria criteria = getSession().createCriteria(Factura.class);
 		criteria.setProjection(Projections.rowCount());
 		criteria.add(Restrictions.eq("idCliente", id));
 		Long cantidad = (Long) criteria.uniqueResult();
 		if (cantidad > 0) {
 			return Boolean.TRUE;
+		} else {
+			// Valida si el Cliente tiene asociadas Notas de Credito.
+			criteria = getSession().createCriteria(NotaCredito.class);
+			criteria.setProjection(Projections.rowCount());
+			criteria.add(Restrictions.eq("idCliente", id));
+			cantidad = (Long) criteria.uniqueResult();
+			if (cantidad > 0) {
+				return Boolean.TRUE;
+			} else {
+				// Valida si el Cliente tiene asociadas Notas de Debito.
+				criteria = getSession().createCriteria(NotaDebito.class);
+				criteria.setProjection(Projections.rowCount());
+				criteria.add(Restrictions.eq("idCliente", id));
+				cantidad = (Long) criteria.uniqueResult();
+				if (cantidad > 0) {
+					return Boolean.TRUE;
+				} else {
+					// Valida si el Cliente tiene asociados Remitos.
+					criteria = getSession().createCriteria(Remito.class);
+					criteria.setProjection(Projections.rowCount());
+					criteria.add(Restrictions.eq("idCliente", id));
+					cantidad = (Long) criteria.uniqueResult();
+					if (cantidad > 0) {
+						return Boolean.TRUE;
+					}
+					//TODO SI TIENE ASOCIADOS RECIBOS.
+				}
+			}
 		}
 		return Boolean.FALSE;
 	}

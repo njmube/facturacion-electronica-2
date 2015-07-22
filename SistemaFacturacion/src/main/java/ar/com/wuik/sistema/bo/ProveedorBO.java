@@ -12,7 +12,7 @@ public interface ProveedorBO {
 
 	List<Proveedor> buscar(ProveedorFilter filter) throws BusinessException;
 
-	List<Proveedor> obtenerTodos() throws BusinessException;
+	List<Proveedor> obtenerTodosActivos() throws BusinessException;
 
 	void guardar(Proveedor proveedor) throws BusinessException;
 
@@ -21,4 +21,8 @@ public interface ProveedorBO {
 	boolean estaEnUso(Long id) throws BusinessException;
 
 	void eliminar(Long id) throws BusinessException;
+	
+	void activar(Long id) throws BusinessException;
+
+	void desactivar(Long id) throws BusinessException;
 }

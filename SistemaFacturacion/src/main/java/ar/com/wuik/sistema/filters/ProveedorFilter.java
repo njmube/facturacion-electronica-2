@@ -4,6 +4,7 @@ public class ProveedorFilter {
 
 	private String razonSocial;
 	private String cuit;
+	private Boolean activo;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -19,6 +20,14 @@ public class ProveedorFilter {
 
 	public void setCuit(String cuit) {
 		this.cuit = cuit;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
 }

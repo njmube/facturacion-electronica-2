@@ -54,6 +54,8 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity itemUsuario = null;
 	private WMenuItemSecurity itemParametro = null;
 	private WMenuItemSecurity itemCheque = null;
+	private WMenuItemSecurity itemProveedor = null;
+	private WMenuItemSecurity itemBackup = null;
 
 	// Menu Archivo -------------
 	private WMenuItemSecurity itemEditarDatosPersonales = null;
@@ -78,8 +80,8 @@ public class MainFrame extends WApplication {
 
 	private WMenuItemSecurity getItemProducto() {
 		if (null == itemProducto) {
-			itemProducto = new WMenuItemSecurity("Productos",
-					null, new ImageIcon(
+			itemProducto = new WMenuItemSecurity("Productos", null,
+					new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/productos.png")));
 			itemProducto.setVisible(Boolean.TRUE);
@@ -87,7 +89,7 @@ public class MainFrame extends WApplication {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					 addIFrame(new ProductoIFrame());
+					addIFrame(new ProductoIFrame());
 				}
 			});
 		}
@@ -96,8 +98,8 @@ public class MainFrame extends WApplication {
 
 	private WMenuItemSecurity getItemCliente() {
 		if (null == itemCliente) {
-			itemCliente = new WMenuItemSecurity("Clientes",
-					null, new ImageIcon(
+			itemCliente = new WMenuItemSecurity("Clientes", null,
+					new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/clientes.png")));
 			itemCliente.setVisible(Boolean.TRUE);
@@ -112,10 +114,45 @@ public class MainFrame extends WApplication {
 		return itemCliente;
 	}
 
+	private WMenuItemSecurity getItemProveedor() {
+		if (null == itemProveedor) {
+			itemProveedor = new WMenuItemSecurity("Proveedores", null,
+					new ImageIcon(
+							MainFrame.class
+									.getResource("/icons32/proveedores.png")));
+			itemProveedor.setVisible(Boolean.TRUE);
+			itemProveedor.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addIFrame(new ProveedorIFrame());
+				}
+			});
+		}
+		return itemProveedor;
+	}
+
+	private WMenuItemSecurity getItemBackup() {
+		if (null == itemBackup) {
+			itemBackup = new WMenuItemSecurity("Respaldo de Sistema", null,
+					new ImageIcon(
+							MainFrame.class
+									.getResource("/icons32/proveedores.png")));
+			itemBackup.setVisible(Boolean.TRUE);
+			itemBackup.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addIFrame(new BackupIFrame());
+				}
+			});
+		}
+		return itemBackup;
+	}
+
 	private WMenuItemSecurity getItemParametro() {
 		if (null == itemParametro) {
-			itemParametro = new WMenuItemSecurity("Parámetros",
-					null, new ImageIcon(
+			itemParametro = new WMenuItemSecurity("Parámetros", null,
+					new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/parametros.png")));
 			itemParametro.setVisible(Boolean.TRUE);
@@ -132,8 +169,8 @@ public class MainFrame extends WApplication {
 
 	private WMenuItemSecurity getItemUsuario() {
 		if (null == itemUsuario) {
-			itemUsuario = new WMenuItemSecurity("Usuarios",
-					null, new ImageIcon(
+			itemUsuario = new WMenuItemSecurity("Usuarios", null,
+					new ImageIcon(
 							MainFrame.class
 									.getResource("/icons32/usuarios.png")));
 			itemUsuario.setVisible(Boolean.TRUE);
@@ -182,14 +219,11 @@ public class MainFrame extends WApplication {
 		}
 		return itemCerrarSesion;
 	}
-	
-	
 
 	private WMenuItemSecurity getItemCheque() {
 		if (null == itemCheque) {
-			itemCheque = new WMenuItemSecurity("Cheques", null,
-					new ImageIcon(
-							MainFrame.class.getResource("/icons32/cheque.png")));
+			itemCheque = new WMenuItemSecurity("Cheques", null, new ImageIcon(
+					MainFrame.class.getResource("/icons32/cheque.png")));
 			itemCheque.setVisible(Boolean.TRUE);
 			itemCheque.addActionListener(new ActionListener() {
 
@@ -201,12 +235,12 @@ public class MainFrame extends WApplication {
 		}
 		return itemCheque;
 	}
-	
 
 	protected void addMenuItems(JMenuBar menu, WMenuSecurity menuArchivo) {
 		menuArchivo.add(getItemCerrarSesion(), menuArchivo.getComponentCount());
 		menuArchivo.add(getItemEditarDatosPersonales(),
 				menuArchivo.getComponentCount());
+		menuArchivo.add(getItemBackup(), menuArchivo.getComponentCount());
 		menu.add(getMenuAdministraciones());
 		menu.add(getMenuAdmParametricas());
 	}
@@ -216,7 +250,8 @@ public class MainFrame extends WApplication {
 			menuAdministraciones = new WMenuSecurity("Administraciones",
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/administraciones.png")),
-					getItemCliente(),  getItemProducto(), getItemCheque());
+					getItemCliente(), getItemProducto(), getItemProveedor(),
+					getItemCheque());
 		}
 		return menuAdministraciones;
 	}
@@ -289,7 +324,7 @@ public class MainFrame extends WApplication {
 							Long.valueOf(ParametrosUtil
 									.getProperty(ParametrosUtil.IDLE_TIME)));
 				}
-//				((MainFrame) instance).setPermisos(permisos);
+				// ((MainFrame) instance).setPermisos(permisos);
 				((MainFrame) instance).showFrame();
 			}
 		});

@@ -152,11 +152,13 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							int result = JOptionPane.showConfirmDialog(
-									getParent(),
-									"¿Desea eliminar el Producto seleccionado?",
-									"Alerta", JOptionPane.OK_CANCEL_OPTION,
-									JOptionPane.WARNING_MESSAGE);
+							int result = JOptionPane
+									.showConfirmDialog(
+											getParent(),
+											"¿Desea eliminar el Producto seleccionado?",
+											"Alerta",
+											JOptionPane.OK_CANCEL_OPTION,
+											JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
 								try {
 									boolean estaEnUso = productoBO
@@ -166,7 +168,8 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 											productoBO.eliminar(selectedItem);
 											search();
 										} catch (BusinessException bexc) {
-											showGlobalErrorMsg(bexc.getMessage());
+											showGlobalErrorMsg(bexc
+													.getMessage());
 										}
 									} else {
 										WTooltipUtils
@@ -198,8 +201,8 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							// addModalIFrame(new MovimientosProductoIFrame(
-							// selectedItem));
+							addModalIFrame(new MovimientoProductoIFrame(
+									selectedItem));
 						} else {
 							WTooltipUtils.showMessage(
 									"Debe seleccionar un Producto",

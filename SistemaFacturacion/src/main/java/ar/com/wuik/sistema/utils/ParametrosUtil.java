@@ -9,7 +9,8 @@ public class ParametrosUtil {
 
 	private final static String PROPERTIES_PATH = "/extras/parametros.properties";
 	public static final String IDLE_TIME = "idle.time.out";
-
+	public static final String KEY_PATH_MYSQL = "path.mysql";
+	
 	public static Properties getProperties() {
 		final Properties properties = new Properties();
 		FileInputStream fInput = null;

@@ -6,10 +6,12 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import ar.com.wuik.sistema.dao.ProveedorDAO;
 import ar.com.wuik.sistema.entities.Proveedor;
+import ar.com.wuik.sistema.entities.StockProducto;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ProveedorFilter;
 import ar.com.wuik.swing.utils.WUtils;
@@ -33,21 +35,40 @@ public class ProveedorDAOImpl extends GenericCrudHBDAOImpl<Proveedor> implements
 		}
 	}
 
+	@Override
+	public boolean estaEnUso(Long id) throws DataAccessException {
+		// Valida si el Proveedor tiene asociados Movimientos de Stock.
+		Criteria criteria = getSession().createCriteria(StockProducto.class);
+		criteria.setProjection(Projections.rowCount());
+		criteria.add(Restrictions.eq("idProveedor", id));
+		Long cantidad = (Long) criteria.uniqueResult();
+		if (cantidad > 0) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
 	private Criteria buildCriteria(ProveedorFilter filter) {
 
 		Criteria criteria = getSession().createCriteria(Proveedor.class);
 
 		String razonSocial = filter.getRazonSocial();
 		String cuit = filter.getCuit();
+		Boolean activo = filter.getActivo();
 
 		if (WUtils.isNotEmpty(razonSocial)) {
 			Criterion criterion = Restrictions.like("razonSocial", razonSocial,
 					MatchMode.ANYWHERE);
 			criteria.add(criterion);
 		}
-		
+
 		if (WUtils.isNotEmpty(cuit)) {
 			Criterion criterion = Restrictions.eq("cuit", cuit);
+			criteria.add(criterion);
+		}
+
+		if (null != activo) {
+			Criterion criterion = Restrictions.eq("activo", activo);
 			criteria.add(criterion);
 		}
 
