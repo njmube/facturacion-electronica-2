@@ -23,20 +23,7 @@ public class TestService {
 	public void testService() {
 
 		try {
-			Resultado resultado =
-			// facturacionService.consultarUltimoComprobante(TipoComprobante.FACTURA_A);
-			// System.out.println(resultado);
-
-			// Comprobante comprobante = crearComprobante();
-			// Resultado resultado = facturacionService
-			// .solicitarComprobante(comprobante);
-
-			// System.out.println(resultado);
-
-			// long nroComprobante = 10;
-			// TipoComprobante tipoComprobante = TipoComprobante.FACTURA_B;
-			//
-			resultado = facturacionService
+			Resultado resultado = facturacionService
 					.consultarUltimoComprobante(TipoComprobante.FACTURA_A);
 			System.out.println(resultado);
 		} catch (ServiceException sexc) {
