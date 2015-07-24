@@ -136,8 +136,10 @@ public class FacturaBOImpl implements FacturaBO {
 				// Datos de AFIP
 				factura.setCae(resultado.getCae());
 				factura.setFechaCAE(resultado.getFechaVtoCAE());
-				factura.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
+				factura.setPtoVenta(resultado.getPtoVtaFormato());
 				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+				factura.setNroCompFormato(resultado.getNroComprobanteFormato());
+				factura.setCodBarras(resultado.getCodigoBarras());
 			}
 
 			// Guardo la Factura con los datos de AFIP.
@@ -216,8 +218,10 @@ public class FacturaBOImpl implements FacturaBO {
 				// Datos de AFIP
 				factura.setCae(resultado.getCae());
 				factura.setFechaCAE(resultado.getFechaVtoCAE());
-				factura.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
+				factura.setPtoVenta(resultado.getPtoVtaFormato());
 				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+				factura.setNroCompFormato(resultado.getNroComprobanteFormato());
+				factura.setCodBarras(resultado.getCodigoBarras());
 			}
 
 			// Guardo la Factura con los datos de AFIP.
@@ -436,6 +440,7 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setSubtotal(subtotal);
 		facturaDTO.setTipo("FACTURA");
 		facturaDTO.setTotal(total);
+		facturaDTO.setCodigoBarras(factura.getCodBarras());
 		return facturaDTO;
 	}
 

@@ -143,8 +143,10 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				// Datos de AFIP
 				notaCredito.setCae(resultado.getCae());
 				notaCredito.setFechaCAE(resultado.getFechaVtoCAE());
-				notaCredito.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
+				notaCredito.setPtoVenta(resultado.getPtoVtaFormato());
 				notaCredito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+				notaCredito.setNroCompFormato(resultado.getNroComprobanteFormato());
+				notaCredito.setCodBarras(resultado.getCodigoBarras());
 			}
 
 			// Guardo la Nota de Credito con los datos de AFIP.
@@ -224,8 +226,10 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				// Datos de AFIP
 				notaCredito.setCae(resultado.getCae());
 				notaCredito.setFechaCAE(resultado.getFechaVtoCAE());
-				notaCredito.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
+				notaCredito.setPtoVenta(resultado.getPtoVtaFormato());
 				notaCredito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+				notaCredito.setNroCompFormato(resultado.getNroComprobanteFormato());
+				notaCredito.setCodBarras(resultado.getCodigoBarras());
 			}
 
 			// Guardo la Nota de Credito con los datos de AFIP.
@@ -441,6 +445,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		notaCreditoDTO.setSubtotal(subtotal);
 		notaCreditoDTO.setTipo("NOTA DE CREDITO");
 		notaCreditoDTO.setTotal(total);
+		notaCreditoDTO.setCodigoBarras(notaCredito.getCodBarras());
 		return notaCreditoDTO;
 	}
 

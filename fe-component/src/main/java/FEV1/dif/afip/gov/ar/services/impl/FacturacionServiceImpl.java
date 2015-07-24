@@ -20,6 +20,14 @@ import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
 
 public class FacturacionServiceImpl implements FacturacionService {
 
+	// Punto de Venta.
+	private int ptoVta = Integer.valueOf(ParametrosUtil
+			.getProperty("puntoventa"));
+
+	public FacturacionServiceImpl() {
+		ptoVta = Integer.valueOf(ParametrosUtil.getProperty("puntoventa"));
+	}
+
 	@Override
 	public Resultado solicitarComprobante(Comprobante comprobante)
 			throws ServiceException {
@@ -31,8 +39,8 @@ public class FacturacionServiceImpl implements FacturacionService {
 			ServiceSoapProxy service = new ServiceSoapProxy();
 
 			// Request del Servicio.
-			FECAERequest caeRequest = ServiceRequestParser.getFECAERequest(
-					comprobante);
+			FECAERequest caeRequest = ServiceRequestParser
+					.getFECAERequest(comprobante, ptoVta);
 
 			// Response del Servicio.
 			FECAEResponse response = service.FECAESolicitar(authRequest,
@@ -60,7 +68,8 @@ public class FacturacionServiceImpl implements FacturacionService {
 
 			// Request del Servicio.
 			FECompConsultaReq feCompConsReq = ServiceRequestParser
-					.getFECompConsultaRequest(nroComprobante, tipoComprobante);
+					.getFECompConsultaRequest(nroComprobante, tipoComprobante,
+							ptoVta);
 
 			// Response del Servicio.
 			FECompConsultaResponse response = service.FECompConsultar(
@@ -82,9 +91,6 @@ public class FacturacionServiceImpl implements FacturacionService {
 
 		// Autorizacion.
 		FEAuthRequest authRequest = AuthorizationUtil.getAuthorization();
-
-		// Punto de Venta.
-		int ptoVta = Integer.valueOf(ParametrosUtil.getProperty("puntoventa"));
 
 		try {
 			ServiceSoapProxy service = new ServiceSoapProxy();

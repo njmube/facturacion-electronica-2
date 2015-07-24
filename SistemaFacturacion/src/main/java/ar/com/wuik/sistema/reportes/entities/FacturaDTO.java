@@ -29,6 +29,7 @@ public class FacturaDTO {
 	private String cae;
 	private Date vtoCAE;
 	private List<DetalleFacturaDTO> detalles;
+	private String codigoBarras;
 
 	public String getLetra() {
 		return letra;
@@ -212,6 +213,14 @@ public class FacturaDTO {
 
 	public void setDetalles(List<DetalleFacturaDTO> detalles) {
 		this.detalles = detalles;
+	}
+
+	public String getCodigoBarras() {
+		return codigoBarras;
+	}
+
+	public void setCodigoBarras(String codigoBarras) {
+		this.codigoBarras = codigoBarras;
 	}
 
 }

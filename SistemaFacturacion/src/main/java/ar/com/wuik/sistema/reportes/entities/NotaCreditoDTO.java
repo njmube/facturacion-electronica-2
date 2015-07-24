@@ -29,6 +29,7 @@ public class NotaCreditoDTO {
 	private String cae;
 	private Date vtoCAE;
 	private List<DetalleNotaCreditoDTO> detalles;
+	private String codigoBarras;
 
 	public String getLetra() {
 		return letra;
@@ -212,6 +213,14 @@ public class NotaCreditoDTO {
 
 	public void setDetalles(List<DetalleNotaCreditoDTO> detalles) {
 		this.detalles = detalles;
+	}
+
+	public String getCodigoBarras() {
+		return codigoBarras;
+	}
+
+	public void setCodigoBarras(String codigoBarras) {
+		this.codigoBarras = codigoBarras;
 	}
 
 }

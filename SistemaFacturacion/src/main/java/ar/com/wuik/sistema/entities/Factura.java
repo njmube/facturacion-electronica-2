@@ -64,6 +64,10 @@ public class Factura extends BaseEntity {
 	private EstadoFacturacion estadoFacturacion;
 	@Formula(value = "(select IF(count(*) > 1, 1, 0) from recibos_facturas rf where rf.ID_FACTURA = ID)")
 	private boolean paga;
+	@Column(name = "NUMERO_COMP_FORMATO")
+	private String nroCompFormato;
+	@Column(name = "COD_BARRAS")
+	private String codBarras;
 
 	public Factura() {
 		this.detalles = new ArrayList<DetalleFactura>();
@@ -217,6 +221,22 @@ public class Factura extends BaseEntity {
 
 	public void setPaga(boolean paga) {
 		this.paga = paga;
+	}
+
+	public String getCodBarras() {
+		return codBarras;
+	}
+
+	public void setCodBarras(String codBarras) {
+		this.codBarras = codBarras;
+	}
+
+	public String getNroCompFormato() {
+		return nroCompFormato;
+	}
+
+	public void setNroCompFormato(String nroCompFormato) {
+		this.nroCompFormato = nroCompFormato;
 	}
 
 }

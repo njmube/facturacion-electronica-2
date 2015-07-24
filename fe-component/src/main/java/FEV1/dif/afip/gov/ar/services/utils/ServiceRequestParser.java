@@ -28,7 +28,7 @@ import FEV1.dif.afip.gov.ar.utils.Utils;
 
 public class ServiceRequestParser {
 
-	public static FECAERequest getFECAERequest(Comprobante comprobante) {
+	public static FECAERequest getFECAERequest(Comprobante comprobante, int ptoVta) {
 
 		FECAERequest request = new FECAERequest();
 
@@ -36,8 +36,7 @@ public class ServiceRequestParser {
 		FECAECabRequest feCabReq = new FECAECabRequest();
 		feCabReq.setCantReg(1);
 		feCabReq.setCbteTipo(comprobante.getTipoComprobante().getId());
-		feCabReq.setPtoVta(Integer.valueOf(ParametrosUtil
-				.getProperty("puntoventa")));
+		feCabReq.setPtoVta(ptoVta);
 		request.setFeCabReq(feCabReq);
 
 		// Detalle
@@ -93,12 +92,11 @@ public class ServiceRequestParser {
 	}
 
 	public static FECompConsultaReq getFECompConsultaRequest(
-			long nroComprobante, TipoComprobante tipoComprobante) {
+			long nroComprobante, TipoComprobante tipoComprobante, int ptoVta) {
 		FECompConsultaReq feCompConsultaReq = new FECompConsultaReq();
 		feCompConsultaReq.setCbteNro(nroComprobante);
 		feCompConsultaReq.setCbteTipo(tipoComprobante.getId());
-		feCompConsultaReq.setPtoVta(Integer.valueOf(ParametrosUtil
-				.getProperty("puntoventa")));
+		feCompConsultaReq.setPtoVta(ptoVta);
 		return feCompConsultaReq;
 	}
 
@@ -113,6 +111,8 @@ public class ServiceRequestParser {
 		if (null != datosComprobante) {
 			resultado.setCae(datosComprobante.getCodAutorizacion());
 			resultado.setPtoVta(datosComprobante.getPtoVta());
+			resultado.setPtoVtaFormato(Utils
+					.generarFormatoPtoVta(datosComprobante.getPtoVta()));
 			resultado.setEstado(Resultado.Estado.valueOf(datosComprobante
 					.getResultado()));
 			resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
@@ -162,6 +162,8 @@ public class ServiceRequestParser {
 		resultado.setPtoVta(cabecera.getPtoVta());
 		resultado.setFechaVtoCAE(Utils.getDateFromString(
 				detalle.getCAEFchVto(), "yyyyMMdd"));
+		resultado.setPtoVtaFormato(Utils.generarFormatoPtoVta(cabecera
+				.getPtoVta()));
 		resultado.setFecha(Utils.getDateFromString(detalle.getCbteFch(),
 				"yyyyMMdd"));
 		resultado.setEstado(Resultado.Estado.valueOf(estado));
@@ -201,6 +203,9 @@ public class ServiceRequestParser {
 		resultado.setNroComprobante(response.getCbteNro());
 		resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
 				response.getPtoVta(), response.getCbteNro()));
+		resultado.setPtoVta(response.getPtoVta());
+		resultado.setPtoVtaFormato(Utils.generarFormatoPtoVta(response
+				.getPtoVta()));
 
 		// Errores
 		Err[] errors = response.getErrors();

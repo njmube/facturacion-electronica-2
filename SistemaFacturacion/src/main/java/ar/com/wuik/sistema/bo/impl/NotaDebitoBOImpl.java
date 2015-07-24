@@ -144,8 +144,11 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 				// Datos de AFIP
 				notaDebito.setCae(resultado.getCae());
 				notaDebito.setFechaCAE(resultado.getFechaVtoCAE());
-				notaDebito.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
+				notaDebito.setPtoVenta(resultado.getPtoVtaFormato());
 				notaDebito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+				notaDebito.setNroCompFormato(resultado
+						.getNroComprobanteFormato());
+				notaDebito.setCodBarras(resultado.getCodigoBarras());
 			}
 
 			// Guardo la Nota de Debito con los datos de AFIP.
@@ -201,7 +204,8 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 					// existe
 					// en AFIP.
 					resultado = facturacionService.consultarComprobante(
-							Long.valueOf(nroNotaDebito), TipoComprobante.NOTA_CREDITO_A);
+							Long.valueOf(nroNotaDebito),
+							TipoComprobante.NOTA_CREDITO_A);
 
 					// Si no existe lo envio a Autorizar a AFIP.
 					if (null == resultado.getCae()) {
@@ -230,8 +234,11 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 				// Datos de AFIP
 				notaDebito.setCae(resultado.getCae());
 				notaDebito.setFechaCAE(resultado.getFechaVtoCAE());
-				notaDebito.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
+				notaDebito.setPtoVenta(resultado.getPtoVtaFormato());
 				notaDebito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
+				notaDebito.setNroCompFormato(resultado
+						.getNroComprobanteFormato());
+				notaDebito.setCodBarras(resultado.getCodigoBarras());
 			}
 
 			// Guardo la Nota de Debito con los datos de AFIP.
@@ -285,8 +292,10 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 			ComprobanteAsociado comprobanteAsociado = null;
 			for (Factura factura : facturas) {
 				comprobanteAsociado = new ComprobanteAsociado();
-				comprobanteAsociado.setNumero(Long.valueOf(factura.getNroComprobante()));
-				comprobanteAsociado.setPtoVta(Integer.valueOf(factura.getPtoVenta()));
+				comprobanteAsociado.setNumero(Long.valueOf(factura
+						.getNroComprobante()));
+				comprobanteAsociado.setPtoVta(Integer.valueOf(factura
+						.getPtoVenta()));
 				comprobanteAsociado
 						.setTipoComprobante(TipoComprobante.FACTURA_A);
 				comprobantesAsociados.add(comprobanteAsociado);
@@ -449,6 +458,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		notaDebitoDTO.setSubtotal(subtotal);
 		notaDebitoDTO.setTipo("NOTA DE DEBITO");
 		notaDebitoDTO.setTotal(total);
+		notaDebitoDTO.setCodigoBarras(notaDebito.getCodBarras());
 		return notaDebitoDTO;
 	}
 

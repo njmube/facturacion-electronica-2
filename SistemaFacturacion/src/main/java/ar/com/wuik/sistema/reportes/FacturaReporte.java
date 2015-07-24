@@ -1,10 +1,12 @@
 package ar.com.wuik.sistema.reportes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -49,6 +51,8 @@ public class FacturaReporte {
 			parameters.put("TOTAL", facturaDTO.getTotal());
 			parameters.put("CAE", facturaDTO.getCae());
 			parameters.put("VTO_CAE", facturaDTO.getVtoCAE());
+			parameters.put("COD_BARRAS", facturaDTO.getCodigoBarras());
+			parameters.put("COPIA", "ORIGINAL");
 			parameters.put("BG_IMG", FacturaReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 
@@ -56,9 +60,34 @@ public class FacturaReporte {
 					.loadObject(FacturaReporte.class
 							.getResourceAsStream("/reportes/comprobante.jasper"));
 
+			
 			JasperPrint jasperPrint = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
+			
+			parameters.put("COPIA", "DUPLICADO");
+			parameters.put("BG_IMG", FacturaReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrint2 = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(
+							detalles));
+			
+			List<JRPrintPage> pages = new ArrayList<JRPrintPage>( jasperPrint2.getPages());
+			for(int count=0;count<pages.size();count++){
+				jasperPrint.addPage(1, (JRPrintPage)pages.get(count));		
+			}
+			
+			parameters.put("COPIA", "TRIPLICADO");
+			parameters.put("BG_IMG", FacturaReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrint3 = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(
+							detalles));
+			
+			List<JRPrintPage> pages2 = new ArrayList<JRPrintPage>( jasperPrint3.getPages());
+			for(int count2=0;count2<pages2.size();count2++){
+				jasperPrint.addPage(2, (JRPrintPage)pages2.get(count2));		
+			}
 
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {
@@ -69,6 +98,6 @@ public class FacturaReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarFactura(18L);
+		generarFactura(94L);
 	}
 }

@@ -36,6 +36,8 @@ public class Parametro extends BaseEntity {
 	private String ingresosBrutos;
 	@Column(name = "INICIO_ACT")
 	private Date inicioActividad;
+	@Column(name = "PTO_VENTA")
+	private String ptoVenta;
 
 	public Long getNroRecibo() {
 		return nroRecibo;
@@ -139,6 +141,14 @@ public class Parametro extends BaseEntity {
 
 	public void setNroNotaDebito(Long nroNotaDebito) {
 		this.nroNotaDebito = nroNotaDebito;
+	}
+
+	public String getPtoVenta() {
+		return ptoVenta;
+	}
+
+	public void setPtoVenta(String ptoVenta) {
+		this.ptoVenta = ptoVenta;
 	}
 
 }

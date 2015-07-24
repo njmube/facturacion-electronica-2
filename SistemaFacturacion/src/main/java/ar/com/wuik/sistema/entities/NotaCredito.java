@@ -59,6 +59,10 @@ public class NotaCredito extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "ESTADO_FACTURACION")
 	private EstadoFacturacion estadoFacturacion;
+	@Column(name = "NUMERO_COMP_FORMATO")
+	private String nroCompFormato;
+	@Column(name = "COD_BARRAS")
+	private String codBarras;
 
 	public NotaCredito() {
 		this.detalles = new ArrayList<DetalleNotaCredito>();
@@ -185,13 +189,29 @@ public class NotaCredito extends BaseEntity {
 	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
 		this.estadoFacturacion = estadoFacturacion;
 	}
-	
-	public String getEstado(){
+
+	public String getEstado() {
 		if (activo) {
 			return "ACTIVA - " + getEstadoFacturacion().getDenominacion();
 		} else {
 			return "ANULADA - " + getEstadoFacturacion().getDenominacion();
 		}
+	}
+
+	public String getNroCompFormato() {
+		return nroCompFormato;
+	}
+
+	public void setNroCompFormato(String nroCompFormato) {
+		this.nroCompFormato = nroCompFormato;
+	}
+
+	public String getCodBarras() {
+		return codBarras;
+	}
+
+	public void setCodBarras(String codBarras) {
+		this.codBarras = codBarras;
 	}
 
 }

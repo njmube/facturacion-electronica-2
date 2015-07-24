@@ -88,7 +88,8 @@ public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
 	public String obtenerNroNotaCredito() throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getNroNotaCredito()+ "", 8, "0");
+			return StringUtils.leftPad(parametro.getNroNotaCredito() + "", 8,
+					"0");
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}
@@ -98,7 +99,8 @@ public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
 	public String obtenerNroNotaDebito() throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getNroNotaDebito()+ "", 8, "0");
+			return StringUtils.leftPad(parametro.getNroNotaDebito() + "", 8,
+					"0");
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}
@@ -108,6 +110,55 @@ public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
 	public Parametro getParametro() throws DataAccessException {
 		try {
 			return getById(1L);
+		} catch (HibernateException hexc) {
+			throw new DataAccessException(hexc);
+		}
+	}
+
+	@Override
+	public String obtenerPtoVenta() throws DataAccessException {
+		try {
+			Parametro parametro = getById(1L);
+			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0");
+		} catch (HibernateException hexc) {
+			throw new DataAccessException(hexc);
+		}
+	}
+
+	@Override
+	public String obtenerNroFacturaFormato() throws DataAccessException {
+		try {
+			Parametro parametro = getById(1L);
+			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0")
+					+ "-"
+					+ StringUtils.leftPad(parametro.getNroFactura() + "", 8,
+							"0");
+		} catch (HibernateException hexc) {
+			throw new DataAccessException(hexc);
+		}
+	}
+
+	@Override
+	public String obtenerNroNotaCreditoFormato() throws DataAccessException {
+		try {
+			Parametro parametro = getById(1L);
+			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0")
+					+ "-"
+					+ StringUtils.leftPad(parametro.getNroNotaCredito() + "", 8,
+							"0");
+		} catch (HibernateException hexc) {
+			throw new DataAccessException(hexc);
+		}
+	}
+
+	@Override
+	public String obtenerNroNotaDebitoFormato() throws DataAccessException {
+		try {
+			Parametro parametro = getById(1L);
+			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0")
+					+ "-"
+					+ StringUtils.leftPad(parametro.getNroNotaDebito() + "", 8,
+							"0");
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}

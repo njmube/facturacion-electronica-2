@@ -16,6 +16,7 @@ public final class Resultado {
 	private long nroComprobante;
 	private String nroComprobanteFormato;
 	private long ptoVta;
+	private String ptoVtaFormato;
 	private List<String> errores;
 	private String codigoBarras;
 
@@ -100,6 +101,14 @@ public final class Resultado {
 		this.nroComprobanteFormato = nroComprobanteFormato;
 	}
 
+	public String getPtoVtaFormato() {
+		return ptoVtaFormato;
+	}
+
+	public void setPtoVtaFormato(String ptoVtaFormato) {
+		this.ptoVtaFormato = ptoVtaFormato;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
@@ -115,10 +124,12 @@ public final class Resultado {
 		str.append("\n");
 		str.append("PTO. VTA.: " + ptoVta);
 		str.append("\n");
-		
+
 		str.append("CODIGO BARRAS: " + codigoBarras);
 		str.append("\n");
 		str.append("NRO. COMP. FORMATO: " + nroComprobanteFormato);
+		str.append("\n");
+		str.append("PTO. VTA. FORMATO: " + ptoVtaFormato);
 		str.append("\n");
 
 		for (String error : errores) {

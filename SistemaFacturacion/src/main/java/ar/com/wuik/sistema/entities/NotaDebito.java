@@ -63,6 +63,10 @@ public class NotaDebito extends BaseEntity {
 	private EstadoFacturacion estadoFacturacion;
 	@Formula(value = "(select IF(count(*) > 1, 1, 0) from recibos_notas_debito rnd where rnd.ID_NOTA_DEBITO = ID)")
 	private boolean paga;
+	@Column(name = "NUMERO_COMP_FORMATO")
+	private String nroCompFormato;
+	@Column(name = "COD_BARRAS")
+	private String codBarras;
 
 	public NotaDebito() {
 		this.detalles = new ArrayList<DetalleNotaDebito>();
@@ -204,6 +208,22 @@ public class NotaDebito extends BaseEntity {
 
 	public void setPaga(boolean paga) {
 		this.paga = paga;
+	}
+
+	public String getNroCompFormato() {
+		return nroCompFormato;
+	}
+
+	public void setNroCompFormato(String nroCompFormato) {
+		this.nroCompFormato = nroCompFormato;
+	}
+
+	public String getCodBarras() {
+		return codBarras;
+	}
+
+	public void setCodBarras(String codBarras) {
+		this.codBarras = codBarras;
 	}
 
 }

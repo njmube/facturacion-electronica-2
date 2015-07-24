@@ -21,12 +21,12 @@ public class NotaCreditoModel extends WTableModel<NotaCredito> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.08, 0.13, 0.10, 0.10, 0.12, 0.12, 0.12, 0.19 };
+		return new double[] { 0.10, 0.11, 0.10, 0.10, 0.12, 0.12, 0.12, 0.19 };
 	}
 
 	@Override
 	protected Object[] getRow(NotaCredito t, Object[] fila) {
-		fila[0] = t.getNroComprobante();
+		fila[0] = (WUtils.isNotEmpty(t.getNroCompFormato())) ? t.getNroCompFormato() : t.getNroComprobante();
 		fila[1] = t.getCae();
 		fila[2] = WUtils.getStringFromDate(t.getFechaCAE());
 		fila[3] = WUtils.getStringFromDate(t.getFechaVenta());

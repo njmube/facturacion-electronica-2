@@ -13,7 +13,7 @@ public class DetalleNotaCreditoFacturaModel extends WTableModel<Factura> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public DetalleNotaCreditoFacturaModel() {
-		super(new String[] { "CAE", "FECHA", "TOTAL" });
+		super(new String[] { "NRO", "FECHA", "TOTAL" });
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class DetalleNotaCreditoFacturaModel extends WTableModel<Factura> {
 
 	@Override
 	protected Object[] getRow(Factura t, Object[] fila) {
-		fila[0] = t.getCae();
+		fila[0] = (WUtils.isNotEmpty(t.getNroCompFormato())) ? t.getNroCompFormato() : t.getNroComprobante();
 		fila[1] = WUtils.getStringFromDate(t.getFechaVenta());
 		fila[2] = AppUtils.formatPeso(t.getTotal());
 		fila[3] = t.getId();

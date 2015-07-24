@@ -75,6 +75,10 @@ public class Utils {
 	}
 
 	public static String generarFormatoComprobante(int ptoVta, long nroComp) {
-		return  leftPadding(ptoVta + "", 4, "0") + "-" +  leftPadding(nroComp + "", 8, "0") ;
+		return  generarFormatoPtoVta(ptoVta) + "-" +  leftPadding(nroComp + "", 8, "0") ;
+	}
+
+	public static String generarFormatoPtoVta(int ptoVta) {
+		return leftPadding(ptoVta + "", 4, "0");
 	}
 }

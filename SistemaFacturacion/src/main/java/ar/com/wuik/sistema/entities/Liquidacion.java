@@ -38,10 +38,10 @@ public class Liquidacion {
 
 	public String getComprobante() {
 		if (null != notaDebito) {
-			return notaDebito.getNroComprobante() + "";
+			return notaDebito.getNroCompFormato();
 		}
 		if (null != factura) {
-			return factura.getNroComprobante() + "";
+			return factura.getNroCompFormato();
 		}
 		return "";
 	}
