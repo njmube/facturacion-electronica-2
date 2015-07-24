@@ -1,7 +1,6 @@
 package ar.com.wuik.sistema.reportes;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -9,16 +8,13 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import ar.com.wuik.sistema.bo.FacturaBO;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.reportes.entities.DetalleFacturaDTO;
 import ar.com.wuik.sistema.reportes.entities.FacturaDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
-import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class ModeloComprobanteReporte {
 

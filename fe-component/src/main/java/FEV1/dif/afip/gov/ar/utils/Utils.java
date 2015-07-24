@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
-
 public class Utils {
 
 	public static String getStringFromDate(Date fecha, String format) {
