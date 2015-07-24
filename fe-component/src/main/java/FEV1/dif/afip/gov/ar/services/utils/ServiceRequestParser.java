@@ -115,11 +115,20 @@ public class ServiceRequestParser {
 			resultado.setPtoVta(datosComprobante.getPtoVta());
 			resultado.setEstado(Resultado.Estado.valueOf(datosComprobante
 					.getResultado()));
+			resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
+					datosComprobante.getPtoVta(),
+					datosComprobante.getCbteDesde()));
 			resultado.setFechaVtoCAE(Utils.getDateFromString(
 					datosComprobante.getFchVto(), "yyyyMMdd"));
 			resultado.setFecha(Utils.getDateFromString(
 					datosComprobante.getCbteFch(), "yyyyMMdd"));
 			resultado.setNroComprobante(datosComprobante.getCbteDesde());
+			resultado.setCodigoBarras(Utils.generarCodigoBarras(
+					ParametrosUtil.getProperty("cuit"),
+					datosComprobante.getCbteTipo(),
+					datosComprobante.getPtoVta(),
+					datosComprobante.getCodAutorizacion(),
+					datosComprobante.getFchVto()));
 		}
 
 		List<String> errores = new ArrayList<String>();
@@ -148,12 +157,19 @@ public class ServiceRequestParser {
 		Resultado resultado = new Resultado();
 		resultado.setCae(detalle.getCAE());
 		resultado.setNroComprobante(detalle.getCbteDesde());
+		resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
+				cabecera.getPtoVta(), detalle.getCbteDesde()));
 		resultado.setPtoVta(cabecera.getPtoVta());
 		resultado.setFechaVtoCAE(Utils.getDateFromString(
 				detalle.getCAEFchVto(), "yyyyMMdd"));
 		resultado.setFecha(Utils.getDateFromString(detalle.getCbteFch(),
 				"yyyyMMdd"));
 		resultado.setEstado(Resultado.Estado.valueOf(estado));
+		resultado
+				.setCodigoBarras(Utils.generarCodigoBarras(
+						ParametrosUtil.getProperty("cuit"),
+						cabecera.getCbteTipo(), cabecera.getPtoVta(),
+						detalle.getCAE(), detalle.getCAEFchVto()));
 
 		List<String> errores = new ArrayList<String>();
 
@@ -183,6 +199,8 @@ public class ServiceRequestParser {
 
 		Resultado resultado = new Resultado();
 		resultado.setNroComprobante(response.getCbteNro());
+		resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
+				response.getPtoVta(), response.getCbteNro()));
 
 		// Errores
 		Err[] errors = response.getErrors();

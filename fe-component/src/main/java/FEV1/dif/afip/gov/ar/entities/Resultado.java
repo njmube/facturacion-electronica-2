@@ -14,8 +14,10 @@ public final class Resultado {
 	private Date fechaVtoCAE;
 	private Estado estado;
 	private long nroComprobante;
+	private String nroComprobanteFormato;
 	private long ptoVta;
 	private List<String> errores;
+	private String codigoBarras;
 
 	public String getCae() {
 		return cae;
@@ -72,8 +74,8 @@ public final class Resultado {
 	public void setPtoVta(long ptoVta) {
 		this.ptoVta = ptoVta;
 	}
-	
-	public String getMensajeErrores(){
+
+	public String getMensajeErrores() {
 		StringBuilder str = new StringBuilder();
 		for (String error : errores) {
 			str.append("ERROR: " + error);
@@ -81,7 +83,22 @@ public final class Resultado {
 		}
 		return str.toString();
 	}
-	
+
+	public String getCodigoBarras() {
+		return codigoBarras;
+	}
+
+	public void setCodigoBarras(String codigoBarras) {
+		this.codigoBarras = codigoBarras;
+	}
+
+	public String getNroComprobanteFormato() {
+		return nroComprobanteFormato;
+	}
+
+	public void setNroComprobanteFormato(String nroComprobanteFormato) {
+		this.nroComprobanteFormato = nroComprobanteFormato;
+	}
 
 	@Override
 	public String toString() {
@@ -98,6 +115,12 @@ public final class Resultado {
 		str.append("\n");
 		str.append("PTO. VTA.: " + ptoVta);
 		str.append("\n");
+		
+		str.append("CODIGO BARRAS: " + codigoBarras);
+		str.append("\n");
+		str.append("NRO. COMP. FORMATO: " + nroComprobanteFormato);
+		str.append("\n");
+
 		for (String error : errores) {
 			str.append("ERROR: " + error);
 			str.append("\n");
