@@ -104,7 +104,6 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 				ParametroBO parametroBO = AbstractFactory
 						.getInstance(ParametroBO.class);
 				String nroRemito = parametroBO.getNroRemito();
-				this.remito.setNumero(nroRemito);
 				model.addValue(CAMPO_NRO_COMP, nroRemito);
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());

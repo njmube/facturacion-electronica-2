@@ -63,6 +63,8 @@ public class RemitoBOImpl implements RemitoBO {
 	@Override
 	public void guardar(Remito remito) throws BusinessException {
 		try {
+			String nroRemito = parametroBO.getNroRemito();
+			remito.setNumero(nroRemito);
 			HibernateUtil.startTransaction();
 			remitoDAO.saveOrUpdate(remito);
 			parametroDAO.incrementarNroRemito();

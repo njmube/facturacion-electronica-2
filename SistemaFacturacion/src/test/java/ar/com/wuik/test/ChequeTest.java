@@ -37,7 +37,7 @@ public class ChequeTest extends JUnit4Builder {
 		cheque.setIdBanco(19L);
 		cheque.setImporte(BigDecimal.TEN);
 		cheque.setNumero("123");
-		cheque.setRecibidoDe("JUAN MANUEL VAZQUEZ");
+		cheque.setaNombreDe("JUAN MANUEL VAZQUEZ");
 		chequeBO.guardar(cheque);
 		Long id = cheque.getId();
 		assertNotNull(id);
@@ -57,7 +57,7 @@ public class ChequeTest extends JUnit4Builder {
 		cheque.setIdBanco(19L);
 		cheque.setImporte(BigDecimal.TEN);
 		cheque.setNumero("1234567890");
-		cheque.setRecibidoDe("JUAN MANUEL VAZQUEZ");
+		cheque.setaNombreDe("JUAN MANUEL VAZQUEZ");
 		chequeBO.guardar(cheque);
 		Long id = cheque.getId();
 		assertNotNull(id);
@@ -65,13 +65,13 @@ public class ChequeTest extends JUnit4Builder {
 		// Busco
 		ChequeFilter filter = new ChequeFilter();
 		filter.setNumero("NO EXISTE");
-		filter.setRecibidoDe("NO EXISTE");
+		filter.setaNombreDe("NO EXISTE");
 		List<Cheque> cheques = chequeBO.buscar(filter);
 		assertFalse(WUtils.isNotEmpty(cheques));
 
 		filter = new ChequeFilter();
 		filter.setNumero("1234567890");
-		filter.setRecibidoDe("JUAN MANUEL VAZQUEZ");
+		filter.setaNombreDe("JUAN MANUEL VAZQUEZ");
 		cheques = chequeBO.buscar(filter);
 		assertTrue(WUtils.isNotEmpty(cheques));
 
@@ -93,7 +93,7 @@ public class ChequeTest extends JUnit4Builder {
 		cheque.setIdBanco(idBanco);
 		cheque.setImporte(importe);
 		cheque.setNumero(numero);
-		cheque.setRecibidoDe(recibidoDe);
+		cheque.setaNombreDe(recibidoDe);
 		chequeBO.guardar(cheque);
 		Long id = cheque.getId();
 		assertNotNull(id);
@@ -104,7 +104,7 @@ public class ChequeTest extends JUnit4Builder {
 		assertEquals(WUtils.getStringFromDate(fecha), WUtils.getStringFromDate(cheque.getFechaPago()));
 		assertEquals(idBanco, cheque.getIdBanco());
 		assertEquals(numero, cheque.getNumero());
-		assertEquals(recibidoDe, cheque.getRecibidoDe());
+		assertEquals(recibidoDe, cheque.getaNombreDe());
 	}
 
 	@org.junit.Test
@@ -117,7 +117,7 @@ public class ChequeTest extends JUnit4Builder {
 		cheque.setIdBanco(19L);
 		cheque.setImporte(BigDecimal.TEN);
 		cheque.setNumero("123");
-		cheque.setRecibidoDe("JUAN MANUEL VAZQUEZ");
+		cheque.setaNombreDe("JUAN MANUEL VAZQUEZ");
 		chequeBO.guardar(cheque);
 		Long id = cheque.getId();
 		assertNotNull(id);
@@ -146,7 +146,7 @@ public class ChequeTest extends JUnit4Builder {
 		cheque.setIdBanco(19L);
 		cheque.setImporte(BigDecimal.TEN);
 		cheque.setNumero("123");
-		cheque.setRecibidoDe("JUAN MANUEL VAZQUEZ");
+		cheque.setaNombreDe("JUAN MANUEL VAZQUEZ");
 		chequeBO.guardar(cheque);
 		Long id = cheque.getId();
 		assertNotNull(id);
@@ -172,7 +172,7 @@ public class ChequeTest extends JUnit4Builder {
 		cheque.setIdBanco(19L);
 		cheque.setImporte(BigDecimal.TEN);
 		cheque.setNumero("123");
-		cheque.setRecibidoDe("JUAN MANUEL VAZQUEZ");
+		cheque.setaNombreDe("JUAN MANUEL VAZQUEZ");
 		chequeBO.guardar(cheque);
 		Long id = cheque.getId();
 		assertNotNull(id);

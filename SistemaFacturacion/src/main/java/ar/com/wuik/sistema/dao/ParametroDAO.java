@@ -15,11 +15,11 @@ public interface ParametroDAO extends GenericCrudDAO<Parametro> {
 	
 	void incrementarNroNotaDebito() throws DataAccessException;
 	
-	long obtenerNroFactura() throws DataAccessException;
+	String obtenerNroFactura() throws DataAccessException;
 	
-	long obtenerNroNotaCredito() throws DataAccessException;
+	String obtenerNroNotaCredito() throws DataAccessException;
 	
-	long obtenerNroNotaDebito() throws DataAccessException;
+	String obtenerNroNotaDebito() throws DataAccessException;
 
 	Parametro getParametro()  throws DataAccessException;
 }

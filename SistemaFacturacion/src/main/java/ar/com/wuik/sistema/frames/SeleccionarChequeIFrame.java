@@ -11,11 +11,11 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 
-import ar.com.wuik.sistema.bo.RemitoBO;
-import ar.com.wuik.sistema.entities.Remito;
+import ar.com.wuik.sistema.bo.ChequeBO;
+import ar.com.wuik.sistema.entities.Cheque;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.filters.RemitoFilter;
-import ar.com.wuik.sistema.model.RemitoModel;
+import ar.com.wuik.sistema.filters.ChequeFilter;
+import ar.com.wuik.sistema.model.ChequeModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.security.WSecure;
@@ -27,32 +27,32 @@ import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
-public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
+public class SeleccionarChequeIFrame extends WAbstractModelIFrame implements
 		WSecure {
 
 	/**
 	 * Serial UID.
 	 */
 	private static final long serialVersionUID = 7107533032732470914L;
-	private WTablePanel<Remito> tablePanel;
+	private WTablePanel<Cheque> tablePanel;
 	private JButton btnCerrar;
 	private Long idCliente;
-	private List<Long> idsRemitosToExclude;
-	private FacturaVerIFrame ventaClienteVerIFrame;
+	private List<Long> idsChequesToExclude;
+	private ReciboVerIFrame reciboVerIFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public SeleccionarRemitoIFrame(FacturaVerIFrame ventaClienteVerIFrame,  List<Long> idsRemitosToExclude,
-			Long idCliente) {
-		this.idsRemitosToExclude = idsRemitosToExclude;
-		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
+	public SeleccionarChequeIFrame(ReciboVerIFrame reciboVerIFrame,
+			List<Long> idsChequesToExclude, Long idCliente) {
+		this.idsChequesToExclude = idsChequesToExclude;
+		this.reciboVerIFrame = reciboVerIFrame;
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
-		setTitle("Remitos");
+		setTitle("Cheques");
 		setFrameIcon(new ImageIcon(
-				SeleccionarRemitoIFrame.class.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 636, 271);
+				SeleccionarChequeIFrame.class.getResource("/icons/cheque.png")));
+		setBounds(0, 0, 751, 424);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getTablePanel());
@@ -72,10 +72,10 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 		return false;
 	}
 
-	private WTablePanel<Remito> getTablePanel() {
+	private WTablePanel<Cheque> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(RemitoModel.class, Boolean.FALSE);
-			tablePanel.setBounds(8, 11, 617, 184);
+			tablePanel = new WTablePanel(ChequeModel.class, Boolean.FALSE);
+			tablePanel.setBounds(8, 11, 731, 340);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -85,7 +85,7 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
 		WToolbarButton buttonSeleccionar = new WToolbarButton(
-				"Seleccionar Remito(s)", new ImageIcon(
+				"Seleccionar Cheque(s)", new ImageIcon(
 						WCalendarIFrame.class.getResource("/icons/add.png")),
 				new ActionListener() {
 
@@ -95,14 +95,15 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 								.getSelectedItemsID();
 						if (WUtils.isNotEmpty(selectedItems)) {
 
-							RemitoBO remitoBO = AbstractFactory
-									.getInstance(RemitoBO.class);
-							RemitoFilter filter = new RemitoFilter();
+							ChequeBO chequeBO = AbstractFactory
+									.getInstance(ChequeBO.class);
+							ChequeFilter filter = new ChequeFilter();
 							filter.setIdsToInclude(selectedItems);
-							filter.setInicializarDetalles(Boolean.TRUE);
 							try {
-								List<Remito> remitos = remitoBO.buscar(filter);
-								ventaClienteVerIFrame.addRemitos(remitos);
+								List<Cheque> cheques = chequeBO.buscar(filter);
+								if (null != reciboVerIFrame) {
+									reciboVerIFrame.addCheques(cheques);
+								}
 								hideFrame();
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
@@ -111,7 +112,7 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos un Cheque",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -132,29 +133,26 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(SeleccionarRemitoIFrame.class
+			btnCerrar.setIcon(new ImageIcon(SeleccionarChequeIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(522, 206, 103, 25);
+			btnCerrar.setBounds(636, 361, 103, 25);
 		}
 		return btnCerrar;
 	}
 
 	public void search() {
-		RemitoFilter filter = new RemitoFilter();
+		ChequeBO chequeBO = AbstractFactory.getInstance(ChequeBO.class);
+		ChequeFilter filter = new ChequeFilter();
+		filter.setEnUso(Boolean.FALSE);
 		filter.setIdCliente(idCliente);
-		filter.setAsignado(Boolean.FALSE);
-		filter.setActivo(Boolean.TRUE);
-		filter.setIdsToExclude(idsRemitosToExclude);
-
-		List<Remito> remitos = new ArrayList<Remito>();
+		filter.setIdsToExclude(idsChequesToExclude);
+		List<Cheque> chequesSinAsignar = null;
 		try {
-			RemitoBO remitoBO = AbstractFactory.getInstance(RemitoBO.class);
-			List<Remito> remitosSinAsignar = remitoBO.buscar(filter);
-			remitos.addAll(remitosSinAsignar);
+			chequesSinAsignar = chequeBO.buscar(filter);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
-		getTablePanel().addData(remitos);
+		getTablePanel().addData(chequesSinAsignar);
 	}
 
 	@Override

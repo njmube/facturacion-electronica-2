@@ -151,8 +151,9 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private List<WToolbarButton> getToolbarButtons() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
-		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Cliente", new ImageIcon(
-				WCalendarIFrame.class.getResource("/icons/add.png")),
+		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Cliente",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/add.png")),
 				new ActionListener() {
 
 					@Override
@@ -160,8 +161,9 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						addModalIFrame(new ClienteVerIFrame(ClienteIFrame.this));
 					}
 				}, "Nuevo", null);
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Cliente", new ImageIcon(
-				WCalendarIFrame.class.getResource("/icons/edit.png")),
+		WToolbarButton buttonEdit = new WToolbarButton("Editar Cliente",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/edit.png")),
 				new ActionListener() {
 
 					@Override
@@ -179,9 +181,10 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						}
 					}
 				}, "Editar", null);
-		WToolbarButton buttonActivar = new WToolbarButton("Activar/Desactivar Cliente",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/activar-desactivar.png")),
+		WToolbarButton buttonActivar = new WToolbarButton(
+				"Activar/Desactivar Cliente", new ImageIcon(
+						WCalendarIFrame.class
+								.getResource("/icons/activar-desactivar.png")),
 				new ActionListener() {
 
 					@Override
@@ -365,8 +368,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							// addModalIFrame(new
-							// ReciboClienteIFrame(selectedItem));
+							addModalIFrame(new ReciboIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -376,6 +378,25 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						}
 					}
 				}, "Recibos", null);
+		WToolbarButton buttonCheques = new WToolbarButton("Cheques",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/cheque.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							addModalIFrame(new ChequeIFrame(selectedItem));
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar un solo Cliente",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Cheques", null);
 
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
@@ -386,6 +407,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 		toolbarButtons.add(buttonFacturas);
 		toolbarButtons.add(buttonRemitos);
 		toolbarButtons.add(buttonRecibos);
+		toolbarButtons.add(buttonCheques);
 		return toolbarButtons;
 	}
 

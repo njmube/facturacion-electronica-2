@@ -59,7 +59,8 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		Boolean activo = filter.getActivo();
 		List<Long> idsToExclude = filter.getIdsToExclude();
 		List<Long> idsToInclude = filter.getIdsToInclude();
-		EstadoFacturacion estadoFacturacion= filter.getEstadoFacturacion();
+		EstadoFacturacion estadoFacturacion = filter.getEstadoFacturacion();
+		Boolean paga = filter.getPaga();
 
 		if (null != idCliente) {
 			criteria.add(Restrictions.eq("idCliente", idCliente));
@@ -76,7 +77,8 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		}
 
 		if (null != estadoFacturacion) {
-				criteria.add(Restrictions.eq("estadoFacturacion", estadoFacturacion));
+			criteria.add(Restrictions
+					.eq("estadoFacturacion", estadoFacturacion));
 		}
 
 		if (null != activo) {
@@ -89,6 +91,10 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 
 		if (WUtils.isNotEmpty(idsToExclude)) {
 			criteria.add(Restrictions.not(Restrictions.in("id", idsToExclude)));
+		}
+
+		if (null != paga) {
+			criteria.add(Restrictions.eq("paga", paga));
 		}
 
 		return criteria;

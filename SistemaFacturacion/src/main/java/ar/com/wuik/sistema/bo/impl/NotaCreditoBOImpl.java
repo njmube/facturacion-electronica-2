@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +113,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 			boolean errorServicios = Boolean.FALSE;
 
 			// Obtengo el Nro de Nota de Credito.
-			Long nroNotaCredito = parametroDAO.obtenerNroNotaCredito();
+			String nroNotaCredito = parametroDAO.obtenerNroNotaCredito();
 			notaCredito.setNroComprobante(nroNotaCredito);
 			parametroDAO.incrementarNroNotaCredito();
 
@@ -142,7 +143,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				// Datos de AFIP
 				notaCredito.setCae(resultado.getCae());
 				notaCredito.setFechaCAE(resultado.getFechaVtoCAE());
-				notaCredito.setPtoVenta(resultado.getPtoVta());
+				notaCredito.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
 				notaCredito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 			}
 
@@ -172,7 +173,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		try {
 			HibernateUtil.startTransaction();
 
-			Long nroNotaCredito = notaCredito.getNroComprobante();
+			String nroNotaCredito = notaCredito.getNroComprobante();
 			Resultado resultado = null;
 			boolean errorServicios = Boolean.FALSE;
 
@@ -196,7 +197,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 					// Consulto si el comprobante con el Nro. de Nota de Crédito existe
 					// en AFIP.
 					resultado = facturacionService.consultarComprobante(
-							nroNotaCredito, TipoComprobante.NOTA_CREDITO_A);
+							Long.valueOf(nroNotaCredito), TipoComprobante.NOTA_CREDITO_A);
 
 					// Si no existe lo envio a Autorizar a AFIP.
 					if (null == resultado.getCae()) {
@@ -223,7 +224,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				// Datos de AFIP
 				notaCredito.setCae(resultado.getCae());
 				notaCredito.setFechaCAE(resultado.getFechaVtoCAE());
-				notaCredito.setPtoVenta(resultado.getPtoVta());
+				notaCredito.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
 				notaCredito.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 			}
 
@@ -252,7 +253,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 			throws DataAccessException {
 
 		Cliente cliente = clienteDAO.getById(notaCredito.getIdCliente());
-		long nroNotaCredito = notaCredito.getNroComprobante();
+		long nroNotaCredito = Long.valueOf(notaCredito.getNroComprobante());
 
 		String cuit = cliente.getCuit().replaceAll("-", "");
 		Date fechaComprobante = notaCredito.getFechaVenta();
@@ -277,8 +278,8 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 			ComprobanteAsociado comprobanteAsociado = null;
 			for (Factura factura : facturas) {
 				comprobanteAsociado = new ComprobanteAsociado();
-				comprobanteAsociado.setNumero(factura.getNroComprobante());
-				comprobanteAsociado.setPtoVta(factura.getPtoVenta().intValue());
+				comprobanteAsociado.setNumero(Long.valueOf(factura.getNroComprobante()));
+				comprobanteAsociado.setPtoVta(Integer.valueOf(factura.getPtoVenta()));
 				comprobanteAsociado
 						.setTipoComprobante(TipoComprobante.FACTURA_A);
 				comprobantesAsociados.add(comprobanteAsociado);

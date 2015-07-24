@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.dao.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.HibernateException;
 
 import ar.com.wuik.sistema.dao.ParametroDAO;
@@ -74,30 +75,30 @@ public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
 	}
 
 	@Override
-	public long obtenerNroFactura() throws DataAccessException {
+	public String obtenerNroFactura() throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return parametro.getNroFactura();
+			return StringUtils.leftPad(parametro.getNroFactura() + "", 8, "0");
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}
 	}
 
 	@Override
-	public long obtenerNroNotaCredito() throws DataAccessException {
+	public String obtenerNroNotaCredito() throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return parametro.getNroNotaCredito();
+			return StringUtils.leftPad(parametro.getNroNotaCredito()+ "", 8, "0");
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}
 	}
 
 	@Override
-	public long obtenerNroNotaDebito() throws DataAccessException {
+	public String obtenerNroNotaDebito() throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return parametro.getNroNotaDebito();
+			return StringUtils.leftPad(parametro.getNroNotaDebito()+ "", 8, "0");
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}

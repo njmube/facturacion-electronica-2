@@ -13,6 +13,7 @@ public class FacturaFilter {
 	private List<Long> idsToInclude;
 	private Boolean inicializarDetalles;
 	private EstadoFacturacion estadoFacturacion;
+	private Boolean paga;
 
 	public Long getIdCliente() {
 		return idCliente;
@@ -68,6 +69,14 @@ public class FacturaFilter {
 
 	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
 		this.estadoFacturacion = estadoFacturacion;
+	}
+
+	public Boolean getPaga() {
+		return paga;
+	}
+
+	public void setPaga(Boolean paga) {
+		this.paga = paga;
 	}
 
 }

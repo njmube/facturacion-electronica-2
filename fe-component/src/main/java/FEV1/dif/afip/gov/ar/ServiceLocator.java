@@ -7,6 +7,8 @@
 
 package FEV1.dif.afip.gov.ar;
 
+import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
+
 public class ServiceLocator extends org.apache.axis.client.Service implements FEV1.dif.afip.gov.ar.Service {
 
 /**
@@ -15,19 +17,22 @@ public class ServiceLocator extends org.apache.axis.client.Service implements FE
  */
 
     public ServiceLocator() {
+    	ServiceSoap_address = ParametrosUtil.getProperty("url.wsfev1");
     }
 
 
     public ServiceLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
+        ServiceSoap_address = ParametrosUtil.getProperty("url.wsfev1");
     }
 
     public ServiceLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
+        ServiceSoap_address = ParametrosUtil.getProperty("url.wsfev1");
     }
 
     // Use to get a proxy class for ServiceSoap
-    private java.lang.String ServiceSoap_address = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";
+    private java.lang.String ServiceSoap_address;
 
     public java.lang.String getServiceSoapAddress() {
         return ServiceSoap_address;

@@ -51,43 +51,10 @@ public class TestService {
 			 resultado =
 			 facturacionService.consultarComprobante(20,
 			 TipoComprobante.FACTURA_A);
-			 
-			 resultado =
-					 facturacionService.consultarComprobante(20,
-					 TipoComprobante.NOTA_CREDITO_A);
-			 
-			 resultado =
-					 facturacionService.consultarComprobante(20,
-					 TipoComprobante.NOTA_DEBITO_A);
-			//
 			 System.out.println(resultado);
 		} catch (ServiceException sexc) {
 			System.out.println(sexc.getMessage());
 			sexc.printStackTrace();
 		}
 	}
-
-	private Comprobante crearComprobante() {
-		Comprobante comprobante = new Comprobante();
-		List<AlicuotaIVA> alicuotas = new ArrayList<AlicuotaIVA>();
-		AlicuotaIVA alicuota = new AlicuotaIVA();
-		alicuota.setBaseImponible(new BigDecimal(15105.00));
-		alicuota.setTipoIVA(TipoIVA.IVA_21);
-		alicuota.setTotalAlicuota(new BigDecimal(3172.05));
-		alicuotas.add(alicuota);
-		comprobante.setAlicuotas(alicuotas);
-		comprobante.setComprobantesAsociados(null);
-		comprobante.setCotizacion(null);
-		comprobante.setDocNro(30709933244L);
-		comprobante.setDocTipo(TipoDocumento.CUIT);
-		comprobante.setFechaComprobante(new Date());
-		comprobante.setImporteIVA(new BigDecimal(3172.05));
-		comprobante.setImporteSubtotal(new BigDecimal(15105.00));
-		comprobante.setImporteTotal(new BigDecimal(18277.05));
-		comprobante.setTipoComprobante(TipoComprobante.FACTURA_A);
-		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
-		comprobante.setTipoMoneda(TipoMoneda.PESOS_ARGENTINOS);
-		return comprobante;
-	}
-
 }

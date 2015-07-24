@@ -17,7 +17,7 @@ import ar.com.wuik.sistema.utils.MonedaUtils;
 
 public class ReciboReporte {
 
-	public static void generarFactura(Long idFactura) throws ReportException {
+	public static void generarRecibo(Long idRecibo) throws ReportException {
 
 		try {
 			ReciboDTO reciboDTO = createDummy();
@@ -97,6 +97,6 @@ public class ReciboReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarFactura(18L);
+		generarRecibo(18L);
 	}
 }

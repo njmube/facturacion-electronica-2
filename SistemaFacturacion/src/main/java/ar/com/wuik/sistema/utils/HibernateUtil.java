@@ -24,7 +24,6 @@ import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.entities.NotaDebito;
 import ar.com.wuik.sistema.entities.PagoReciboCheque;
 import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
-import ar.com.wuik.sistema.entities.PagoReciboNotaCredito;
 import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Permiso;
 import ar.com.wuik.sistema.entities.Producto;
@@ -116,7 +115,6 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(NotaDebito.class);
 		cfg.addAnnotatedClass(PagoReciboCheque.class);
 		cfg.addAnnotatedClass(PagoReciboEfectivo.class);
-		cfg.addAnnotatedClass(PagoReciboNotaCredito.class);
 		cfg.addAnnotatedClass(Parametro.class);
 		cfg.addAnnotatedClass(Permiso.class);
 		cfg.addAnnotatedClass(Producto.class);

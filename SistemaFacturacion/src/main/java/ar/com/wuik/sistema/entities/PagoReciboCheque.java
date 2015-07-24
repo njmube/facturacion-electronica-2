@@ -6,34 +6,37 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "pagos_recibos_cheques")
 public class PagoReciboCheque extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_NOTA_CREDITO", nullable = false, insertable = false, updatable = false)
-	private NotaCredito notaCredito;
-	@Column(name = "ID_NOTA_CREDITO")
-	private Long idNotaCredito;
+	@JoinColumn(name = "ID_CHEQUE", nullable = false, insertable = false, updatable = false)
+	private Cheque cheque;
+	@Column(name = "ID_CHEQUE")
+	private Long idCheque;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_RECIBO", nullable = false)
 	private Recibo recibo;
+	@Transient
+	private Long temporalId;
 
-	public NotaCredito getNotaCredito() {
-		return notaCredito;
+	public Cheque getCheque() {
+		return cheque;
 	}
 
-	public void setNotaCredito(NotaCredito notaCredito) {
-		this.notaCredito = notaCredito;
+	public void setCheque(Cheque cheque) {
+		this.cheque = cheque;
 	}
 
-	public Long getIdNotaCredito() {
-		return idNotaCredito;
+	public Long getIdCheque() {
+		return idCheque;
 	}
 
-	public void setIdNotaCredito(Long idNotaCredito) {
-		this.idNotaCredito = idNotaCredito;
+	public void setIdCheque(Long idCheque) {
+		this.idCheque = idCheque;
 	}
 
 	public Recibo getRecibo() {
@@ -42,6 +45,18 @@ public class PagoReciboCheque extends BaseEntity {
 
 	public void setRecibo(Recibo recibo) {
 		this.recibo = recibo;
+	}
+
+	public Long getCoalesceId() {
+		return (null != getId()) ? getId() : temporalId;
+	}
+
+	public Long getTemporalId() {
+		return temporalId;
+	}
+
+	public void setTemporalId(Long temporalId) {
+		this.temporalId = temporalId;
 	}
 
 }

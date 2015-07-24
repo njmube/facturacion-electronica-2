@@ -10,6 +10,4 @@ public interface ChequeDAO extends GenericCrudDAO<Cheque> {
 
 	List<Cheque> search(ChequeFilter filter) throws DataAccessException;
 
-	boolean estaEnUso(Long id) throws DataAccessException;
-
 }

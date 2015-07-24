@@ -51,9 +51,9 @@ public class NotaCredito extends BaseEntity {
 	@Column(name = "TOTAL")
 	private BigDecimal total;
 	@Column(name = "PTO_VENTA")
-	private Long ptoVenta;
+	private String ptoVenta;
 	@Column(name = "NUMERO_COMPROBANTE")
-	private Long nroComprobante;
+	private String nroComprobante;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 	@Enumerated(EnumType.ORDINAL)
@@ -146,19 +146,19 @@ public class NotaCredito extends BaseEntity {
 		this.total = total;
 	}
 
-	public Long getPtoVenta() {
+	public String getPtoVenta() {
 		return ptoVenta;
 	}
 
-	public void setPtoVenta(Long ptoVenta) {
+	public void setPtoVenta(String ptoVenta) {
 		this.ptoVenta = ptoVenta;
 	}
 
-	public Long getNroComprobante() {
+	public String getNroComprobante() {
 		return nroComprobante;
 	}
 
-	public void setNroComprobante(Long nroComprobante) {
+	public void setNroComprobante(String nroComprobante) {
 		this.nroComprobante = nroComprobante;
 	}
 

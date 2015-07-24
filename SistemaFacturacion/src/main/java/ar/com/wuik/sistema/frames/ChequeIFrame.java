@@ -19,7 +19,6 @@ import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.bo.ChequeBO;
 import ar.com.wuik.sistema.entities.Cheque;
-import ar.com.wuik.sistema.entities.Permisos;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.ChequeFilter;
 import ar.com.wuik.sistema.model.ChequeModel;
@@ -47,6 +46,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 	private JTextField txtNumero;
 	private JButton btnLimpiar;
 	private JButton btnBuscar;
+	private Long idCliente;
 
 	private static final String CAMPO_NUMERO = "numero";
 	private static final String CAMPO_RECIBIDO = "recibido";
@@ -66,6 +66,21 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 		getContentPane().add(getBtnSalir());
 	}
 
+	public ChequeIFrame(Long idCliente) {
+		this.idCliente = idCliente;
+		setBorder(new LineBorder(null, 1, true));
+		setTitle("Cheques");
+		setFrameIcon(new ImageIcon(
+				ChequeIFrame.class.getResource("/icons/cheque.png")));
+		setBounds(0, 0, 712, 594);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
+		getContentPane().add(getPnlBusqueda());
+		getContentPane().add(getTablePanel());
+		getContentPane().add(getBtnSalir());
+		search();
+	}
+
 	@Override
 	public void applySecurity(List<String> permisos) {
 	}
@@ -80,7 +95,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 		// Filtro
 		ChequeFilter filter = new ChequeFilter();
 		filter.setNumero(numero);
-		filter.setRecibidoDe(recibido);
+		filter.setaNombreDe(recibido);
 
 		try {
 			List<Cheque> cheques = chequeBO.buscar(filter);
@@ -119,9 +134,10 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new ChequeVerIFrame(ChequeIFrame.this));
+						addModalIFrame(new ChequeVerIFrame(idCliente,
+								ChequeIFrame.this));
 					}
-				}, "Nuevo", Permisos.NUE_CLI.getCodPermiso());
+				}, "Nuevo", null);
 		WToolbarButton buttonEdit = new WToolbarButton("Editar Cheque",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/edit.png")),
@@ -131,17 +147,16 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new ChequeVerIFrame(selectedItem,
-									ChequeIFrame.this));
+							addModalIFrame(new ChequeVerIFrame(
+									ChequeIFrame.this, selectedItem, idCliente));
 						} else {
 							WTooltipUtils.showMessage(
-									"Debe seleccionar un Producto",
+									"Debe seleccionar un Cheque",
 									(JButton) e.getSource(), MessageType.ALERTA);
 						}
 					}
-				}, "Editar", Permisos.EDI_CLI.getCodPermiso());
-		WToolbarButton buttonDelete = new WToolbarButton(
-				"Eliminar Cheque(s)",
+				}, "Editar", null);
+		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Cheque(s)",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
 				new ActionListener() {
@@ -150,20 +165,18 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							int result = JOptionPane
-									.showConfirmDialog(
-											getParent(),
-											"¿Desea eliminar el Cheque seleccionado?",
-											"Alerta",
-											JOptionPane.OK_CANCEL_OPTION,
-											JOptionPane.WARNING_MESSAGE);
+							int result = JOptionPane.showConfirmDialog(
+									getParent(),
+									"¿Desea eliminar el Cheque seleccionado?",
+									"Alerta", JOptionPane.OK_CANCEL_OPTION,
+									JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
 								ChequeBO chequeBO = AbstractFactory
 										.getInstance(ChequeBO.class);
 								try {
-									boolean estaEnUso = chequeBO
-											.estaEnUso(selectedItem);
-									if (estaEnUso) {
+									Cheque cheque = chequeBO
+											.obtener(selectedItem);
+									if (!cheque.isEnUso()) {
 										try {
 											chequeBO.eliminar(selectedItem);
 											search();
@@ -190,9 +203,11 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Eliminar", Permisos.ELI_CLI.getCodPermiso());
+				}, "Eliminar", null);
 
-		toolbarButtons.add(buttonAdd);
+		if (null != this.idCliente) {
+			toolbarButtons.add(buttonAdd);
+		}
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
 		return toolbarButtons;

@@ -21,7 +21,7 @@ public class NotaCreditoModel extends WTableModel<NotaCredito> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.05, 0.16, 0.10, 0.10, 0.12, 0.12, 0.12, 0.19 };
+		return new double[] { 0.08, 0.13, 0.10, 0.10, 0.12, 0.12, 0.12, 0.19 };
 	}
 
 	@Override

@@ -19,9 +19,11 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.bo.ChequeBO;
+import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.entities.Banco;
 import ar.com.wuik.sistema.entities.Cheque;
+import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
@@ -54,7 +56,9 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_FECHA_COBRO = "celular";
 	private static final String CAMPO_RECIBIDO = "localidad";
 	private static final String CAMPO_TOTAL = "cuit";
+	private static final String CAMPO_CLIENTE = "cliente";
 	private ChequeIFrame chequeIFrame;
+	private ReciboVerIFrame reciboVerIFrame;
 	private JTextField txtFechaEmision;
 	private JTextField txtFechaCobro;
 	private JComboBox cmbBancos;
@@ -65,30 +69,31 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 	private WTextFieldDecimal textFieldDecimal;
 	private JButton btnFechaEmision;
 	private JButton btnFechaCobro;
+	private JLabel lblCliente;
+	private JTextField txtCliente;
 
 	/**
 	 * Create the frame.
 	 * 
 	 * @wbp.parser.constructor
 	 */
-	public ChequeVerIFrame(Long idCheque, ChequeIFrame chequeIFrame) {
+	public ChequeVerIFrame(ChequeIFrame chequeIFrame, Long idCheque,
+			Long idCliente) {
 		initialize("Editar Cheque");
 		this.chequeIFrame = chequeIFrame;
-		loadCheque(idCheque);
-	}
-
-	private void loadCheque(Long idCheque) {
-		ChequeBO chequeBO = AbstractFactory.getInstance(ChequeBO.class);
 		try {
+			ChequeBO chequeBO = AbstractFactory.getInstance(ChequeBO.class);
 			this.cheque = chequeBO.obtener(idCheque);
+			Cliente cliente = this.cheque.getCliente();
 			WModel model = populateModel();
+			model.addValue(CAMPO_CLIENTE, cliente.getRazonSocial());
 			model.addValue(CAMPO_NUMERO, cheque.getNumero());
 			model.addValue(CAMPO_FECHA_COBRO,
 					WUtils.getStringFromDate(cheque.getFechaPago()));
 			model.addValue(CAMPO_FECHA_EMISION,
 					WUtils.getStringFromDate(cheque.getFechaEmision()));
 			model.addValue(CAMPO_BANCO, cheque.getBanco().getId());
-			model.addValue(CAMPO_RECIBIDO, cheque.getRecibidoDe());
+			model.addValue(CAMPO_RECIBIDO, cheque.getaNombreDe());
 			model.addValue(CAMPO_TOTAL, cheque.getImporte());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
@@ -96,10 +101,36 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		}
 	}
 
-	public ChequeVerIFrame(ChequeIFrame chequeIFrame) {
+	public ChequeVerIFrame(Long idCliente, ChequeIFrame chequeIFrame) {
 		initialize("Nuevo Cheque");
 		this.chequeIFrame = chequeIFrame;
 		this.cheque = new Cheque();
+		this.cheque.setIdCliente(idCliente);
+		try {
+			ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
+			Cliente cliente = clienteBO.obtener(idCliente);
+			WModel model = populateModel();
+			model.addValue(CAMPO_CLIENTE, cliente.getRazonSocial());
+			populateComponents(model);
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+	}
+
+	public ChequeVerIFrame(Long idCliente, ReciboVerIFrame reciboVerIFrame) {
+		initialize("Nuevo Cheque");
+		this.reciboVerIFrame = reciboVerIFrame;
+		this.cheque = new Cheque();
+		this.cheque.setIdCliente(idCliente);
+		try {
+			ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
+			Cliente cliente = clienteBO.obtener(idCliente);
+			WModel model = populateModel();
+			model.addValue(CAMPO_CLIENTE, cliente.getRazonSocial());
+			populateComponents(model);
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
 	}
 
 	private void initialize(String title) {
@@ -107,7 +138,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ChequeVerIFrame.class.getResource("/icons/clientes.png")));
-		setBounds(0, 0, 445, 326);
+		setBounds(0, 0, 445, 369);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -137,7 +168,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 
 	@Override
 	protected boolean validateModel(WModel model) {
-		
+
 		String numero = model.getValue(CAMPO_NUMERO);
 		String fechaCobro = model.getValue(CAMPO_FECHA_COBRO);
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
@@ -166,7 +197,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (WUtils.isEmpty(recibido)) {
 			messages.add("Debe ingresar el campo de Recibido");
 		}
-		
+
 		if (WUtils.isEmpty(total)) {
 			messages.add("Debe ingresar un Monto");
 		}
@@ -182,7 +213,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 421, 240);
+			pnlBusqueda.setBounds(10, 11, 421, 284);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblNro());
 			pnlBusqueda.add(getTxtNro());
@@ -198,6 +229,8 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTextFieldDecimal());
 			pnlBusqueda.add(getBtnFechaEmision());
 			pnlBusqueda.add(getBtnFechaCobro());
+			pnlBusqueda.add(getLblCliente());
+			pnlBusqueda.add(getTxtCliente());
 		}
 		return pnlBusqueda;
 	}
@@ -206,7 +239,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (lblNro == null) {
 			lblNro = new JLabel("* N\u00FAmero:");
 			lblNro.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNro.setBounds(10, 23, 121, 25);
+			lblNro.setBounds(10, 68, 121, 25);
 		}
 		return lblNro;
 	}
@@ -216,7 +249,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			txtNro = new JTextField();
 			txtNro.setName(CAMPO_NUMERO);
 			txtNro.setDocument(new WTextFieldLimit(50));
-			txtNro.setBounds(141, 23, 145, 25);
+			txtNro.setBounds(141, 68, 145, 25);
 		}
 		return txtNro;
 	}
@@ -232,7 +265,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ChequeVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(215, 262, 103, 25);
+			btnCerrar.setBounds(217, 306, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -242,7 +275,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ChequeVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(328, 262, 103, 25);
+			btnGuardar.setBounds(330, 306, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -250,16 +283,19 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 
 						String numero = model.getValue(CAMPO_NUMERO);
 						String fechaCobro = model.getValue(CAMPO_FECHA_COBRO);
-						String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
+						String fechaEmision = model
+								.getValue(CAMPO_FECHA_EMISION);
 						WOption banco = model.getValue(CAMPO_BANCO);
 						String recibido = model.getValue(CAMPO_RECIBIDO);
 						String total = model.getValue(CAMPO_TOTAL);
 
 						cheque.setNumero(numero);
-						cheque.setFechaPago(WUtils.getDateFromString(fechaCobro));
-						cheque.setFechaEmision(WUtils.getDateFromString(fechaEmision));
+						cheque.setFechaPago(WUtils
+								.getDateFromString(fechaCobro));
+						cheque.setFechaEmision(WUtils
+								.getDateFromString(fechaEmision));
 						cheque.setIdBanco(banco.getValue());
-						cheque.setRecibidoDe(recibido);
+						cheque.setaNombreDe(recibido);
 						cheque.setImporte(WUtils.getValue(total));
 
 						ChequeBO chequeBO = AbstractFactory
@@ -271,7 +307,12 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 								chequeBO.actualizar(cheque);
 							}
 							hideFrame();
-							chequeIFrame.search();
+							if (null != chequeIFrame) {
+								chequeIFrame.search();
+							} else if (null != reciboVerIFrame) {
+								Cheque chequeSeleccionado = chequeBO.obtener(cheque.getId());
+								reciboVerIFrame.addCheque(chequeSeleccionado);
+							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						}
@@ -293,16 +334,16 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (lblFecha == null) {
 			lblFecha = new JLabel("* Fecha Emisi\u00F3n:");
 			lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFecha.setBounds(10, 95, 121, 25);
+			lblFecha.setBounds(10, 140, 121, 25);
 		}
 		return lblFecha;
 	}
 
 	private JLabel getLblRecibido() {
 		if (lblRecibido == null) {
-			lblRecibido = new JLabel("* Recibido de:");
+			lblRecibido = new JLabel("* A nombre de:");
 			lblRecibido.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblRecibido.setBounds(10, 167, 121, 25);
+			lblRecibido.setBounds(10, 212, 121, 25);
 		}
 		return lblRecibido;
 	}
@@ -311,7 +352,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (txtFechaEmision == null) {
 			txtFechaEmision = new JTextField();
 			txtFechaEmision.setEditable(false);
-			txtFechaEmision.setBounds(141, 95, 92, 25);
+			txtFechaEmision.setBounds(141, 140, 92, 25);
 			txtFechaEmision.setDocument(new WTextFieldLimit(100));
 			txtFechaEmision.setName(CAMPO_FECHA_EMISION);
 		}
@@ -322,7 +363,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (txtFechaCobro == null) {
 			txtFechaCobro = new JTextField();
 			txtFechaCobro.setEditable(false);
-			txtFechaCobro.setBounds(141, 131, 92, 25);
+			txtFechaCobro.setBounds(141, 176, 92, 25);
 			txtFechaCobro.setDocument(new WTextFieldLimit(20));
 			txtFechaCobro.setName(CAMPO_FECHA_COBRO);
 		}
@@ -333,7 +374,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (cmbBancos == null) {
 			cmbBancos = new JComboBox();
 			cmbBancos.setName(CAMPO_BANCO);
-			cmbBancos.setBounds(141, 59, 201, 25);
+			cmbBancos.setBounds(141, 104, 201, 25);
 		}
 		return cmbBancos;
 	}
@@ -342,7 +383,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (lblBanco == null) {
 			lblBanco = new JLabel("* Banco:");
 			lblBanco.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblBanco.setBounds(10, 59, 121, 25);
+			lblBanco.setBounds(10, 104, 121, 25);
 		}
 		return lblBanco;
 	}
@@ -351,7 +392,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (lblMonto == null) {
 			lblMonto = new JLabel("* Monto: $");
 			lblMonto.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblMonto.setBounds(10, 203, 121, 25);
+			lblMonto.setBounds(10, 248, 121, 25);
 		}
 		return lblMonto;
 	}
@@ -360,7 +401,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (txtRecibido == null) {
 			txtRecibido = new JTextField();
 			txtRecibido.setName(CAMPO_RECIBIDO);
-			txtRecibido.setBounds(141, 167, 242, 25);
+			txtRecibido.setBounds(141, 212, 242, 25);
 			txtRecibido.setDocument(new WTextFieldLimit(50));
 		}
 		return txtRecibido;
@@ -370,7 +411,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (lblFechaCobro == null) {
 			lblFechaCobro = new JLabel("* Fecha Cobro:");
 			lblFechaCobro.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFechaCobro.setBounds(10, 131, 121, 25);
+			lblFechaCobro.setBounds(10, 176, 121, 25);
 		}
 		return lblFechaCobro;
 	}
@@ -378,11 +419,12 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 	private WTextFieldDecimal getTextFieldDecimal() {
 		if (textFieldDecimal == null) {
 			textFieldDecimal = new WTextFieldDecimal(10, 2);
-			textFieldDecimal.setBounds(141, 203, 92, 25);
+			textFieldDecimal.setBounds(141, 248, 92, 25);
 			textFieldDecimal.setName(CAMPO_TOTAL);
 		}
 		return textFieldDecimal;
 	}
+
 	private JButton getBtnFechaEmision() {
 		if (btnFechaEmision == null) {
 			btnFechaEmision = new JButton("");
@@ -391,22 +433,44 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 					addModalIFrame(new WCalendarIFrame(txtFechaEmision));
 				}
 			});
-			btnFechaEmision.setIcon(new ImageIcon(ChequeVerIFrame.class.getResource("/icons/calendar.png")));
-			btnFechaEmision.setBounds(243, 96, 23, 23);
+			btnFechaEmision.setIcon(new ImageIcon(ChequeVerIFrame.class
+					.getResource("/icons/calendar.png")));
+			btnFechaEmision.setBounds(243, 141, 23, 23);
 		}
 		return btnFechaEmision;
 	}
+
 	private JButton getBtnFechaCobro() {
 		if (btnFechaCobro == null) {
 			btnFechaCobro = new JButton("");
-			btnFechaCobro.setIcon(new ImageIcon(ChequeVerIFrame.class.getResource("/icons/calendar.png")));
+			btnFechaCobro.setIcon(new ImageIcon(ChequeVerIFrame.class
+					.getResource("/icons/calendar.png")));
 			btnFechaCobro.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					addModalIFrame(new WCalendarIFrame(txtFechaCobro));
 				}
 			});
-			btnFechaCobro.setBounds(243, 132, 23, 23);
+			btnFechaCobro.setBounds(243, 177, 23, 23);
 		}
 		return btnFechaCobro;
+	}
+
+	private JLabel getLblCliente() {
+		if (lblCliente == null) {
+			lblCliente = new JLabel("Cliente:");
+			lblCliente.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblCliente.setBounds(10, 32, 121, 25);
+		}
+		return lblCliente;
+	}
+
+	private JTextField getTxtCliente() {
+		if (txtCliente == null) {
+			txtCliente = new JTextField();
+			txtCliente.setEditable(false);
+			txtCliente.setName(CAMPO_CLIENTE);
+			txtCliente.setBounds(141, 32, 270, 25);
+		}
+		return txtCliente;
 	}
 }

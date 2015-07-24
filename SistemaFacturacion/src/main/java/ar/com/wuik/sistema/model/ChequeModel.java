@@ -16,7 +16,7 @@ public class ChequeModel extends WTableModel<Cheque> {
 
 	public ChequeModel() {
 		super(new String[] { "NUMERO", "BANCO", "FECHA EMISIÓN", "FECHA COBRO",
-				"RECIBIDO", "IMPORTE" });
+				"A NOMBRE DE", "IMPORTE" });
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ChequeModel extends WTableModel<Cheque> {
 		fila[1] = t.getBanco().getNombre();
 		fila[2] = WUtils.getStringFromDate(t.getFechaEmision());
 		fila[3] = WUtils.getStringFromDate(t.getFechaPago());
-		fila[4] = t.getRecibidoDe();
+		fila[4] = t.getaNombreDe();
 		fila[5] = AppUtils.formatPeso(t.getImporte());
 		fila[6] = t.getId();
 		return fila;

@@ -18,7 +18,5 @@ public interface ChequeBO {
 
 	void eliminar(Long id) throws BusinessException;
 
-	boolean estaEnUso(Long id) throws BusinessException;
-
 	List<Cheque> obtenerTodos() throws BusinessException;
 }

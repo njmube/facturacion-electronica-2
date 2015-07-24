@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 
 @Entity
@@ -49,9 +51,9 @@ public class Factura extends BaseEntity {
 	@Column(name = "TOTAL")
 	private BigDecimal total;
 	@Column(name = "PTO_VENTA")
-	private Long ptoVenta;
+	private String ptoVenta;
 	@Column(name = "NUMERO_COMPROBANTE")
-	private Long nroComprobante;
+	private String nroComprobante;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -60,6 +62,8 @@ public class Factura extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "ESTADO_FACTURACION")
 	private EstadoFacturacion estadoFacturacion;
+	@Formula(value = "(select IF(count(*) > 1, 1, 0) from recibos_facturas rf where rf.ID_FACTURA = ID)")
+	private boolean paga;
 
 	public Factura() {
 		this.detalles = new ArrayList<DetalleFactura>();
@@ -155,11 +159,11 @@ public class Factura extends BaseEntity {
 		this.total = total;
 	}
 
-	public Long getPtoVenta() {
+	public String getPtoVenta() {
 		return ptoVenta;
 	}
 
-	public void setPtoVenta(Long ptoVenta) {
+	public void setPtoVenta(String ptoVenta) {
 		this.ptoVenta = ptoVenta;
 	}
 
@@ -171,11 +175,11 @@ public class Factura extends BaseEntity {
 		this.observaciones = observaciones;
 	}
 
-	public Long getNroComprobante() {
+	public String getNroComprobante() {
 		return nroComprobante;
 	}
 
-	public void setNroComprobante(Long nroComprobante) {
+	public void setNroComprobante(String nroComprobante) {
 		this.nroComprobante = nroComprobante;
 	}
 
@@ -199,12 +203,20 @@ public class Factura extends BaseEntity {
 		this.estadoFacturacion = estadoFacturacion;
 	}
 
-	public String getEstado(){
+	public String getEstado() {
 		if (activo) {
 			return "ACTIVA - " + getEstadoFacturacion().getDenominacion();
 		} else {
 			return "ANULADA - " + getEstadoFacturacion().getDenominacion();
 		}
 	}
-	
+
+	public boolean isPaga() {
+		return paga;
+	}
+
+	public void setPaga(boolean paga) {
+		this.paga = paga;
+	}
+
 }

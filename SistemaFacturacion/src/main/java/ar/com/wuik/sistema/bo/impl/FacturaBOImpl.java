@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +106,7 @@ public class FacturaBOImpl implements FacturaBO {
 			boolean errorServicios = Boolean.FALSE;
 
 			// Obtengo el Nro de Factura.
-			Long nroFactura = parametroDAO.obtenerNroFactura();
+			String nroFactura = parametroDAO.obtenerNroFactura();
 			factura.setNroComprobante(nroFactura);
 			parametroDAO.incrementarNroFactura();
 
@@ -135,7 +136,7 @@ public class FacturaBOImpl implements FacturaBO {
 				// Datos de AFIP
 				factura.setCae(resultado.getCae());
 				factura.setFechaCAE(resultado.getFechaVtoCAE());
-				factura.setPtoVenta(resultado.getPtoVta());
+				factura.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
 				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 			}
 
@@ -164,7 +165,7 @@ public class FacturaBOImpl implements FacturaBO {
 		try {
 			HibernateUtil.startTransaction();
 
-			Long nroFactura = factura.getNroComprobante();
+			String nroFactura = factura.getNroComprobante();
 			Resultado resultado = null;
 			boolean errorServicios = Boolean.FALSE;
 
@@ -188,7 +189,7 @@ public class FacturaBOImpl implements FacturaBO {
 					// Consulto si el comprobante con el Nro. de Factura existe
 					// en AFIP.
 					resultado = facturacionService.consultarComprobante(
-							nroFactura, TipoComprobante.FACTURA_A);
+							Long.valueOf(nroFactura), TipoComprobante.FACTURA_A);
 
 					// Si no existe lo envio a Autorizar a AFIP.
 					if (null == resultado.getCae()) {
@@ -215,7 +216,7 @@ public class FacturaBOImpl implements FacturaBO {
 				// Datos de AFIP
 				factura.setCae(resultado.getCae());
 				factura.setFechaCAE(resultado.getFechaVtoCAE());
-				factura.setPtoVenta(resultado.getPtoVta());
+				factura.setPtoVenta(StringUtils.leftPad(resultado.getPtoVta() + "", 4, "0"));
 				factura.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 			}
 
@@ -242,7 +243,7 @@ public class FacturaBOImpl implements FacturaBO {
 			throws DataAccessException {
 
 		Cliente cliente = clienteDAO.getById(factura.getIdCliente());
-		long nroFactura = factura.getNroComprobante();
+		long nroFactura = Long.valueOf(factura.getNroComprobante());
 
 		String cuit = cliente.getCuit().replaceAll("-", "");
 		Date fechaComprobante = factura.getFechaVenta();
@@ -426,7 +427,7 @@ public class FacturaBOImpl implements FacturaBO {
 		facturaDTO.setDetalles(detallesDTO);
 		facturaDTO.setCae(factura.getCae());
 		facturaDTO.setVtoCAE(factura.getFechaCAE());
-		facturaDTO.setCompNro(factura.getNroComprobante().toString());
+		facturaDTO.setCompNro(factura.getNroComprobante());
 		facturaDTO.setFechaEmision(factura.getFechaVenta());
 		facturaDTO.setIva105(subtotalIVA105);
 		facturaDTO.setIva21(subtotalIVA21);

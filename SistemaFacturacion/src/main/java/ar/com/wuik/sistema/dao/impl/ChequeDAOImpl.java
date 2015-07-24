@@ -33,21 +33,37 @@ public class ChequeDAOImpl extends GenericCrudHBDAOImpl<Cheque> implements
 		Criteria criteria = getSession().createCriteria(Cheque.class);
 
 		String numero = filter.getNumero();
-		String recibidoDe = filter.getRecibidoDe();
+		String aNombreDe = filter.getaNombreDe();
+		Boolean enUso = filter.getEnUso();
+		Long idCliente = filter.getIdCliente();
+		List<Long> idsToExclude = filter.getIdsToExclude();
+		List<Long> idsToInclude = filter.getIdsToInclude();
 
 		if (WUtils.isNotEmpty(numero)) {
 			criteria.add(Restrictions.eq("numero", numero));
 		}
 
-		if (WUtils.isNotEmpty(recibidoDe)) {
-			criteria.add(Restrictions.like("recibidoDe", recibidoDe, MatchMode.ANYWHERE));
+		if (WUtils.isNotEmpty(aNombreDe)) {
+			criteria.add(Restrictions.like("aNombreDe", aNombreDe,
+					MatchMode.ANYWHERE));
 		}
+
+		if (null != enUso) {
+			criteria.add(Restrictions.eq("enUso", enUso));
+		}
+
+		if (null != idCliente) {
+			criteria.add(Restrictions.eq("idCliente", idCliente));
+		}
+
+		if (WUtils.isNotEmpty(idsToInclude)) {
+			criteria.add(Restrictions.in("id", idsToInclude));
+		}
+
+		if (WUtils.isNotEmpty(idsToExclude)) {
+			criteria.add(Restrictions.not(Restrictions.in("id", idsToExclude)));
+		}
+
 		return criteria;
-	}
-	
-	@Override
-	public boolean estaEnUso(Long id) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

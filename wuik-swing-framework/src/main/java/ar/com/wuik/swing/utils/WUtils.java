@@ -280,7 +280,11 @@ public final class WUtils {
 	}
 
 	public static BigDecimal getValue(final String value) {
-		return getValue(value, 2);
+		if (isEmpty(value)) {
+			return BigDecimal.ZERO;
+		} else {
+			return getValue(value, 2);
+		}
 	}
 
 	public static BigDecimal getValueNullZero(final String value) {
