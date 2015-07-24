@@ -17,14 +17,18 @@ import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.reportes.entities.DetalleNotaDebitoDTO;
 import ar.com.wuik.sistema.reportes.entities.NotaDebitoDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
+import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class NotaDebitoReporte {
 
-	public static void generarNotaDebito(Long idNotaCredito) throws ReportException {
+	public static void generarNotaDebito(Long idNotaCredito)
+			throws ReportException {
 
 		try {
-			NotaDebitoBO notaDebitoBO = AbstractFactory.getInstance(NotaDebitoBO.class);
-			NotaDebitoDTO notaDebitoDTO = notaDebitoBO.obtenerDTO(idNotaCredito);
+			NotaDebitoBO notaDebitoBO = AbstractFactory
+					.getInstance(NotaDebitoBO.class);
+			NotaDebitoDTO notaDebitoDTO = notaDebitoBO
+					.obtenerDTO(idNotaCredito);
 			List<DetalleNotaDebitoDTO> detalles = notaDebitoDTO.getDetalles();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_LETRA", notaDebitoDTO.getLetra());
@@ -39,8 +43,10 @@ public class NotaDebitoReporte {
 			parameters.put("ING_BRUTOS", notaDebitoDTO.getIngBrutos());
 			parameters.put("INICIO_ATC", notaDebitoDTO.getInicioAct());
 			parameters.put("CLIENTE_CUIT", notaDebitoDTO.getClienteCuit());
-			parameters.put("CLIENTE_COND_IVA", notaDebitoDTO.getClienteCondIVA());
-			parameters.put("CLIENTE_RAZON", notaDebitoDTO.getClienteRazonSocial());
+			parameters.put("CLIENTE_COND_IVA",
+					notaDebitoDTO.getClienteCondIVA());
+			parameters.put("CLIENTE_RAZON",
+					notaDebitoDTO.getClienteRazonSocial());
 			parameters.put("CLIENTE_DOM", notaDebitoDTO.getClienteDomicilio());
 			parameters.put("REMITOS", notaDebitoDTO.getRemitos());
 			parameters.put("SUBTOTAL", notaDebitoDTO.getSubtotal());
@@ -48,6 +54,7 @@ public class NotaDebitoReporte {
 			parameters.put("IVA_105", notaDebitoDTO.getIva105());
 			parameters.put("TOTAL", notaDebitoDTO.getTotal());
 			parameters.put("CAE", notaDebitoDTO.getCae());
+			parameters.put("COD_BARRAS", notaDebitoDTO.getCodigoBarras());
 			parameters.put("VTO_CAE", notaDebitoDTO.getVtoCAE());
 			parameters.put("BG_IMG", NotaDebitoReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
@@ -56,9 +63,29 @@ public class NotaDebitoReporte {
 					.loadObject(NotaDebitoReporte.class
 							.getResourceAsStream("/reportes/comprobante.jasper"));
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
+			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
+
+			// DUPLICADO
+			parameters.put("COPIA", "DUPLICADO");
+			parameters.put("BG_IMG", NotaDebitoReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(
+							detalles));
+
+			// TRIPLICADO
+			parameters.put("COPIA", "TRIPLICADO");
+			parameters.put("BG_IMG", NotaDebitoReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrintTriplicado = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(
+							detalles));
+
+			JasperPrint jasperPrint = WJasperUtils.concatReports(
+					jasperPrintOriginal, jasperPrintDuplicado,
+					jasperPrintTriplicado);
 
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {

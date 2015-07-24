@@ -205,7 +205,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 					// en AFIP.
 					resultado = facturacionService.consultarComprobante(
 							Long.valueOf(nroNotaDebito),
-							TipoComprobante.NOTA_CREDITO_A);
+							TipoComprobante.NOTA_DEBITO_A);
 
 					// Si no existe lo envio a Autorizar a AFIP.
 					if (null == resultado.getCae()) {
