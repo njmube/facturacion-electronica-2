@@ -131,10 +131,11 @@ public final class Resultado {
 		str.append("\n");
 		str.append("PTO. VTA. FORMATO: " + ptoVtaFormato);
 		str.append("\n");
-
-		for (String error : errores) {
-			str.append("ERROR: " + error);
-			str.append("\n");
+		if (null != errores) {
+			for (String error : errores) {
+				str.append("ERROR: " + error);
+				str.append("\n");
+			}
 		}
 		return str.toString();
 	}

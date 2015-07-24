@@ -100,10 +100,15 @@ public class AuthorizationUtil {
 	public static void main(String[] args) throws Exception {
 
 		FEAuthRequest req = getAuthorization();
-
 		System.out.println("<ar:Token>" + req.getToken() + "</ar:Token>");
 		System.out.println("<ar:Sign>" + req.getSign() + "</ar:Sign>");
 		System.out.println("<ar:Cuit>20049746181</ar:Cuit>");
+		
+//		AuthRequestType req2 = getAuthorizationDetalles();
+//
+//		System.out.println("<token>" + req2.getToken() + "</token>");
+//		System.out.println("<sign>" + req2.getSign() + "</sign>");
+//		System.out.println("<cuitRepresentada>20049746181</cuitRepresentada>");
 	}
 
 }

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public final class Comprobante {
+public final class ComprobanteDetalles {
 
 	private TipoComprobante tipoComprobante;
 	private Date fechaComprobante;
@@ -19,7 +19,6 @@ public final class Comprobante {
 	private BigDecimal cotizacion;
 	private List<AlicuotaIVA> alicuotas;
 	private List<ComprobanteAsociado> comprobantesAsociados;
-	private List<Item> items;
 
 	// Datos para comprobantes asociados.
 	private int ptoVenta;
@@ -146,13 +145,4 @@ public final class Comprobante {
 		this.nroComprobante = nroComprobante;
 	}
 
-	public List<Item> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
-
-	
 }
