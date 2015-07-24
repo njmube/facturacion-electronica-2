@@ -1,12 +1,10 @@
 package ar.com.wuik.sistema.reportes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -19,6 +17,7 @@ import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.reportes.entities.DetalleFacturaDTO;
 import ar.com.wuik.sistema.reportes.entities.FacturaDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
+import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class FacturaReporte {
 
@@ -60,34 +59,28 @@ public class FacturaReporte {
 					.loadObject(FacturaReporte.class
 							.getResourceAsStream("/reportes/comprobante.jasper"));
 
-			
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
+			// ORIGINAL
+			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
 			
+			// DUPLICADO
 			parameters.put("COPIA", "DUPLICADO");
 			parameters.put("BG_IMG", FacturaReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
-			JasperPrint jasperPrint2 = JasperFillManager.fillReport(
+			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
 			
-			List<JRPrintPage> pages = new ArrayList<JRPrintPage>( jasperPrint2.getPages());
-			for(int count=0;count<pages.size();count++){
-				jasperPrint.addPage(1, (JRPrintPage)pages.get(count));		
-			}
-			
+			// TRIPLICADO
 			parameters.put("COPIA", "TRIPLICADO");
 			parameters.put("BG_IMG", FacturaReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
-			JasperPrint jasperPrint3 = JasperFillManager.fillReport(
+			JasperPrint jasperPrintTriplicado = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
 			
-			List<JRPrintPage> pages2 = new ArrayList<JRPrintPage>( jasperPrint3.getPages());
-			for(int count2=0;count2<pages2.size();count2++){
-				jasperPrint.addPage(2, (JRPrintPage)pages2.get(count2));		
-			}
+			JasperPrint jasperPrint = WJasperUtils.concatReports(jasperPrintOriginal, jasperPrintDuplicado, jasperPrintTriplicado);
 
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {

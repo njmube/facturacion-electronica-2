@@ -49,7 +49,8 @@ public class NotaCreditoReporte {
 			parameters.put("TOTAL", notaCreditoDTO.getTotal());
 			parameters.put("CAE", notaCreditoDTO.getCae());
 			parameters.put("VTO_CAE", notaCreditoDTO.getVtoCAE());
-			parameters.put("BG_IMG", NotaCreditoReporte.class
+			parameters.put("COPIA", "ORIGINAL");
+			parameters.put("BG_IMG", FacturaReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 
 			JasperReport jasperReport = (JasperReport) JRLoader
@@ -59,6 +60,16 @@ public class NotaCreditoReporte {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
+			
+			parameters.put("COPIA", "DUPLICADO");
+			parameters.put("BG_IMG", FacturaReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			
+			
+			
+			parameters.put("COPIA", "TRIPLICADO");
+			parameters.put("BG_IMG", FacturaReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
 
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {
