@@ -17,6 +17,7 @@ import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ReciboFilter;
 import ar.com.wuik.sistema.reportes.entities.ReciboDTO;
 import ar.com.wuik.sistema.utils.HibernateUtil;
+import ar.com.wuik.sistema.utils.MonedaUtils;
 
 public class ReciboBOImpl implements ReciboBO {
 
@@ -107,7 +108,7 @@ public class ReciboBOImpl implements ReciboBO {
 
 	private ReciboDTO convertToDTO(Recibo recibo) throws DataAccessException {
 		ReciboDTO reciboDTO = new ReciboDTO();
-
+		
 		// DATOS DEL CLIENTE.
 		Cliente cliente = recibo.getCliente();
 		reciboDTO
@@ -125,6 +126,15 @@ public class ReciboBOImpl implements ReciboBO {
 		reciboDTO.setIngBrutos(parametro.getIngresosBrutos());
 		reciboDTO.setInicioAct(parametro.getInicioActividad());
 
+		reciboDTO.setCheques(recibo.getPagosCheque());
+		reciboDTO.setEfectivo(recibo.getPagosEfectivo());
+		reciboDTO.setComprobantes(recibo.getFacturas(), recibo.getNotasDebito());
+		reciboDTO.setCompNro(recibo.getNumero());
+		reciboDTO.setFechaEmision(recibo.getFecha());
+				
+		reciboDTO.setTotal(recibo.getTotal());
+		reciboDTO.setTotalLetras(MonedaUtils.enLetras(recibo.getTotal()));
+		
 		return reciboDTO;
 	}
 

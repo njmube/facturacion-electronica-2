@@ -15,8 +15,6 @@ public class PagoReciboEfectivo extends BaseEntity {
 
 	@Column(name = "TOTAL")
 	private BigDecimal total;
-	@Column(name = "ID_CHEQUE")
-	private Long idCheque;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_RECIBO", nullable = false)
 	private Recibo recibo;
@@ -27,14 +25,6 @@ public class PagoReciboEfectivo extends BaseEntity {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
-	}
-
-	public Long getIdCheque() {
-		return idCheque;
-	}
-
-	public void setIdCheque(Long idCheque) {
-		this.idCheque = idCheque;
 	}
 
 	public Recibo getRecibo() {

@@ -1,5 +1,7 @@
 package ar.com.wuik.sistema.model;
 
+import java.math.BigDecimal;
+
 import ar.com.wuik.sistema.entities.Liquidacion;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
@@ -18,7 +20,7 @@ public class DetalleLiquidacionModel extends WTableModel<Liquidacion> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.30, 0.20, 0.20, 0.30 };
+		return new double[] { 0.15, 0.25, 0.35, 0.25 };
 	}
 
 	@Override
@@ -39,7 +41,9 @@ public class DetalleLiquidacionModel extends WTableModel<Liquidacion> {
 		case 1:
 			return String.class;
 		case 2:
-			return Integer.class;
+			return String.class;
+		case 3:
+			return BigDecimal.class;
 		}
 		return Object.class;
 	}

@@ -1,6 +1,5 @@
 package ar.com.wuik.sistema.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -13,10 +12,8 @@ import javax.persistence.Transient;
 public class PagoReciboCheque extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_CHEQUE", nullable = false, insertable = false, updatable = false)
+	@JoinColumn(name = "ID_CHEQUE")
 	private Cheque cheque;
-	@Column(name = "ID_CHEQUE")
-	private Long idCheque;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_RECIBO", nullable = false)
 	private Recibo recibo;
@@ -29,14 +26,6 @@ public class PagoReciboCheque extends BaseEntity {
 
 	public void setCheque(Cheque cheque) {
 		this.cheque = cheque;
-	}
-
-	public Long getIdCheque() {
-		return idCheque;
-	}
-
-	public void setIdCheque(Long idCheque) {
-		this.idCheque = idCheque;
 	}
 
 	public Recibo getRecibo() {

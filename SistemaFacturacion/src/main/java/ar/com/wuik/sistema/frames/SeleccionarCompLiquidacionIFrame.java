@@ -118,7 +118,13 @@ public class SeleccionarCompLiquidacionIFrame extends WAbstractModelIFrame
 						List<Long> selectedItems = tablePanel
 								.getSelectedItemsID();
 						if (WUtils.isNotEmpty(selectedItems)) {
-							reciboVerIFrame.addLiquidaciones(liquidaciones);
+							List<Liquidacion> seleccionadas = new ArrayList<Liquidacion>();
+							for (Liquidacion liquidacion : liquidaciones) {
+								if (selectedItems.contains(liquidacion.getId())) {
+									seleccionadas.add(liquidacion);
+								}
+							}
+							reciboVerIFrame.addLiquidaciones(seleccionadas);
 							hideFrame();
 						} else {
 							WTooltipUtils

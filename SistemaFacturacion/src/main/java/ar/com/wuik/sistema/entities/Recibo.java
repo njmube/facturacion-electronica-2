@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name = "recibos")
 public class Recibo extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_CLIENTE", nullable = false, insertable = false, updatable = false)
 	private Cliente cliente;
 	@Column(name = "ID_CLIENTE")
@@ -31,25 +31,26 @@ public class Recibo extends BaseEntity {
 	private Date fecha;
 	@Column(name = "NUMERO")
 	private String numero;
+	@Column(name = "OBSERVACIONES")
+	private String observaciones;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "recibos_facturas", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) })
 	private Set<Factura> facturas;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "recibos_notas_debito", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_NOTA_DEBITO", nullable = false, updatable = false) })
 	private Set<NotaDebito> notasDebito;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-	@JoinColumn(name = "ID_PAGO_EFECTIVO", nullable = false, insertable = false, updatable = false)
-	private PagoReciboEfectivo pagoEfectivo;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL)
+	private List<PagoReciboEfectivo> pagosEfectivo;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL)
 	private List<PagoReciboCheque> pagosCheque;
 	@Column(name = "TOTAL")
 	private BigDecimal total;
 
 	public Recibo() {
-		this.pagoEfectivo = new PagoReciboEfectivo();
 		this.pagosCheque = new ArrayList<PagoReciboCheque>();
 		this.facturas = new HashSet<Factura>();
 		this.notasDebito = new HashSet<NotaDebito>();
+		this.pagosEfectivo = new ArrayList<PagoReciboEfectivo>();
 	}
 
 	public Cliente getCliente() {
@@ -100,12 +101,12 @@ public class Recibo extends BaseEntity {
 		this.notasDebito = notasDebito;
 	}
 
-	public PagoReciboEfectivo getPagoEfectivo() {
-		return pagoEfectivo;
+	public List<PagoReciboEfectivo> getPagosEfectivo() {
+		return pagosEfectivo;
 	}
 
-	public void setPagoEfectivo(PagoReciboEfectivo pagoEfectivo) {
-		this.pagoEfectivo = pagoEfectivo;
+	public void setPagosEfectivo(List<PagoReciboEfectivo> pagosEfectivo) {
+		this.pagosEfectivo = pagosEfectivo;
 	}
 
 	public List<PagoReciboCheque> getPagosCheque() {
@@ -122,6 +123,14 @@ public class Recibo extends BaseEntity {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }

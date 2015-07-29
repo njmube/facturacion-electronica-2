@@ -18,10 +18,10 @@ public class Liquidacion {
 
 	public Long getId() {
 		if (null != notaDebito) {
-			return (long) notaDebito.getCae().hashCode();
+			return notaDebito.getId().longValue() * -1;
 		}
 		if (null != factura) {
-			return (long) factura.getCae().hashCode();
+			return factura.getId();
 		}
 		return null;
 	}
@@ -45,7 +45,7 @@ public class Liquidacion {
 		}
 		return "";
 	}
-	
+
 	public String getTipo() {
 		if (null != notaDebito) {
 			return "Nota de Débito";
@@ -78,6 +78,14 @@ public class Liquidacion {
 			return factura.getId();
 		}
 		return null;
+	}
+
+	public NotaDebito getNotaDebito() {
+		return notaDebito;
+	}
+
+	public Factura getFactura() {
+		return factura;
 	}
 
 }

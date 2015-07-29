@@ -49,7 +49,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 		setTitle("Recibos");
 		setFrameIcon(new ImageIcon(
 				ReciboIFrame.class.getResource("/icons/recibos.png")));
-		setBounds(0, 0, 1000, 519);
+		setBounds(0, 0, 375, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCerrar());
@@ -72,7 +72,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Recibo> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(ReciboModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 11, 978, 429);
+			tablePanel.setBounds(10, 11, 356, 429);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -208,7 +208,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(885, 451, 103, 25);
+			btnCerrar.setBounds(263, 451, 103, 25);
 		}
 		return btnCerrar;
 	}

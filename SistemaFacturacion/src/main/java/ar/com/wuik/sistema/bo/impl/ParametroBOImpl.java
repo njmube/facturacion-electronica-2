@@ -54,7 +54,8 @@ public class ParametroBOImpl implements ParametroBO {
 	public String getNroRecibo() throws BusinessException {
 		try {
 			Parametro parametro = parametroDAO.getById(1L);
-			return WUtils.leftPadding(parametro.getNroRecibo() + "", 8, "0");
+			return parametro.getPrefRecibo() + "-"
+					+ WUtils.leftPadding(parametro.getNroRecibo() + "", 8, "0");
 		} catch (DataAccessException daexc) {
 			LOGGER.error("getNroRecibo() - Error al obtener Nro. de Recibo",
 					daexc);
@@ -118,7 +119,8 @@ public class ParametroBOImpl implements ParametroBO {
 	public String getNroRemito() throws BusinessException {
 		try {
 			Parametro parametro = parametroDAO.getById(1L);
-			return WUtils.leftPadding(parametro.getNroRemito() + "", 8, "0");
+			return parametro.getPrefRecibo() + "-"
+					+ WUtils.leftPadding(parametro.getNroRemito() + "", 8, "0");
 		} catch (DataAccessException daexc) {
 			LOGGER.error("getNroRemito() - Error al obtener Nro. de Remito",
 					daexc);

@@ -1,7 +1,16 @@
 package ar.com.wuik.sistema.reportes.entities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import ar.com.wuik.sistema.entities.Factura;
+import ar.com.wuik.sistema.entities.NotaDebito;
+import ar.com.wuik.sistema.entities.PagoReciboCheque;
+import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
+import ar.com.wuik.swing.utils.WUtils;
 
 public class ReciboDTO {
 
@@ -19,6 +28,7 @@ public class ReciboDTO {
 	private String clienteCondIVA;
 
 	private BigDecimal total;
+	private BigDecimal efectivo;
 	private String totalLetras;
 
 	private String nroCh1 = "-";
@@ -43,12 +53,12 @@ public class ReciboDTO {
 	private Date fechaComp5;
 	private Date fechaComp6;
 
-	private String nroComp1= "-";
-	private String nroComp2= "-";
-	private String nroComp3= "-";
-	private String nroComp4= "-";
-	private String nroComp5= "-";
-	private String nroComp6= "-";
+	private String nroComp1 = "-";
+	private String nroComp2 = "-";
+	private String nroComp3 = "-";
+	private String nroComp4 = "-";
+	private String nroComp5 = "-";
+	private String nroComp6 = "-";
 
 	private BigDecimal totalComp1;
 	private BigDecimal totalComp2;
@@ -416,6 +426,162 @@ public class ReciboDTO {
 
 	public void setTotalLetras(String totalLetras) {
 		this.totalLetras = totalLetras;
+	}
+
+	public void setCheques(List<PagoReciboCheque> pagosCheque) {
+
+		if (WUtils.isNotEmpty(pagosCheque)) {
+			if (pagosCheque.size() >= 1) {
+				PagoReciboCheque pagoReciboCheque = pagosCheque.get(0);
+				setBancoCh1(pagoReciboCheque.getCheque().getBanco().getNombre());
+				setNroCh1(pagoReciboCheque.getCheque().getNumero());
+				setTotalCh1(pagoReciboCheque.getCheque().getImporte());
+			}
+
+			if (pagosCheque.size() >= 2) {
+				PagoReciboCheque pagoReciboCheque = pagosCheque.get(1);
+				setBancoCh2(pagoReciboCheque.getCheque().getBanco().getNombre());
+				setNroCh2(pagoReciboCheque.getCheque().getNumero());
+				setTotalCh2(pagoReciboCheque.getCheque().getImporte());
+			}
+
+			if (pagosCheque.size() >= 3) {
+				PagoReciboCheque pagoReciboCheque = pagosCheque.get(2);
+				setBancoCh3(pagoReciboCheque.getCheque().getBanco().getNombre());
+				setNroCh3(pagoReciboCheque.getCheque().getNumero());
+				setTotalCh3(pagoReciboCheque.getCheque().getImporte());
+			}
+
+			if (pagosCheque.size() >= 4) {
+				PagoReciboCheque pagoReciboCheque = pagosCheque.get(3);
+				setBancoCh4(pagoReciboCheque.getCheque().getBanco().getNombre());
+				setNroCh4(pagoReciboCheque.getCheque().getNumero());
+				setTotalCh4(pagoReciboCheque.getCheque().getImporte());
+			}
+		}
+	}
+
+	public void setEfectivo(List<PagoReciboEfectivo> pagosEfectivo) {
+
+		if (WUtils.isNotEmpty(pagosEfectivo)) {
+			PagoReciboEfectivo pagoReciboEfectivo = pagosEfectivo.get(0);
+			setEfectivo(pagoReciboEfectivo.getTotal());
+		}
+	}
+
+	public BigDecimal getEfectivo() {
+		return efectivo;
+	}
+
+	public void setEfectivo(BigDecimal efectivo) {
+		this.efectivo = efectivo;
+	}
+
+	public void setComprobantes(Set<Factura> facturas,
+			Set<NotaDebito> notasDebito) {
+
+		List<Comprobante> comprobantes = new ArrayList<Comprobante>();
+
+		BigDecimal totalComprobantes = BigDecimal.ZERO;
+
+		if (WUtils.isNotEmpty(facturas)) {
+			for (Factura factura : facturas) {
+				comprobantes.add(new Comprobante(factura.getFechaVenta(),
+						factura.getNroCompFormato(), factura.getTotal()));
+				totalComprobantes = totalComprobantes.add(factura.getTotal());
+			}
+		}
+
+		if (WUtils.isNotEmpty(notasDebito)) {
+			for (NotaDebito notaDebito : notasDebito) {
+				comprobantes.add(new Comprobante(notaDebito.getFechaVenta(),
+						notaDebito.getNroCompFormato(), notaDebito.getTotal()));
+				totalComprobantes = totalComprobantes
+						.add(notaDebito.getTotal());
+			}
+		}
+
+		if (comprobantes.size() >= 1) {
+			Comprobante comp = comprobantes.get(0);
+			setNroComp1(comp.getNro());
+			setFechaComp1(comp.getFecha());
+			setTotalComp1(comp.getTotal());
+		}
+
+		if (comprobantes.size() >= 2) {
+			Comprobante comp = comprobantes.get(1);
+			setNroComp2(comp.getNro());
+			setFechaComp2(comp.getFecha());
+			setTotalComp2(comp.getTotal());
+		}
+
+		if (comprobantes.size() >= 3) {
+			Comprobante comp = comprobantes.get(2);
+			setNroComp3(comp.getNro());
+			setFechaComp3(comp.getFecha());
+			setTotalComp3(comp.getTotal());
+		}
+
+		if (comprobantes.size() >= 4) {
+			Comprobante comp = comprobantes.get(3);
+			setNroComp4(comp.getNro());
+			setFechaComp4(comp.getFecha());
+			setTotalComp4(comp.getTotal());
+		}
+
+		if (comprobantes.size() >= 5) {
+			Comprobante comp = comprobantes.get(4);
+			setNroComp5(comp.getNro());
+			setFechaComp5(comp.getFecha());
+			setTotalComp5(comp.getTotal());
+		}
+
+		if (comprobantes.size() >= 6) {
+			Comprobante comp = comprobantes.get(5);
+			setNroComp6(comp.getNro());
+			setFechaComp6(comp.getFecha());
+			setTotalComp6(comp.getTotal());
+		}
+
+		setTotalComp(totalComprobantes);
+
+	}
+}
+
+class Comprobante {
+
+	public Comprobante(Date fecha, String nro, BigDecimal total) {
+		this.fecha = fecha;
+		this.nro = nro;
+		this.total = total;
+	}
+
+	private Date fecha;
+	private String nro;
+	private BigDecimal total;
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getNro() {
+		return nro;
+	}
+
+	public void setNro(String nro) {
+		this.nro = nro;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
 }
