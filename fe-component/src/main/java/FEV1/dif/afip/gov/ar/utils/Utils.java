@@ -7,8 +7,11 @@ import java.util.Date;
 public class Utils {
 
 	public static String getStringFromDate(Date fecha, String format) {
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		return sdf.format(fecha);
+		if (null != fecha) {
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			return sdf.format(fecha);
+		}
+		return "";
 	}
 
 	public static String getStringFromDate(Date fecha) {
@@ -73,7 +76,8 @@ public class Utils {
 	}
 
 	public static String generarFormatoComprobante(int ptoVta, long nroComp) {
-		return  generarFormatoPtoVta(ptoVta) + "-" +  leftPadding(nroComp + "", 8, "0") ;
+		return generarFormatoPtoVta(ptoVta) + "-"
+				+ leftPadding(nroComp + "", 8, "0");
 	}
 
 	public static String generarFormatoPtoVta(int ptoVta) {

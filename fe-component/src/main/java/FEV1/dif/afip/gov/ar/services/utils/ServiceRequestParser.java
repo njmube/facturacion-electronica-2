@@ -28,7 +28,8 @@ import FEV1.dif.afip.gov.ar.utils.Utils;
 
 public class ServiceRequestParser {
 
-	public static FECAERequest getFECAERequest(Comprobante comprobante, int ptoVta) {
+	public static FECAERequest getFECAERequest(Comprobante comprobante,
+			int ptoVta) {
 
 		FECAERequest request = new FECAERequest();
 
@@ -75,16 +76,20 @@ public class ServiceRequestParser {
 
 		// Alicuotas IVA.
 		List<AlicuotaIVA> alicuotasComprobantes = comprobante.getAlicuotas();
-		List<AlicIva> alicuotas = new ArrayList<AlicIva>();
-		AlicIva alicuota = null;
-		for (AlicuotaIVA alicuotaIVA : alicuotasComprobantes) {
-			alicuota = new AlicIva();
-			alicuota.setBaseImp(alicuotaIVA.getBaseImponible().doubleValue());
-			alicuota.setImporte(alicuotaIVA.getTotalAlicuota().doubleValue());
-			alicuota.setId(alicuotaIVA.getTipoIVA().getId());
-			alicuotas.add(alicuota);
+		if (null != alicuotasComprobantes && !alicuotasComprobantes.isEmpty()) {
+			List<AlicIva> alicuotas = new ArrayList<AlicIva>();
+			AlicIva alicuota = null;
+			for (AlicuotaIVA alicuotaIVA : alicuotasComprobantes) {
+				alicuota = new AlicIva();
+				alicuota.setBaseImp(alicuotaIVA.getBaseImponible()
+						.doubleValue());
+				alicuota.setImporte(alicuotaIVA.getTotalAlicuota()
+						.doubleValue());
+				alicuota.setId(alicuotaIVA.getTipoIVA().getId());
+				alicuotas.add(alicuota);
+			}
+			detalle.setIva(alicuotas.toArray(new AlicIva[0]));
 		}
-		detalle.setIva(alicuotas.toArray(new AlicIva[0]));
 
 		detalles[0] = detalle;
 		request.setFeDetReq(detalles);
