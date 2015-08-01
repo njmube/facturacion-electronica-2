@@ -21,10 +21,10 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.commons.beanutils.BeanComparator;
 
-import FacturaBO.SubdiarioIvaFilter;
 import ar.com.wuik.sistema.bo.SubdiarioIvaBO;
 import ar.com.wuik.sistema.entities.SubdiarioIva;
 import ar.com.wuik.sistema.exceptions.BusinessException;
+import ar.com.wuik.sistema.filters.SubdiarioIvaFilter;
 import ar.com.wuik.sistema.model.SubdiarioIvaModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;

@@ -7,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import FacturaBO.SubdiarioIvaFilter;
 import ar.com.wuik.sistema.bo.ChequeBO;
 import ar.com.wuik.sistema.bo.SubdiarioIvaBO;
 import ar.com.wuik.sistema.dao.FacturaDAO;
@@ -22,6 +21,7 @@ import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.FacturaFilter;
 import ar.com.wuik.sistema.filters.NotaCreditoFilter;
 import ar.com.wuik.sistema.filters.NotaDebitoFilter;
+import ar.com.wuik.sistema.filters.SubdiarioIvaFilter;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.HibernateUtil;
 import ar.com.wuik.swing.utils.WUtils;

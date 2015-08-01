@@ -1,4 +1,4 @@
-package FacturaBO;
+package ar.com.wuik.sistema.filters;
 
 import java.util.Date;
 
