@@ -1,5 +1,6 @@
 package ar.com.wuik.swing.components.table;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public abstract class WTableModel<T> extends AbstractTableModel {
 	protected List<Object[]> rows;
 	private String[] columns;
 	private int columnCount = 0;
+	protected enum Aligment{LEFT, MIDDLE, RIGHT}
 
 	public WTableModel(String[] columns) {
 		this.columns = columns;
@@ -106,4 +108,13 @@ public abstract class WTableModel<T> extends AbstractTableModel {
 	protected Integer getIndexID() {
 		return columnCount - 1;
 	}
+	
+	public Aligment getAligment(int columnIndex){
+		return null;
+	}
+	
+	public Color getBgColor(int columnIndex){
+		return null;
+	}
+	
 }

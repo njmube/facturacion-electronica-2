@@ -1,20 +1,11 @@
-package ar.com.wuik.sistema.filters;
+package FacturaBO;
 
 import java.util.Date;
 
-public class NotaCreditoFilter {
+public class SubdiarioIvaFilter {
 
-	private Long idCliente;
 	private Date desde;
 	private Date hasta;
-
-	public Long getIdCliente() {
-		return idCliente;
-	}
-
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
-	}
 
 	public Date getDesde() {
 		return desde;

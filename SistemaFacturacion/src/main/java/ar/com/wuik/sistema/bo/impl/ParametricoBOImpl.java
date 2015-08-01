@@ -6,11 +6,9 @@ import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.dao.BancoDAO;
 import ar.com.wuik.sistema.dao.CondicionIVADAO;
 import ar.com.wuik.sistema.dao.LocalidadDAO;
-import ar.com.wuik.sistema.dao.TipoProductoDAO;
 import ar.com.wuik.sistema.entities.Banco;
 import ar.com.wuik.sistema.entities.CondicionIVA;
 import ar.com.wuik.sistema.entities.Localidad;
-import ar.com.wuik.sistema.entities.TipoProducto;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
@@ -20,14 +18,12 @@ public class ParametricoBOImpl implements ParametricoBO {
 
 	private LocalidadDAO localidadDAO;
 	private BancoDAO bancoDAO;
-	private TipoProductoDAO tipoProductoDAO;
 	private CondicionIVADAO condicionIVADAO;
 
 
 	public ParametricoBOImpl() {
 		localidadDAO = AbstractFactory.getInstance(LocalidadDAO.class);
 		bancoDAO = AbstractFactory.getInstance(BancoDAO.class);
-		tipoProductoDAO = AbstractFactory.getInstance(TipoProductoDAO.class);
 		condicionIVADAO = AbstractFactory.getInstance(CondicionIVADAO.class);
 	}
 
@@ -46,18 +42,6 @@ public class ParametricoBOImpl implements ParametricoBO {
 	public List<Localidad> obtenerTodosLocalidades() throws BusinessException {
 		try {
 			return localidadDAO.getAll();
-		} catch (DataAccessException daexc) {
-			throw new BusinessException(daexc);
-		} finally {
-			HibernateUtil.closeSession();
-		}
-	}
-
-	@Override
-	public List<TipoProducto> obtenerTodosTiposProductos()
-			throws BusinessException {
-		try {
-			return tipoProductoDAO.getAll();
 		} catch (DataAccessException daexc) {
 			throw new BusinessException(daexc);
 		} finally {

@@ -1,6 +1,7 @@
 package ar.com.wuik.sistema.model;
 
-import java.math.BigDecimal;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.swing.components.table.WTableModel;
@@ -19,7 +20,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.18, 0.09, 0.22, 0.09, 0.09, 0.16, 0.06, 0.06 };
+		return new double[] { 0.18, 0.09, 0.22, 0.09, 0.09, 0.18, 0.09, 0.06 };
 	}
 
 	@Override
@@ -31,7 +32,9 @@ public class ClienteModel extends WTableModel<Cliente> {
 		fila[4] = t.getCelular();
 		fila[5] = t.getLocalidad().getNombre();
 		fila[6] = t.getCondicionIVA().getAbreviacion();
-		fila[7] = t.isActivo() ? "ACTIVO" : "INACTIVO";
+		fila[7] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
+				"/icons/activo.png")) : new ImageIcon(this.getClass()
+				.getResource("/icons/inactivo.png"));
 		fila[8] = t.getId();
 		return fila;
 	}
@@ -54,11 +57,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 		case 6:
 			return String.class;
 		case 7:
-			return String.class;
-		case 8:
-			return BigDecimal.class;
-		case 9:
-			return String.class;
+			return Icon.class;
 		}
 		return Object.class;
 	}

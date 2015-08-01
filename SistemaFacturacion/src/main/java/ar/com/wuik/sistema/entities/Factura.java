@@ -62,7 +62,7 @@ public class Factura extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "ESTADO_FACTURACION")
 	private EstadoFacturacion estadoFacturacion;
-	@Formula(value = "(select IF(count(*) > 1, 1, 0) from recibos_facturas rf where rf.ID_FACTURA = ID)")
+	@Formula(value = "(select IF(count(*) >= 1, 1, 0) from recibos_facturas rf where rf.ID_FACTURA = ID)")
 	private boolean paga;
 	@Column(name = "NUMERO_COMP_FORMATO")
 	private String nroCompFormato;

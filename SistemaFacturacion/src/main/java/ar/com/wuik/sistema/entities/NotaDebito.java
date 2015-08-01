@@ -61,7 +61,7 @@ public class NotaDebito extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "ESTADO_FACTURACION")
 	private EstadoFacturacion estadoFacturacion;
-	@Formula(value = "(select IF(count(*) > 1, 1, 0) from recibos_notas_debito rnd where rnd.ID_NOTA_DEBITO = ID)")
+	@Formula(value = "(select IF(count(*) >= 1, 1, 0) from recibos_notas_debito rnd where rnd.ID_NOTA_DEBITO = ID)")
 	private boolean paga;
 	@Column(name = "NUMERO_COMP_FORMATO")
 	private String nroCompFormato;

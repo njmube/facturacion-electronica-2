@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -43,9 +44,15 @@ public class NotaCreditoDAOImpl extends GenericCrudHBDAOImpl<NotaCredito>
 		Criteria criteria = getSession().createCriteria(NotaCredito.class);
 
 		Long idCliente = filter.getIdCliente();
+		Date desde = filter.getDesde();
+		Date hasta = filter.getHasta();
 
 		if (null != idCliente) {
 			criteria.add(Restrictions.eq("idCliente", idCliente));
+		}
+
+		if (null != desde && null != hasta) {
+			criteria.add(Restrictions.between("fechaVenta", desde, hasta));
 		}
 
 		return criteria;

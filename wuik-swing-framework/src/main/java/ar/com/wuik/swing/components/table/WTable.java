@@ -5,10 +5,11 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
@@ -59,67 +60,76 @@ public final class WTable<T> extends JTable {
 					+ " ]", iaexc);
 		}
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 
-		if (LOGGER.isDebugEnabled()) {
-			this.getColumnModel().addColumnModelListener(
-					new TableColumnModelListener() {
-
-						@Override
-						public void columnSelectionChanged(ListSelectionEvent e) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void columnRemoved(TableColumnModelEvent e) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void columnMoved(TableColumnModelEvent e) {
-							// TODO Auto-generated method stub
-
-						}
-
-						@Override
-						public void columnMarginChanged(ChangeEvent e) {
-
-							final TableColumnModel tModel = getColumnModel();
-							int columns = ((WTableModel) getModel())
-									.getColumnPercentSize().length;
-							for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
-								final TableColumn column = tModel
-										.getColumn(columnIndex);
-								LOGGER.debug("COLUMN: "
-										+ column.getHeaderValue()
-										+ " LONGITUD: " + column.getWidth()
-										+ " PORCENTAJE: "
-										+ (column.getWidth() * FACTOR));
-							}
-						}
-
-						@Override
-						public void columnAdded(TableColumnModelEvent e) {
-							// TODO Auto-generated method stub
-
-						}
-					});
-		}
-
+		WTableModel<T> model = (WTableModel<T>) getModel();
 		int columnCount = getModel().getColumnCount();
 		Class<?> columnClass = null;
 		for (int i = 0; i < columnCount; i++) {
 			columnClass = getModel().getColumnClass(i);
-			if (columnClass.equals(BigDecimal.class)
-					|| columnClass.equals(Long.class)
-					|| columnClass.equals(Integer.class)) {
-				DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-				rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-				getColumnModel().getColumn(i).setCellRenderer(rightRenderer);
+			DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) getDefaultRenderer(columnClass);
+			if (null != renderer) {
+				if (columnClass.equals(BigDecimal.class)
+						|| columnClass.equals(Long.class)
+						|| columnClass.equals(Integer.class)) {
+					renderer.setHorizontalAlignment(SwingConstants.RIGHT);
+					getColumnModel().getColumn(i).setCellRenderer(renderer);
+				}
 			}
 		}
 		resizeColumns();
+//		showColumnsSize();
+	}
+
+	private void showColumnsSize() {
+		this.getColumnModel().addColumnModelListener(
+				new TableColumnModelListener() {
+
+					@Override
+					public void columnSelectionChanged(ListSelectionEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void columnRemoved(TableColumnModelEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void columnMoved(TableColumnModelEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void columnMarginChanged(ChangeEvent e) {
+
+						final TableColumnModel tModel = getColumnModel();
+						int columns = ((WTableModel) getModel())
+								.getColumnPercentSize().length;
+						String medidas = "";
+						double sumaTotal = 0;
+						for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
+							final TableColumn column = tModel
+									.getColumn(columnIndex);
+							BigDecimal size = BigDecimal.valueOf((column
+									.getPreferredWidth() / FACTOR));
+							size = size.setScale(2, RoundingMode.HALF_EVEN);
+							medidas += size.toEngineeringString() + ", ";
+							sumaTotal += size.doubleValue() * 100;
+						}
+
+						LOGGER.info(medidas + "   TOTAL: " + sumaTotal);
+					}
+
+					@Override
+					public void columnAdded(TableColumnModelEvent e) {
+						// TODO Auto-generated method stub
+
+					}
+				});
 	}
 
 	/**

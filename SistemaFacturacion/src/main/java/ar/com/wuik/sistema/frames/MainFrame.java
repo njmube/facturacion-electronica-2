@@ -56,6 +56,8 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity itemCheque = null;
 	private WMenuItemSecurity itemProveedor = null;
 	private WMenuItemSecurity itemBackup = null;
+	private WMenuItemSecurity itemSubdiarioIVA = null;
+	private WMenuItemSecurity itemTipoProducto = null;
 
 	// Menu Archivo -------------
 	private WMenuItemSecurity itemEditarDatosPersonales = null;
@@ -96,6 +98,25 @@ public class MainFrame extends WApplication {
 		return itemProducto;
 	}
 
+	private WMenuItemSecurity getItemTipoProducto() {
+		if (null == itemTipoProducto) {
+			itemTipoProducto = new WMenuItemSecurity("Tipos de Producto", null,
+					new ImageIcon(
+							MainFrame.class
+									.getResource("/icons32/tipos_productos.png")));
+			itemTipoProducto.setVisible(Boolean.TRUE);
+			itemTipoProducto.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addIFrame(new TipoProductoIFrame());
+				}
+			});
+		}
+		return itemTipoProducto;
+	}
+	
+	
 	private WMenuItemSecurity getItemCliente() {
 		if (null == itemCliente) {
 			itemCliente = new WMenuItemSecurity("Clientes", null,
@@ -250,7 +271,7 @@ public class MainFrame extends WApplication {
 			menuAdministraciones = new WMenuSecurity("Administraciones",
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/administraciones.png")),
-					getItemCliente(), getItemProducto(), getItemProveedor(),
+					getItemCliente(), getItemProducto(), getItemTipoProducto(), getItemProveedor(),
 					getItemCheque());
 		}
 		return menuAdministraciones;
@@ -261,11 +282,31 @@ public class MainFrame extends WApplication {
 			menuAdmParametricas = new WMenuSecurity("Paramétricas",
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/parametricas.png")),
-					getItemParametro(), getItemUsuario());
+					getItemParametro(), getItemSubdiarioIVA(), getItemUsuario());
 		}
 		return menuAdmParametricas;
 	}
+	
+	private WMenuItemSecurity getItemSubdiarioIVA() {
+		if (null == itemSubdiarioIVA) {
+			itemSubdiarioIVA = new WMenuItemSecurity("Subdiario de IVA", null,
+					new ImageIcon(
+							MainFrame.class
+									.getResource("/icons32/subdiario.png")));
+			itemSubdiarioIVA.setVisible(Boolean.TRUE);
+			itemSubdiarioIVA.addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addIFrame(new SubdiarioIvaIFrame());
+				}
+			});
+		}
+		return itemSubdiarioIVA;
+	}
+
+	
+	
 	@Override
 	protected Map<Integer, ActionListener> getKeyMapEvent() {
 		Map<Integer, ActionListener> mapEvent = new HashMap<Integer, ActionListener>();

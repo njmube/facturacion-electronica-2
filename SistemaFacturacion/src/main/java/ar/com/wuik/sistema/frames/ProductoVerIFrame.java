@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.bo.ProductoBO;
+import ar.com.wuik.sistema.bo.TipoProductoBO;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.TipoProducto;
 import ar.com.wuik.sistema.exceptions.BusinessException;
@@ -70,6 +71,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private WTextFieldDecimal txfPrecio;
 	private JLabel lblUbicacion;
 	private JTextField txtUbicacion;
+	private JButton btnNewButton;
 
 	/**
 	 * @wbp.parser.constructor
@@ -91,13 +93,13 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 		this.producto = new Producto();
 	}
-	
+
 	public ProductoVerIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame) {
 		initializate("Nuevo Producto");
 		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
 		this.producto = new Producto();
 	}
-	
+
 	public ProductoVerIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame) {
 		initializate("Nuevo Producto");
 		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
@@ -124,18 +126,28 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
+	
+	public void loadTiposProducto(){
+		getCmbTipoProd().removeAllItems();
+		getCmbTipoProd().addItem(WOption.getWOptionSelecione());
+		List<WOption> items = getTiposProducto();
+		for (WOption wOption : items) {
+			getCmbTipoProd().addItem(wOption);
+		}
+	}
 
 	private void initializate(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ClienteIFrame.class.getResource("/icons/productos.png")));
-		setBounds(0, 0, 411, 370);
+		setBounds(0, 0, 462, 370);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCancelar());
 		getContentPane().add(getBtnGuardar());
 		getContentPane().add(getPanelDatos());
+		loadTiposProducto();
 	}
 
 	@Override
@@ -282,7 +294,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			panelDatos = new JPanel();
 			panelDatos.setBorder(new TitledBorder(null, "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDatos.setBounds(11, 8, 388, 288);
+			panelDatos.setBounds(11, 8, 428, 288);
 			panelDatos.setLayout(null);
 			panelDatos.add(getLblCosto());
 			panelDatos.add(getCmbTipoProd());
@@ -298,6 +310,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			panelDatos.add(getTxfPrecio());
 			panelDatos.add(getLblUbicacion());
 			panelDatos.add(getTxtUbicacion());
+			panelDatos.add(getBtnNewButton());
 		}
 		return panelDatos;
 	}
@@ -315,12 +328,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		if (cmbTipoProd == null) {
 			cmbTipoProd = new JComboBox();
 			cmbTipoProd.setBounds(148, 95, 230, 25);
-			cmbTipoProd.addItem(WOption.getWOptionSelecione());
-			List<WOption> items = getTiposProducto();
-
-			for (WOption wOption : items) {
-				cmbTipoProd.addItem(wOption);
-			}
 			cmbTipoProd.setName(CAMPO_TIPO_PROD);
 		}
 		return cmbTipoProd;
@@ -357,11 +364,11 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 	private List<WOption> getTiposProducto() {
 		List<WOption> tipoProductosWOption = new ArrayList<WOption>();
-		ParametricoBO parametricoBO = AbstractFactory
-				.getInstance(ParametricoBO.class);
+		TipoProductoBO tipoProductoBO = AbstractFactory
+				.getInstance(TipoProductoBO.class);
 		List<TipoProducto> tipoProductos;
 		try {
-			tipoProductos = parametricoBO.obtenerTodosTiposProductos();
+			tipoProductos = tipoProductoBO.obtenerTodos();
 			if (!WUtils.isEmpty(tipoProductos)) {
 				for (TipoProducto tipoProducto : tipoProductos) {
 					tipoProductosWOption.add(new WOption(Long
@@ -458,5 +465,18 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			txtUbicacion.setBounds(148, 236, 230, 25);
 		}
 		return txtUbicacion;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addModalIFrame(new TipoProductoVerIFrame(ProductoVerIFrame.this));
+				}
+			});
+			btnNewButton.setIcon(new ImageIcon(ProductoVerIFrame.class.getResource("/icons/add.png")));
+			btnNewButton.setBounds(388, 96, 26, 23);
+		}
+		return btnNewButton;
 	}
 }

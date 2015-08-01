@@ -85,6 +85,12 @@
 			<artifactId>miglayout</artifactId>
 			<version>3.7.4</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.github.insubstantial</groupId>
+			<artifactId>substance</artifactId>
+			<version>7.2.1</version>
+		</dependency>
 
 
 	</dependencies>

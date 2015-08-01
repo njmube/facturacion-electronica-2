@@ -14,8 +14,6 @@ public interface ParametricoBO {
 
 	List<Localidad> obtenerTodosLocalidades() throws BusinessException;
 
-	List<TipoProducto> obtenerTodosTiposProductos() throws BusinessException;
-	
 	List<CondicionIVA> obtenerTodosCondicionesIVA() throws BusinessException;
 
 }

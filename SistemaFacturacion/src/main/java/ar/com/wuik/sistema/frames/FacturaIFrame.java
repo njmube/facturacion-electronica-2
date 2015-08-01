@@ -173,12 +173,23 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 										if (!factura
 												.getEstadoFacturacion()
 												.equals(EstadoFacturacion.FACTURADO_ERROR)) {
-											facturaBO.cancelar(selectedItem);
-											search();
+
+											if (!factura.isPaga()) {
+												facturaBO
+														.cancelar(selectedItem);
+												search();
+											} else {
+												WTooltipUtils
+														.showMessage(
+																"No es posible anular la Factura porque se encuentra paga.",
+																(JButton) e
+																		.getSource(),
+																MessageType.ALERTA);
+											}
 										} else {
 											WTooltipUtils
 													.showMessage(
-															"No es posible editar la Factura porque se encuentra facturada con error.",
+															"No es posible anular la Factura porque se encuentra facturada con error.",
 															(JButton) e
 																	.getSource(),
 															MessageType.ALERTA);
@@ -242,13 +253,23 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 										.obtener(selectedItem);
 								if (!factura.getEstadoFacturacion().equals(
 										EstadoFacturacion.FACTURADO)) {
-									facturaBO.registrarAFIP(factura);
-									try {
-										FacturaReporte
-												.generarFactura(selectedItem);
-									} catch (ReportException rexc) {
-										showGlobalErrorMsg(rexc.getMessage());
+									if (factura.isActivo()) {
+										facturaBO.registrarAFIP(factura);
+										try {
+											FacturaReporte
+													.generarFactura(selectedItem);
+										} catch (ReportException rexc) {
+											showGlobalErrorMsg(rexc
+													.getMessage());
+										}
+									} else {
+										WTooltipUtils
+												.showMessage(
+														"La Factura se encuentra anulada.",
+														(JButton) e.getSource(),
+														MessageType.ALERTA);
 									}
+
 								} else {
 									WTooltipUtils
 											.showMessage(
@@ -258,7 +279,7 @@ public class FacturaIFrame extends WAbstractModelIFrame implements WSecure {
 								}
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
-							} finally{
+							} finally {
 								search();
 							}
 						} else {

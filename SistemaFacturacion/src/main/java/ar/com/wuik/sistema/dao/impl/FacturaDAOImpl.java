@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -61,6 +62,8 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 		List<Long> idsToInclude = filter.getIdsToInclude();
 		EstadoFacturacion estadoFacturacion = filter.getEstadoFacturacion();
 		Boolean paga = filter.getPaga();
+		Date desde = filter.getDesde();
+		Date hasta = filter.getHasta();
 
 		if (null != idCliente) {
 			criteria.add(Restrictions.eq("idCliente", idCliente));
@@ -95,6 +98,10 @@ public class FacturaDAOImpl extends GenericCrudHBDAOImpl<Factura> implements
 
 		if (null != paga) {
 			criteria.add(Restrictions.eq("paga", paga));
+		}
+		
+		if (null != desde && null != hasta) {
+			criteria.add(Restrictions.between("fechaVenta", desde, hasta));
 		}
 
 		return criteria;

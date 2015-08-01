@@ -2,6 +2,9 @@ package ar.com.wuik.sistema.model;
 
 import java.math.BigDecimal;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 import ar.com.wuik.sistema.entities.NotaCredito;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
@@ -21,7 +24,7 @@ public class NotaCreditoModel extends WTableModel<NotaCredito> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.11, 0.10, 0.10, 0.12, 0.12, 0.12, 0.19 };
+		return new double[] { 0.10, 0.12, 0.08, 0.09, 0.18, 0.17, 0.20, 0.06 };
 	}
 
 	@Override
@@ -33,9 +36,30 @@ public class NotaCreditoModel extends WTableModel<NotaCredito> {
 		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
 		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getIva()));
 		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
-		fila[7] = t.getEstado();
+		fila[7] =  t.isActivo() ? new ImageIcon(this.getClass().getResource(
+				"/icons/activo.png")) : new ImageIcon(this.getClass()
+				.getResource("/icons/inactivo.png"));
 		fila[8] = t.getId();
 		return fila;
+	}
+	
+	@Override
+	public ar.com.wuik.swing.components.table.WTableModel.Aligment getAligment(
+			int columnIndex) {
+		
+		switch (columnIndex) {
+		case 0:
+			return Aligment.MIDDLE;
+		case 1:
+			return Aligment.MIDDLE;
+		case 2:
+			return Aligment.MIDDLE;
+		case 3:
+			return Aligment.MIDDLE;
+		case 7:
+			return Aligment.MIDDLE;
+		}
+		return super.getAligment(columnIndex);
 	}
 
 	@Override
@@ -56,11 +80,7 @@ public class NotaCreditoModel extends WTableModel<NotaCredito> {
 		case 6:
 			return BigDecimal.class;
 		case 7:
-			return BigDecimal.class;
-		case 8:
-			return BigDecimal.class;
-		case 9:
-			return String.class;
+			return Icon.class;
 		}
 		return Object.class;
 	}

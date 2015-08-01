@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.filters;
 
+import java.util.Date;
 import java.util.List;
 
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
@@ -14,6 +15,8 @@ public class FacturaFilter {
 	private Boolean inicializarDetalles;
 	private EstadoFacturacion estadoFacturacion;
 	private Boolean paga;
+	private Date desde;
+	private Date hasta;
 
 	public Long getIdCliente() {
 		return idCliente;
@@ -77,6 +80,22 @@ public class FacturaFilter {
 
 	public void setPaga(Boolean paga) {
 		this.paga = paga;
+	}
+
+	public Date getDesde() {
+		return desde;
+	}
+
+	public void setDesde(Date desde) {
+		this.desde = desde;
+	}
+
+	public Date getHasta() {
+		return hasta;
+	}
+
+	public void setHasta(Date hasta) {
+		this.hasta = hasta;
 	}
 
 }
