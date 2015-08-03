@@ -6,16 +6,16 @@ import java.util.List;
 
 public final class ComprobanteDetalles {
 
-	private TipoComprobante tipoComprobante;
+	private TipoComprobanteEnum tipoComprobante;
 	private Date fechaComprobante;
 	private Long docNro;
 	private long nroComprobante;
-	private TipoDocumento docTipo;
-	private TipoConcepto tipoConcepto;
+	private TipoDocumentoEnum docTipo;
+	private TipoConceptoEnum tipoConcepto;
 	private BigDecimal importeTotal;
 	private BigDecimal importeSubtotal;
 	private BigDecimal importeIVA;
-	private TipoMoneda tipoMoneda;
+	private TipoMonedaEnum tipoMoneda;
 	private BigDecimal cotizacion;
 	private List<AlicuotaIVA> alicuotas;
 	private List<ComprobanteAsociado> comprobantesAsociados;
@@ -24,11 +24,11 @@ public final class ComprobanteDetalles {
 	private int ptoVenta;
 	private String cae;
 
-	public TipoComprobante getTipoComprobante() {
+	public TipoComprobanteEnum getTipoComprobante() {
 		return tipoComprobante;
 	}
 
-	public void setTipoComprobante(TipoComprobante tipoComprobante) {
+	public void setTipoComprobante(TipoComprobanteEnum tipoComprobante) {
 		this.tipoComprobante = tipoComprobante;
 	}
 
@@ -48,19 +48,19 @@ public final class ComprobanteDetalles {
 		this.docNro = docNro;
 	}
 
-	public TipoDocumento getDocTipo() {
+	public TipoDocumentoEnum getDocTipo() {
 		return docTipo;
 	}
 
-	public void setDocTipo(TipoDocumento docTipo) {
+	public void setDocTipo(TipoDocumentoEnum docTipo) {
 		this.docTipo = docTipo;
 	}
 
-	public TipoConcepto getTipoConcepto() {
+	public TipoConceptoEnum getTipoConcepto() {
 		return tipoConcepto;
 	}
 
-	public void setTipoConcepto(TipoConcepto tipoConcepto) {
+	public void setTipoConcepto(TipoConceptoEnum tipoConcepto) {
 		this.tipoConcepto = tipoConcepto;
 	}
 
@@ -121,11 +121,11 @@ public final class ComprobanteDetalles {
 		this.cae = cae;
 	}
 
-	public TipoMoneda getTipoMoneda() {
+	public TipoMonedaEnum getTipoMoneda() {
 		return tipoMoneda;
 	}
 
-	public void setTipoMoneda(TipoMoneda tipoMoneda) {
+	public void setTipoMoneda(TipoMonedaEnum tipoMoneda) {
 		this.tipoMoneda = tipoMoneda;
 	}
 

@@ -1,10 +1,13 @@
 package FEV1.dif.afip.gov.ar.services.utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import FEV1.dif.afip.gov.ar.AlicIva;
 import FEV1.dif.afip.gov.ar.CbteAsoc;
+import FEV1.dif.afip.gov.ar.CbteTipo;
+import FEV1.dif.afip.gov.ar.CbteTipoResponse;
 import FEV1.dif.afip.gov.ar.Err;
 import FEV1.dif.afip.gov.ar.FECAECabRequest;
 import FEV1.dif.afip.gov.ar.FECAECabResponse;
@@ -22,6 +25,9 @@ import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.ComprobanteAsociado;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
 import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
+import FEV1.dif.afip.gov.ar.entities.TipoComprobanteEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoConceptoEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoDocumentoEnum;
 import FEV1.dif.afip.gov.ar.utils.ErrorsUtil;
 import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
 import FEV1.dif.afip.gov.ar.utils.Utils;
@@ -97,7 +103,7 @@ public class ServiceRequestParser {
 	}
 
 	public static FECompConsultaReq getFECompConsultaRequest(
-			long nroComprobante, TipoComprobante tipoComprobante, int ptoVta) {
+			long nroComprobante, TipoComprobanteEnum tipoComprobante, int ptoVta) {
 		FECompConsultaReq feCompConsultaReq = new FECompConsultaReq();
 		feCompConsultaReq.setCbteNro(nroComprobante);
 		feCompConsultaReq.setCbteTipo(tipoComprobante.getId());
@@ -149,6 +155,43 @@ public class ServiceRequestParser {
 		resultado.setErrores(errores);
 
 		return resultado;
+	}
+
+	public static Comprobante parseFECompConsResponseComprobante(
+			FECompConsultaResponse response) {
+
+		Comprobante comprobante = new Comprobante();
+
+		// Datos del comprobante
+		FECompConsResponse datosComprobante = response.getResultGet();
+
+		if (null != datosComprobante) {
+			comprobante.setCae(datosComprobante.getCodAutorizacion());
+			comprobante.setPtoVenta(datosComprobante.getPtoVta());
+			comprobante.setPtoVentaFormato(Utils
+					.generarFormatoPtoVta(datosComprobante.getPtoVta()));
+			comprobante.setEstado(datosComprobante.getResultado());
+			comprobante.setNroComprobanteFormato(Utils
+					.generarFormatoComprobante(datosComprobante.getPtoVta(),
+							datosComprobante.getCbteDesde()));
+			comprobante.setFechaVtoCAE(Utils.getDateFromString(
+					datosComprobante.getFchVto(), "yyyyMMdd"));
+			comprobante.setFecha(Utils.getDateFromString(
+					datosComprobante.getCbteFch(), "yyyyMMdd"));
+			comprobante.setNroComprobante(datosComprobante.getCbteDesde());
+			comprobante.setDocTipo(TipoDocumentoEnum.fromValue(datosComprobante
+					.getDocTipo()));
+			comprobante.setDocNro(datosComprobante.getDocNro());
+			comprobante.setImporteIVA(BigDecimal.valueOf(datosComprobante
+					.getImpIVA()));
+			comprobante.setTipoConcepto(TipoConceptoEnum.fromValue(datosComprobante.getConcepto()));
+			comprobante.setImporteSubtotal(BigDecimal.valueOf(
+					datosComprobante.getImpNeto()).subtract(
+					BigDecimal.valueOf(datosComprobante.getImpIVA())));
+			comprobante.setImporteTotal(BigDecimal.valueOf(datosComprobante
+					.getImpNeto()));
+		}
+		return comprobante;
 	}
 
 	public static Resultado parseFECAEResponse(FECAEResponse response) {
@@ -222,6 +265,21 @@ public class ServiceRequestParser {
 			}
 		}
 		return resultado;
+	}
+
+	public static List<TipoComprobante> parseFETiposCbteResponse(
+			CbteTipoResponse response) {
+
+		List<TipoComprobante> tiposComprobantes = null;
+		CbteTipo[] cbtesTipo = response.getResultGet();
+		if (null != cbtesTipo) {
+			tiposComprobantes = new ArrayList<TipoComprobante>();
+			for (CbteTipo cbteTipo : cbtesTipo) {
+				tiposComprobantes.add(new TipoComprobante(cbteTipo.getId(),
+						cbteTipo.getDesc()));
+			}
+		}
+		return tiposComprobantes;
 	}
 
 }

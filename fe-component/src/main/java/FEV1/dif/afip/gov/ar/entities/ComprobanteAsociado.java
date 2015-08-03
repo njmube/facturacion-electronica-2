@@ -2,15 +2,15 @@ package FEV1.dif.afip.gov.ar.entities;
 
 public class ComprobanteAsociado {
 
-	private TipoComprobante tipoComprobante;
+	private TipoComprobanteEnum tipoComprobante;
 	private int ptoVta;
 	private long numero;
 
-	public TipoComprobante getTipoComprobante() {
+	public TipoComprobanteEnum getTipoComprobante() {
 		return tipoComprobante;
 	}
 
-	public void setTipoComprobante(TipoComprobante tipoComprobante) {
+	public void setTipoComprobante(TipoComprobanteEnum tipoComprobante) {
 		this.tipoComprobante = tipoComprobante;
 	}
 

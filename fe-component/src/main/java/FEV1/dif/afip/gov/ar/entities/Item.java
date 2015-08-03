@@ -9,10 +9,10 @@ public class Item {
 	private String codigo;
 	private String descripcion;
 	private BigDecimal cantidad;
-	private UnidadMedida unidadMedida;
+	private UnidadMedidaEnum unidadMedida;
 	private BigDecimal precioUnitario;
 	private BigDecimal importeBonificacion;
-	private TipoIVA tipoIVA;
+	private TipoIVAEnum tipoIVA;
 	private BigDecimal totalIVA;
 	private BigDecimal total;
 
@@ -56,11 +56,11 @@ public class Item {
 		this.cantidad = cantidad;
 	}
 
-	public UnidadMedida getUnidadMedida() {
+	public UnidadMedidaEnum getUnidadMedida() {
 		return unidadMedida;
 	}
 
-	public void setUnidadMedida(UnidadMedida unidadMedida) {
+	public void setUnidadMedida(UnidadMedidaEnum unidadMedida) {
 		this.unidadMedida = unidadMedida;
 	}
 
@@ -80,11 +80,11 @@ public class Item {
 		this.importeBonificacion = importeBonificacion;
 	}
 
-	public TipoIVA getTipoIVA() {
+	public TipoIVAEnum getTipoIVA() {
 		return tipoIVA;
 	}
 
-	public void setTipoIVA(TipoIVA tipoIVA) {
+	public void setTipoIVA(TipoIVAEnum tipoIVA) {
 		this.tipoIVA = tipoIVA;
 	}
 

@@ -1,18 +1,29 @@
 package FEV1.dif.afip.gov.ar.entities;
 
-public enum TipoComprobante {
-
-	FACTURA_A(1), NOTA_DEBITO_A(2), NOTA_CREDITO_A(3), FACTURA_B(6), NOTA_DEBITO_B(
-			7), NOTA_CREDITO_B(8);
+public class TipoComprobante {
 
 	private int id;
-
-	private TipoComprobante(int id) {
+	private String desc;
+	
+	public TipoComprobante(int id,String desc) {
 		this.id = id;
+		this.desc = desc;
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 }

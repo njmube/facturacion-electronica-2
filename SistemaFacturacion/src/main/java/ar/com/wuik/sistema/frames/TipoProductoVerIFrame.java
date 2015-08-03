@@ -79,7 +79,7 @@ public class TipoProductoVerIFrame extends WAbstractModelIFrame {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				ClienteIFrame.class.getResource("/icons/productos.png")));
+				ClienteIFrame.class.getResource("/icons/tipos_productos.png")));
 		setBounds(0, 0, 411, 150);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

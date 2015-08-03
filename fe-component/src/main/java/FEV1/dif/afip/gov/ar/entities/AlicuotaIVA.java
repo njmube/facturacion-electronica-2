@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 
 public class AlicuotaIVA {
 
-	private TipoIVA tipoIVA;
+	private TipoIVAEnum tipoIVA;
 	private BigDecimal baseImponible;
 	private BigDecimal totalAlicuota;
 
-	public TipoIVA getTipoIVA() {
+	public TipoIVAEnum getTipoIVA() {
 		return tipoIVA;
 	}
 
-	public void setTipoIVA(TipoIVA tipoIVA) {
+	public void setTipoIVA(TipoIVAEnum tipoIVA) {
 		this.tipoIVA = tipoIVA;
 	}
 

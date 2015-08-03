@@ -2,14 +2,14 @@ package FEV1.dif.afip.gov.ar.entities;
 
 import java.math.BigDecimal;
 
-public enum TipoMoneda {
+public enum TipoMonedaEnum {
 
 	PESOS_ARGENTINOS("PES", BigDecimal.ONE);
 
 	private String id;
 	private BigDecimal cotizacion;
 
-	private TipoMoneda(String id, BigDecimal cotizacion) {
+	private TipoMonedaEnum(String id, BigDecimal cotizacion) {
 		this.id = id;
 		this.cotizacion = cotizacion;
 	}

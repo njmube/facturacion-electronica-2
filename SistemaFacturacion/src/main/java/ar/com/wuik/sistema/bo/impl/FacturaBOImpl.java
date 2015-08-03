@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import FEV1.dif.afip.gov.ar.entities.AlicuotaIVA;
 import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
-import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
-import FEV1.dif.afip.gov.ar.entities.TipoConcepto;
-import FEV1.dif.afip.gov.ar.entities.TipoDocumento;
-import FEV1.dif.afip.gov.ar.entities.TipoIVA;
-import FEV1.dif.afip.gov.ar.entities.TipoMoneda;
+import FEV1.dif.afip.gov.ar.entities.TipoComprobanteEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoConceptoEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoDocumentoEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoIVAEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoMonedaEnum;
 import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
@@ -190,7 +190,7 @@ public class FacturaBOImpl implements FacturaBO {
 					// Consulto si el comprobante con el Nro. de Factura existe
 					// en AFIP.
 					resultado = facturacionService.consultarComprobante(
-							Long.valueOf(nroFactura), TipoComprobante.FACTURA_A);
+							Long.valueOf(nroFactura), TipoComprobanteEnum.FACTURA_A);
 
 					// Si no existe lo envio a Autorizar a AFIP.
 					if (null == resultado.getCae()) {
@@ -258,10 +258,10 @@ public class FacturaBOImpl implements FacturaBO {
 
 		// DATOS DEL CLIENTE.
 		comprobante.setDocNro(Long.valueOf(cuit));
-		comprobante.setDocTipo(TipoDocumento.CUIT);
+		comprobante.setDocTipo(TipoDocumentoEnum.CUIT);
 
 		// COTIZACION LA TOMA DEL TIPO DE MONEDA PORQUE ES EN PESOS.
-		comprobante.setTipoMoneda(TipoMoneda.PESOS_ARGENTINOS);
+		comprobante.setTipoMoneda(TipoMonedaEnum.PESOS_ARGENTINOS);
 		comprobante.setCotizacion(null);
 
 		// TOTALES.
@@ -271,8 +271,8 @@ public class FacturaBOImpl implements FacturaBO {
 
 		// DATOS GENERALES DEL COMPROBANTE.
 		comprobante.setFechaComprobante(fechaComprobante);
-		comprobante.setTipoComprobante(TipoComprobante.FACTURA_A);
-		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
+		comprobante.setTipoComprobante(TipoComprobanteEnum.FACTURA_A);
+		comprobante.setTipoConcepto(TipoConceptoEnum.PRODUCTO);
 		comprobante.setComprobantesAsociados(null);
 		comprobante.setNroComprobante(nroFactura);
 
@@ -298,7 +298,7 @@ public class FacturaBOImpl implements FacturaBO {
 		if (subtotal21.doubleValue() > 0) {
 			AlicuotaIVA alicuota21 = new AlicuotaIVA();
 			alicuota21.setBaseImponible(subtotal21);
-			alicuota21.setTipoIVA(TipoIVA.IVA_21);
+			alicuota21.setTipoIVA(TipoIVAEnum.IVA_21);
 			alicuota21.setTotalAlicuota(totalIVA21);
 			alicuotas.add(alicuota21);
 		}
@@ -307,7 +307,7 @@ public class FacturaBOImpl implements FacturaBO {
 		if (subtotal105.doubleValue() > 0) {
 			AlicuotaIVA alicuota105 = new AlicuotaIVA();
 			alicuota105.setBaseImponible(subtotal105);
-			alicuota105.setTipoIVA(TipoIVA.IVA_10_5);
+			alicuota105.setTipoIVA(TipoIVAEnum.IVA_10_5);
 			alicuota105.setTotalAlicuota(totalIVA105);
 			alicuotas.add(alicuota105);
 		}
@@ -447,7 +447,7 @@ public class FacturaBOImpl implements FacturaBO {
 	public Long obtenerUltimoNroComprobante() throws BusinessException {
 		try {
 			Resultado resultado = facturacionService
-					.consultarUltimoComprobante(TipoComprobante.FACTURA_A);
+					.consultarUltimoComprobante(TipoComprobanteEnum.FACTURA_A);
 			return resultado.getNroComprobante();
 		} catch (ServiceException sexc) {
 			LOGGER.error(

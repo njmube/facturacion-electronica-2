@@ -23,6 +23,7 @@ import org.pushingpixels.substance.api.skin.SaharaSkin;
 
 import ar.com.wuik.sistema.entities.Permiso;
 import ar.com.wuik.sistema.entities.Usuario;
+import ar.com.wuik.sistema.frames.afip.ConsultaComprobanteIFrame;
 import ar.com.wuik.sistema.frames.parametricos.ParametroIFrame;
 import ar.com.wuik.sistema.frames.parametricos.UsuarioIFrame;
 import ar.com.wuik.sistema.frames.parametricos.UsuarioVerIFrame;
@@ -58,6 +59,7 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity itemBackup = null;
 	private WMenuItemSecurity itemSubdiarioIVA = null;
 	private WMenuItemSecurity itemTipoProducto = null;
+	private WMenuItemSecurity itemConsultaComprobantes = null;
 
 	// Menu Archivo -------------
 	private WMenuItemSecurity itemEditarDatosPersonales = null;
@@ -101,9 +103,8 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity getItemTipoProducto() {
 		if (null == itemTipoProducto) {
 			itemTipoProducto = new WMenuItemSecurity("Tipos de Producto", null,
-					new ImageIcon(
-							MainFrame.class
-									.getResource("/icons32/tipos_productos.png")));
+					new ImageIcon(MainFrame.class
+							.getResource("/icons32/tipos_productos.png")));
 			itemTipoProducto.setVisible(Boolean.TRUE);
 			itemTipoProducto.addActionListener(new ActionListener() {
 
@@ -115,8 +116,7 @@ public class MainFrame extends WApplication {
 		}
 		return itemTipoProducto;
 	}
-	
-	
+
 	private WMenuItemSecurity getItemCliente() {
 		if (null == itemCliente) {
 			itemCliente = new WMenuItemSecurity("Clientes", null,
@@ -186,6 +186,24 @@ public class MainFrame extends WApplication {
 			});
 		}
 		return itemParametro;
+	}
+
+	private WMenuItemSecurity getItemConsultaComprobantes() {
+		if (null == itemConsultaComprobantes) {
+			itemConsultaComprobantes = new WMenuItemSecurity(
+					"Consulta Comprobantes", null, new ImageIcon(
+							MainFrame.class
+									.getResource("/icons32/parametros.png")));
+			itemConsultaComprobantes.setVisible(Boolean.TRUE);
+			itemConsultaComprobantes.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addIFrame(new ConsultaComprobanteIFrame());
+				}
+			});
+		}
+		return itemConsultaComprobantes;
 	}
 
 	private WMenuItemSecurity getItemUsuario() {
@@ -271,8 +289,8 @@ public class MainFrame extends WApplication {
 			menuAdministraciones = new WMenuSecurity("Administraciones",
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/administraciones.png")),
-					getItemCliente(), getItemProducto(), getItemTipoProducto(), getItemProveedor(),
-					getItemCheque());
+					getItemCliente(), getItemProducto(), getItemTipoProducto(),
+					getItemProveedor(), getItemCheque());
 		}
 		return menuAdministraciones;
 	}
@@ -282,11 +300,12 @@ public class MainFrame extends WApplication {
 			menuAdmParametricas = new WMenuSecurity("Paramétricas",
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/parametricas.png")),
-					getItemParametro(), getItemSubdiarioIVA(), getItemUsuario());
+					getItemParametro(), getItemSubdiarioIVA(),
+					getItemConsultaComprobantes(), getItemUsuario());
 		}
 		return menuAdmParametricas;
 	}
-	
+
 	private WMenuItemSecurity getItemSubdiarioIVA() {
 		if (null == itemSubdiarioIVA) {
 			itemSubdiarioIVA = new WMenuItemSecurity("Subdiario de IVA", null,
@@ -305,8 +324,6 @@ public class MainFrame extends WApplication {
 		return itemSubdiarioIVA;
 	}
 
-	
-	
 	@Override
 	protected Map<Integer, ActionListener> getKeyMapEvent() {
 		Map<Integer, ActionListener> mapEvent = new HashMap<Integer, ActionListener>();

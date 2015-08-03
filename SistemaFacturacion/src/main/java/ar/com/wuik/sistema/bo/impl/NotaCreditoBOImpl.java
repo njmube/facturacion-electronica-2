@@ -13,11 +13,11 @@ import FEV1.dif.afip.gov.ar.entities.AlicuotaIVA;
 import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.ComprobanteAsociado;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
-import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
-import FEV1.dif.afip.gov.ar.entities.TipoConcepto;
-import FEV1.dif.afip.gov.ar.entities.TipoDocumento;
-import FEV1.dif.afip.gov.ar.entities.TipoIVA;
-import FEV1.dif.afip.gov.ar.entities.TipoMoneda;
+import FEV1.dif.afip.gov.ar.entities.TipoComprobanteEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoConceptoEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoDocumentoEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoIVAEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoMonedaEnum;
 import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
@@ -198,7 +198,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 					// Consulto si el comprobante con el Nro. de Nota de Crédito existe
 					// en AFIP.
 					resultado = facturacionService.consultarComprobante(
-							Long.valueOf(nroNotaCredito), TipoComprobante.NOTA_CREDITO_A);
+							Long.valueOf(nroNotaCredito), TipoComprobanteEnum.NOTA_CREDITO_A);
 
 					// Si no existe lo envio a Autorizar a AFIP.
 					if (null == resultado.getCae()) {
@@ -268,10 +268,10 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 
 		// DATOS DEL CLIENTE.
 		comprobante.setDocNro(Long.valueOf(cuit));
-		comprobante.setDocTipo(TipoDocumento.CUIT);
+		comprobante.setDocTipo(TipoDocumentoEnum.CUIT);
 
 		// COTIZACION LA TOMA DEL TIPO DE MONEDA PORQUE ES EN PESOS.
-		comprobante.setTipoMoneda(TipoMoneda.PESOS_ARGENTINOS);
+		comprobante.setTipoMoneda(TipoMonedaEnum.PESOS_ARGENTINOS);
 		comprobante.setCotizacion(null);
 
 		// COMPROBANTES ASOCIADOS.
@@ -284,7 +284,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 				comprobanteAsociado.setNumero(Long.valueOf(factura.getNroComprobante()));
 				comprobanteAsociado.setPtoVta(Integer.valueOf(factura.getPtoVenta()));
 				comprobanteAsociado
-						.setTipoComprobante(TipoComprobante.FACTURA_A);
+						.setTipoComprobante(TipoComprobanteEnum.FACTURA_A);
 				comprobantesAsociados.add(comprobanteAsociado);
 			}
 			comprobante.setComprobantesAsociados(comprobantesAsociados);
@@ -297,8 +297,8 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 
 		// DATOS GENERALES DEL COMPROBANTE.
 		comprobante.setFechaComprobante(fechaComprobante);
-		comprobante.setTipoComprobante(TipoComprobante.NOTA_CREDITO_A);
-		comprobante.setTipoConcepto(TipoConcepto.PRODUCTO);
+		comprobante.setTipoComprobante(TipoComprobanteEnum.NOTA_CREDITO_A);
+		comprobante.setTipoConcepto(TipoConceptoEnum.PRODUCTO);
 		comprobante.setNroComprobante(nroNotaCredito);
 
 		// DETALLES DE LA NOTA DE CREDITO.
@@ -323,7 +323,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		if (subtotal21.doubleValue() > 0) {
 			AlicuotaIVA alicuota21 = new AlicuotaIVA();
 			alicuota21.setBaseImponible(subtotal21);
-			alicuota21.setTipoIVA(TipoIVA.IVA_21);
+			alicuota21.setTipoIVA(TipoIVAEnum.IVA_21);
 			alicuota21.setTotalAlicuota(totalIVA21);
 			alicuotas.add(alicuota21);
 		}
@@ -332,7 +332,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		if (subtotal105.doubleValue() > 0) {
 			AlicuotaIVA alicuota105 = new AlicuotaIVA();
 			alicuota105.setBaseImponible(subtotal105);
-			alicuota105.setTipoIVA(TipoIVA.IVA_10_5);
+			alicuota105.setTipoIVA(TipoIVAEnum.IVA_10_5);
 			alicuota105.setTotalAlicuota(totalIVA105);
 			alicuotas.add(alicuota105);
 		}
@@ -452,7 +452,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 	public Long obtenerUltimoNroComprobante() throws BusinessException {
 		try {
 			Resultado resultado = facturacionService
-					.consultarUltimoComprobante(TipoComprobante.NOTA_CREDITO_A);
+					.consultarUltimoComprobante(TipoComprobanteEnum.NOTA_CREDITO_A);
 			return resultado.getNroComprobante();
 		} catch (ServiceException sexc) {
 			LOGGER.error(
