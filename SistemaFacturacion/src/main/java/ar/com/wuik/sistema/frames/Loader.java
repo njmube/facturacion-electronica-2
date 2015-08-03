@@ -41,7 +41,7 @@ public class Loader extends WLoader {
 	@Override
 	protected void onLoadFinished() {
 		// Aca muestro la siguiente pantalla
-		Login.main(null);
+		Login.main();
 	}
 
 	@Override

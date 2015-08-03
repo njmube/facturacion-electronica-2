@@ -266,7 +266,7 @@ public class Login extends WAbstractModelFrame {
 		return WUtils.isEmpty(messages);
 	}
 
-	public static void main(String[] args) {
+	public static void main() {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {

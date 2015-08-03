@@ -80,8 +80,12 @@ public class BackupUtil {
 				os.write(buffer, 0, length);
 			}
 		} finally {
-			is.close();
-			os.close();
+			if (null != is) {
+				is.close();
+			}
+			if (null != os) {
+				os.close();
+			}
 		}
 	}
 }
