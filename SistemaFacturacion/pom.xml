@@ -44,7 +44,7 @@
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 							<addClasspath>true</addClasspath>
-							<mainClass>ar.com.wuik.agrosumma.frames.Loader</mainClass>
+							<mainClass>ar.com.wuik.sistema.frames.Loader</mainClass>
 							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 					</archive>
