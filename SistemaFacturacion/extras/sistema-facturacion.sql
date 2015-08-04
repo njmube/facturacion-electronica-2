@@ -89,10 +89,10 @@ INSERT INTO `bancos` (`ID`,`NOMBRE`) VALUES
 DROP TABLE IF EXISTS `cheques`;
 CREATE TABLE `cheques` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `NUMERO` varchar(45) NOT NULL,
+  `NUMERO` varchar(30) NOT NULL,
   `FECHA_EMISION` date NOT NULL,
   `ID_BANCO` int(10) unsigned NOT NULL,
-  `IMPORTE` decimal(10,2) NOT NULL,
+  `IMPORTE` decimal(12,2) NOT NULL,
   `A_NOMBRE_DE` varchar(50) NOT NULL,
   `FECHA_PAGO` date NOT NULL,
   `ID_CLIENTE` int(10) unsigned DEFAULT NULL,
@@ -101,14 +101,7 @@ CREATE TABLE `cheques` (
   KEY `FK_cheques_2` (`ID_CLIENTE`),
   CONSTRAINT `FK_cheques_1` FOREIGN KEY (`ID_BANCO`) REFERENCES `bancos` (`ID`),
   CONSTRAINT `FK_cheques_2` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `cheques`
---
-
-/*!40000 ALTER TABLE `cheques` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cheques` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -118,7 +111,7 @@ CREATE TABLE `cheques` (
 DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE `clientes` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `RAZON_SOCIAL` varchar(45) NOT NULL,
+  `RAZON_SOCIAL` varchar(50) NOT NULL,
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
   `TELEFONO` varchar(30) DEFAULT NULL,
   `CELULAR` varchar(30) DEFAULT NULL,
@@ -131,15 +124,7 @@ CREATE TABLE `clientes` (
   KEY `FK_clientes_2` (`ID_LOCALIDAD`),
   CONSTRAINT `FK_clientes_1` FOREIGN KEY (`ID_COND_IVA`) REFERENCES `condiciones_iva` (`ID`),
   CONSTRAINT `FK_clientes_2` FOREIGN KEY (`ID_LOCALIDAD`) REFERENCES `localidades` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `clientes`
---
-
-/*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
 -- Definition of table `condiciones_iva`
@@ -172,25 +157,17 @@ DROP TABLE IF EXISTS `detalles_facturas`;
 CREATE TABLE `detalles_facturas` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ID_PRODUCTO` int(10) unsigned DEFAULT NULL,
-  `PRECIO` decimal(10,2) NOT NULL,
+  `PRECIO` decimal(12,2) NOT NULL,
   `CANTIDAD` int(10) unsigned NOT NULL,
-  `PORC_IVA` decimal(10,2) NOT NULL,
   `ID_FACTURA` int(10) unsigned NOT NULL,
   `DETALLE` varchar(100) DEFAULT NULL,
+  `ID_TIPO_IVA` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_detalles_facturas_1` (`ID_PRODUCTO`),
   KEY `FK_detalles_facturas_2` (`ID_FACTURA`),
   CONSTRAINT `FK_detalles_facturas_1` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `productos` (`ID`),
   CONSTRAINT `FK_detalles_facturas_2` FOREIGN KEY (`ID_FACTURA`) REFERENCES `facturas` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `detalles_facturas`
---
-
-/*!40000 ALTER TABLE `detalles_facturas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detalles_facturas` ENABLE KEYS */;
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
 -- Definition of table `detalles_notas_creditos`
@@ -200,25 +177,18 @@ DROP TABLE IF EXISTS `detalles_notas_creditos`;
 CREATE TABLE `detalles_notas_creditos` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ID_PRODUCTO` int(10) unsigned DEFAULT NULL,
-  `PRECIO` decimal(10,2) NOT NULL,
+  `PRECIO` decimal(12,2) NOT NULL,
   `CANTIDAD` int(10) unsigned NOT NULL,
-  `PORC_IVA` decimal(10,2) NOT NULL,
   `ID_NOTA_CREDITO` int(10) unsigned NOT NULL,
   `COMENTARIO` varchar(100) DEFAULT NULL,
   `DETALLE` varchar(100) DEFAULT NULL,
+  `ID_TIPO_IVA` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_detalles_notas_creditos_1` (`ID_PRODUCTO`),
   KEY `FK_detalles_notas_creditos_2` (`ID_NOTA_CREDITO`),
   CONSTRAINT `FK_detalles_notas_creditos_1` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `productos` (`ID`),
   CONSTRAINT `FK_detalles_notas_creditos_2` FOREIGN KEY (`ID_NOTA_CREDITO`) REFERENCES `notas_creditos` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `detalles_notas_creditos`
---
-
-/*!40000 ALTER TABLE `detalles_notas_creditos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detalles_notas_creditos` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -229,25 +199,18 @@ DROP TABLE IF EXISTS `detalles_notas_debitos`;
 CREATE TABLE `detalles_notas_debitos` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ID_PRODUCTO` int(10) unsigned DEFAULT NULL,
-  `PRECIO` decimal(10,2) NOT NULL,
+  `PRECIO` decimal(12,2) NOT NULL,
   `CANTIDAD` int(10) unsigned NOT NULL,
-  `PORC_IVA` decimal(10,2) NOT NULL,
   `ID_NOTA_DEBITO` int(10) unsigned NOT NULL,
   `DETALLE` varchar(100) DEFAULT NULL,
   `COMENTARIO` varchar(100) DEFAULT NULL,
+  `ID_TIPO_IVA` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_detalles_notas_debitos_1` (`ID_NOTA_DEBITO`),
   KEY `FK_detalles_notas_debitos_2` (`ID_PRODUCTO`),
   CONSTRAINT `FK_detalles_notas_debitos_1` FOREIGN KEY (`ID_NOTA_DEBITO`) REFERENCES `notas_debitos` (`ID`),
   CONSTRAINT `FK_detalles_notas_debitos_2` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `productos` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `detalles_notas_debitos`
---
-
-/*!40000 ALTER TABLE `detalles_notas_debitos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detalles_notas_debitos` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -288,9 +251,9 @@ CREATE TABLE `facturas` (
   `FECHA_VENTA` date NOT NULL,
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
   `ID_CLIENTE` int(10) unsigned NOT NULL,
-  `SUBTOTAL` decimal(10,2) NOT NULL,
-  `TOTAL` decimal(10,2) NOT NULL,
-  `IVA` decimal(10,2) NOT NULL,
+  `SUBTOTAL` decimal(12,2) NOT NULL,
+  `TOTAL` decimal(12,2) NOT NULL,
+  `IVA` decimal(12,2) NOT NULL,
   `PTO_VENTA` varchar(4) DEFAULT NULL,
   `OBSERVACIONES` varchar(100) DEFAULT NULL,
   `NUMERO_COMPROBANTE` varchar(10) DEFAULT NULL,
@@ -300,14 +263,8 @@ CREATE TABLE `facturas` (
   PRIMARY KEY (`ID`),
   KEY `FK_facturas_1` (`ID_CLIENTE`),
   CONSTRAINT `FK_facturas_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `facturas`
---
-
-/*!40000 ALTER TABLE `facturas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `facturas` ENABLE KEYS */;
 
 
 --
@@ -476,9 +433,9 @@ CREATE TABLE `notas_creditos` (
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
   `ID_CLIENTE` int(10) unsigned NOT NULL,
   `OBSERVACIONES` varchar(100) DEFAULT NULL,
-  `SUBTOTAL` decimal(10,2) NOT NULL,
-  `TOTAL` decimal(10,2) NOT NULL,
-  `IVA` decimal(10,2) NOT NULL,
+  `SUBTOTAL` decimal(12,2) NOT NULL,
+  `TOTAL` decimal(12,2) NOT NULL,
+  `IVA` decimal(12,2) NOT NULL,
   `PTO_VENTA` varchar(4) DEFAULT NULL,
   `NUMERO_COMPROBANTE` varchar(10) DEFAULT NULL,
   `ESTADO_FACTURACION` int(10) unsigned NOT NULL DEFAULT '0',
@@ -487,15 +444,7 @@ CREATE TABLE `notas_creditos` (
   PRIMARY KEY (`ID`),
   KEY `FK_notas_creditos_1` (`ID_CLIENTE`),
   CONSTRAINT `FK_notas_creditos_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `notas_creditos`
---
-
-/*!40000 ALTER TABLE `notas_creditos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notas_creditos` ENABLE KEYS */;
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
 -- Definition of table `notas_creditos_facturas`
@@ -532,9 +481,9 @@ CREATE TABLE `notas_debitos` (
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
   `ID_CLIENTE` int(10) unsigned NOT NULL,
   `OBSERVACIONES` varchar(100) DEFAULT NULL,
-  `SUBTOTAL` decimal(10,2) NOT NULL,
-  `TOTAL` decimal(10,2) NOT NULL,
-  `IVA` decimal(10,2) NOT NULL,
+  `SUBTOTAL` decimal(12,2) NOT NULL,
+  `TOTAL` decimal(12,2) NOT NULL,
+  `IVA` decimal(12,2) NOT NULL,
   `PTO_VENTA` varchar(4) DEFAULT NULL,
   `NUMERO_COMPROBANTE` varchar(10) DEFAULT NULL,
   `ESTADO_FACTURACION` int(10) unsigned NOT NULL,
@@ -543,14 +492,7 @@ CREATE TABLE `notas_debitos` (
   PRIMARY KEY (`ID`),
   KEY `FK_notas_debitos_1` (`ID_CLIENTE`),
   CONSTRAINT `FK_notas_debitos_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `notas_debitos`
---
-
-/*!40000 ALTER TABLE `notas_debitos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notas_debitos` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -589,14 +531,7 @@ CREATE TABLE `pagos_recibos_cheques` (
   KEY `FK_pagos_recibos_cheques_2` (`ID_CHEQUE`),
   CONSTRAINT `FK_pagos_recibos_cheques_1` FOREIGN KEY (`ID_RECIBO`) REFERENCES `recibos` (`ID`),
   CONSTRAINT `FK_pagos_recibos_cheques_2` FOREIGN KEY (`ID_CHEQUE`) REFERENCES `cheques` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `pagos_recibos_cheques`
---
-
-/*!40000 ALTER TABLE `pagos_recibos_cheques` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pagos_recibos_cheques` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -607,18 +542,11 @@ DROP TABLE IF EXISTS `pagos_recibos_efectivo`;
 CREATE TABLE `pagos_recibos_efectivo` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ID_RECIBO` int(10) unsigned NOT NULL,
-  `TOTAL` decimal(10,2) NOT NULL,
+  `TOTAL` decimal(12,2) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_pagos_recibos_efectivo_1` (`ID_RECIBO`),
   CONSTRAINT `FK_pagos_recibos_efectivo_1` FOREIGN KEY (`ID_RECIBO`) REFERENCES `recibos` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `pagos_recibos_efectivo`
---
-
-/*!40000 ALTER TABLE `pagos_recibos_efectivo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pagos_recibos_efectivo` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -651,7 +579,7 @@ CREATE TABLE `parametros` (
 
 /*!40000 ALTER TABLE `parametros` DISABLE KEYS */;
 INSERT INTO `parametros` (`ID`,`NRO_RECIBO`,`NRO_REMITO`,`PREF_REMITO`,`PREF_RECIBO`,`RAZON_SOCIAL`,`COND_IVA`,`CUIT`,`DOMICILIO`,`ING_BRUTOS`,`INICIO_ACT`,`NRO_FACTURA`,`NRO_NOTA_CREDITO`,`NRO_NOTA_DEBITO`,`PTO_VENTA`) VALUES 
- (1,'4','19','0001','0001','VAN DER BEKEN FRANCISCO NICOLAS','IVA RESPONSABLE INSCRIPTO','20-04974618-1','PASSO 50 - ROJAS, BUENOS AIRES','20-04974618-1','1994-01-01','50','6','4','0004');
+ (1,'5','19','0001','0001','VAN DER BEKEN FRANCISCO NICOLAS','IVA RESPONSABLE INSCRIPTO','20-04974618-1','PASSO 50 - ROJAS, BUENOS AIRES','20-04974618-1','1994-01-01','50','8','5','0004');
 /*!40000 ALTER TABLE `parametros` ENABLE KEYS */;
 
 
@@ -703,23 +631,16 @@ CREATE TABLE `productos` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `DESCRIPCION` varchar(50) NOT NULL,
   `CODIGO` varchar(20) NOT NULL,
-  `COSTO` decimal(10,2) NOT NULL,
-  `PRECIO` decimal(10,2) NOT NULL,
+  `COSTO` decimal(12,2) NOT NULL,
+  `PRECIO` decimal(12,2) NOT NULL,
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
-  `IVA` decimal(10,2) NOT NULL,
   `UBICACION` varchar(45) DEFAULT NULL,
   `ID_TIPO` int(10) unsigned NOT NULL,
+  `ID_TIPO_IVA` int(10) unsigned NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_productos_1` (`ID_TIPO`),
   CONSTRAINT `FK_productos_1` FOREIGN KEY (`ID_TIPO`) REFERENCES `tipos_productos` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `productos`
---
-
-/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -739,14 +660,7 @@ CREATE TABLE `proveedores` (
   PRIMARY KEY (`ID`),
   KEY `FK_proveedores_1` (`ID_LOCALIDAD`),
   CONSTRAINT `FK_proveedores_1` FOREIGN KEY (`ID_LOCALIDAD`) REFERENCES `localidades` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `proveedores`
---
-
-/*!40000 ALTER TABLE `proveedores` DISABLE KEYS */;
-/*!40000 ALTER TABLE `proveedores` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -759,19 +673,12 @@ CREATE TABLE `recibos` (
   `FECHA` date NOT NULL,
   `ID_CLIENTE` int(10) unsigned NOT NULL,
   `NUMERO` varchar(45) NOT NULL,
-  `TOTAL` decimal(10,2) NOT NULL,
+  `TOTAL` decimal(12,2) NOT NULL,
   `OBSERVACIONES` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_recibos_1` (`ID_CLIENTE`),
   CONSTRAINT `FK_recibos_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `recibos`
---
-
-/*!40000 ALTER TABLE `recibos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `recibos` ENABLE KEYS */;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
 --
@@ -787,13 +694,6 @@ CREATE TABLE `recibos_facturas` (
   CONSTRAINT `FK_recibos_facturas_1` FOREIGN KEY (`ID_RECIBO`) REFERENCES `recibos` (`ID`),
   CONSTRAINT `FK_recibos_facturas_2` FOREIGN KEY (`ID_FACTURA`) REFERENCES `facturas` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `recibos_facturas`
---
-
-/*!40000 ALTER TABLE `recibos_facturas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `recibos_facturas` ENABLE KEYS */;
 
 
 --
@@ -882,14 +782,9 @@ CREATE TABLE `tipos_productos` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `NOMBRE` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tipos_productos`
---
 
-/*!40000 ALTER TABLE `tipos_productos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipos_productos` ENABLE KEYS */;
 
 
 --
@@ -904,7 +799,7 @@ CREATE TABLE `usuarios` (
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
   `NOMBRE` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `usuarios`
