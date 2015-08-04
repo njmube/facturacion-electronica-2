@@ -39,9 +39,9 @@ public class Recibo extends BaseEntity {
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "recibos_notas_debito", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_NOTA_DEBITO", nullable = false, updatable = false) })
 	private Set<NotaDebito> notasDebito;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PagoReciboEfectivo> pagosEfectivo;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PagoReciboCheque> pagosCheque;
 	@Column(name = "TOTAL")
 	private BigDecimal total;

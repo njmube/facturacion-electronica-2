@@ -2,6 +2,8 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	private JTextField txtMail;
 	private JComboBox cmbLocalidad;
 	private JLabel lblTelfono;
+	private JLabel label;
 
 	/**
 	 * Create the frame.
@@ -205,6 +208,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtMail());
 			pnlBusqueda.add(getCmbLocalidad());
 			pnlBusqueda.add(getLblTelfono());
+			pnlBusqueda.add(getLabel());
 		}
 		return pnlBusqueda;
 	}
@@ -349,6 +353,25 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			}
 			txfCuit = new JFormattedTextField(formatter);
 			txfCuit.setName(CAMPO_CUIT);
+			txfCuit.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+
+					if (txfCuit.getText().length() == 13
+							&& !txfCuit.getText().contains("#")) {
+						if (AppUtils.esValidoCUIT(txfCuit.getText())) {
+							label.setIcon(new ImageIcon(ClienteVerIFrame.class
+									.getResource("/icons/ok.png")));
+						} else {
+							label.setIcon(new ImageIcon(ClienteVerIFrame.class
+									.getResource("/icons/error.png")));
+						}
+					} else {
+						label.setIcon(null);
+					}
+
+				}
+			});
 			txfCuit.setBounds(141, 59, 145, 25);
 		}
 		return txfCuit;
@@ -399,5 +422,11 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		}
 		return lblTelfono;
 	}
-
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("");
+			label.setBounds(296, 59, 26, 25);
+		}
+		return label;
+	}
 }

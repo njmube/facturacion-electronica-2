@@ -18,7 +18,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.entities.DetalleFactura;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.swing.components.WModel;
+import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
@@ -26,6 +28,7 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
+import javax.swing.JComboBox;
 
 public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 	/**
@@ -49,7 +52,7 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 	private boolean editaDetalle = false;
 	private WTextFieldDecimal txfPrecio;
 	private JLabel lblPrecio;
-	private WTextFieldDecimal txfIVA;
+	private JComboBox cmbTipoIva;
 	private JLabel lblIva;
 
 	/**
@@ -63,7 +66,7 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 		WModel model = populateModel();
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
 		model.addValue(CAMPO_PRECIO, detalle.getPrecio());
-		model.addValue(CAMPO_IVA, detalle.getIva());
+		model.addValue(CAMPO_IVA, detalle.getTipoIVA().getId());
 		model.addValue(
 				CAMPO_PRODUCTO,
 				(null != detalle.getProducto()) ? detalle.getProducto()
@@ -76,7 +79,7 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 			getLblProductoSeleccionado().setText("* Detalle:");
 			getTxtProductoSeleccionado().setEditable(Boolean.TRUE);
 			getLblIva().setText("* " + getLblIva().getText());
-			getTxfIVA().setEditable(Boolean.TRUE);
+			getCmbTipoIva().setEditable(Boolean.TRUE);
 			getLblPrecio().setText("* " + getLblPrecio().getText());
 			getTxfPrecio().setEditable(Boolean.TRUE);
 		}
@@ -95,6 +98,19 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getBtnCerrar());
 		getContentPane().add(getBtnGuardar());
+		loadTiposIva();
+	}
+
+	private void loadTiposIva() {
+
+		TipoIVAEnum[] tiposIVAEnum = TipoIVAEnum.values();
+		for (TipoIVAEnum tipoIVAEnum : tiposIVAEnum) {
+			getCmbTipoIva().addItem(
+					new WOption((long) tipoIVAEnum.getId(), tipoIVAEnum
+							.getDescripcion()));
+		}
+		getCmbTipoIva().setSelectedItem(
+				new WOption((long) TipoIVAEnum.IVA_21.getId()));
 	}
 
 	@Override
@@ -147,7 +163,7 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblProductoSeleccionado());
 			pnlBusqueda.add(getTxfPrecio());
 			pnlBusqueda.add(getLblPrecio());
-			pnlBusqueda.add(getTxfIVA());
+			pnlBusqueda.add(getCmbTipoIva());
 			pnlBusqueda.add(getLblIva());
 		}
 		return pnlBusqueda;
@@ -187,10 +203,10 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 							String detalleDescripcion = model
 									.getValue(CAMPO_PRODUCTO);
 							String precio = model.getValue(CAMPO_PRECIO);
-							String iva = model.getValue(CAMPO_IVA);
+							WOption tipoIva = model.getValue(CAMPO_IVA);
 							detalle.setDetalle(detalleDescripcion);
 							detalle.setPrecio(WUtils.getValue(precio));
-							detalle.setIva(WUtils.getValue(iva));
+							detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
 						}
 
 						ventaClienteVerIFrame.refreshDetalles();
@@ -267,14 +283,14 @@ public class EditarDetalleFacturaIFrame extends WAbstractModelIFrame {
 		return lblPrecio;
 	}
 
-	private WTextFieldDecimal getTxfIVA() {
-		if (txfIVA == null) {
-			txfIVA = new WTextFieldDecimal(10, 2);
-			txfIVA.setEditable(false);
-			txfIVA.setName(CAMPO_IVA);
-			txfIVA.setBounds(141, 93, 121, 25);
+	private JComboBox getCmbTipoIva() {
+		if (cmbTipoIva == null) {
+			cmbTipoIva = new JComboBox();
+			cmbTipoIva.setEditable(false);
+			cmbTipoIva.setName(CAMPO_IVA);
+			cmbTipoIva.setBounds(141, 93, 121, 25);
 		}
-		return txfIVA;
+		return cmbTipoIva;
 	}
 
 	private JLabel getLblIva() {

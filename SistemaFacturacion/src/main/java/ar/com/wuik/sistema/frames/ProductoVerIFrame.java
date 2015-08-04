@@ -17,11 +17,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.bo.TipoProductoBO;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.TipoProducto;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.ProductoFilter;
 import ar.com.wuik.sistema.utils.AbstractFactory;
@@ -66,7 +66,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblCodigo;
 	private JTextField txtCodigo;
 	private JLabel lblIVA;
-	private WTextFieldDecimal txfIVA;
+	private JComboBox cmbTipoIva;
 	private JLabel lblPrecio;
 	private WTextFieldDecimal txfPrecio;
 	private JLabel lblUbicacion;
@@ -115,7 +115,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			this.productoIFrame = productoIFrame;
 			WModel model = populateModel();
 			model.addValue(CAMPO_CODIGO, producto.getCodigo());
-			model.addValue(CAMPO_IVA, producto.getIva());
+			model.addValue(CAMPO_IVA, producto.getTipoIVA().getId());
 			model.addValue(CAMPO_TIPO_PROD, producto.getTipoProducto().getId());
 			model.addValue(CAMPO_COSTO, producto.getCosto());
 			model.addValue(CAMPO_DESCRIPCION, producto.getDescripcion());
@@ -126,8 +126,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
-	
-	public void loadTiposProducto(){
+
+	public void loadTiposProducto() {
 		getCmbTipoProd().removeAllItems();
 		getCmbTipoProd().addItem(WOption.getWOptionSelecione());
 		List<WOption> items = getTiposProducto();
@@ -148,13 +148,25 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getBtnGuardar());
 		getContentPane().add(getPanelDatos());
 		loadTiposProducto();
+		loadTiposIva();
+	}
+
+	private void loadTiposIva() {
+
+		TipoIVAEnum[] tiposIVAEnum = TipoIVAEnum.values();
+		for (TipoIVAEnum tipoIVAEnum : tiposIVAEnum) {
+			getCmbTipoIva().addItem(
+					new WOption((long) tipoIVAEnum.getId(), tipoIVAEnum
+							.getDescripcion()));
+		}
+		getCmbTipoIva().setSelectedItem(
+				new WOption((long) TipoIVAEnum.IVA_21.getId()));
 	}
 
 	@Override
 	protected boolean validateModel(WModel model) {
 		String codigo = model.getValue(CAMPO_CODIGO);
 		String descripcion = model.getValue(CAMPO_DESCRIPCION);
-		String iva = model.getValue(CAMPO_IVA);
 		WOption tipoProducto = model.getValue(CAMPO_TIPO_PROD);
 		String costo = model.getValue(CAMPO_COSTO);
 		String precio = model.getValue(CAMPO_PRECIO);
@@ -168,6 +180,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 					.getInstance(ProductoBO.class);
 			ProductoFilter filter = new ProductoFilter();
 			filter.setCodigo(codigo);
+			filter.setIdToExclude(producto.getId());
 			try {
 				List<Producto> productos = productoBO.buscar(filter);
 				if (productos.size() > 0) {
@@ -189,10 +202,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isEmpty(costo)) {
 			messages.add("Debe ingresar un Costo");
-		}
-
-		if (WUtils.isEmpty(iva)) {
-			messages.add("Debe ingresar % de IVA");
 		}
 
 		if (WUtils.isEmpty(precio)) {
@@ -251,14 +260,15 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 				String codigo = model.getValue(CAMPO_CODIGO);
 				String descripcion = model.getValue(CAMPO_DESCRIPCION);
-				String iva = model.getValue(CAMPO_IVA);
+				WOption tipoIva = model.getValue(CAMPO_IVA);
 				WOption tipoProducto = model.getValue(CAMPO_TIPO_PROD);
 				String costo = model.getValue(CAMPO_COSTO);
 				String precio = model.getValue(CAMPO_PRECIO);
 				String ubicacion = model.getValue(CAMPO_UBICACION);
 
 				producto.setDescripcion(descripcion);
-				producto.setIva(WUtils.getValue(iva));
+				producto.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue()
+						.intValue()));
 				producto.setIdTipo(tipoProducto.getValue());
 				producto.setCosto(WUtils.getValue(costo));
 				producto.setPrecio(WUtils.getValue(precio));
@@ -305,7 +315,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			panelDatos.add(getLblCodigo());
 			panelDatos.add(getTxtCodigo());
 			panelDatos.add(getLblIVA());
-			panelDatos.add(getTxfIVA());
+			panelDatos.add(getCmbTipoIva());
 			panelDatos.add(getLblPrecio());
 			panelDatos.add(getTxfPrecio());
 			panelDatos.add(getLblUbicacion());
@@ -384,7 +394,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 	private WTextFieldDecimal getTxfCosto() {
 		if (txfCosto == null) {
-			txfCosto = new WTextFieldDecimal(7, 3);
+			txfCosto = new WTextFieldDecimal(7, 2);
 			txfCosto.setName(CAMPO_COSTO);
 			txfCosto.setBounds(148, 128, 125, 25);
 		}
@@ -420,13 +430,13 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		return lblIVA;
 	}
 
-	private WTextFieldDecimal getTxfIVA() {
-		if (txfIVA == null) {
-			txfIVA = new WTextFieldDecimal(7, 3);
-			txfIVA.setName(CAMPO_IVA);
-			txfIVA.setBounds(148, 164, 125, 25);
+	private JComboBox getCmbTipoIva() {
+		if (cmbTipoIva == null) {
+			cmbTipoIva = new JComboBox();
+			cmbTipoIva.setName(CAMPO_IVA);
+			cmbTipoIva.setBounds(148, 164, 125, 25);
 		}
-		return txfIVA;
+		return cmbTipoIva;
 	}
 
 	private JLabel getLblPrecio() {
@@ -440,7 +450,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 	private WTextFieldDecimal getTxfPrecio() {
 		if (txfPrecio == null) {
-			txfPrecio = new WTextFieldDecimal(7, 3);
+			txfPrecio = new WTextFieldDecimal(7, 2);
 			txfPrecio.setName(CAMPO_PRECIO);
 			txfPrecio.setBounds(148, 200, 125, 25);
 		}
@@ -466,15 +476,18 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		}
 		return txtUbicacion;
 	}
+
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new TipoProductoVerIFrame(ProductoVerIFrame.this));
+					addModalIFrame(new TipoProductoVerIFrame(
+							ProductoVerIFrame.this));
 				}
 			});
-			btnNewButton.setIcon(new ImageIcon(ProductoVerIFrame.class.getResource("/icons/add.png")));
+			btnNewButton.setIcon(new ImageIcon(ProductoVerIFrame.class
+					.getResource("/icons/add.png")));
 			btnNewButton.setBounds(388, 96, 26, 23);
 		}
 		return btnNewButton;

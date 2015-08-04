@@ -24,6 +24,7 @@ import ar.com.wuik.sistema.bo.NotaDebitoBO;
 import ar.com.wuik.sistema.entities.DetalleNotaDebito;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.NotaDebito;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.DetalleNotaDebitoFacturaModel;
 import ar.com.wuik.sistema.model.DetalleNotaDebitoModel;
@@ -375,9 +376,9 @@ public class NotaDebitoVistaIFrame extends WAbstractModelIFrame {
 
 		List<DetalleNotaDebito> detalles = notaDebito.getDetalles();
 		for (DetalleNotaDebito detalleNotaDebito : detalles) {
-			if (detalleNotaDebito.getIva().doubleValue() == 21.00) {
+			if (detalleNotaDebito.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
 				subtotalIVA21 = subtotalIVA21.add(detalleNotaDebito.getTotalIVA());
-			} else if (detalleNotaDebito.getIva().doubleValue() == 10.50) {
+			} else if (detalleNotaDebito.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleNotaDebito
 						.getTotalIVA());
 			}

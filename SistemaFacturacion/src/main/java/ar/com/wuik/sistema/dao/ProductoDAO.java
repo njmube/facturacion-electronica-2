@@ -10,4 +10,6 @@ public interface ProductoDAO extends GenericCrudDAO<Producto> {
 
 	List<Producto> search(ProductoFilter filter) throws DataAccessException;
 
+	boolean estaEnUso(Long id) throws DataAccessException;
+
 }

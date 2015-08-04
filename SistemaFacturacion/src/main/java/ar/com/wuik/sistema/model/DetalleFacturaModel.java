@@ -32,7 +32,7 @@ public class DetalleFacturaModel extends WTableModel<DetalleFactura> {
 		fila[2] = t.getCantidad();
 		fila[3] = AppUtils.formatPeso(t.getPrecio());
 		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
-		fila[5] = t.getIva() + " %";
+		fila[5] = t.getTipoIVA().getDescripcion();
 		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
 		fila[7] = t.getCoalesceId();
 		return fila;

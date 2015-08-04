@@ -32,6 +32,7 @@ import ar.com.wuik.sistema.entities.DetalleNotaDebito;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.NotaDebito;
 import ar.com.wuik.sistema.entities.Producto;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.filters.ProductoFilter;
@@ -438,7 +439,19 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 						}
 					}
 				}, "Eliminar", null);
+		WToolbarButton buttonNuevoDetalle = new WToolbarButton("Nuevo Detalle",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/add.png")),
+				new ActionListener() {
 
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addModalIFrame(new DetalleVerIFrame(
+								NotaDebitoVerIFrame.this));
+					}
+				}, "Nuevo Detalle", null);
+
+		toolbarButtons.add(buttonNuevoDetalle);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonEliminar);
 		return toolbarButtons;
@@ -597,20 +610,8 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 								NotaDebitoVerIFrame.this));
 					}
 				}, "Nuevo Producto", null);
-		WToolbarButton buttonNuevoDetalle = new WToolbarButton("Nuevo Detalle",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/add.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new DetalleVerIFrame(
-								NotaDebitoVerIFrame.this));
-					}
-				}, "Nuevo Detalle", null);
-
+	
 		toolbarButtons.add(buttonNuevoProducto);
-		toolbarButtons.add(buttonNuevoDetalle);
 		return toolbarButtons;
 	}
 
@@ -633,7 +634,7 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 				DetalleNotaDebito detalle = new DetalleNotaDebito();
 				detalle.setCantidad(1);
 				detalle.setNotaDebito(notaDebito);
-				detalle.setIva(producto.getIva());
+				detalle.setTipoIVA(producto.getTipoIVA());
 				detalle.setPrecio(producto.getPrecio());
 				detalle.setProducto(producto);
 				detalle.setTemporalId(System.currentTimeMillis());
@@ -689,9 +690,9 @@ public class NotaDebitoVerIFrame extends WAbstractModelIFrame {
 
 		List<DetalleNotaDebito> detalles = notaDebito.getDetalles();
 		for (DetalleNotaDebito detalleFactura : detalles) {
-			if (detalleFactura.getIva().doubleValue() == 21.00) {
+			if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
 				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
-			} else if (detalleFactura.getIva().doubleValue() == 10.50) {
+			} else if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleFactura
 						.getTotalIVA());
 			}

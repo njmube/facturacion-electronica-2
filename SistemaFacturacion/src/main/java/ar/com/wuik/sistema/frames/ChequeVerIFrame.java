@@ -50,12 +50,12 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblFecha;
 	private JLabel lblRecibido;
 
-	private static final String CAMPO_NUMERO = "razonSocial";
-	private static final String CAMPO_FECHA_EMISION = "direccion";
-	private static final String CAMPO_BANCO = "telefono";
-	private static final String CAMPO_FECHA_COBRO = "celular";
-	private static final String CAMPO_RECIBIDO = "localidad";
-	private static final String CAMPO_TOTAL = "cuit";
+	private static final String CAMPO_NUMERO = "numero";
+	private static final String CAMPO_FECHA_EMISION = "emision";
+	private static final String CAMPO_BANCO = "banco";
+	private static final String CAMPO_FECHA_COBRO = "fechaCobro";
+	private static final String CAMPO_RECIBIDO = "recibo";
+	private static final String CAMPO_TOTAL = "total";
 	private static final String CAMPO_CLIENTE = "cliente";
 	private ChequeIFrame chequeIFrame;
 	private ReciboVerIFrame reciboVerIFrame;
@@ -248,7 +248,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 		if (txtNro == null) {
 			txtNro = new JTextField();
 			txtNro.setName(CAMPO_NUMERO);
-			txtNro.setDocument(new WTextFieldLimit(50));
+			txtNro.setDocument(new WTextFieldLimit(30));
 			txtNro.setBounds(141, 68, 145, 25);
 		}
 		return txtNro;
@@ -418,7 +418,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 
 	private WTextFieldDecimal getTextFieldDecimal() {
 		if (textFieldDecimal == null) {
-			textFieldDecimal = new WTextFieldDecimal(10, 2);
+			textFieldDecimal = new WTextFieldDecimal(7, 2);
 			textFieldDecimal.setBounds(141, 248, 92, 25);
 			textFieldDecimal.setName(CAMPO_TOTAL);
 		}

@@ -24,6 +24,7 @@ import ar.com.wuik.sistema.bo.NotaCreditoBO;
 import ar.com.wuik.sistema.entities.DetalleNotaCredito;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.NotaCredito;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.DetalleNotaCreditoFacturaModel;
 import ar.com.wuik.sistema.model.DetalleNotaCreditoModel;
@@ -367,10 +368,9 @@ public class NotaCreditoVistaIFrame extends WAbstractModelIFrame {
 
 		List<DetalleNotaCredito> detalles = notaCredito.getDetalles();
 		for (DetalleNotaCredito detalleNotaCredito : detalles) {
-			if (detalleNotaCredito.getIva().doubleValue() == 21.00) {
-				subtotalIVA21 = subtotalIVA21.add(detalleNotaCredito
-						.getTotalIVA());
-			} else if (detalleNotaCredito.getIva().doubleValue() == 10.50) {
+			if (detalleNotaCredito.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
+				subtotalIVA21 = subtotalIVA21.add(detalleNotaCredito.getTotalIVA());
+			} else if (detalleNotaCredito.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleNotaCredito
 						.getTotalIVA());
 			}

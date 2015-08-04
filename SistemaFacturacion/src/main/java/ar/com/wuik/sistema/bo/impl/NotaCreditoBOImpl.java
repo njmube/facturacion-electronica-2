@@ -310,10 +310,10 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		BigDecimal totalIVA105 = BigDecimal.ZERO;
 		List<DetalleNotaCredito> detalles = notaCredito.getDetalles();
 		for (DetalleNotaCredito detalleNotaCredito : detalles) {
-			if (detalleNotaCredito.getIva().doubleValue() == 21.00) {
+			if (detalleNotaCredito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_21)) {
 				subtotal21 = subtotal21.add(detalleNotaCredito.getSubtotal());
 				totalIVA21 = totalIVA21.add(detalleNotaCredito.getTotalIVA());
-			} else if (detalleNotaCredito.getIva().doubleValue() == 10.50) {
+			} else if (detalleNotaCredito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_105)) {
 				subtotal105 = subtotal105.add(detalleNotaCredito.getSubtotal());
 				totalIVA105 = totalIVA105.add(detalleNotaCredito.getTotalIVA());
 			}
@@ -406,7 +406,7 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 		DetalleNotaCreditoDTO detalleNotaCreditoDTO = null;
 		for (DetalleNotaCredito detalleNotaCredito : detalles) {
 			detalleNotaCreditoDTO = new DetalleNotaCreditoDTO();
-			detalleNotaCreditoDTO.setAlicuota(detalleNotaCredito.getIva());
+			detalleNotaCreditoDTO.setAlicuota(detalleNotaCredito.getTipoIVA().getImporte());
 			detalleNotaCreditoDTO.setCantidad(detalleNotaCredito.getCantidad());
 			detalleNotaCreditoDTO.setCodigo((null != detalleNotaCredito
 					.getProducto()) ? detalleNotaCredito.getProducto()
@@ -422,10 +422,10 @@ public class NotaCreditoBOImpl implements NotaCreditoBO {
 					.getComentario());
 			detallesDTO.add(detalleNotaCreditoDTO);
 
-			if (detalleNotaCredito.getIva().doubleValue() == 21.00) {
+			if (detalleNotaCredito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_21)) {
 				subtotalIVA21 = subtotalIVA21.add(detalleNotaCredito
 						.getTotalIVA());
-			} else if (detalleNotaCredito.getIva().doubleValue() == 10.50) {
+			} else if (detalleNotaCredito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleNotaCredito
 						.getTotalIVA());
 			}

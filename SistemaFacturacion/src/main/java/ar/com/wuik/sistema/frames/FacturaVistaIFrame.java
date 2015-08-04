@@ -23,6 +23,7 @@ import ar.com.wuik.sistema.bo.FacturaBO;
 import ar.com.wuik.sistema.entities.DetalleFactura;
 import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.Remito;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.DetalleFacturaModel;
 import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
@@ -363,9 +364,9 @@ public class FacturaVistaIFrame extends WAbstractModelIFrame {
 
 		List<DetalleFactura> detalles = factura.getDetalles();
 		for (DetalleFactura detalleFactura : detalles) {
-			if (detalleFactura.getIva().doubleValue() == 21.00) {
+			if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
 				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
-			} else if (detalleFactura.getIva().doubleValue() == 10.50) {
+			} else if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleFactura
 						.getTotalIVA());
 			}

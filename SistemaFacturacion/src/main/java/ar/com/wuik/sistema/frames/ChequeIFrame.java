@@ -147,8 +147,24 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new ChequeVerIFrame(
-									ChequeIFrame.this, selectedItem, idCliente));
+							ChequeBO chequeBO = AbstractFactory
+									.getInstance(ChequeBO.class);
+							try {
+								Cheque cheque = chequeBO.obtener(selectedItem);
+								if (!cheque.isEnUso()) {
+									addModalIFrame(new ChequeVerIFrame(
+											ChequeIFrame.this, selectedItem,
+											idCliente));
+								} else {
+									WTooltipUtils
+											.showMessage(
+													"No es posible Editar el Cheque porque está siendo utilizado.",
+													(JButton) e.getSource(),
+													MessageType.ALERTA);
+								}
+							} catch (BusinessException bexc) {
+								showGlobalErrorMsg(bexc.getMessage());
+							}
 						} else {
 							WTooltipUtils.showMessage(
 									"Debe seleccionar un Cheque",

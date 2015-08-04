@@ -40,9 +40,9 @@ public class Factura extends BaseEntity {
 	private String cae;
 	@Column(name = "ACTIVO")
 	private boolean activo = Boolean.TRUE;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "factura", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Remito> remitos;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "factura", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DetalleFactura> detalles;
 	@Column(name = "SUBTOTAL")
 	private BigDecimal subtotal;

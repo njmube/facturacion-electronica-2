@@ -322,10 +322,10 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		BigDecimal totalIVA105 = BigDecimal.ZERO;
 		List<DetalleNotaDebito> detalles = notaDebito.getDetalles();
 		for (DetalleNotaDebito detalleNotaDebito : detalles) {
-			if (detalleNotaDebito.getIva().doubleValue() == 21.00) {
+			if (detalleNotaDebito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_21)) {
 				subtotal21 = subtotal21.add(detalleNotaDebito.getSubtotal());
 				totalIVA21 = totalIVA21.add(detalleNotaDebito.getTotalIVA());
-			} else if (detalleNotaDebito.getIva().doubleValue() == 10.50) {
+			} else if (detalleNotaDebito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_105)) {
 				subtotal105 = subtotal105.add(detalleNotaDebito.getSubtotal());
 				totalIVA105 = totalIVA105.add(detalleNotaDebito.getTotalIVA());
 			}
@@ -419,7 +419,7 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 		DetalleNotaDebitoDTO detalleNotaDebitoDTO = null;
 		for (DetalleNotaDebito detalleNotaDebito : detalles) {
 			detalleNotaDebitoDTO = new DetalleNotaDebitoDTO();
-			detalleNotaDebitoDTO.setAlicuota(detalleNotaDebito.getIva());
+			detalleNotaDebitoDTO.setAlicuota(detalleNotaDebito.getTipoIVA().getImporte());
 			detalleNotaDebitoDTO.setCantidad(detalleNotaDebito.getCantidad());
 			detalleNotaDebitoDTO.setCodigo((null != detalleNotaDebito
 					.getProducto()) ? detalleNotaDebito.getProducto()
@@ -435,10 +435,10 @@ public class NotaDebitoBOImpl implements NotaDebitoBO {
 					.getComentario());
 			detallesDTO.add(detalleNotaDebitoDTO);
 
-			if (detalleNotaDebito.getIva().doubleValue() == 21.00) {
+			if (detalleNotaDebito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_21)) {
 				subtotalIVA21 = subtotalIVA21.add(detalleNotaDebito
 						.getTotalIVA());
-			} else if (detalleNotaDebito.getIva().doubleValue() == 10.50) {
+			} else if (detalleNotaDebito.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleNotaDebito
 						.getTotalIVA());
 			}

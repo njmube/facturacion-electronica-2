@@ -30,7 +30,7 @@ public class ProductoModel extends WTableModel<Producto> {
 		fila[2] = t.getTipoProducto().getNombre();
 		fila[3] = t.getUbicacion();
 		fila[4] = AppUtils.formatPeso(t.getCosto());
-		fila[5] = t.getIva() + " %";
+		fila[5] = t.getTipoIVA().getDescripcion();
 		fila[6] = AppUtils.formatPeso(t.getPrecio());
 		fila[7] = t.getId();
 		return fila;

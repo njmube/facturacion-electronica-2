@@ -31,7 +31,7 @@ public class Remito extends BaseEntity {
 	private Cliente cliente;
 	@Column(name = "ID_CLIENTE")
 	private Long idCliente;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "remito", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "remito", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DetalleRemito> detalles;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;

@@ -19,13 +19,17 @@ import javax.swing.border.TitledBorder;
 import ar.com.wuik.sistema.entities.DetalleFactura;
 import ar.com.wuik.sistema.entities.DetalleNotaCredito;
 import ar.com.wuik.sistema.entities.DetalleNotaDebito;
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.swing.components.WModel;
+import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
+
+import javax.swing.JComboBox;
 
 public class DetalleVerIFrame extends WAbstractModelIFrame {
 
@@ -47,10 +51,13 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 	private NotaCreditoVerIFrame notaCreditoVerIFrame;
 	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 	private JLabel lblIVA;
-	private WTextFieldDecimal txfIVA;
+	private JComboBox cmbTipoIva;
 	private JLabel lblPrecio;
 	private WTextFieldDecimal txfPrecio;
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public DetalleVerIFrame(FacturaVerIFrame ventaClienteVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
@@ -65,7 +72,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 		initializate("Nuevo Detalle");
 		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
 	}
-	
+
 	public DetalleVerIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
@@ -82,22 +89,30 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getBtnCancelar());
 		getContentPane().add(getBtnGuardar());
 		getContentPane().add(getPanelDatos());
+		loadTiposIva();
+	}
+
+	private void loadTiposIva() {
+
+		TipoIVAEnum[] tiposIVAEnum = TipoIVAEnum.values();
+		for (TipoIVAEnum tipoIVAEnum : tiposIVAEnum) {
+			getCmbTipoIva().addItem(
+					new WOption((long) tipoIVAEnum.getId(), tipoIVAEnum
+							.getDescripcion()));
+		}
+		getCmbTipoIva().setSelectedItem(
+				new WOption((long) TipoIVAEnum.IVA_21.getId()));
 	}
 
 	@Override
 	protected boolean validateModel(WModel model) {
 		String descripcion = model.getValue(CAMPO_DESCRIPCION);
-		String iva = model.getValue(CAMPO_IVA);
 		String precio = model.getValue(CAMPO_PRECIO);
 
 		List<String> messages = new ArrayList<String>();
 
 		if (WUtils.isEmpty(descripcion)) {
 			messages.add("Debe ingresar una Descripción");
-		}
-
-		if (WUtils.isEmpty(iva)) {
-			messages.add("Debe ingresar % de IVA");
 		}
 
 		if (WUtils.isEmpty(precio)) {
@@ -151,14 +166,14 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 		if (validateModel(model)) {
 
 			String descripcion = model.getValue(CAMPO_DESCRIPCION);
-			String iva = model.getValue(CAMPO_IVA);
+			WOption tipoIva = model.getValue(CAMPO_IVA);
 			String precio = model.getValue(CAMPO_PRECIO);
 
 			if (null != ventaClienteVerIFrame) {
 				DetalleFactura detalle = new DetalleFactura();
 				detalle.setCantidad(1);
 				detalle.setDetalle(descripcion);
-				detalle.setIva(WUtils.getValue(iva));
+				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
 				detalle.setPrecio(WUtils.getValue(precio));
 				detalle.setTemporalId(System.currentTimeMillis());
 				ventaClienteVerIFrame.addDetalle(detalle);
@@ -168,15 +183,15 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 				DetalleNotaCredito detalle = new DetalleNotaCredito();
 				detalle.setCantidad(1);
 				detalle.setDetalle(descripcion);
-				detalle.setIva(WUtils.getValue(iva));
+				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
 				detalle.setPrecio(WUtils.getValue(precio));
 				detalle.setTemporalId(System.currentTimeMillis());
 				notaCreditoVerIFrame.addDetalle(detalle);
-			} else if (null != notaDebitoVerIFrame){
+			} else if (null != notaDebitoVerIFrame) {
 				DetalleNotaDebito detalle = new DetalleNotaDebito();
 				detalle.setCantidad(1);
 				detalle.setDetalle(descripcion);
-				detalle.setIva(WUtils.getValue(iva));
+				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
 				detalle.setPrecio(WUtils.getValue(precio));
 				detalle.setTemporalId(System.currentTimeMillis());
 				notaDebitoVerIFrame.addDetalle(detalle);
@@ -195,7 +210,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 			panelDatos.add(getTxtDescripcion());
 			panelDatos.add(getLblDescripcion());
 			panelDatos.add(getLblIVA());
-			panelDatos.add(getTxfIVA());
+			panelDatos.add(getCmbTipoIva());
 			panelDatos.add(getLblPrecio());
 			panelDatos.add(getTxfPrecio());
 		}
@@ -231,13 +246,13 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 		return lblIVA;
 	}
 
-	private WTextFieldDecimal getTxfIVA() {
-		if (txfIVA == null) {
-			txfIVA = new WTextFieldDecimal(7, 3);
-			txfIVA.setName(CAMPO_IVA);
-			txfIVA.setBounds(148, 63, 125, 25);
+	private JComboBox getCmbTipoIva() {
+		if (cmbTipoIva == null) {
+			cmbTipoIva = new JComboBox();
+			cmbTipoIva.setName(CAMPO_IVA);
+			cmbTipoIva.setBounds(148, 63, 125, 25);
 		}
-		return txfIVA;
+		return cmbTipoIva;
 	}
 
 	private JLabel getLblPrecio() {

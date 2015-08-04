@@ -116,7 +116,17 @@ public class ProductoBOImpl implements ProductoBO {
 
 	@Override
 	public boolean estaEnUso(Long id) throws BusinessException {
-		throw new NotImplementedException();
+		try {
+			return productoDAO.estaEnUso(id);
+		} catch (DataAccessException daexc) {
+			LOGGER.error(
+					"estaEnUso() - Error al verificar el uso de Producto",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al verificar el uso de Producto");
+		} finally {
+			HibernateUtil.closeSession();
+		}
 	}
 
 	@Override

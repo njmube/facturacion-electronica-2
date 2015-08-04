@@ -47,7 +47,7 @@ public class FacturaBOImpl implements FacturaBO {
 	private ParametroDAO parametroDAO;
 
 	public FacturaBOImpl() {
-		facturacionService = AbstractFactory
+		facturacionService = AbstractFactory 
 				.getInstance(FacturacionService.class);
 		facturaDAO = ar.com.wuik.sistema.utils.AbstractFactory
 				.getInstance(FacturaDAO.class);
@@ -285,10 +285,10 @@ public class FacturaBOImpl implements FacturaBO {
 		BigDecimal totalIVA105 = BigDecimal.ZERO;
 		List<DetalleFactura> detalles = factura.getDetalles();
 		for (DetalleFactura detalleFactura : detalles) {
-			if (detalleFactura.getIva().doubleValue() == 21.00) {
+			if (detalleFactura.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_21)) {
 				subtotal21 = subtotal21.add(detalleFactura.getSubtotal());
 				totalIVA21 = totalIVA21.add(detalleFactura.getTotalIVA());
-			} else if (detalleFactura.getIva().doubleValue() == 10.50) {
+			} else if (detalleFactura.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_105)) {
 				subtotal105 = subtotal105.add(detalleFactura.getSubtotal());
 				totalIVA105 = totalIVA105.add(detalleFactura.getTotalIVA());
 			}
@@ -404,7 +404,7 @@ public class FacturaBOImpl implements FacturaBO {
 		DetalleFacturaDTO detalleFacturaDTO = null;
 		for (DetalleFactura detalleFactura : detalles) {
 			detalleFacturaDTO = new DetalleFacturaDTO();
-			detalleFacturaDTO.setAlicuota(detalleFactura.getIva());
+			detalleFacturaDTO.setAlicuota(detalleFactura.getTipoIVA().getImporte());
 			detalleFacturaDTO.setCantidad(detalleFactura.getCantidad());
 			detalleFacturaDTO
 					.setCodigo((null != detalleFactura.getProducto()) ? detalleFactura
@@ -418,9 +418,9 @@ public class FacturaBOImpl implements FacturaBO {
 			detalleFacturaDTO.setSubtotalConIVA(detalleFactura.getTotal());
 			detallesDTO.add(detalleFacturaDTO);
 
-			if (detalleFactura.getIva().doubleValue() == 21.00) {
+			if (detalleFactura.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_21)) {
 				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
-			} else if (detalleFactura.getIva().doubleValue() == 10.50) {
+			} else if (detalleFactura.getTipoIVA().equals(ar.com.wuik.sistema.entities.enums.TipoIVAEnum.IVA_105)) {
 				subtotalIVA105 = subtotalIVA105.add(detalleFactura
 						.getTotalIVA());
 			}

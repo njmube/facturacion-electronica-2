@@ -41,7 +41,7 @@ public class NotaDebito extends BaseEntity {
 	private String cae;
 	@Column(name = "ACTIVO")
 	private boolean activo = Boolean.TRUE;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "notaDebito", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "notaDebito", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DetalleNotaDebito> detalles;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "notas_debitos_facturas", joinColumns = { @JoinColumn(name = "ID_NOTA_DEBITO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) })

@@ -163,7 +163,7 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 								try {
 									boolean estaEnUso = productoBO
 											.estaEnUso(selectedItem);
-									if (estaEnUso) {
+									if (!estaEnUso) {
 										try {
 											productoBO.eliminar(selectedItem);
 											search();

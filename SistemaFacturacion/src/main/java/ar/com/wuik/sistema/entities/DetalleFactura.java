@@ -4,11 +4,15 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 
 @Entity
 @Table(name = "detalles_facturas")
@@ -21,8 +25,9 @@ public class DetalleFactura extends BaseEntity {
 	private Integer cantidad;
 	@Column(name = "PRECIO")
 	private BigDecimal precio;
-	@Column(name = "PORC_IVA")
-	private BigDecimal iva;
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "ID_TIPO_IVA")
+	private TipoIVAEnum tipoIVA;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_FACTURA", nullable = true)
 	private Factura factura;
@@ -55,14 +60,6 @@ public class DetalleFactura extends BaseEntity {
 		this.precio = precio;
 	}
 
-	public BigDecimal getIva() {
-		return iva;
-	}
-
-	public void setIva(BigDecimal iva) {
-		this.iva = iva;
-	}
-
 	public Factura getFactura() {
 		return factura;
 	}
@@ -76,7 +73,7 @@ public class DetalleFactura extends BaseEntity {
 	}
 
 	public BigDecimal getTotal() {
-		BigDecimal iva = getIva().add(new BigDecimal(100));
+		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
 		return getSubtotal().multiply(iva).divide(new BigDecimal(100));
 	}
 
@@ -102,6 +99,14 @@ public class DetalleFactura extends BaseEntity {
 
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
+	}
+
+	public TipoIVAEnum getTipoIVA() {
+		return tipoIVA;
+	}
+
+	public void setTipoIVA(TipoIVAEnum tipoIVA) {
+		this.tipoIVA = tipoIVA;
 	}
 
 }

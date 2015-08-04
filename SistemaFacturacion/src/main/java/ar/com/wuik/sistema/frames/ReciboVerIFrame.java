@@ -101,6 +101,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 		WModel model = populateModel();
 		if (null == idRecibo) {
+			this.recibo = new Recibo();
 			liquidaciones = new ArrayList<Liquidacion>();
 			try {
 				ParametroBO parametroBO = AbstractFactory
@@ -109,10 +110,10 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 				model.addValue(CAMPO_FECHA_EMISION,
 						WUtils.getStringFromDate(new Date()));
 				model.addValue(CAMPO_NUMERO, numero);
+				populateComponents(model);
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());
 			}
-			this.recibo = new Recibo();
 		} else {
 			initialize("Editar Recibo");
 			liquidaciones = new ArrayList<Liquidacion>();
@@ -124,6 +125,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 				model.addValue(CAMPO_NUMERO, recibo.getNumero());
 				model.addValue(CAMPO_EFECTIVO, obtenerPagoEfectivo());
 				model.addValue(CAMPO_OBSERVACIONES, recibo.getObservaciones());
+				populateComponents(model);
 				loadLiquidaciones();
 				refreshPagosCheques();
 			} catch (BusinessException bexc) {
@@ -131,7 +133,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			}
 
 		}
-		populateComponents(model);
+		
 	}
 
 	private BigDecimal obtenerPagoEfectivo() {
@@ -179,6 +181,10 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
 		BigDecimal total = recibo.getTotal();
+		BigDecimal totalLiquidacion = BigDecimal.ZERO;
+		for (Liquidacion liquidacion : liquidaciones) {
+			totalLiquidacion = totalLiquidacion.add(liquidacion.getTotal());
+		}
 
 		List<String> messages = new ArrayList<String>();
 
@@ -192,7 +198,11 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 		if (null == total || total.doubleValue() == 0) {
 			messages.add("Debe ingresar al menos monto en Efectivo o Cheque");
-		}
+		} 
+		
+		if (total.doubleValue() != totalLiquidacion.doubleValue()) {
+			messages.add("Total de la entrega debe coincidir con el total de las liquidaciones");
+		} 
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
 
@@ -621,7 +631,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 	private WTextFieldDecimal getTxfEfectivo() {
 		if (txfEfectivo == null) {
-			txfEfectivo = new WTextFieldDecimal(10, 2);
+			txfEfectivo = new WTextFieldDecimal(7, 2);
 			txfEfectivo.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {

@@ -35,6 +35,8 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ClienteVerIFrame extends WAbstractModelIFrame {
 	/**
@@ -68,6 +70,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JComboBox cmbLocalidad;
 	private JComboBox cmbTipoIva;
 	private JLabel lblTelefono;
+	private JLabel label;
 
 	/**
 	 * Create the frame.
@@ -222,6 +225,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getCmbLocalidad());
 			pnlBusqueda.add(getCmbTipoIva());
 			pnlBusqueda.add(getLblTelefono());
+			pnlBusqueda.add(getLabel());
 		}
 		return pnlBusqueda;
 	}
@@ -362,6 +366,25 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			} catch (java.text.ParseException exc) {
 			}
 			txfCuit = new JFormattedTextField(formatter);
+			txfCuit.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyReleased(KeyEvent e) {
+
+					if (txfCuit.getText().length() == 13
+							&& !txfCuit.getText().contains("#")) {
+						if (AppUtils.esValidoCUIT(txfCuit.getText())) {
+							label.setIcon(new ImageIcon(ClienteVerIFrame.class
+									.getResource("/icons/ok.png")));
+						} else {
+							label.setIcon(new ImageIcon(ClienteVerIFrame.class
+									.getResource("/icons/error.png")));
+						}
+					} else {
+						label.setIcon(null);
+					}
+
+				}
+			});
 			txfCuit.setName(CAMPO_CUIT);
 			txfCuit.setBounds(141, 59, 145, 25);
 		}
@@ -391,7 +414,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			txtCelular = new JTextField();
 			txtCelular.setName(CAMPO_CELULAR);
 			txtCelular.setBounds(141, 167, 145, 25);
-			txtCelular.setDocument(new WTextFieldLimit(50, Boolean.TRUE));
+			txtCelular.setDocument(new WTextFieldLimit(30));
 		}
 		return txtCelular;
 	}
@@ -418,7 +441,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (cmbTipoIva == null) {
 			cmbTipoIva = new JComboBox();
 			cmbTipoIva.setName(CAMPO_TIPO_IVA);
-			cmbTipoIva.setBounds(141, 239, 163, 25);
+			cmbTipoIva.setBounds(141, 239, 247, 25);
 		}
 		return cmbTipoIva;
 	}
@@ -432,4 +455,11 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		return lblTelefono;
 	}
 
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("");
+			label.setBounds(296, 59, 22, 25);
+		}
+		return label;
+	}
 }

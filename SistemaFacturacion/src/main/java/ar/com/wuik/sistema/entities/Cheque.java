@@ -36,7 +36,7 @@ public class Cheque extends BaseEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_CLIENTE", nullable = false, insertable = false, updatable = false)
 	private Cliente cliente;
-	@Formula(value = "(select IF(count(prc.ID) > 1, 1, 0) end from pagos_recibos_cheques prc where prc.ID = ID)")
+	@Formula(value = "(select IF(count(prc.ID) >= 1, 1, 0) end from pagos_recibos_cheques prc where prc.ID_CHEQUE = ID)")
 	private boolean enUso;
 
 	public String getNumero() {
