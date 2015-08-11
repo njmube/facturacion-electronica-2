@@ -80,7 +80,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_NRO_COMP, remito.getNumero());
 			model.addValue(CAMPO_ESTADO, remito.isActivo() ? "ACTIVO"
 					: "ANULADO");
-			model.addValue(CAMPO_FACTURA, (null !=  remito.getFactura()) ? remito.getFactura().getCae() : "");
+//			model.addValue(CAMPO_FACTURA, (null !=  remito.getFactura()) ? remito.getFactura().getCae() : "");
 			refreshDetalles();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());

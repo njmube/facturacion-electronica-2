@@ -47,9 +47,9 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Recibos");
-		setFrameIcon(new ImageIcon(
-				ReciboIFrame.class.getResource("/icons/recibos.png")));
-		setBounds(0, 0, 375, 519);
+		setFrameIcon(new ImageIcon( 
+				ReciboIFrame.class.getResource("/icons/recibo.png")));
+		setBounds(0, 0, 545, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCerrar());
@@ -72,7 +72,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Recibo> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(ReciboModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 11, 356, 429);
+			tablePanel.setBounds(10, 11, 523, 429);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -149,7 +149,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new NotaCreditoVistaIFrame(
+							addModalIFrame(new ReciboVistaIFrame(
 									selectedItem));
 						} else {
 							WTooltipUtils
@@ -187,7 +187,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 				}, "Imprimir", null);
 
 		if (isClienteActivo()) {
-			toolbarButtons.add(buttonAdd);
+//			toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
 			toolbarButtons.add(buttonDelete);
 			toolbarButtons.add(buttonImprimir);
@@ -208,7 +208,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(263, 451, 103, 25);
+			btnCerrar.setBounds(430, 451, 103, 25);
 		}
 		return btnCerrar;
 	}

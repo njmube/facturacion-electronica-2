@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.bo.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import ar.com.wuik.sistema.bo.ReciboBO;
 import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.dao.ReciboDAO;
 import ar.com.wuik.sistema.entities.Cliente;
+import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Recibo;
 import ar.com.wuik.sistema.exceptions.BusinessException;
@@ -113,22 +115,14 @@ public class ReciboBOImpl implements ReciboBO {
 		Cliente cliente = recibo.getCliente();
 		reciboDTO
 				.setClienteCondIVA(cliente.getCondicionIVA().getDenominacion());
-		reciboDTO.setClienteCuit(cliente.getCuit());
+		reciboDTO.setClienteCuit(cliente.getDocumento());
 		reciboDTO.setClienteDomicilio(cliente.getDireccion());
 		reciboDTO.setClienteRazonSocial(cliente.getRazonSocial());
 
-		// DATOS PROPIOS.
-		Parametro parametro = parametroDAO.getParametro();
-		reciboDTO.setRazonSocial(parametro.getRazonSocial());
-		reciboDTO.setCondIVA(parametro.getCondIVA());
-		reciboDTO.setCuit(parametro.getCuit());
-		reciboDTO.setDomicilio(parametro.getDomicilio());
-		reciboDTO.setIngBrutos(parametro.getIngresosBrutos());
-		reciboDTO.setInicioAct(parametro.getInicioActividad());
-
 		reciboDTO.setCheques(recibo.getPagosCheque());
 		reciboDTO.setEfectivo(recibo.getPagosEfectivo());
-		reciboDTO.setComprobantes(recibo.getFacturas(), recibo.getNotasDebito());
+		List<Comprobante> comprobantes = new ArrayList<Comprobante>(recibo.getComprobantes());
+		reciboDTO.setComprobantes(comprobantes);
 		reciboDTO.setCompNro(recibo.getNumero());
 		reciboDTO.setFechaEmision(recibo.getFecha());
 				

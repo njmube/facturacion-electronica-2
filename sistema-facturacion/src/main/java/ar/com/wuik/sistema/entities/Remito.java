@@ -20,8 +20,8 @@ import org.hibernate.annotations.Formula;
 public class Remito extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_FACTURA", nullable = true)
-	private Factura factura;
+	@JoinColumn(name = "ID_COMPROBANTE", nullable = true)
+	private Comprobante comprobante;
 	@Column(name = "FECHA")
 	private Date fecha;
 	@Column(name = "NUMERO")
@@ -45,12 +45,12 @@ public class Remito extends BaseEntity {
 		this.activo = Boolean.TRUE;
 	}
 
-	public Factura getFactura() {
-		return factura;
+	public Comprobante getComprobante() {
+		return comprobante;
 	}
 
-	public void setFactura(Factura factura) {
-		this.factura = factura;
+	public void setComprobante(Comprobante comprobante) {
+		this.comprobante = comprobante;
 	}
 
 	public Date getFecha() {

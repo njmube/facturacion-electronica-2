@@ -14,7 +14,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public ClienteModel() {
-		super(new String[] { "RAZÓN SOCIAL", "CUIT", "DIRECCIÓN", "TELÉFONO",
+		super(new String[] { "RAZÓN SOCIAL", "CUIT/CUIL/DNI", "DIRECCIÓN", "TELÉFONO",
 				"CELULAR", "LOCALIDAD", "COND. IVA", "ESTADO" });
 	}
 
@@ -26,7 +26,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 	@Override
 	protected Object[] getRow(Cliente t, Object[] fila) {
 		fila[0] = t.getRazonSocial();
-		fila[1] = t.getCuit();
+		fila[1] = t.getTipoDocumento() + " " + t.getDocumento();
 		fila[2] = t.getDireccion();
 		fila[3] = t.getTelefono();
 		fila[4] = t.getCelular();

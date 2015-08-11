@@ -28,9 +28,7 @@ import javax.swing.border.TitledBorder;
 import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.bo.ReciboBO;
 import ar.com.wuik.sistema.entities.Cheque;
-import ar.com.wuik.sistema.entities.Factura;
-import ar.com.wuik.sistema.entities.Liquidacion;
-import ar.com.wuik.sistema.entities.NotaDebito;
+import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.PagoReciboCheque;
 import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
 import ar.com.wuik.sistema.entities.Recibo;
@@ -80,13 +78,12 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblTotalLiq;
 	private JLabel lblTotal;
 	private JTextField txtTotalPesos;
-	private WTablePanel<Liquidacion> tblLiquidacion;
+	private WTablePanel<Comprobante> tblLiquidacion;
 	private WTablePanel<PagoReciboCheque> tblCheques;
 	private WTextFieldDecimal txfEfectivo;
 	private JLabel lblEfectivo;
 	private JLabel lblNro;
 	private JTextField txtNro;
-	private List<Liquidacion> liquidaciones;
 
 	/**
 	 * @wbp.parser.constructor
@@ -102,7 +99,6 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		WModel model = populateModel();
 		if (null == idRecibo) {
 			this.recibo = new Recibo();
-			liquidaciones = new ArrayList<Liquidacion>();
 			try {
 				ParametroBO parametroBO = AbstractFactory
 						.getInstance(ParametroBO.class);
@@ -116,7 +112,6 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			}
 		} else {
 			initialize("Editar Recibo");
-			liquidaciones = new ArrayList<Liquidacion>();
 			ReciboBO reciboBO = AbstractFactory.getInstance(ReciboBO.class);
 			try {
 				this.recibo = reciboBO.obtener(idRecibo);
@@ -126,14 +121,36 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 				model.addValue(CAMPO_EFECTIVO, obtenerPagoEfectivo());
 				model.addValue(CAMPO_OBSERVACIONES, recibo.getObservaciones());
 				populateComponents(model);
-				loadLiquidaciones();
+				refreshLiquidaciones();
 				refreshPagosCheques();
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());
 			}
 
 		}
-		
+
+	}
+
+	public ReciboVerIFrame(Long idCliente) {
+
+		initialize("Nuevo Recibo");
+
+		this.idCliente = idCliente;
+
+		WModel model = populateModel();
+		this.recibo = new Recibo();
+		try {
+			ParametroBO parametroBO = AbstractFactory
+					.getInstance(ParametroBO.class);
+			String numero = parametroBO.getNroRecibo();
+			model.addValue(CAMPO_FECHA_EMISION,
+					WUtils.getStringFromDate(new Date()));
+			model.addValue(CAMPO_NUMERO, numero);
+			populateComponents(model);
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+
 	}
 
 	private BigDecimal obtenerPagoEfectivo() {
@@ -145,29 +162,11 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		return BigDecimal.ZERO;
 	}
 
-	private void loadLiquidaciones() {
-		Set<Factura> facturas = recibo.getFacturas();
-		Set<NotaDebito> notasDebito = recibo.getNotasDebito();
-
-		if (WUtils.isNotEmpty(facturas)) {
-			for (Factura factura : facturas) {
-				liquidaciones.add(new Liquidacion(factura));
-			}
-		}
-
-		if (WUtils.isNotEmpty(notasDebito)) {
-			for (NotaDebito notaDebito : notasDebito) {
-				liquidaciones.add(new Liquidacion(notaDebito));
-			}
-		}
-		refreshLiquidaciones();
-	}
-
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				ReciboVerIFrame.class.getResource("/icons/recibos.png")));
+				ReciboVerIFrame.class.getResource("/icons/recibo.png")));
 		setBounds(0, 0, 926, 505);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -182,8 +181,9 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
 		BigDecimal total = recibo.getTotal();
 		BigDecimal totalLiquidacion = BigDecimal.ZERO;
-		for (Liquidacion liquidacion : liquidaciones) {
-			totalLiquidacion = totalLiquidacion.add(liquidacion.getTotal());
+		Set<Comprobante> comprobantes = recibo.getComprobantes();
+		for (Comprobante comprobante : comprobantes) {
+			totalLiquidacion = totalLiquidacion.add(comprobante.getTotal());
 		}
 
 		List<String> messages = new ArrayList<String>();
@@ -192,17 +192,17 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			messages.add("Debe ingresar una Fecha de Emisión");
 		}
 
-		if (WUtils.isEmpty(liquidaciones)) {
+		if (WUtils.isEmpty(comprobantes)) {
 			messages.add("Debe seleccionar al menos un Comprobante a liquidar");
 		}
 
 		if (null == total || total.doubleValue() == 0) {
 			messages.add("Debe ingresar al menos monto en Efectivo o Cheque");
-		} 
-		
+		}
+
 		if (total.doubleValue() != totalLiquidacion.doubleValue()) {
 			messages.add("Total de la entrega debe coincidir con el total de las liquidaciones");
-		} 
+		}
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
 
@@ -286,8 +286,6 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 							pagoEfectivo.setTotal(WUtils.getValue(efectivo));
 						}
 
-						populateLiquidaciones(recibo, liquidaciones);
-
 						try {
 							ReciboBO reciboBO = AbstractFactory
 									.getInstance(ReciboBO.class);
@@ -302,7 +300,9 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 								showGlobalErrorMsg(rexc.getMessage());
 							}
 							hideFrame();
-							reciboIFrame.search();
+							if (null != reciboIFrame) {
+								reciboIFrame.search();
+							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						}
@@ -311,18 +311,6 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			});
 		}
 		return btnGuardar;
-	}
-
-	protected void populateLiquidaciones(Recibo recibo,
-			List<Liquidacion> liquidaciones) {
-		for (Liquidacion liquidacion : liquidaciones) {
-			if (null != liquidacion.getFactura()) {
-				recibo.getFacturas().add(liquidacion.getFactura());
-			}
-			if (null != liquidacion.getNotaDebito()) {
-				recibo.getNotasDebito().add(liquidacion.getNotaDebito());
-			}
-		}
 	}
 
 	@Override
@@ -484,8 +472,9 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new SeleccionarCompLiquidacionIFrame(
-								ReciboVerIFrame.this, liquidaciones, idCliente));
+						addModalIFrame(new SeleccionarComprobanteIFrame(
+								ReciboVerIFrame.this, getIdsComprobantes(),
+								idCliente));
 					}
 				}, "Agregar", null);
 		WToolbarButton buttonEliminar = new WToolbarButton(
@@ -508,8 +497,9 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 											JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
 								for (Long selectedItem : selectedItems) {
-									Liquidacion liquidacion = getLiquidacionById(selectedItem);
-									liquidaciones.remove(liquidacion);
+									Comprobante comprobante = getComprobanteById(selectedItem);
+									recibo.getComprobantes()
+											.remove(comprobante);
 								}
 								refreshLiquidaciones();
 							}
@@ -528,10 +518,10 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		return toolbarButtons;
 	}
 
-	protected Liquidacion getLiquidacionById(Long selectedItem) {
-		for (Liquidacion liquidacion : liquidaciones) {
-			if (liquidacion.getId().equals(selectedItem)) {
-				return liquidacion;
+	protected Comprobante getComprobanteById(Long selectedItem) {
+		for (Comprobante comprobante : recibo.getComprobantes()) {
+			if (comprobante.getId().equals(selectedItem)) {
+				return comprobante;
 			}
 		}
 		return null;
@@ -583,7 +573,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		return txtTotalPesos;
 	}
 
-	private WTablePanel<Liquidacion> getTblLiquidacion() {
+	private WTablePanel<Comprobante> getTblLiquidacion() {
 		if (tblLiquidacion == null) {
 			tblLiquidacion = new WTablePanel(DetalleLiquidacionModel.class,
 					"Liquidación");
@@ -622,7 +612,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 		// TOTAL LIQUIDACION
 		BigDecimal totalLiquidacion = BigDecimal.ZERO;
-		for (Liquidacion liquidacion : liquidaciones) {
+		for (Comprobante liquidacion : recibo.getComprobantes()) {
 			totalLiquidacion = totalLiquidacion.add(liquidacion.getTotal());
 		}
 		getTxtTotalLiquidacion()
@@ -701,13 +691,21 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		calcularTotales();
 	}
 
-	public void addLiquidaciones(List<Liquidacion> liquidaciones) {
-		this.liquidaciones.addAll(liquidaciones);
+	public void addComprobantes(List<Comprobante> comprobantes) {
+		this.recibo.getComprobantes().addAll(comprobantes);
 		refreshLiquidaciones();
 	}
 
 	protected void refreshLiquidaciones() {
-		getTblLiquidacion().addData(this.liquidaciones);
+		getTblLiquidacion().addData(this.recibo.getComprobantes());
 		calcularTotales();
+	}
+
+	private List<Long> getIdsComprobantes() {
+		List<Long> ids = new ArrayList<Long>();
+		for (Comprobante comprobante : recibo.getComprobantes()) {
+			ids.add(comprobante.getId());
+		}
+		return ids;
 	}
 }

@@ -2,10 +2,15 @@ package ar.com.wuik.sistema.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import ar.com.wuik.sistema.entities.enums.CondicionIVA;
+import ar.com.wuik.sistema.entities.enums.TipoDocumento;
 
 @Entity
 @Table(name = "clientes")
@@ -24,15 +29,16 @@ public class Cliente extends BaseEntity {
 	private Localidad localidad;
 	@Column(name = "ID_LOCALIDAD")
 	private Long idLocalidad;
-	@Column(name = "CUIT")
-	private String cuit;
+	@Column(name = "DOCUMENTO")
+	private String documento;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "TIPO_DOC")
+	private TipoDocumento tipoDocumento;
 	@Column(name = "ACTIVO")
 	private boolean activo = Boolean.TRUE;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_COND_IVA", nullable = true, insertable = false, updatable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(name = "COND_IVA")
 	private CondicionIVA condicionIVA;
-	@Column(name = "ID_COND_IVA")
-	private Long idCondicionIVA;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -82,14 +88,6 @@ public class Cliente extends BaseEntity {
 		this.idLocalidad = idLocalidad;
 	}
 
-	public String getCuit() {
-		return cuit;
-	}
-
-	public void setCuit(String cuit) {
-		this.cuit = cuit;
-	}
-
 	public boolean isActivo() {
 		return activo;
 	}
@@ -106,12 +104,20 @@ public class Cliente extends BaseEntity {
 		this.condicionIVA = condicionIVA;
 	}
 
-	public Long getIdCondicionIVA() {
-		return idCondicionIVA;
+	public String getDocumento() {
+		return documento;
 	}
 
-	public void setIdCondicionIVA(Long idCondicionIVA) {
-		this.idCondicionIVA = idCondicionIVA;
+	public void setDocumento(String documento) {
+		this.documento = documento;
+	}
+
+	public TipoDocumento getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(TipoDocumento tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
 	}
 
 }

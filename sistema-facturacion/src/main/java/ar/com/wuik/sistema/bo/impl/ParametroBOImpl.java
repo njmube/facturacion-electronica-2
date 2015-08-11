@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.entities.Parametro;
+import ar.com.wuik.sistema.entities.enums.TipoComprobante;
+import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
@@ -67,49 +69,17 @@ public class ParametroBOImpl implements ParametroBO {
 	}
 
 	@Override
-	public String getNroFactura() throws BusinessException {
+	public String getNroComprobante(TipoComprobante tipoComprobante,
+			TipoLetraComprobante tipoLetraComprobante) throws BusinessException {
 		try {
-			Parametro parametro = parametroDAO.getById(1L);
-			return WUtils.leftPadding(parametro.getNroFactura() + "", 8, "0");
-		} catch (DataAccessException daexc) {
-			LOGGER.error("getNroFactura() - Error al obtener Nro. de Factura",
-					daexc);
-			throw new BusinessException(daexc,
-					"Error al obtener Nro. de Factura");
-		} finally {
-			HibernateUtil.closeSession();
-		}
-	}
-
-	@Override
-	public String getNroNotaCredito() throws BusinessException {
-		try {
-			Parametro parametro = parametroDAO.getById(1L);
-			return WUtils.leftPadding(parametro.getNroNotaCredito() + "", 8,
-					"0");
+			return parametroDAO.obtenerNroComprobante(tipoComprobante,
+					tipoLetraComprobante);
 		} catch (DataAccessException daexc) {
 			LOGGER.error(
-					"getNroNotaCredito() - Error al obtener Nro. Nota de Crédito",
+					"getNroComprobante() - Error al obtener Nro. de Comprobante",
 					daexc);
 			throw new BusinessException(daexc,
-					"Error al obtener Nro. Nota de Crédito");
-		} finally {
-			HibernateUtil.closeSession();
-		}
-	}
-
-	@Override
-	public String getNroNotaDebito() throws BusinessException {
-		try {
-			Parametro parametro = parametroDAO.getById(1L);
-			return WUtils
-					.leftPadding(parametro.getNroNotaDebito() + "", 8, "0");
-		} catch (DataAccessException daexc) {
-			LOGGER.error(
-					"getNroNotaDebito() - Error al obtener Nro. Nota de Débito",
-					daexc);
-			throw new BusinessException(daexc,
-					"Error al obtener Nro. Nota de Débito");
+					"Error al obtener Nro. de Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}

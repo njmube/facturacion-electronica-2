@@ -78,7 +78,15 @@ public final class WTable<T> extends JTable {
 			}
 		}
 		resizeColumns();
+		resizeRows();
 //		showColumnsSize();
+	}
+
+	/**
+	 * //TODO: Describir el metodo resizeRows
+	 */
+	private void resizeRows() {
+		setRowHeight(25);
 	}
 
 	private void showColumnsSize() {

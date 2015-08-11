@@ -19,7 +19,7 @@ import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
 import ar.com.wuik.sistema.bo.AfipBO;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.model.ComprobanteModel;
+import ar.com.wuik.sistema.model.ComprobanteConsultaModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
@@ -49,7 +49,7 @@ public class ConsultaComprobanteIFrame extends WAbstractModelIFrame implements
 		setTitle("Ventas");
 		setFrameIcon(new ImageIcon(
 				ConsultaComprobanteIFrame.class
-						.getResource("/icons/facturas.png")));
+						.getResource("/icons/comprobantes.png")));
 		setBounds(0, 0, 1000, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -93,7 +93,7 @@ public class ConsultaComprobanteIFrame extends WAbstractModelIFrame implements
 
 	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(ComprobanteModel.class, Boolean.FALSE);
+			tablePanel = new WTablePanel(ComprobanteConsultaModel.class, Boolean.FALSE);
 			tablePanel.setBounds(10, 76, 978, 364);
 		}
 		return tablePanel;

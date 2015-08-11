@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -186,6 +187,11 @@ public abstract class WAbstractModelIFrame extends WAbstractIFrame {
 						JSpinner jC = (JSpinner) component;
 						if (null != value) {
 							jC.setValue((Integer) value);
+						}
+					} else if (component instanceof JLabel) {
+						JLabel jC = (JLabel) component;
+						if (null != value) {
+							jC.setText(value.toString());
 						}
 					} else if (component instanceof JSlider) {
 						JSlider jC = (JSlider) component;

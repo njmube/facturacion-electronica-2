@@ -158,7 +158,7 @@ public class MainFrame extends WApplication {
 			itemBackup = new WMenuItemSecurity("Respaldo de Sistema", null,
 					new ImageIcon(
 							MainFrame.class
-									.getResource("/icons32/proveedores.png")));
+									.getResource("/icons32/backup.png")));
 			itemBackup.setVisible(Boolean.TRUE);
 			itemBackup.addActionListener(new ActionListener() {
 				@Override
@@ -172,10 +172,10 @@ public class MainFrame extends WApplication {
 
 	private WMenuItemSecurity getItemParametro() {
 		if (null == itemParametro) {
-			itemParametro = new WMenuItemSecurity("Parámetros", null,
+			itemParametro = new WMenuItemSecurity("Paramétricos", null,
 					new ImageIcon(
 							MainFrame.class
-									.getResource("/icons32/parametros.png")));
+									.getResource("/icons32/parametricos.png")));
 			itemParametro.setVisible(Boolean.TRUE);
 			itemParametro.addActionListener(new ActionListener() {
 
@@ -193,7 +193,7 @@ public class MainFrame extends WApplication {
 			itemConsultaComprobantes = new WMenuItemSecurity(
 					"Consulta Comprobantes", null, new ImageIcon(
 							MainFrame.class
-									.getResource("/icons32/parametros.png")));
+									.getResource("/icons32/comprobantes.png")));
 			itemConsultaComprobantes.setVisible(Boolean.TRUE);
 			itemConsultaComprobantes.addActionListener(new ActionListener() {
 
@@ -262,7 +262,7 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity getItemCheque() {
 		if (null == itemCheque) {
 			itemCheque = new WMenuItemSecurity("Cheques", null, new ImageIcon(
-					MainFrame.class.getResource("/icons32/cheque.png")));
+					MainFrame.class.getResource("/icons32/cheques.png")));
 			itemCheque.setVisible(Boolean.TRUE);
 			itemCheque.addActionListener(new ActionListener() {
 
@@ -276,6 +276,8 @@ public class MainFrame extends WApplication {
 	}
 
 	protected void addMenuItems(JMenuBar menu, WMenuSecurity menuArchivo) {
+		menuArchivo.setIcon(new ImageIcon(WCalendarIFrame.class
+				.getResource("/icons32/home.png")));
 		menuArchivo.add(getItemCerrarSesion(), menuArchivo.getComponentCount());
 		menuArchivo.add(getItemEditarDatosPersonales(),
 				menuArchivo.getComponentCount());
@@ -297,9 +299,9 @@ public class MainFrame extends WApplication {
 
 	protected WMenuSecurity getMenuAdmParametricas() {
 		if (null == menuAdmParametricas) {
-			menuAdmParametricas = new WMenuSecurity("Paramétricas",
+			menuAdmParametricas = new WMenuSecurity("Parámetros",
 					new ImageIcon(WCalendarIFrame.class
-							.getResource("/icons32/parametricas.png")),
+							.getResource("/icons32/parametros.png")),
 					getItemParametro(), getItemSubdiarioIVA(),
 					getItemConsultaComprobantes(), getItemUsuario());
 		}

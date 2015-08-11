@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Composite;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -79,7 +80,11 @@ public abstract class WAbstractIFrame extends JInternalFrame {
 	public void showFrame() {
 		WFrameUtils.resizeComponents( this );
 		setVisible( Boolean.TRUE );
-		setLocation( 0, 0 );
+//		setLocation( 0, 0 );
+		Dimension desktopSize = getDesktopPane().getSize();
+		Dimension jInternalFrameSize = getSize();
+		setLocation((desktopSize.width - jInternalFrameSize.width)/2,
+		    (desktopSize.height- jInternalFrameSize.height)/10);
 		try {
 			setClosed( Boolean.FALSE );
 			setSelected( Boolean.TRUE );

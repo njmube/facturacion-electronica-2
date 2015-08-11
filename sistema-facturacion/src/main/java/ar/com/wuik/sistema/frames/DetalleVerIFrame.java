@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,9 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.entities.DetalleFactura;
-import ar.com.wuik.sistema.entities.DetalleNotaCredito;
-import ar.com.wuik.sistema.entities.DetalleNotaDebito;
+import ar.com.wuik.sistema.entities.DetalleComprobante;
 import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
@@ -28,8 +27,6 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
-
-import javax.swing.JComboBox;
 
 public class DetalleVerIFrame extends WAbstractModelIFrame {
 
@@ -46,10 +43,8 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_IVA = "iva";
 	private static final String CAMPO_PRECIO = "precio";
 	private static final String CAMPO_DESCRIPCION = "descripcion";
-	private FacturaVerIFrame ventaClienteVerIFrame;
+	private ComprobanteVerIFrame comprobanteVerIFrame;
 	private RemitoClienteVerIFrame remitoClienteVerIFrame;
-	private NotaCreditoVerIFrame notaCreditoVerIFrame;
-	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 	private JLabel lblIVA;
 	private JComboBox cmbTipoIva;
 	private JLabel lblPrecio;
@@ -58,24 +53,14 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public DetalleVerIFrame(FacturaVerIFrame ventaClienteVerIFrame) {
+	public DetalleVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame) {
 		initializate("Nuevo Detalle");
-		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
+		this.comprobanteVerIFrame = comprobanteVerIFrame;
 	}
 
 	public DetalleVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
-	}
-
-	public DetalleVerIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame) {
-		initializate("Nuevo Detalle");
-		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
-	}
-
-	public DetalleVerIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame) {
-		initializate("Nuevo Detalle");
-		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
 	}
 
 	private void initializate(String title) {
@@ -169,32 +154,16 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 			WOption tipoIva = model.getValue(CAMPO_IVA);
 			String precio = model.getValue(CAMPO_PRECIO);
 
-			if (null != ventaClienteVerIFrame) {
-				DetalleFactura detalle = new DetalleFactura();
+			if (null != comprobanteVerIFrame) {
+				DetalleComprobante detalle = new DetalleComprobante();
 				detalle.setCantidad(1);
 				detalle.setDetalle(descripcion);
 				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
 				detalle.setPrecio(WUtils.getValue(precio));
 				detalle.setTemporalId(System.currentTimeMillis());
-				ventaClienteVerIFrame.addDetalle(detalle);
+				comprobanteVerIFrame.addDetalle(detalle);
 			} else if (null != remitoClienteVerIFrame) {
 				remitoClienteVerIFrame.search();
-			} else if (null != notaCreditoVerIFrame) {
-				DetalleNotaCredito detalle = new DetalleNotaCredito();
-				detalle.setCantidad(1);
-				detalle.setDetalle(descripcion);
-				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
-				detalle.setPrecio(WUtils.getValue(precio));
-				detalle.setTemporalId(System.currentTimeMillis());
-				notaCreditoVerIFrame.addDetalle(detalle);
-			} else if (null != notaDebitoVerIFrame) {
-				DetalleNotaDebito detalle = new DetalleNotaDebito();
-				detalle.setCantidad(1);
-				detalle.setDetalle(descripcion);
-				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
-				detalle.setPrecio(WUtils.getValue(precio));
-				detalle.setTemporalId(System.currentTimeMillis());
-				notaDebitoVerIFrame.addDetalle(detalle);
 			}
 			hideFrame();
 		}

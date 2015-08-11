@@ -20,6 +20,7 @@ import FEV1.dif.afip.gov.ar.FECompConsultaReq;
 import FEV1.dif.afip.gov.ar.FECompConsultaResponse;
 import FEV1.dif.afip.gov.ar.FERecuperaLastCbteResponse;
 import FEV1.dif.afip.gov.ar.Obs;
+import FEV1.dif.afip.gov.ar.Tributo;
 import FEV1.dif.afip.gov.ar.entities.AlicuotaIVA;
 import FEV1.dif.afip.gov.ar.entities.Comprobante;
 import FEV1.dif.afip.gov.ar.entities.ComprobanteAsociado;
@@ -28,6 +29,8 @@ import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
 import FEV1.dif.afip.gov.ar.entities.TipoComprobanteEnum;
 import FEV1.dif.afip.gov.ar.entities.TipoConceptoEnum;
 import FEV1.dif.afip.gov.ar.entities.TipoDocumentoEnum;
+import FEV1.dif.afip.gov.ar.entities.TipoTributoEnum;
+import FEV1.dif.afip.gov.ar.entities.TributoComprobante;
 import FEV1.dif.afip.gov.ar.utils.ErrorsUtil;
 import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
 import FEV1.dif.afip.gov.ar.utils.Utils;
@@ -58,7 +61,13 @@ public class ServiceRequestParser {
 		detalle.setDocTipo(comprobante.getDocTipo().getId());
 		detalle.setImpIVA(comprobante.getImporteIVA().doubleValue());
 		detalle.setImpNeto(comprobante.getImporteSubtotal().doubleValue());
-		detalle.setImpTotal(comprobante.getImporteTotal().doubleValue());
+		
+		BigDecimal total = comprobante.getImporteTotal();
+		if (null != comprobante.getImporteTributos()) {
+			detalle.setImpTrib(comprobante.getImporteTributos().doubleValue());
+			total = total.add(comprobante.getImporteTributos());	
+		}
+		detalle.setImpTotal(total.doubleValue());
 		detalle.setMonId(comprobante.getTipoMoneda().getId());
 		detalle.setMonCotiz((null != comprobante.getCotizacion()) ? comprobante
 				.getCotizacion().doubleValue() : comprobante.getTipoMoneda()
@@ -78,6 +87,26 @@ public class ServiceRequestParser {
 				cbtesAsoc.add(cbteAsoc);
 			}
 			detalle.setCbtesAsoc(cbtesAsoc.toArray(new CbteAsoc[0]));
+		}
+
+		// Otros Tributos
+		List<TributoComprobante> tributosComprobante = comprobante
+				.getTributos();
+		if (null != tributosComprobante && !tributosComprobante.isEmpty()) {
+			List<Tributo> tributos = new ArrayList<Tributo>();
+			Tributo tributo = null;
+			for (TributoComprobante tributoComprobante : tributosComprobante) {
+				tributo = new Tributo();
+				tributo.setAlic(tributoComprobante.getAlicuota().doubleValue());
+				tributo.setBaseImp(tributoComprobante.getBaseImporte()
+						.doubleValue());
+				tributo.setDesc(tributoComprobante.getDetalle());
+				tributo.setId((short) TipoTributoEnum.OTRO.getId());
+				tributo.setImporte(tributoComprobante.getImporte()
+						.doubleValue());
+				tributos.add(tributo);
+			}
+			detalle.setTributos(tributos.toArray(new Tributo[0]));
 		}
 
 		// Alicuotas IVA.
@@ -184,7 +213,8 @@ public class ServiceRequestParser {
 			comprobante.setDocNro(datosComprobante.getDocNro());
 			comprobante.setImporteIVA(BigDecimal.valueOf(datosComprobante
 					.getImpIVA()));
-			comprobante.setTipoConcepto(TipoConceptoEnum.fromValue(datosComprobante.getConcepto()));
+			comprobante.setTipoConcepto(TipoConceptoEnum
+					.fromValue(datosComprobante.getConcepto()));
 			comprobante.setImporteSubtotal(BigDecimal.valueOf(
 					datosComprobante.getImpNeto()).subtract(
 					BigDecimal.valueOf(datosComprobante.getImpIVA())));

@@ -7,6 +7,7 @@ import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.ReciboFilter;
 import ar.com.wuik.sistema.reportes.entities.ReciboDTO;
 
+
 public interface ReciboBO {
 
 	Recibo obtener(Long id) throws BusinessException;

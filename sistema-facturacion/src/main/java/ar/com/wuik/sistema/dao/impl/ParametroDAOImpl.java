@@ -5,6 +5,8 @@ import org.hibernate.HibernateException;
 
 import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.entities.Parametro;
+import ar.com.wuik.sistema.entities.enums.TipoComprobante;
+import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 
 public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
@@ -39,74 +41,6 @@ public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
 	}
 
 	@Override
-	public void incrementarNroFactura() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			Long nroFactura = parametro.getNroFactura();
-			parametro.setNroFactura(nroFactura + 1);
-			getSession().saveOrUpdate(parametro);
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
-	public void incrementarNroNotaCredito() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			Long nroNotaCredito = parametro.getNroNotaCredito();
-			parametro.setNroNotaCredito(nroNotaCredito + 1);
-			getSession().saveOrUpdate(parametro);
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
-	public void incrementarNroNotaDebito() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			Long nroNotaDebito = parametro.getNroNotaDebito();
-			parametro.setNroNotaDebito(nroNotaDebito + 1);
-			getSession().saveOrUpdate(parametro);
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
-	public String obtenerNroFactura() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getNroFactura() + "", 8, "0");
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
-	public String obtenerNroNotaCredito() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getNroNotaCredito() + "", 8,
-					"0");
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
-	public String obtenerNroNotaDebito() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getNroNotaDebito() + "", 8,
-					"0");
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
 	public Parametro getParametro() throws DataAccessException {
 		try {
 			return getById(1L);
@@ -116,49 +50,79 @@ public class ParametroDAOImpl extends GenericCrudHBDAOImpl<Parametro> implements
 	}
 
 	@Override
-	public String obtenerPtoVenta() throws DataAccessException {
+	public void incrementarNroComprobante(TipoComprobante tipoComprobante,
+			TipoLetraComprobante tipoLetraComprobante)
+			throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0");
+
+			switch (tipoComprobante) {
+			case FACTURA:
+				if (tipoLetraComprobante.equals(TipoLetraComprobante.A)) {
+					parametro.setNroFacturaA(parametro.getNroFacturaA() + 1);
+				} else {
+					parametro.setNroFacturaB(parametro.getNroFacturaB() + 1);
+				}
+				break;
+			case NOTA_CREDITO:
+				if (tipoLetraComprobante.equals(TipoLetraComprobante.A)) {
+					parametro
+							.setNroNotaCreditoA(parametro.getNroNotaCreditoA() + 1);
+				} else {
+					parametro
+							.setNroNotaCreditoB(parametro.getNroNotaCreditoB() + 1);
+				}
+				break;
+			case NOTA_DEBITO:
+				if (tipoLetraComprobante.equals(TipoLetraComprobante.A)) {
+					parametro
+							.setNroNotaDebitoA(parametro.getNroNotaDebitoA() + 1);
+				} else {
+					parametro
+							.setNroNotaDebitoB(parametro.getNroNotaDebitoB() + 1);
+				}
+				break;
+			}
+			getSession().saveOrUpdate(parametro);
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}
 	}
 
 	@Override
-	public String obtenerNroFacturaFormato() throws DataAccessException {
+	public String obtenerNroComprobante(TipoComprobante tipoComprobante,
+			TipoLetraComprobante tipoLetraComprobante)
+			throws DataAccessException {
 		try {
 			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0")
-					+ "-"
-					+ StringUtils.leftPad(parametro.getNroFactura() + "", 8,
-							"0");
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
 
-	@Override
-	public String obtenerNroNotaCreditoFormato() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0")
-					+ "-"
-					+ StringUtils.leftPad(parametro.getNroNotaCredito() + "", 8,
-							"0");
-		} catch (HibernateException hexc) {
-			throw new DataAccessException(hexc);
-		}
-	}
-
-	@Override
-	public String obtenerNroNotaDebitoFormato() throws DataAccessException {
-		try {
-			Parametro parametro = getById(1L);
-			return StringUtils.leftPad(parametro.getPtoVenta() + "", 4, "0")
-					+ "-"
-					+ StringUtils.leftPad(parametro.getNroNotaDebito() + "", 8,
-							"0");
+			switch (tipoComprobante) {
+			case FACTURA:
+				if (tipoLetraComprobante.equals(TipoLetraComprobante.A)) {
+					return StringUtils.leftPad(parametro.getNroFacturaA() + "",
+							8, "0");
+				} else {
+					return StringUtils.leftPad(parametro.getNroFacturaB() + "",
+							8, "0");
+				}
+			case NOTA_CREDITO:
+				if (tipoLetraComprobante.equals(TipoLetraComprobante.A)) {
+					return StringUtils.leftPad(parametro.getNroNotaCreditoA()
+							+ "", 8, "0");
+				} else {
+					return StringUtils.leftPad(parametro.getNroNotaCreditoB()
+							+ "", 8, "0");
+				}
+			case NOTA_DEBITO:
+				if (tipoLetraComprobante.equals(TipoLetraComprobante.A)) {
+					return StringUtils.leftPad(parametro.getNroNotaDebitoA()
+							+ "", 8, "0");
+				} else {
+					return StringUtils.leftPad(parametro.getNroNotaDebitoB()
+							+ "", 8, "0");
+				}
+			}
+			return null;
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}

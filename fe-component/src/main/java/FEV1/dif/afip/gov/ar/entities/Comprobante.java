@@ -15,9 +15,11 @@ public final class Comprobante {
 	private BigDecimal importeTotal;
 	private BigDecimal importeSubtotal;
 	private BigDecimal importeIVA;
+	private BigDecimal importeTributos;
 	private TipoMonedaEnum tipoMoneda;
 	private BigDecimal cotizacion;
 	private List<AlicuotaIVA> alicuotas;
+	private List<TributoComprobante> tributos;
 	private List<ComprobanteAsociado> comprobantesAsociados;
 	private List<Item> items;
 
@@ -199,6 +201,22 @@ public final class Comprobante {
 
 	public void setFechaVtoCAE(Date fechaVtoCAE) {
 		this.fechaVtoCAE = fechaVtoCAE;
+	}
+
+	public List<TributoComprobante> getTributos() {
+		return tributos;
+	}
+
+	public void setTributos(List<TributoComprobante> tributos) {
+		this.tributos = tributos;
+	}
+
+	public BigDecimal getImporteTributos() {
+		return importeTributos;
+	}
+
+	public void setImporteTributos(BigDecimal importeTributos) {
+		this.importeTributos = importeTributos;
 	}
 
 }

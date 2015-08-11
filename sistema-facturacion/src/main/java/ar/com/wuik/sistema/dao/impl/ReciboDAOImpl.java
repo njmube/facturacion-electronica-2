@@ -23,8 +23,8 @@ public class ReciboDAOImpl extends GenericCrudHBDAOImpl<Recibo> implements
 	public Recibo getById(Long id) throws DataAccessException {
 		Recibo recibo = super.getById(id);
 		if (null != recibo) {
-			Hibernate.initialize(recibo.getNotasDebito());
-			Hibernate.initialize(recibo.getFacturas());
+			Hibernate.initialize(recibo.getCliente());
+			Hibernate.initialize(recibo.getComprobantes());
 			Hibernate.initialize(recibo.getPagosCheque());
 			Hibernate.initialize(recibo.getPagosEfectivo());
 		}
@@ -35,6 +35,7 @@ public class ReciboDAOImpl extends GenericCrudHBDAOImpl<Recibo> implements
 	public List<Recibo> search(ReciboFilter filter) throws DataAccessException {
 		try {
 			Criteria criteria = buildCriteria(filter);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			return criteria.list();
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);

@@ -33,12 +33,9 @@ public class Recibo extends BaseEntity {
 	private String numero;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "recibos_facturas", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_FACTURA", nullable = false, updatable = false) })
-	private Set<Factura> facturas;
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "recibos_notas_debito", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_NOTA_DEBITO", nullable = false, updatable = false) })
-	private Set<NotaDebito> notasDebito;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinTable(name = "recibos_comprobantes", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_COMPROBANTE", nullable = false, updatable = false) })
+	private Set<Comprobante> comprobantes;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PagoReciboEfectivo> pagosEfectivo;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,8 +45,7 @@ public class Recibo extends BaseEntity {
 
 	public Recibo() {
 		this.pagosCheque = new ArrayList<PagoReciboCheque>();
-		this.facturas = new HashSet<Factura>();
-		this.notasDebito = new HashSet<NotaDebito>();
+		this.comprobantes = new HashSet<Comprobante>();
 		this.pagosEfectivo = new ArrayList<PagoReciboEfectivo>();
 	}
 
@@ -85,22 +81,6 @@ public class Recibo extends BaseEntity {
 		this.numero = numero;
 	}
 
-	public Set<Factura> getFacturas() {
-		return facturas;
-	}
-
-	public void setFacturas(Set<Factura> facturas) {
-		this.facturas = facturas;
-	}
-
-	public Set<NotaDebito> getNotasDebito() {
-		return notasDebito;
-	}
-
-	public void setNotasDebito(Set<NotaDebito> notasDebito) {
-		this.notasDebito = notasDebito;
-	}
-
 	public List<PagoReciboEfectivo> getPagosEfectivo() {
 		return pagosEfectivo;
 	}
@@ -131,6 +111,14 @@ public class Recibo extends BaseEntity {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	public Set<Comprobante> getComprobantes() {
+		return comprobantes;
+	}
+
+	public void setComprobantes(Set<Comprobante> comprobantes) {
+		this.comprobantes = comprobantes;
 	}
 
 }

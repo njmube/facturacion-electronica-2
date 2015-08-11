@@ -8,35 +8,32 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.MaskFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ar.com.wuik.sistema.bo.FacturaBO;
-import ar.com.wuik.sistema.bo.NotaCreditoBO;
-import ar.com.wuik.sistema.bo.NotaDebitoBO;
+import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.entities.Parametro;
+import ar.com.wuik.sistema.entities.enums.TipoComprobante;
+import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
-import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.WModel;
-import ar.com.wuik.swing.components.WTextFieldLimit;
-import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
+
+import javax.swing.SpinnerNumberModel;
 
 /**
  * 
@@ -53,68 +50,73 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			.getLogger(ParametroIFrame.class);
 	private static final String CAMPO_NRO_REMITO = "nroRemito";
 	private static final String CAMPO_NRO_RECIBO = "nroRecibo";
-	private static final String CAMPO_NRO_FACTURA = "nroFactura";
-	private static final String CAMPO_NRO_NOTA_CREDITO = "nroNotaCredito";
-	private static final String CAMPO_NRO_NOTA_DEBITO = "nroNotaDebito";
 	
-	private static final String CAMPO_NRO_FACTURA_AFIP = "nroFacturaAfip";
-	private static final String CAMPO_NRO_NOTA_CREDITO_AFIP = "nroNotaCreditoAfip";
-	private static final String CAMPO_NRO_NOTA_DEBITO_AFIP = "nroNotaDebitoAfip";
+	private static final String CAMPO_NRO_FACTURA_A = "nroFacturaA";
+	private static final String CAMPO_NRO_NOTA_CREDITO_A = "nroNotaCreditoA";
+	private static final String CAMPO_NRO_NOTA_DEBITO_A = "nroNotaDebitoA";
+	
+	private static final String CAMPO_NRO_FACTURA_A_AFIP = "nroFacturaAAfip";
+	private static final String CAMPO_NRO_NOTA_CREDITO_A_AFIP = "nroNotaCreditoAAfip";
+	private static final String CAMPO_NRO_NOTA_DEBITO_A_AFIP = "nroNotaDebitoAAfip";
+	
+	
+	private static final String CAMPO_NRO_FACTURA_B = "nroFacturaB";
+	private static final String CAMPO_NRO_NOTA_CREDITO_B = "nroNotaCreditoB";
+	private static final String CAMPO_NRO_NOTA_DEBITO_B = "nroNotaDebitoB";
+	
+	private static final String CAMPO_NRO_FACTURA_B_AFIP = "nroFacturaBAfip";
+	private static final String CAMPO_NRO_NOTA_CREDITO_B_AFIP = "nroNotaCreditoBAfip";
+	private static final String CAMPO_NRO_NOTA_DEBITO_B_AFIP = "nroNotaDebitoBAfip";
+
 
 	private static final String CAMPO_P_NRO_REMITO = "nroPRemito";
 	private static final String CAMPO_P_NRO_RECIBO = "nroPRecibo";
-
-	private static final String CAMPO_RAZON_SOCIAL = "razonSocial";
-	private static final String CAMPO_CUIT = "cuit";
-	private static final String CAMPO_ING_BRUTOS = "ingBrutos";
-	private static final String CAMPO_DOMICILIO = "domicilio";
-	private static final String CAMPO_COND_IVA = "condIVA";
-	private static final String CAMPO_INICIO_ACT = "inicioActividad";
 
 	private JPanel pnlParametros;
 	private JLabel lblNroRecibo;
 	private JButton btnCancelar;
 	private JButton btnGuardar;
-	private WTextFieldNumeric txtNroRecibo;
-	private WTextFieldNumeric txtNroRemito;
+	private JSpinner txtNroRecibo;
+	private JSpinner txtNroRemito;
 	private JLabel lblNroRemito;
 	private JLabel label;
 	private JTextField txtPRecibo;
 	private JLabel label_4;
 	private JTextField txtPRemito;
 	private Parametro parametro;
-	private JLabel lblRazonSocial;
-	private JTextField txtRazonSocial;
-	private JLabel lblCuit;
-	private JFormattedTextField txtCuit;
-	private JLabel lblDomicilio;
-	private JTextField txtDomicilio;
-	private JLabel lblCondIVA;
-	private JTextField txtCondIVA;
-	private JLabel lblIngBrutos;
-	private WTextFieldNumeric txtIngBrutos;
-	private JLabel lblInicioAct;
-	private JTextField txtInicioAct;
-	private JButton btnNewButton;
-	private WTextFieldNumeric txfNroFactura;
+	private JSpinner spnNroFacturaA;
 	private JLabel lblFactura;
-	private WTextFieldNumeric txfNotaCredito;
+	private JSpinner spnNotaCreditoA;
 	private JLabel lblNotaCredito;
-	private WTextFieldNumeric txfNotaDebito;
+	private JSpinner spnNotaDebitoA;
 	private JLabel lblNotaDebito;
 	private JLabel lblNroFacturaAFIP;
-	private JTextField txtNroFacturaAfip;
-	private JTextField txtNroNCAfip;
+	private JTextField txtNroFacturaAAfip;
+	private JTextField txtNroNCAAfip;
 	private JLabel lblNroNCAfip;
-	private JTextField txtNroNDAfip;
+	private JTextField txtNroNDAAfip;
 	private JLabel lblNroNDAfip;
+	private JLabel label_1;
+	private JSpinner spnNroFacturaB;
+	private JLabel label_2;
+	private JTextField txtNroFacturaBAfip;
+	private JTextField txtNroNCBAfip;
+	private JTextField txtNroNDBAfip;
+	private JLabel label_3;
+	private JLabel label_5;
+	private JSpinner spnNotaCreditoB;
+	private JLabel label_6;
+	private JLabel label_7;
+	private JSpinner spnNotaDebitoB;
+	private JPanel panel;
+	private JPanel panel_1;
 
 	public ParametroIFrame() {
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Parámetros");
 		setFrameIcon(new ImageIcon(
 				ParametroIFrame.class.getResource("/icons/parametros.png")));
-		setBounds(0, 0, 488, 515);
+		setBounds(0, 0, 629, 484);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlParametros());
@@ -129,36 +131,38 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 		try {
 			parametro = parametroBO.obtener(1L);
 			WModel model = populateModel();
-			model.addValue(CAMPO_NRO_RECIBO, parametro.getNroRecibo());
-			model.addValue(CAMPO_NRO_REMITO, parametro.getNroRemito());
+			model.addValue(CAMPO_NRO_RECIBO, parametro.getNroRecibo().intValue());
+			model.addValue(CAMPO_NRO_REMITO, parametro.getNroRemito().intValue());
 			model.addValue(CAMPO_P_NRO_RECIBO, parametro.getPrefRecibo());
 			model.addValue(CAMPO_P_NRO_REMITO, parametro.getPrefRemito());
 			
-			model.addValue(CAMPO_NRO_FACTURA, parametro.getNroFactura());
-			model.addValue(CAMPO_NRO_NOTA_CREDITO, parametro.getNroNotaCredito());
-			model.addValue(CAMPO_NRO_NOTA_DEBITO, parametro.getNroNotaDebito());
+			model.addValue(CAMPO_NRO_FACTURA_A, parametro.getNroFacturaA().intValue());
+			model.addValue(CAMPO_NRO_NOTA_CREDITO_A, parametro.getNroNotaCreditoA().intValue());
+			model.addValue(CAMPO_NRO_NOTA_DEBITO_A, parametro.getNroNotaDebitoA().intValue());
+			
+			model.addValue(CAMPO_NRO_FACTURA_B, parametro.getNroFacturaB().intValue());
+			model.addValue(CAMPO_NRO_NOTA_CREDITO_B, parametro.getNroNotaCreditoB().intValue());
+			model.addValue(CAMPO_NRO_NOTA_DEBITO_B, parametro.getNroNotaDebitoB().intValue());
 
-			model.addValue(CAMPO_RAZON_SOCIAL, parametro.getRazonSocial());
-			model.addValue(CAMPO_COND_IVA, parametro.getCondIVA());
-			model.addValue(CAMPO_CUIT, parametro.getCuit());
-			model.addValue(CAMPO_DOMICILIO, parametro.getDomicilio());
-			model.addValue(CAMPO_ING_BRUTOS, parametro.getIngresosBrutos());
-			model.addValue(CAMPO_INICIO_ACT,
-					WUtils.getStringFromDate(parametro.getInicioActividad()));
-			populateComponents(model);
 			
-			NotaCreditoBO notaCreditoBO = AbstractFactory.getInstance(NotaCreditoBO.class);
-			Long ultNroNotaCredito = notaCreditoBO.obtenerUltimoNroComprobante();
 			
-			NotaDebitoBO notaDebitoBO = AbstractFactory.getInstance(NotaDebitoBO.class);
-			Long ultNroNotaDebito = notaDebitoBO.obtenerUltimoNroComprobante();
+			ComprobanteBO comprobanteBO = AbstractFactory.getInstance(ComprobanteBO.class);
+			Long ultNroFacturaA = comprobanteBO.obtenerUltimoNroComprobante(TipoComprobante.FACTURA, TipoLetraComprobante.A);
+			Long ultNroFacturaB = comprobanteBO.obtenerUltimoNroComprobante(TipoComprobante.FACTURA, TipoLetraComprobante.B);
 			
-			FacturaBO facturaBO = AbstractFactory.getInstance(FacturaBO.class);
-			Long ultNroFactura = facturaBO.obtenerUltimoNroComprobante();
+			Long ultNroNotaCreditoA = comprobanteBO.obtenerUltimoNroComprobante(TipoComprobante.NOTA_CREDITO, TipoLetraComprobante.A);
+			Long ultNroNotaCreditoB = comprobanteBO.obtenerUltimoNroComprobante(TipoComprobante.NOTA_CREDITO, TipoLetraComprobante.B);
 			
-			model.addValue(CAMPO_NRO_FACTURA_AFIP, ultNroFactura);
-			model.addValue(CAMPO_NRO_NOTA_CREDITO_AFIP, ultNroNotaCredito);
-			model.addValue(CAMPO_NRO_NOTA_DEBITO_AFIP, ultNroNotaDebito);
+			Long ultNroNotaDebitoA = comprobanteBO.obtenerUltimoNroComprobante(TipoComprobante.NOTA_DEBITO, TipoLetraComprobante.A);
+			Long ultNroNotaDebitoB = comprobanteBO.obtenerUltimoNroComprobante(TipoComprobante.NOTA_DEBITO, TipoLetraComprobante.B);
+			
+			 
+			model.addValue(CAMPO_NRO_FACTURA_A_AFIP, ultNroFacturaA);
+			model.addValue(CAMPO_NRO_NOTA_CREDITO_A_AFIP, ultNroNotaCreditoA);
+			model.addValue(CAMPO_NRO_NOTA_DEBITO_A_AFIP, ultNroNotaDebitoA);
+			model.addValue(CAMPO_NRO_FACTURA_B_AFIP, ultNroFacturaB);
+			model.addValue(CAMPO_NRO_NOTA_CREDITO_B_AFIP, ultNroNotaCreditoB);
+			model.addValue(CAMPO_NRO_NOTA_DEBITO_B_AFIP, ultNroNotaDebitoB);
 			
 			populateComponents(model);
 		} catch (BusinessException bexc) {
@@ -174,75 +178,18 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 	@Override
 	protected boolean validateModel(WModel model) {
 
-		String nroRecibo = model.getValue(CAMPO_NRO_RECIBO);
-		String nroRemito = model.getValue(CAMPO_NRO_REMITO);
-
 		String nroPRecibo = model.getValue(CAMPO_P_NRO_RECIBO);
 		String nroPRemito = model.getValue(CAMPO_P_NRO_REMITO);
 		
-		String nroFactura = model.getValue(CAMPO_NRO_FACTURA);
-		String nroNotaCredito = model.getValue(CAMPO_NRO_NOTA_CREDITO);
-		String nroNotaDebito = model.getValue(CAMPO_NRO_NOTA_DEBITO);
-
-		String razonSocial = model.getValue(CAMPO_RAZON_SOCIAL);
-		String cuit = model.getValue(CAMPO_CUIT);
-		String domicilio = model.getValue(CAMPO_DOMICILIO);
-		String ingBrutos = model.getValue(CAMPO_ING_BRUTOS);
-		String inicioAct = model.getValue(CAMPO_INICIO_ACT);
-		String condIVA = model.getValue(CAMPO_COND_IVA);
-
 		List<String> messages = new ArrayList<String>();
 
-		if (WUtils.isEmpty(nroRecibo)) {
-			messages.add("Debe ingresar un Nro. de Recibo");
-		}
 
 		if (WUtils.isEmpty(nroPRecibo)) {
 			messages.add("Debe ingresar un Prefijo de Recibo");
 		}
 
-		if (WUtils.isEmpty(nroRemito)) {
-			messages.add("Debe ingresar un Nro. de Remito");
-		}
-
 		if (WUtils.isEmpty(nroPRemito)) {
 			messages.add("Debe ingresar un Prefijo de Remito");
-		}
-		
-		if (WUtils.isEmpty(nroFactura)) {
-			messages.add("Debe ingresar un Nro. de Factura");
-		}
-		
-		if (WUtils.isEmpty(nroNotaCredito)) {
-			messages.add("Debe ingresar un Nro. de Nota de Crédito");
-		}
-		
-		if (WUtils.isEmpty(nroNotaDebito)) {
-			messages.add("Debe ingresar un Nro. de Nota de Débito");
-		}
-
-		if (WUtils.isEmpty(razonSocial)) {
-			messages.add("Debe ingresar una Razón Social");
-		}
-
-		if (!AppUtils.esValidoCUIT(cuit)) {
-			messages.add("Debe ingresar un CUIT");
-		}
-
-		if (WUtils.isEmpty(domicilio)) {
-			messages.add("Debe ingresar un Domicilio");
-		}
-
-		if (WUtils.isEmpty(condIVA)) {
-			messages.add("Debe ingresar una Cond. de IVA");
-		}
-
-		if (WUtils.isEmpty(ingBrutos)) {
-			messages.add("Debe ingresar el Ingreso Bruto");
-		}
-
-		if (WUtils.isEmpty(inicioAct)) {
-			messages.add("Debe seleccionar un Inicio de Actividad");
 		}
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
@@ -253,9 +200,9 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 	private JPanel getPnlParametros() {
 		if (pnlParametros == null) {
 			pnlParametros = new JPanel();
-			pnlParametros.setBorder(new TitledBorder(null, "Parametros",
+			pnlParametros.setBorder(new TitledBorder(null, "",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlParametros.setBounds(10, 11, 466, 430);
+			pnlParametros.setBounds(10, 11, 609, 400);
 			pnlParametros.setLayout(null);
 			pnlParametros.add(getLblNroRecibo());
 			pnlParametros.add(getTxtNroRecibo());
@@ -265,31 +212,8 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			pnlParametros.add(getTxtPRecibo());
 			pnlParametros.add(getLabel_4());
 			pnlParametros.add(getTxtPRemito());
-			pnlParametros.add(getLblRazonSocial());
-			pnlParametros.add(getTxtRazonSocial());
-			pnlParametros.add(getLblCuit());
-			pnlParametros.add(getTxtCuit());
-			pnlParametros.add(getLblDomicilio());
-			pnlParametros.add(getTxtDomicilio());
-			pnlParametros.add(getLblCondIVA());
-			pnlParametros.add(getTxtCondIVA());
-			pnlParametros.add(getLblIngBrutos());
-			pnlParametros.add(getTxtIngBrutos());
-			pnlParametros.add(getLblInicioAct());
-			pnlParametros.add(getTxtInicioAct());
-			pnlParametros.add(getBtnNewButton());
-			pnlParametros.add(getTxfNroFactura());
-			pnlParametros.add(getLblFactura());
-			pnlParametros.add(getTxfNotaCredito());
-			pnlParametros.add(getLblNotaCredito());
-			pnlParametros.add(getTxfNotaDebito());
-			pnlParametros.add(getLblNotaDebito());
-			pnlParametros.add(getLblNroFacturaAFIP());
-			pnlParametros.add(getTxtNroFacturaAfip());
-			pnlParametros.add(getTxtNroNCAfip());
-			pnlParametros.add(getLblNroNCAfip());
-			pnlParametros.add(getTxtNroNDAfip());
-			pnlParametros.add(getLblNroNDAfip());
+			pnlParametros.add(getPanel());
+			pnlParametros.add(getPanel_1());
 		}
 		return pnlParametros;
 	}
@@ -313,7 +237,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(ParametroIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(256, 452, 103, 25);
+			btnCancelar.setBounds(399, 422, 103, 25);
 		}
 		return btnCancelar;
 	}
@@ -325,36 +249,31 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
 					if (validateModel(model)) {
-						String nroRecibo = model.getValue(CAMPO_NRO_RECIBO);
-						String nroRemito = model.getValue(CAMPO_NRO_REMITO);
+						Integer nroRecibo = model.getValue(CAMPO_NRO_RECIBO);
+						Integer nroRemito = model.getValue(CAMPO_NRO_REMITO);
 						String prefRecibo = model.getValue(CAMPO_P_NRO_RECIBO);
 						String prefRemito = model.getValue(CAMPO_P_NRO_REMITO);
 						
-						String nroFactura = model.getValue(CAMPO_NRO_FACTURA);
-						String nroNotaCredito = model.getValue(CAMPO_NRO_NOTA_CREDITO);
-						String nroNotaDebito = model.getValue(CAMPO_NRO_NOTA_DEBITO);
+						Integer nroFacturaA = model.getValue(CAMPO_NRO_FACTURA_A);
+						Integer nroNotaCreditoA = model.getValue(CAMPO_NRO_NOTA_CREDITO_A);
+						Integer nroNotaDebitoA = model.getValue(CAMPO_NRO_NOTA_DEBITO_A);
 
-						String razonSocial = model.getValue(CAMPO_RAZON_SOCIAL);
-						String cuit = model.getValue(CAMPO_CUIT);
-						String domicilio = model.getValue(CAMPO_DOMICILIO);
-						String ingBrutos = model.getValue(CAMPO_ING_BRUTOS);
-						String inicioAct = model.getValue(CAMPO_INICIO_ACT);
-						String condIVA = model.getValue(CAMPO_COND_IVA);
-
+						Integer nroFacturaB = model.getValue(CAMPO_NRO_FACTURA_B);
+						Integer nroNotaCreditoB = model.getValue(CAMPO_NRO_NOTA_CREDITO_B);
+						Integer nroNotaDebitoB = model.getValue(CAMPO_NRO_NOTA_DEBITO_B);
+						
+						
 						parametro.setNroRecibo(Long.valueOf(nroRecibo));
 						parametro.setNroRemito(Long.valueOf(nroRemito));
 						parametro.setPrefRecibo(prefRecibo);
 						parametro.setPrefRemito(prefRemito);
-						parametro.setNroFactura(Long.valueOf(nroFactura));
-						parametro.setNroNotaCredito(Long.valueOf(nroNotaCredito));
-						parametro.setNroNotaDebito(Long.valueOf(nroNotaDebito));
-						parametro.setCondIVA(condIVA);
-						parametro.setCuit(cuit);
-						parametro.setDomicilio(domicilio);
-						parametro.setIngresosBrutos(ingBrutos);
-						parametro.setInicioActividad(WUtils
-								.getDateFromString(inicioAct));
-						parametro.setRazonSocial(razonSocial);
+						parametro.setNroFacturaA(Long.valueOf(nroFacturaA));
+						parametro.setNroNotaCreditoA(Long.valueOf(nroNotaCreditoA));
+						parametro.setNroNotaDebitoA(Long.valueOf(nroNotaDebitoA));
+						
+						parametro.setNroFacturaB(Long.valueOf(nroFacturaB));
+						parametro.setNroNotaCreditoB(Long.valueOf(nroNotaCreditoB));
+						parametro.setNroNotaDebitoB(Long.valueOf(nroNotaDebitoB));
 
 						ParametroBO parametroBO = AbstractFactory
 								.getInstance(ParametroBO.class);
@@ -370,26 +289,26 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			});
 			btnGuardar.setIcon(new ImageIcon(ParametroIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(373, 452, 103, 25);
+			btnGuardar.setBounds(516, 422, 103, 25);
 		}
 		return btnGuardar;
 	}
 
-	private WTextFieldNumeric getTxtNroRecibo() {
+	private JSpinner getTxtNroRecibo() {
 		if (txtNroRecibo == null) {
-			txtNroRecibo = new WTextFieldNumeric();
-			txtNroRecibo.setDocument(new WTextFieldLimit(20));
-			txtNroRecibo.setBounds(135, 24, 134, 25);
+			txtNroRecibo = new JSpinner();
+			txtNroRecibo.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			txtNroRecibo.setBounds(178, 24, 109, 25);
 			txtNroRecibo.setName(CAMPO_NRO_RECIBO);
 		}
 		return txtNroRecibo;
 	}
 
-	private WTextFieldNumeric getTxtNroRemito() {
+	private JSpinner getTxtNroRemito() {
 		if (txtNroRemito == null) {
-			txtNroRemito = new WTextFieldNumeric();
-			txtNroRemito.setBounds(134, 60, 134, 25);
-			txtNroRemito.setDocument(new WTextFieldLimit(20));
+			txtNroRemito = new JSpinner();
+			txtNroRemito.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			txtNroRemito.setBounds(178, 60, 109, 25);
 			txtNroRemito.setName(CAMPO_NRO_REMITO);
 		}
 		return txtNroRemito;
@@ -408,7 +327,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 		if (label == null) {
 			label = new JLabel("Prefijo:");
 			label.setHorizontalAlignment(SwingConstants.RIGHT);
-			label.setBounds(279, 24, 64, 25);
+			label.setBounds(345, 24, 64, 25);
 		}
 		return label;
 	}
@@ -417,7 +336,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 		if (txtPRecibo == null) {
 			txtPRecibo = new JTextField();
 			txtPRecibo.setColumns(10);
-			txtPRecibo.setBounds(353, 24, 103, 25);
+			txtPRecibo.setBounds(419, 24, 103, 25);
 			txtPRecibo.setName(CAMPO_P_NRO_RECIBO);
 		}
 		return txtPRecibo;
@@ -427,7 +346,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 		if (label_4 == null) {
 			label_4 = new JLabel("Prefijo:");
 			label_4.setHorizontalAlignment(SwingConstants.RIGHT);
-			label_4.setBounds(278, 60, 64, 25);
+			label_4.setBounds(344, 60, 64, 25);
 		}
 		return label_4;
 	}
@@ -436,246 +355,261 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 		if (txtPRemito == null) {
 			txtPRemito = new JTextField();
 			txtPRemito.setColumns(10);
-			txtPRemito.setBounds(352, 60, 103, 25);
+			txtPRemito.setBounds(418, 60, 103, 25);
 			txtPRemito.setName(CAMPO_P_NRO_REMITO);
 		}
 		return txtPRemito;
 	}
-
-	private JLabel getLblRazonSocial() {
-		if (lblRazonSocial == null) {
-			lblRazonSocial = new JLabel("* Raz\u00F3n Social:");
-			lblRazonSocial.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblRazonSocial.setBounds(4, 204, 124, 25);
+	private JSpinner getSpnNroFacturaA() {
+		if (spnNroFacturaA == null) {
+			spnNroFacturaA = new JSpinner();
+			spnNroFacturaA.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			spnNroFacturaA.setBounds(167, 26, 108, 25);
+			spnNroFacturaA.setName(CAMPO_NRO_FACTURA_A);
 		}
-		return lblRazonSocial;
-	}
-
-	private JTextField getTxtRazonSocial() {
-		if (txtRazonSocial == null) {
-			txtRazonSocial = new JTextField();
-			txtRazonSocial.setName(CAMPO_RAZON_SOCIAL);
-			txtRazonSocial.setBounds(134, 204, 243, 25);
-			txtRazonSocial.setDocument(new WTextFieldLimit(100));
-		}
-		return txtRazonSocial;
-	}
-
-	private JLabel getLblCuit() {
-		if (lblCuit == null) {
-			lblCuit = new JLabel("* Cuit:");
-			lblCuit.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCuit.setBounds(5, 240, 124, 25);
-		}
-		return lblCuit;
-	}
-
-	private JFormattedTextField getTxtCuit() {
-		if (txtCuit == null) {
-
-			MaskFormatter formatter = null;
-			try {
-				formatter = new MaskFormatter("##-########-#");
-				formatter.setPlaceholderCharacter('#');
-			} catch (java.text.ParseException exc) {
-			}
-			txtCuit = new JFormattedTextField(formatter);
-			txtCuit.setName(CAMPO_CUIT);
-			txtCuit.setBounds(135, 240, 134, 25);
-		}
-		return txtCuit;
-	}
-
-	private JLabel getLblDomicilio() {
-		if (lblDomicilio == null) {
-			lblDomicilio = new JLabel("* Domicilio:");
-			lblDomicilio.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblDomicilio.setBounds(4, 276, 124, 25);
-		}
-		return lblDomicilio;
-	}
-
-	private JTextField getTxtDomicilio() {
-		if (txtDomicilio == null) {
-			txtDomicilio = new JTextField();
-			txtDomicilio.setName(CAMPO_DOMICILIO);
-			txtDomicilio.setDocument(new WTextFieldLimit(100));
-			txtDomicilio.setBounds(134, 276, 243, 25);
-		}
-		return txtDomicilio;
-	}
-
-	private JLabel getLblCondIVA() {
-		if (lblCondIVA == null) {
-			lblCondIVA = new JLabel("* Cond. IVA:");
-			lblCondIVA.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCondIVA.setBounds(5, 312, 124, 25);
-		}
-		return lblCondIVA;
-	}
-
-	private JTextField getTxtCondIVA() {
-		if (txtCondIVA == null) {
-			txtCondIVA = new JTextField();
-			txtCondIVA.setName(CAMPO_COND_IVA);
-			txtCondIVA.setDocument(new WTextFieldLimit(100));
-			txtCondIVA.setBounds(135, 312, 187, 25);
-		}
-		return txtCondIVA;
-	}
-
-	private JLabel getLblIngBrutos() {
-		if (lblIngBrutos == null) {
-			lblIngBrutos = new JLabel("* Ing. Brutos");
-			lblIngBrutos.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIngBrutos.setBounds(4, 348, 124, 25);
-		}
-		return lblIngBrutos;
-	}
-
-	private WTextFieldNumeric getTxtIngBrutos() {
-		if (txtIngBrutos == null) {
-			txtIngBrutos = new WTextFieldNumeric();
-			txtIngBrutos.setHorizontalAlignment(SwingConstants.LEFT);
-			txtIngBrutos.setName(CAMPO_ING_BRUTOS);
-			txtIngBrutos.setBounds(134, 348, 134, 25);
-		}
-		return txtIngBrutos;
-	}
-
-	private JLabel getLblInicioAct() {
-		if (lblInicioAct == null) {
-			lblInicioAct = new JLabel("* Inicio Act.:");
-			lblInicioAct.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblInicioAct.setBounds(4, 384, 124, 25);
-		}
-		return lblInicioAct;
-	}
-
-	private JTextField getTxtInicioAct() {
-		if (txtInicioAct == null) {
-			txtInicioAct = new JTextField();
-			txtInicioAct.setEditable(false);
-			txtInicioAct.setName(CAMPO_INICIO_ACT);
-			txtInicioAct.setBounds(134, 384, 103, 25);
-		}
-		return txtInicioAct;
-	}
-
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new WCalendarIFrame(txtInicioAct));
-				}
-			});
-			btnNewButton.setIcon(new ImageIcon(ParametroIFrame.class
-					.getResource("/icons/calendar.png")));
-			btnNewButton.setBounds(247, 384, 27, 23);
-		}
-		return btnNewButton;
-	}
-	private WTextFieldNumeric getTxfNroFactura() {
-		if (txfNroFactura == null) {
-			txfNroFactura = new WTextFieldNumeric();
-			txfNroFactura.setName(CAMPO_NRO_FACTURA);
-			txfNroFactura.setBounds(134, 96, 134, 25);
-		}
-		return txfNroFactura;
+		return spnNroFacturaA;
 	}
 	private JLabel getLblFactura() {
 		if (lblFactura == null) {
 			lblFactura = new JLabel("* Nro. Factura:");
+			lblFactura.setBounds(11, 26, 147, 25);
 			lblFactura.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFactura.setBounds(4, 96, 124, 25);
 		}
 		return lblFactura;
 	}
-	private WTextFieldNumeric getTxfNotaCredito() {
-		if (txfNotaCredito == null) {
-			txfNotaCredito = new WTextFieldNumeric();
-			txfNotaCredito.setName(CAMPO_NRO_NOTA_CREDITO);
-			txfNotaCredito.setBounds(135, 132, 134, 25);
+	private JSpinner getSpnNotaCreditoA() {
+		if (spnNotaCreditoA == null) {
+			spnNotaCreditoA = new JSpinner();
+			spnNotaCreditoA.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			spnNotaCreditoA.setBounds(167, 62, 108, 25);
+			spnNotaCreditoA.setName(CAMPO_NRO_NOTA_CREDITO_A);
 		}
-		return txfNotaCredito;
+		return spnNotaCreditoA;
 	}
 	private JLabel getLblNotaCredito() {
 		if (lblNotaCredito == null) {
 			lblNotaCredito = new JLabel("* Nro. Nota Cr\u00E9dito:");
+			lblNotaCredito.setBounds(10, 62, 147, 25);
 			lblNotaCredito.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNotaCredito.setBounds(5, 132, 124, 25);
 		}
 		return lblNotaCredito;
 	}
-	private WTextFieldNumeric getTxfNotaDebito() {
-		if (txfNotaDebito == null) {
-			txfNotaDebito = new WTextFieldNumeric();
-			txfNotaDebito.setName(CAMPO_NRO_NOTA_DEBITO);
-			txfNotaDebito.setBounds(134, 168, 134, 25);
+	private JSpinner getSpnNotaDebitoA() {
+		if (spnNotaDebitoA == null) {
+			spnNotaDebitoA = new JSpinner();
+			spnNotaDebitoA.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			spnNotaDebitoA.setBounds(167, 98, 108, 25);
+			spnNotaDebitoA.setName(CAMPO_NRO_NOTA_DEBITO_A);
 		}
-		return txfNotaDebito;
+		return spnNotaDebitoA;
 	}
 	private JLabel getLblNotaDebito() {
 		if (lblNotaDebito == null) {
 			lblNotaDebito = new JLabel("* Nro. Nota D\u00E9bito:");
+			lblNotaDebito.setBounds(10, 98, 147, 25);
 			lblNotaDebito.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNotaDebito.setBounds(4, 168, 124, 25);
 		}
 		return lblNotaDebito;
 	}
 	private JLabel getLblNroFacturaAFIP() {
 		if (lblNroFacturaAFIP == null) {
 			lblNroFacturaAFIP = new JLabel("Nro. AFIP:");
+			lblNroFacturaAFIP.setBounds(388, 26, 64, 25);
 			lblNroFacturaAFIP.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNroFacturaAFIP.setBounds(278, 96, 64, 25);
 		}
 		return lblNroFacturaAFIP;
 	}
-	private JTextField getTxtNroFacturaAfip() {
-		if (txtNroFacturaAfip == null) {
-			txtNroFacturaAfip = new JTextField();
-			txtNroFacturaAfip.setEditable(false);
-			txtNroFacturaAfip.setName(CAMPO_NRO_FACTURA_AFIP);
-			txtNroFacturaAfip.setColumns(10);
-			txtNroFacturaAfip.setBounds(352, 96, 103, 25);
+	private JTextField getTxtNroFacturaAAfip() {
+		if (txtNroFacturaAAfip == null) {
+			txtNroFacturaAAfip = new JTextField();
+			txtNroFacturaAAfip.setBounds(462, 26, 103, 25);
+			txtNroFacturaAAfip.setEditable(false);
+			txtNroFacturaAAfip.setName(CAMPO_NRO_FACTURA_A_AFIP);
+			txtNroFacturaAAfip.setColumns(10);
 		}
-		return txtNroFacturaAfip;
+		return txtNroFacturaAAfip;
 	}
-	private JTextField getTxtNroNCAfip() {
-		if (txtNroNCAfip == null) {
-			txtNroNCAfip = new JTextField();
-			txtNroNCAfip.setEditable(false);
-			txtNroNCAfip.setName(CAMPO_NRO_NOTA_CREDITO_AFIP);
-			txtNroNCAfip.setColumns(10);
-			txtNroNCAfip.setBounds(353, 132, 103, 25);
+	private JTextField getTxtNroNCAAfip() {
+		if (txtNroNCAAfip == null) {
+			txtNroNCAAfip = new JTextField();
+			txtNroNCAAfip.setBounds(462, 62, 103, 25);
+			txtNroNCAAfip.setEditable(false);
+			txtNroNCAAfip.setName(CAMPO_NRO_NOTA_CREDITO_A_AFIP);
+			txtNroNCAAfip.setColumns(10);
 		}
-		return txtNroNCAfip;
+		return txtNroNCAAfip;
 	}
 	private JLabel getLblNroNCAfip() {
 		if (lblNroNCAfip == null) {
 			lblNroNCAfip = new JLabel("Nro. AFIP:");
+			lblNroNCAfip.setBounds(388, 62, 64, 25);
 			lblNroNCAfip.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNroNCAfip.setBounds(279, 132, 64, 25);
 		}
 		return lblNroNCAfip;
 	}
-	private JTextField getTxtNroNDAfip() {
-		if (txtNroNDAfip == null) {
-			txtNroNDAfip = new JTextField();
-			txtNroNDAfip.setEditable(false);
-			txtNroNDAfip.setName(CAMPO_NRO_NOTA_DEBITO_AFIP);
-			txtNroNDAfip.setColumns(10);
-			txtNroNDAfip.setBounds(353, 168, 103, 25);
+	private JTextField getTxtNroNDAAfip() {
+		if (txtNroNDAAfip == null) {
+			txtNroNDAAfip = new JTextField();
+			txtNroNDAAfip.setBounds(462, 98, 103, 25);
+			txtNroNDAAfip.setEditable(false);
+			txtNroNDAAfip.setName(CAMPO_NRO_NOTA_DEBITO_A_AFIP);
+			txtNroNDAAfip.setColumns(10);
 		}
-		return txtNroNDAfip;
+		return txtNroNDAAfip;
 	}
 	private JLabel getLblNroNDAfip() {
 		if (lblNroNDAfip == null) {
 			lblNroNDAfip = new JLabel("Nro. AFIP:");
+			lblNroNDAfip.setBounds(388, 98, 64, 25);
 			lblNroNDAfip.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNroNDAfip.setBounds(279, 168, 64, 25);
 		}
 		return lblNroNDAfip;
+	}
+	private JLabel getLabel_1() {
+		if (label_1 == null) {
+			label_1 = new JLabel("* Nro. Factura:");
+			label_1.setBounds(10, 29, 147, 25);
+			label_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return label_1;
+	}
+	private JSpinner getSpnNroFacturaB() {
+		if (spnNroFacturaB == null) {
+			spnNroFacturaB = new JSpinner();
+			spnNroFacturaB.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			spnNroFacturaB.setBounds(167, 29, 108, 25);
+			spnNroFacturaB.setName(CAMPO_NRO_FACTURA_B);
+		}
+		return spnNroFacturaB;
+	}
+	private JLabel getLabel_2() {
+		if (label_2 == null) {
+			label_2 = new JLabel("Nro. AFIP:");
+			label_2.setBounds(389, 29, 64, 25);
+			label_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return label_2;
+	}
+	private JTextField getTxtNroFacturaBAfip() {
+		if (txtNroFacturaBAfip == null) {
+			txtNroFacturaBAfip = new JTextField();
+			txtNroFacturaBAfip.setBounds(463, 29, 103, 25);
+			txtNroFacturaBAfip.setName(CAMPO_NRO_FACTURA_B_AFIP);
+			txtNroFacturaBAfip.setEditable(false);
+			txtNroFacturaBAfip.setColumns(10);
+		}
+		return txtNroFacturaBAfip;
+	}
+	private JTextField getTxtNroNCBAfip() {
+		if (txtNroNCBAfip == null) {
+			txtNroNCBAfip = new JTextField();
+			txtNroNCBAfip.setBounds(463, 65, 103, 25);
+			txtNroNCBAfip.setName(CAMPO_NRO_NOTA_CREDITO_B_AFIP);
+			txtNroNCBAfip.setEditable(false);
+			txtNroNCBAfip.setColumns(10);
+		}
+		return txtNroNCBAfip;
+	}
+	private JTextField getTxtNroNDBAfip() {
+		if (txtNroNDBAfip == null) {
+			txtNroNDBAfip = new JTextField();
+			txtNroNDBAfip.setBounds(463, 101, 103, 25);
+			txtNroNDBAfip.setName(CAMPO_NRO_NOTA_DEBITO_B_AFIP);
+			txtNroNDBAfip.setEditable(false);
+			txtNroNDBAfip.setColumns(10);
+		}
+		return txtNroNDBAfip;
+	}
+	private JLabel getLabel_3() {
+		if (label_3 == null) {
+			label_3 = new JLabel("Nro. AFIP:");
+			label_3.setBounds(389, 101, 64, 25);
+			label_3.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return label_3;
+	}
+	private JLabel getLabel_5() {
+		if (label_5 == null) {
+			label_5 = new JLabel("Nro. AFIP:");
+			label_5.setBounds(389, 65, 64, 25);
+			label_5.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return label_5;
+	}
+	private JSpinner getSpnNotaCreditoB() {
+		if (spnNotaCreditoB == null) {
+			spnNotaCreditoB = new JSpinner();
+			spnNotaCreditoB.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			spnNotaCreditoB.setBounds(167, 65, 108, 25);
+			spnNotaCreditoB.setName(CAMPO_NRO_NOTA_CREDITO_B);
+		}
+		return spnNotaCreditoB;
+	}
+	private JLabel getLabel_6() {
+		if (label_6 == null) {
+			label_6 = new JLabel("* Nro. Nota Cr\u00E9dito:");
+			label_6.setBounds(10, 65, 147, 25);
+			label_6.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return label_6;
+	}
+	private JLabel getLabel_7() {
+		if (label_7 == null) {
+			label_7 = new JLabel("* Nro. Nota D\u00E9bito:");
+			label_7.setBounds(10, 101, 147, 25);
+			label_7.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return label_7;
+	}
+	private JSpinner getSpnNotaDebitoB() {
+		if (spnNotaDebitoB == null) {
+			spnNotaDebitoB = new JSpinner();
+			spnNotaDebitoB.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+			spnNotaDebitoB.setBounds(167, 101, 108, 25);
+			spnNotaDebitoB.setName(CAMPO_NRO_NOTA_DEBITO_B);
+		}
+		return spnNotaDebitoB;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setBorder(new TitledBorder(null, "Comprobantes A", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel.setBounds(10, 96, 589, 146);
+			panel.setLayout(null);
+			panel.add(getTxtNroNDAAfip());
+			panel.add(getLblNroNDAfip());
+			panel.add(getSpnNotaDebitoA());
+			panel.add(getLblNotaDebito());
+			panel.add(getLblNotaCredito());
+			panel.add(getSpnNotaCreditoA());
+			panel.add(getLblNroNCAfip());
+			panel.add(getTxtNroNCAAfip());
+			panel.add(getSpnNroFacturaA());
+			panel.add(getLblFactura());
+			panel.add(getLblNroFacturaAFIP());
+			panel.add(getTxtNroFacturaAAfip());
+		}
+		return panel;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			panel_1.setBorder(new TitledBorder(null, "Comprobantes B", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_1.setBounds(10, 253, 589, 137);
+			panel_1.setLayout(null);
+			panel_1.add(getLabel_1());
+			panel_1.add(getSpnNroFacturaB());
+			panel_1.add(getLabel_2());
+			panel_1.add(getTxtNroFacturaBAfip());
+			panel_1.add(getTxtNroNCBAfip());
+			panel_1.add(getLabel_5());
+			panel_1.add(getSpnNotaCreditoB());
+			panel_1.add(getLabel_6());
+			panel_1.add(getSpnNotaDebitoB());
+			panel_1.add(getLabel_7());
+			panel_1.add(getLabel_3());
+			panel_1.add(getTxtNroNDBAfip());
+		}
+		return panel_1;
 	}
 }

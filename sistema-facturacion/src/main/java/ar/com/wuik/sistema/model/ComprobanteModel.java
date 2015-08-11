@@ -2,7 +2,11 @@ package ar.com.wuik.sistema.model;
 
 import java.math.BigDecimal;
 
-import FEV1.dif.afip.gov.ar.entities.Comprobante;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import ar.com.wuik.sistema.entities.Comprobante;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
 import ar.com.wuik.swing.utils.WUtils;
@@ -15,29 +19,80 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public ComprobanteModel() {
-		super(new String[] { "NRO", "CAE", "VTO. CAE", "F. VTA.", "SUBTOTAL",
-				"TOTAL IVA", "TOTAL", "ESTADO AFIP", "CLIENTE" });
+		super(new String[] { "TIPO/NRO COMP", "CAE", "VTO. CAE", "F. VTA.",
+				"SUBTOTAL", "TOTAL IVA", "OTROS IMP.", "TOTAL", "FACTURADA",
+				"PAGADO", "ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
 		return new double[] { 0.11, 0.12, 0.09, 0.08, 0.10, 0.10, 0.10, 0.10,
-				0.20 };
+				0.10, 0.05, 0.05 };
 	}
 
 	@Override
 	protected Object[] getRow(Comprobante t, Object[] fila) {
-		fila[0] = (WUtils.isNotEmpty(t.getNroComprobanteFormato())) ? t
-				.getNroComprobanteFormato() : t.getNroComprobante();
+		fila[0] = ((WUtils.isNotEmpty(t.getNroCompFormato())) ? t
+				.getTipoComprobante().getValue() + t.getNroCompFormato()
+				: (WUtils.isNotEmpty(t.getNroComprobante()) ? t
+						.getTipoComprobante().getValue()
+						+ t.getNroComprobante() : ""));
 		fila[1] = t.getCae();
-		fila[2] = WUtils.getStringFromDate(t.getFechaVtoCAE());
-		fila[3] = WUtils.getStringFromDate(t.getFecha());
-		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getImporteSubtotal()));
-		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getImporteIVA()));
-		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getImporteTotal()));
-		fila[7] = t.getEstado();
-		fila[8] = t.getDocTipo().toString() + " " + t.getDocNro();
+		fila[2] = WUtils.getStringFromDate(t.getFechaCAE());
+		fila[3] = WUtils.getStringFromDate(t.getFechaVenta());
+		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
+		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getIva()));
+		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getTotalTributos()));
+
+		BigDecimal totalTributos = (null != t.getTotalTributos()) ? t
+				.getTotalTributos() : BigDecimal.ZERO;
+
+		fila[7] = AppUtils.formatPeso(WUtils.getValue(t.getTotal().add(
+				totalTributos)));
+		fila[8] = getEstadoFacturacion(t.getEstadoFacturacion());
+		fila[9] = t.isPago() ? new ImageIcon(this.getClass().getResource(
+				"/icons/pago.png")) : new ImageIcon(this.getClass()
+				.getResource("/icons/impago.png"));
+		fila[10] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
+				"/icons/activo.png")) : new ImageIcon(this.getClass()
+				.getResource("/icons/inactivo.png"));
+		fila[11] = t.getId();
 		return fila;
+	}
+
+	private Icon getEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
+		switch (estadoFacturacion) {
+		case FACTURADO: {
+			return new ImageIcon(this.getClass().getResource(
+					"/icons/facturado.png"));
+		}
+		case FACTURADO_ERROR: {
+			return new ImageIcon(this.getClass().getResource(
+					"/icons/facturado_error.png"));
+		}
+		case SIN_FACTURAR: {
+			return new ImageIcon(this.getClass().getResource(
+					"/icons/sin_facturar.png"));
+		}
+		}
+		return null;
+	}
+
+	@Override
+	public ar.com.wuik.swing.components.table.WTableModel.Aligment getAligment(
+			int columnIndex) {
+
+		switch (columnIndex) {
+		case 2:
+			return Aligment.MIDDLE;
+		case 3:
+			return Aligment.MIDDLE;
+		case 7:
+			return Aligment.MIDDLE;
+		case 8:
+			return Aligment.MIDDLE;
+		}
+		return super.getAligment(columnIndex);
 	}
 
 	@Override
@@ -58,9 +113,13 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 		case 6:
 			return BigDecimal.class;
 		case 7:
-			return String.class;
+			return BigDecimal.class;
 		case 8:
-			return String.class;
+			return Icon.class;
+		case 9:
+			return Icon.class;
+		case 10:
+			return Icon.class;
 		}
 		return Object.class;
 	}

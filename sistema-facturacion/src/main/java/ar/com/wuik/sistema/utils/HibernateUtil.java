@@ -12,16 +12,10 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import ar.com.wuik.sistema.entities.Banco;
 import ar.com.wuik.sistema.entities.Cheque;
 import ar.com.wuik.sistema.entities.Cliente;
-import ar.com.wuik.sistema.entities.ComprobanteRecibo;
-import ar.com.wuik.sistema.entities.CondicionIVA;
-import ar.com.wuik.sistema.entities.DetalleFactura;
-import ar.com.wuik.sistema.entities.DetalleNotaCredito;
-import ar.com.wuik.sistema.entities.DetalleNotaDebito;
+import ar.com.wuik.sistema.entities.Comprobante;
+import ar.com.wuik.sistema.entities.DetalleComprobante;
 import ar.com.wuik.sistema.entities.DetalleRemito;
-import ar.com.wuik.sistema.entities.Factura;
 import ar.com.wuik.sistema.entities.Localidad;
-import ar.com.wuik.sistema.entities.NotaCredito;
-import ar.com.wuik.sistema.entities.NotaDebito;
 import ar.com.wuik.sistema.entities.PagoReciboCheque;
 import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
 import ar.com.wuik.sistema.entities.Parametro;
@@ -32,7 +26,9 @@ import ar.com.wuik.sistema.entities.Recibo;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.StockProducto;
 import ar.com.wuik.sistema.entities.TipoProducto;
+import ar.com.wuik.sistema.entities.TributoComprobante;
 import ar.com.wuik.sistema.entities.Usuario;
+import ar.com.wuik.sistema.entities.enums.CondicionIVA;
 
 public class HibernateUtil {
 
@@ -103,16 +99,11 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(Banco.class);
 		cfg.addAnnotatedClass(Cheque.class);
 		cfg.addAnnotatedClass(Cliente.class);
-		cfg.addAnnotatedClass(ComprobanteRecibo.class);
 		cfg.addAnnotatedClass(CondicionIVA.class);
-		cfg.addAnnotatedClass(DetalleFactura.class);
-		cfg.addAnnotatedClass(DetalleNotaCredito.class);
-		cfg.addAnnotatedClass(DetalleNotaDebito.class);
+		cfg.addAnnotatedClass(DetalleComprobante.class);
 		cfg.addAnnotatedClass(DetalleRemito.class);
-		cfg.addAnnotatedClass(Factura.class);
+		cfg.addAnnotatedClass(Comprobante.class);
 		cfg.addAnnotatedClass(Localidad.class);
-		cfg.addAnnotatedClass(NotaCredito.class);
-		cfg.addAnnotatedClass(NotaDebito.class);
 		cfg.addAnnotatedClass(PagoReciboCheque.class);
 		cfg.addAnnotatedClass(PagoReciboEfectivo.class);
 		cfg.addAnnotatedClass(Parametro.class);
@@ -123,6 +114,7 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(Remito.class);
 		cfg.addAnnotatedClass(StockProducto.class);
 		cfg.addAnnotatedClass(TipoProducto.class);
+		cfg.addAnnotatedClass(TributoComprobante.class);
 		cfg.addAnnotatedClass(Usuario.class);
 	}
 

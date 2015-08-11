@@ -5,52 +5,13 @@ import java.util.List;
 
 public class RemitoDTO {
 
-	private String razonSocial;
-	private String domicilio;
-	private String condIVA;
-	private String ptoVta;
 	private String compNro;
 	private Date fechaEmision;
-	private String cuit;
-	private String ingBrutos;
-	private Date inicioAct;
 	private String clienteCuit;
 	private String clienteDomicilio;
 	private String clienteRazonSocial;
 	private String clienteCondIVA;
-	private List<DetalleFacturaDTO> detalles;
-
-	public String getRazonSocial() {
-		return razonSocial;
-	}
-
-	public void setRazonSocial(String razonSocial) {
-		this.razonSocial = razonSocial;
-	}
-
-	public String getDomicilio() {
-		return domicilio;
-	}
-
-	public void setDomicilio(String domicilio) {
-		this.domicilio = domicilio;
-	}
-
-	public String getCondIVA() {
-		return condIVA;
-	}
-
-	public void setCondIVA(String condIVA) {
-		this.condIVA = condIVA;
-	}
-
-	public String getPtoVta() {
-		return ptoVta;
-	}
-
-	public void setPtoVta(String ptoVta) {
-		this.ptoVta = ptoVta;
-	}
+	private List<DetalleRemitoDTO> detalles;
 
 	public String getCompNro() {
 		return compNro;
@@ -66,30 +27,6 @@ public class RemitoDTO {
 
 	public void setFechaEmision(Date fechaEmision) {
 		this.fechaEmision = fechaEmision;
-	}
-
-	public String getCuit() {
-		return cuit;
-	}
-
-	public void setCuit(String cuit) {
-		this.cuit = cuit;
-	}
-
-	public String getIngBrutos() {
-		return ingBrutos;
-	}
-
-	public void setIngBrutos(String ingBrutos) {
-		this.ingBrutos = ingBrutos;
-	}
-
-	public Date getInicioAct() {
-		return inicioAct;
-	}
-
-	public void setInicioAct(Date inicioAct) {
-		this.inicioAct = inicioAct;
 	}
 
 	public String getClienteCuit() {
@@ -124,11 +61,11 @@ public class RemitoDTO {
 		this.clienteCondIVA = clienteCondIVA;
 	}
 
-	public List<DetalleFacturaDTO> getDetalles() {
+	public List<DetalleRemitoDTO> getDetalles() {
 		return detalles;
 	}
 
-	public void setDetalles(List<DetalleFacturaDTO> detalles) {
+	public void setDetalles(List<DetalleRemitoDTO> detalles) {
 		this.detalles = detalles;
 	}
 

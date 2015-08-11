@@ -15,13 +15,13 @@ public class RemitoModel extends WTableModel<Remito> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public RemitoModel() {
-		super(new String[] { "NUMERO", "FECHA", "CANT. PRODUCTOS", "FACTURA/CAE",
-				"ESTADO" });
+		super(new String[] { "NUMERO", "FECHA", "CANT. PRODUCTOS",
+				"FACTURA/CAE", "ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] {0.15, 0.15, 0.20, 0.40, 0.10 };
+		return new double[] { 0.15, 0.15, 0.20, 0.40, 0.10 };
 	}
 
 	@Override
@@ -29,8 +29,16 @@ public class RemitoModel extends WTableModel<Remito> {
 		fila[0] = t.getNumero();
 		fila[1] = WUtils.getStringFromDate(t.getFecha());
 		fila[2] = t.getCantidad();
-		fila[3] = (null != t.getFactura())? t.getFactura().getCae() : "";
-		fila[4] =  t.isActivo() ? new ImageIcon(this.getClass().getResource(
+
+		if (null != t.getComprobante()) {
+			fila[3] = (WUtils
+					.isNotEmpty(t.getComprobante().getNroCompFormato()) ? t
+					.getComprobante().getNroCompFormato() : t.getComprobante()
+					.getNroComprobante());
+		} else {
+			fila[3] = "";
+		}
+		fila[4] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
 				"/icons/activo.png")) : new ImageIcon(this.getClass()
 				.getResource("/icons/inactivo.png"));
 		fila[5] = t.getId();

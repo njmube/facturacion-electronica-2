@@ -3,7 +3,9 @@ package ar.com.wuik.swing.components.table;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -139,6 +141,15 @@ public final class WTablePanel<T> extends JPanel implements WSecure {
 		table.addData(data, Boolean.FALSE);
 	}
 
+	public void addData(Set<T> data) {
+		if (null != data) {
+			List<T> dataParse = new ArrayList<T>(data);
+			table.addData(dataParse, Boolean.FALSE);
+		} else {
+			table.addData(new ArrayList<T>(), Boolean.FALSE);
+		}
+	}
+
 	public void addDataNoRemove(List<T> data) {
 		table.addData(data, Boolean.TRUE);
 	}
@@ -191,7 +202,6 @@ public final class WTablePanel<T> extends JPanel implements WSecure {
 			}
 		}
 	}
-	
 
 	/**
 	 * @see ar.com.wuik.swing.components.security.WSecure#applySecurity(java.util.List)

@@ -277,7 +277,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 				}, "Imprimir", null);
 
 		if (isClienteActivo()) {
-			toolbarButtons.add(buttonAdd);
+//			toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
 			toolbarButtons.add(buttonAnular);
 			toolbarButtons.add(buttonImprimir);
