@@ -81,17 +81,6 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 	private List<WToolbarButton> getToolbarButtons() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
-		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Recibo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/add.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new ReciboVerIFrame(ReciboIFrame.this,
-								idCliente, null));
-					}
-				}, "Nuevo", null);
 		WToolbarButton buttonEdit = new WToolbarButton("Editar Recibo",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/edit.png")),

@@ -198,9 +198,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 		if (null == total || total.doubleValue() == 0) {
 			messages.add("Debe ingresar al menos monto en Efectivo o Cheque");
-		}
-
-		if (total.doubleValue() != totalLiquidacion.doubleValue()) {
+		} else if (total.doubleValue() != totalLiquidacion.doubleValue()) {
 			messages.add("Total de la entrega debe coincidir con el total de las liquidaciones");
 		}
 

@@ -117,16 +117,27 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 									.getInstance(ComprobanteBO.class);
 							try {
 
-								Comprobante factura = (Comprobante) comprobanteBO
+								Comprobante comprobante = (Comprobante) comprobanteBO
 										.obtener(selectedItem);
 
-								if (!factura.getEstadoFacturacion().equals(
+								if (!comprobante.getEstadoFacturacion().equals(
 										EstadoFacturacion.FACTURADO)) {
-									if (!factura.getEstadoFacturacion().equals(
-											EstadoFacturacion.FACTURADO_ERROR)) {
-										addModalIFrame(new ComprobanteVerIFrame(
-												ComprobanteIFrame.this,
-												selectedItem));
+									if (!comprobante
+											.getEstadoFacturacion()
+											.equals(EstadoFacturacion.FACTURADO_ERROR)) {
+										if (comprobante.isActivo()) {
+											addModalIFrame(new ComprobanteVerIFrame(
+													ComprobanteIFrame.this,
+													selectedItem));
+										} else {
+											WTooltipUtils
+													.showMessage(
+															"El Comprobante debe estar activo.",
+															(JButton) e
+																	.getSource(),
+															MessageType.ALERTA);
+										}
+
 									} else {
 										WTooltipUtils
 												.showMessage(
@@ -176,15 +187,15 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 									ComprobanteBO comprobanteBO = AbstractFactory
 											.getInstance(ComprobanteBO.class);
 
-									Comprobante factura = (Comprobante) comprobanteBO
+									Comprobante comprobante = (Comprobante) comprobanteBO
 											.obtener(selectedItem);
 
-									if (factura.isActivo()) {
-										if (!factura
+									if (comprobante.isActivo()) {
+										if (!comprobante
 												.getEstadoFacturacion()
 												.equals(EstadoFacturacion.FACTURADO_ERROR)) {
 
-											if (!factura.isPago()) {
+											if (!comprobante.isPago()) {
 												comprobanteBO
 														.cancelar(selectedItem);
 												search();
@@ -260,12 +271,13 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
 							try {
-								Comprobante factura = comprobanteBO
+								Comprobante comprobante = comprobanteBO
 										.obtener(selectedItem);
-								if (!factura.getEstadoFacturacion().equals(
+								if (!comprobante.getEstadoFacturacion().equals(
 										EstadoFacturacion.FACTURADO)) {
-									if (factura.isActivo()) {
-										comprobanteBO.registrarAFIP(factura);
+									if (comprobante.isActivo()) {
+										comprobanteBO
+												.registrarAFIP(comprobante);
 										try {
 											ComprobanteReporte
 													.generarImpresion(selectedItem);
@@ -316,11 +328,11 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
 							try {
-								Comprobante factura = comprobanteBO
+								Comprobante comprobante = comprobanteBO
 										.obtener(selectedItem);
-								if (factura.getEstadoFacturacion().equals(
+								if (comprobante.getEstadoFacturacion().equals(
 										EstadoFacturacion.FACTURADO)) {
-									if (factura.isActivo()) {
+									if (comprobante.isActivo()) {
 										try {
 											ComprobanteReporte
 													.generarImpresion(selectedItem);
