@@ -20,7 +20,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.18, 0.09, 0.22, 0.09, 0.09, 0.18, 0.09, 0.06 };
+		return new double[] { 0.18, 0.12, 0.22, 0.09, 0.09, 0.15, 0.09, 0.06 };
 	}
 
 	@Override
