@@ -57,7 +57,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Cheques");
 		setFrameIcon(new ImageIcon(
-				ChequeIFrame.class.getResource("/icons/cheque.png")));
+				ChequeIFrame.class.getResource("/icons/cheques.png")));
 		setBounds(0, 0, 712, 594);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -71,7 +71,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Cheques");
 		setFrameIcon(new ImageIcon(
-				ChequeIFrame.class.getResource("/icons/cheque.png")));
+				ChequeIFrame.class.getResource("/icons/cheques.png")));
 		setBounds(0, 0, 712, 594);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

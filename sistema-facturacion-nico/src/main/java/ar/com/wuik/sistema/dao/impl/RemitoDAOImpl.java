@@ -35,8 +35,8 @@ public class RemitoDAOImpl extends GenericCrudHBDAOImpl<Remito> implements
 			Criteria criteria = getSession().createCriteria(Remito.class);
 			criteria.setProjection(Projections.rowCount());
 			criteria.add(Restrictions.eq("id", id));
-			criteria.createAlias("factura", "factura", JoinType.LEFT_OUTER_JOIN);
-			criteria.add(Restrictions.isNotNull("factura.id"));
+			criteria.createAlias("comprobante", "comprobante", JoinType.LEFT_OUTER_JOIN);
+			criteria.add(Restrictions.isNotNull("comprobante.id"));
 			Long count = (Long) criteria.uniqueResult();
 			return count > 0;
 		} catch (HibernateException hbexc) {
@@ -78,11 +78,11 @@ public class RemitoDAOImpl extends GenericCrudHBDAOImpl<Remito> implements
 		}
 
 		if (null != asignado) {
-			criteria.createAlias("factura", "factura", JoinType.LEFT_OUTER_JOIN);
+			criteria.createAlias("comprobante", "comprobante", JoinType.LEFT_OUTER_JOIN);
 			if (asignado) {
-				criteria.add(Restrictions.isNotNull("factura.id"));
+				criteria.add(Restrictions.isNotNull("comprobante.id"));
 			} else {
-				criteria.add(Restrictions.isNull("factura.id"));
+				criteria.add(Restrictions.isNull("comprobante.id"));
 			}
 		}
 

@@ -46,7 +46,7 @@ public class BackupIFrame extends WAbstractIFrame {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				BackupIFrame.class.getResource("/icons/clientes.png")));
+				BackupIFrame.class.getResource("/icons/backup.png")));
 		setBounds(0, 0, 523, 196);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

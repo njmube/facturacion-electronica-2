@@ -127,6 +127,28 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		getTxtEstado().setText("SIN FACTURAR");
 	}
 
+	public RemitoClienteVerIFrame(Long idCliente) {
+
+		initialize("Nuevo Remito");
+
+		this.idCliente = idCliente;
+
+		WModel model = populateModel();
+		model.addValue(CAMPO_FECHA_EMISION,
+				WUtils.getStringFromDate(new Date()));
+		this.remito = new Remito();
+		try {
+			ParametroBO parametroBO = AbstractFactory
+					.getInstance(ParametroBO.class);
+			String nroRemito = parametroBO.getNroRemito();
+			model.addValue(CAMPO_NRO_COMP, nroRemito);
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+		populateComponents(model);
+		getTxtEstado().setText("SIN FACTURAR");
+	}
+
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
@@ -248,8 +270,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 							if (remito.getId() == null) {
 								remitoBO.guardar(remito);
 								try {
-									RemitoReporte.generarRemito(remito
-											.getId());
+									RemitoReporte.generarRemito(remito.getId());
 								} catch (ReportException rexc) {
 									showGlobalErrorMsg(rexc.getMessage());
 								}
@@ -257,7 +278,9 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 								remitoBO.actualizar(remito);
 							}
 							hideFrame();
-							remitoIFrame.search();
+							if (null != remitoIFrame) {
+								remitoIFrame.search();
+							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						}
@@ -563,6 +586,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		getTblDetalle().addData(remito.getDetalles());
 		calcularTotales();
 	}
+
 	private JLabel getLblBuscar() {
 		if (lblBuscar == null) {
 			lblBuscar = new JLabel("B\u00FAsqueda:");

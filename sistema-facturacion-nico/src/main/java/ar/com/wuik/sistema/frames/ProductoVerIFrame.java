@@ -57,10 +57,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_CODIGO = "codigo";
 	private static final String CAMPO_UBICACION = "ubicacion";
 	private ProductoIFrame productoIFrame;
-	private FacturaVerIFrame ventaClienteVerIFrame;
+	private ComprobanteVerIFrame comprobanteVerIFrame;
 	private RemitoClienteVerIFrame remitoClienteVerIFrame;
-	private NotaCreditoVerIFrame notaCreditoVerIFrame;
-	private NotaDebitoVerIFrame notaDebitoVerIFrame;
 	private Producto producto;
 	private WTextFieldDecimal txfCosto;
 	private JLabel lblCodigo;
@@ -82,27 +80,23 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		this.producto = new Producto();
 	}
 
-	public ProductoVerIFrame(FacturaVerIFrame ventaClienteVerIFrame) {
+	public ProductoVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame) {
 		initializate("Nuevo Producto");
-		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
+		this.comprobanteVerIFrame = comprobanteVerIFrame;
 		this.producto = new Producto();
+	}
+	
+	public ProductoVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame, String texto) {
+		initializate("Nuevo Producto");
+		this.comprobanteVerIFrame = comprobanteVerIFrame;
+		this.producto = new Producto();
+		this.producto.setDescripcion(texto);
+		getTxtDescripcion().setText(texto);
 	}
 
 	public ProductoVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
 		initializate("Nuevo Producto");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
-		this.producto = new Producto();
-	}
-
-	public ProductoVerIFrame(NotaCreditoVerIFrame notaCreditoVerIFrame) {
-		initializate("Nuevo Producto");
-		this.notaCreditoVerIFrame = notaCreditoVerIFrame;
-		this.producto = new Producto();
-	}
-
-	public ProductoVerIFrame(NotaDebitoVerIFrame notaDebitoVerIFrame) {
-		initializate("Nuevo Producto");
-		this.notaDebitoVerIFrame = notaDebitoVerIFrame;
 		this.producto = new Producto();
 	}
 
@@ -283,15 +277,11 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 				if (null != productoIFrame) {
 					productoIFrame.search();
-				} else if (null != ventaClienteVerIFrame) {
-					ventaClienteVerIFrame.search();
+				} else if (null != comprobanteVerIFrame) {
+					comprobanteVerIFrame.search();
 				} else if (null != remitoClienteVerIFrame) {
 					remitoClienteVerIFrame.search();
-				} else if (null != notaCreditoVerIFrame) {
-					notaCreditoVerIFrame.search();
-				} else if (null != notaDebitoVerIFrame) {
-					notaDebitoVerIFrame.search();
-				}
+				} 
 				hideFrame();
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());

@@ -177,58 +177,6 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 						}
 					}
 				}, "Editar", null);
-		WToolbarButton buttonActivar = new WToolbarButton(
-				"Activar/Desactivar Proveedor", new ImageIcon(
-						WCalendarIFrame.class
-								.getResource("/icons/activar-desactivar.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long idProveedor = tablePanel.getSelectedItemID();
-						if (null != idProveedor) {
-							try {
-								ProveedorBO proveedorBO = AbstractFactory
-										.getInstance(ProveedorBO.class);
-								Proveedor proveedor = proveedorBO
-										.obtener(idProveedor);
-								if (proveedor.isActivo()) {
-									int result = JOptionPane
-											.showConfirmDialog(
-													getParent(),
-													"¿Desea Desactivar el Proveedor seleccionado?",
-													"Alerta",
-													JOptionPane.OK_CANCEL_OPTION,
-													JOptionPane.WARNING_MESSAGE);
-									if (result == JOptionPane.OK_OPTION) {
-										proveedorBO.desactivar(idProveedor);
-										search();
-									}
-								} else {
-									int result = JOptionPane
-											.showConfirmDialog(
-													getParent(),
-													"¿Desea Activar el Proveedor seleccionado?",
-													"Alerta",
-													JOptionPane.OK_CANCEL_OPTION,
-													JOptionPane.WARNING_MESSAGE);
-									if (result == JOptionPane.OK_OPTION) {
-										proveedorBO.activar(idProveedor);
-										search();
-									}
-								}
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
-							}
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar al menos un Proveedor",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Activar/Desactivar", null);
 
 		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Cliente",
 				new ImageIcon(WCalendarIFrame.class
@@ -275,7 +223,6 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
-		toolbarButtons.add(buttonActivar);
 		return toolbarButtons;
 	}
 

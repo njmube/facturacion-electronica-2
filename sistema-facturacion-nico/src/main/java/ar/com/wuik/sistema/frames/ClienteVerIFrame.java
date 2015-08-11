@@ -2,6 +2,10 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,20 +27,20 @@ import javax.swing.text.MaskFormatter;
 import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.entities.Cliente;
-import ar.com.wuik.sistema.entities.CondicionIVA;
 import ar.com.wuik.sistema.entities.Localidad;
+import ar.com.wuik.sistema.entities.enums.CondicionIVA;
+import ar.com.wuik.sistema.entities.enums.TipoDocumento;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldLimit;
+import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class ClienteVerIFrame extends WAbstractModelIFrame {
 	/**
@@ -57,13 +61,15 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_TELEFONO = "telefono";
 	private static final String CAMPO_CELULAR = "celular";
 	private static final String CAMPO_LOCALIDAD = "localidad";
-	private static final String CAMPO_CUIT = "cuit";
+	private static final String CAMPO_NUMERO_DOC = "nroDoc";
+	private static final String CAMPO_NUMERO_DOC2 = "nroDoc2";
+	private static final String CAMPO_TIPO_DOC = "tipoDoc";
 	private static final String CAMPO_TIPO_IVA = "tipoIva";
 	private ClienteIFrame clienteIFrame;
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
 	private JFormattedTextField txfCuit;
-	private JLabel lblCuit;
+	private JLabel lblDocumento;
 	private JLabel lblLocalidad;
 	private JTextField txtCelular;
 	private JLabel lblTipoIva;
@@ -71,6 +77,9 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JComboBox cmbTipoIva;
 	private JLabel lblTelefono;
 	private JLabel label;
+	private JComboBox cmbTipoDoc;
+	private JLabel lblTipoDoc;
+	private WTextFieldNumeric txtDNIOtros;
 
 	/**
 	 * Create the frame.
@@ -80,7 +89,18 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	public ClienteVerIFrame(Long idCliente, ClienteIFrame clienteIFrame) {
 		initialize("Editar Cliente");
 		this.clienteIFrame = clienteIFrame;
+		loadTiposDocumento();
 		loadCliente(idCliente);
+	}
+
+	private void loadTiposDocumento() {
+		TipoDocumento[] tiposDocumento = TipoDocumento.values();
+		for (TipoDocumento tipoDocumento : tiposDocumento) {
+			getCmbTipoDoc().addItem(
+					new WOption((long) tipoDocumento.getId(), tipoDocumento
+							.name()));
+		}
+
 	}
 
 	private void loadCliente(Long idCliente) {
@@ -92,7 +112,9 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_DIRECCION, cliente.getDireccion());
 			model.addValue(CAMPO_TELEFONO, cliente.getTelefono());
 			model.addValue(CAMPO_LOCALIDAD, cliente.getLocalidad().getId());
-			model.addValue(CAMPO_CUIT, cliente.getCuit());
+			model.addValue(CAMPO_NUMERO_DOC, cliente.getDocumento());
+			model.addValue(CAMPO_NUMERO_DOC2, cliente.getDocumento());
+			model.addValue(CAMPO_TIPO_DOC, cliente.getTipoDocumento().getId());
 			model.addValue(CAMPO_CELULAR, cliente.getCelular());
 			model.addValue(CAMPO_TIPO_IVA, cliente.getCondicionIVA().getId());
 			populateComponents(model);
@@ -105,14 +127,15 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		initialize("Nuevo Cliente");
 		this.clienteIFrame = clienteIFrame;
 		this.cliente = new Cliente();
+		loadTiposDocumento();
 	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				ClienteVerIFrame.class.getResource("/icons/clientes.png")));
-		setBounds(0, 0, 445, 369);
+				ClienteVerIFrame.class.getResource("/icons/cliente.png")));
+		setBounds(0, 0, 445, 437);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -123,20 +146,13 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	}
 
 	private void loadTiposIva() {
-		getCmbTipoIva().addItem(WOption.getWOptionSelecione());
-		ParametricoBO parametricoBO = AbstractFactory
-				.getInstance(ParametricoBO.class);
-		try {
-			List<CondicionIVA> condiciones = parametricoBO
-					.obtenerTodosCondicionesIVA();
-			if (WUtils.isNotEmpty(condiciones)) {
-				for (CondicionIVA condicionIVA : condiciones) {
-					getCmbTipoIva().addItem(
-							new WOption((long) condicionIVA.getId(),
-									condicionIVA.getDenominacion()));
-				}
+		CondicionIVA[] condiciones = CondicionIVA.values();
+		if (WUtils.isNotEmpty(condiciones)) {
+			for (CondicionIVA condicionIVA : condiciones) {
+				getCmbTipoIva().addItem(
+						new WOption((long) condicionIVA.getId(), condicionIVA
+								.getDenominacion()));
 			}
-		} catch (BusinessException e) {
 		}
 	}
 
@@ -169,8 +185,10 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		String direccion = model.getValue(CAMPO_DIRECCION);
 		String telefono = model.getValue(CAMPO_TELEFONO);
 		WOption localidad = model.getValue(CAMPO_LOCALIDAD);
-		String cuit = model.getValue(CAMPO_CUIT);
+		String documento = model.getValue(CAMPO_NUMERO_DOC);
+		String documento2 = model.getValue(CAMPO_NUMERO_DOC2);
 		WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
+		WOption tipoDoc = model.getValue(CAMPO_TIPO_DOC);
 
 		List<String> messages = new ArrayList<String>();
 
@@ -178,8 +196,18 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			messages.add("Debe ingresar una Razón Social");
 		}
 
-		if (!AppUtils.esValidoCUIT(cuit)) {
-			messages.add("Debe ingresar un Cuit válido");
+		TipoDocumento tipoDocumento = TipoDocumento.fromValue(tipoDoc
+				.getValue().intValue());
+
+		if (tipoDocumento.equals(TipoDocumento.CUIL)
+				|| tipoDocumento.equals(TipoDocumento.CUIT)) {
+			if (!AppUtils.esValidoCUIT(documento)) {
+				messages.add("Debe ingresar un Documento válido");
+			}
+		} else {
+			if (WUtils.isEmpty(documento2)) {
+				messages.add("Debe ingresar un Documento válido");
+			}
 		}
 
 		if (WUtils.isEmpty(direccion)) {
@@ -209,7 +237,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 421, 281);
+			pnlBusqueda.setBounds(10, 11, 421, 339);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getTxtRazonSocial());
@@ -218,7 +246,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtDireccion());
 			pnlBusqueda.add(getTxtTelefono());
 			pnlBusqueda.add(getTxfCuit());
-			pnlBusqueda.add(getLblCuit());
+			pnlBusqueda.add(getLblDocumento());
 			pnlBusqueda.add(getLblLocalidad());
 			pnlBusqueda.add(getTxtCelular());
 			pnlBusqueda.add(getLblTipoIva());
@@ -226,6 +254,9 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getCmbTipoIva());
 			pnlBusqueda.add(getLblTelefono());
 			pnlBusqueda.add(getLabel());
+			pnlBusqueda.add(getCmbTipoDoc());
+			pnlBusqueda.add(getLblTipoDoc());
+			pnlBusqueda.add(getTxtDNIOtros());
 		}
 		return pnlBusqueda;
 	}
@@ -260,7 +291,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(215, 303, 103, 25);
+			btnCerrar.setBounds(201, 374, 103, 25);
 		}
 		return btnCerrar;
 	}
@@ -270,7 +301,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(328, 303, 103, 25);
+			btnGuardar.setBounds(314, 374, 103, 25);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -280,7 +311,9 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						String direccion = model.getValue(CAMPO_DIRECCION);
 						String telefono = model.getValue(CAMPO_TELEFONO);
 						WOption localidad = model.getValue(CAMPO_LOCALIDAD);
-						String cuit = model.getValue(CAMPO_CUIT);
+						String documento = model.getValue(CAMPO_NUMERO_DOC);
+						String documento2 = model.getValue(CAMPO_NUMERO_DOC2);
+						WOption tipoDoc = model.getValue(CAMPO_TIPO_DOC);
 						String celular = model.getValue(CAMPO_CELULAR);
 						WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
 
@@ -288,9 +321,15 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						cliente.setDireccion(direccion);
 						cliente.setTelefono(telefono);
 						cliente.setIdLocalidad(localidad.getValue());
-						cliente.setCuit(cuit);
+						cliente.setDocumento(documento);
+						cliente.setTipoDocumento(TipoDocumento
+								.fromValue(tipoDoc.getValue().intValue()));
 						cliente.setCelular(celular);
-						cliente.setIdCondicionIVA(tipoIva.getValue());
+						cliente.setCondicionIVA(CondicionIVA.fromValue(tipoIva
+								.getValue().intValue()));
+
+						cliente.setDocumento((WUtils.isNotEmpty(documento) && !"##-########-#"
+								.equals(documento)) ? documento : documento2);
 
 						ClienteBO clienteBO = AbstractFactory
 								.getInstance(ClienteBO.class);
@@ -323,7 +362,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (lblDireccion == null) {
 			lblDireccion = new JLabel("* Direcci\u00F3n:");
 			lblDireccion.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblDireccion.setBounds(10, 95, 121, 25);
+			lblDireccion.setBounds(10, 131, 121, 25);
 		}
 		return lblDireccion;
 	}
@@ -332,7 +371,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (lblCelular == null) {
 			lblCelular = new JLabel("Celular:");
 			lblCelular.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCelular.setBounds(10, 167, 121, 25);
+			lblCelular.setBounds(10, 203, 121, 25);
 		}
 		return lblCelular;
 	}
@@ -340,7 +379,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtDireccion() {
 		if (txtDireccion == null) {
 			txtDireccion = new JTextField();
-			txtDireccion.setBounds(141, 95, 263, 25);
+			txtDireccion.setBounds(141, 131, 263, 25);
 			txtDireccion.setDocument(new WTextFieldLimit(100));
 			txtDireccion.setName(CAMPO_DIRECCION);
 		}
@@ -350,7 +389,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtTelefono() {
 		if (txtTelefono == null) {
 			txtTelefono = new JTextField();
-			txtTelefono.setBounds(141, 131, 145, 25);
+			txtTelefono.setBounds(141, 167, 145, 25);
 			txtTelefono.setDocument(new WTextFieldLimit(20));
 			txtTelefono.setName(CAMPO_TELEFONO);
 		}
@@ -365,7 +404,10 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 				formatter.setPlaceholderCharacter('#');
 			} catch (java.text.ParseException exc) {
 			}
+
 			txfCuit = new JFormattedTextField(formatter);
+			txfCuit.setName(CAMPO_NUMERO_DOC);
+
 			txfCuit.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
@@ -385,26 +427,25 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 				}
 			});
-			txfCuit.setName(CAMPO_CUIT);
-			txfCuit.setBounds(141, 59, 145, 25);
+			txfCuit.setBounds(141, 95, 145, 25);
 		}
 		return txfCuit;
 	}
 
-	private JLabel getLblCuit() {
-		if (lblCuit == null) {
-			lblCuit = new JLabel("* Cuit:");
-			lblCuit.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCuit.setBounds(10, 59, 121, 25);
+	private JLabel getLblDocumento() {
+		if (lblDocumento == null) {
+			lblDocumento = new JLabel("* Documento:");
+			lblDocumento.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblDocumento.setBounds(10, 95, 121, 25);
 		}
-		return lblCuit;
+		return lblDocumento;
 	}
 
 	private JLabel getLblLocalidad() {
 		if (lblLocalidad == null) {
 			lblLocalidad = new JLabel("* Localidad:");
 			lblLocalidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblLocalidad.setBounds(10, 203, 121, 25);
+			lblLocalidad.setBounds(10, 239, 121, 25);
 		}
 		return lblLocalidad;
 	}
@@ -413,7 +454,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (txtCelular == null) {
 			txtCelular = new JTextField();
 			txtCelular.setName(CAMPO_CELULAR);
-			txtCelular.setBounds(141, 167, 145, 25);
+			txtCelular.setBounds(141, 203, 145, 25);
 			txtCelular.setDocument(new WTextFieldLimit(30));
 		}
 		return txtCelular;
@@ -423,7 +464,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (lblTipoIva == null) {
 			lblTipoIva = new JLabel("* Tipo IVA:");
 			lblTipoIva.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTipoIva.setBounds(10, 239, 121, 25);
+			lblTipoIva.setBounds(10, 275, 121, 25);
 		}
 		return lblTipoIva;
 	}
@@ -432,7 +473,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (cmbLocalidad == null) {
 			cmbLocalidad = new JComboBox();
 			cmbLocalidad.setName(CAMPO_LOCALIDAD);
-			cmbLocalidad.setBounds(141, 203, 164, 25);
+			cmbLocalidad.setBounds(141, 239, 164, 25);
 		}
 		return cmbLocalidad;
 	}
@@ -441,7 +482,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (cmbTipoIva == null) {
 			cmbTipoIva = new JComboBox();
 			cmbTipoIva.setName(CAMPO_TIPO_IVA);
-			cmbTipoIva.setBounds(141, 239, 247, 25);
+			cmbTipoIva.setBounds(141, 275, 247, 25);
 		}
 		return cmbTipoIva;
 	}
@@ -450,7 +491,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (lblTelefono == null) {
 			lblTelefono = new JLabel("* Tel\u00E9fono:");
 			lblTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTelefono.setBounds(10, 131, 121, 25);
+			lblTelefono.setBounds(10, 167, 121, 25);
 		}
 		return lblTelefono;
 	}
@@ -458,8 +499,58 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("");
-			label.setBounds(296, 59, 22, 25);
+			label.setBounds(296, 95, 22, 25);
 		}
 		return label;
+	}
+
+	private JComboBox getCmbTipoDoc() {
+		if (cmbTipoDoc == null) {
+			cmbTipoDoc = new JComboBox();
+			cmbTipoDoc.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+
+						getTxfCuit().setVisible(Boolean.FALSE);
+						getTxtDNIOtros().setVisible(Boolean.FALSE);
+						label.setIcon(null);
+
+						WOption selectedOption = (WOption) e.getItem();
+						TipoDocumento tipoDocumento = TipoDocumento
+								.fromValue(selectedOption.getValue().intValue());
+						if (tipoDocumento.equals(TipoDocumento.CUIL)
+								|| tipoDocumento.equals(TipoDocumento.CUIT)) {
+							getTxtDNIOtros().setText("");
+							getTxfCuit().setVisible(Boolean.TRUE);
+						} else {
+							getTxfCuit().setText("");
+							getTxtDNIOtros().setVisible(Boolean.TRUE);
+						}
+					}
+				}
+			});
+			cmbTipoDoc.setName(CAMPO_TIPO_DOC);
+			cmbTipoDoc.setBounds(141, 59, 164, 25);
+		}
+		return cmbTipoDoc;
+	}
+
+	private JLabel getLblTipoDoc() {
+		if (lblTipoDoc == null) {
+			lblTipoDoc = new JLabel("* Tipo Doc.:");
+			lblTipoDoc.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTipoDoc.setBounds(10, 59, 121, 25);
+		}
+		return lblTipoDoc;
+	}
+
+	private WTextFieldNumeric getTxtDNIOtros() {
+		if (txtDNIOtros == null) {
+			txtDNIOtros = new WTextFieldNumeric();
+			txtDNIOtros.setName(CAMPO_NUMERO_DOC2);
+			txtDNIOtros.setDocument(new WTextFieldLimit(10));
+			txtDNIOtros.setBounds(141, 95, 145, 25);
+		}
+		return txtDNIOtros;
 	}
 }

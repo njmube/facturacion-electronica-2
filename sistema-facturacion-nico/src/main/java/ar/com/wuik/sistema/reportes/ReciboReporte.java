@@ -25,14 +25,8 @@ public class ReciboReporte {
 			ReciboDTO reciboDTO = reciboBO.obtenerDTO(idRecibo);
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("RAZON_SOCIAL", reciboDTO.getRazonSocial());
-			parameters.put("DOMICILIO", reciboDTO.getDomicilio());
-			parameters.put("COND_IVA", reciboDTO.getCondIVA());
 			parameters.put("COMP_NRO", reciboDTO.getCompNro());
 			parameters.put("FECHA_EMISION", reciboDTO.getFechaEmision());
-			parameters.put("CUIT", reciboDTO.getCuit());
-			parameters.put("ING_BRUTOS", reciboDTO.getIngBrutos());
-			parameters.put("INICIO_ATC", reciboDTO.getInicioAct());
 			parameters.put("CLIENTE_CUIT", reciboDTO.getClienteCuit());
 			parameters.put("CLIENTE_COND_IVA", reciboDTO.getClienteCondIVA());
 			parameters.put("CLIENTE_RAZON", reciboDTO.getClienteRazonSocial());
@@ -90,6 +84,6 @@ public class ReciboReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarRecibo(1L);
+		generarRecibo(4L);
 	}
 }

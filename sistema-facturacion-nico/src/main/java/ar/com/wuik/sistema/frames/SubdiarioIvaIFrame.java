@@ -21,11 +21,13 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.commons.beanutils.BeanComparator;
 
-import ar.com.wuik.sistema.bo.SubdiarioIvaBO;
-import ar.com.wuik.sistema.entities.SubdiarioIva;
+import ar.com.wuik.sistema.bo.ComprobanteBO;
+import ar.com.wuik.sistema.entities.Comprobante;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
+import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.filters.SubdiarioIvaFilter;
-import ar.com.wuik.sistema.model.SubdiarioIvaModel;
+import ar.com.wuik.sistema.filters.ComprobanteFilter;
+import ar.com.wuik.sistema.model.ComprobanteIVAModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.table.WTablePanel;
@@ -59,7 +61,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 	private JTextField txtHasta;
 	private JButton button;
 	private JLabel lblHasta;
-	private WTablePanel<SubdiarioIva> tablePanel;
+	private WTablePanel<Comprobante> tablePanel;
 	private JLabel lblTotalIVA;
 	private JTextField txtTotalIVA;
 	private JButton btnBuscar;
@@ -69,7 +71,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 		setTitle("Subdiario de IVA");
 		setFrameIcon(new ImageIcon(
 				SubdiarioIvaIFrame.class.getResource("/icons/subdiario.png")));
-		setBounds(0, 0, 655, 539);
+		setBounds(0, 0, 792, 539);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlParametros());
@@ -97,19 +99,20 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			String fechaDesde = model.getValue(CAMPO_FECHA_DESDE);
 			String fechaHasta = model.getValue(CAMPO_FECHA_HASTA);
 
-			SubdiarioIvaBO subdiarioIvaBO = AbstractFactory
-					.getInstance(SubdiarioIvaBO.class);
-			SubdiarioIvaFilter filter = new SubdiarioIvaFilter();
+			ComprobanteBO comprobanteBO = AbstractFactory
+					.getInstance(ComprobanteBO.class);
+			ComprobanteFilter filter = new ComprobanteFilter();
 			filter.setDesde(WUtils.getDateFromString(fechaDesde));
 			filter.setHasta(WUtils.getDateFromString(fechaHasta));
+			filter.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 			try {
-				List<SubdiarioIva> subdiariosIva = subdiarioIvaBO
+				List<Comprobante> comprobantes = comprobanteBO
 						.buscar(filter);
-				if (WUtils.isNotEmpty(subdiariosIva)) {
-					Collections.sort(subdiariosIva, new BeanComparator("fecha"));
+				if (WUtils.isNotEmpty(comprobantes)) {
+					Collections.sort(comprobantes, new BeanComparator("fechaVenta"));
 				}
-				calcularTotal(subdiariosIva);
-				getTablePanel().addData(subdiariosIva);
+				calcularTotal(comprobantes);
+				getTablePanel().addData(comprobantes);
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());
 			}
@@ -117,16 +120,16 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 
 	}
 
-	private void calcularTotal(List<SubdiarioIva> subdiariosIva) {
+	private void calcularTotal(List<Comprobante> comprobantes) {
 
 		BigDecimal totalIva = BigDecimal.ZERO;
 
-		if (WUtils.isNotEmpty(subdiariosIva)) {
-			for (SubdiarioIva subdiarioIva : subdiariosIva) {
-				if (subdiarioIva.isSuma()) {
-					totalIva = totalIva.add(subdiarioIva.getTotalIva());
+		if (WUtils.isNotEmpty(comprobantes)) {
+			for (Comprobante comprobante : comprobantes) {
+				if (comprobante.getTipoComprobante().equals(TipoComprobante.NOTA_CREDITO)) {
+					totalIva = totalIva.add(comprobante.getIva());
 				} else {
-					totalIva = totalIva.subtract(subdiarioIva.getTotalIva());
+					totalIva = totalIva.subtract(comprobante.getIva());
 				}
 			}
 		}
@@ -160,7 +163,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			pnlParametros = new JPanel();
 			pnlParametros.setBorder(new TitledBorder(null, "Parametros",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlParametros.setBounds(10, 11, 633, 454);
+			pnlParametros.setBounds(10, 11, 770, 454);
 			pnlParametros.setLayout(null);
 			pnlParametros.add(getLblInicioAct());
 			pnlParametros.add(getTxtDesde());
@@ -186,7 +189,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(540, 476, 103, 25);
+			btnCancelar.setBounds(677, 476, 103, 25);
 		}
 		return btnCancelar;
 	}
@@ -259,10 +262,10 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 		return lblHasta;
 	}
 
-	private WTablePanel<SubdiarioIva> getTablePanel() {
+	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(SubdiarioIvaModel.class);
-			tablePanel.setBounds(10, 101, 613, 297);
+			tablePanel = new WTablePanel(ComprobanteIVAModel.class);
+			tablePanel.setBounds(10, 101, 750, 297);
 		}
 		return tablePanel;
 	}
@@ -272,7 +275,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			lblTotalIVA = new JLabel("Total IVA Venta: $");
 			lblTotalIVA.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTotalIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
-			lblTotalIVA.setBounds(279, 409, 184, 34);
+			lblTotalIVA.setBounds(416, 409, 184, 34);
 		}
 		return lblTotalIVA;
 	}
@@ -283,7 +286,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			txtTotalIVA.setEditable(false);
 			txtTotalIVA.setHorizontalAlignment(JTextField.RIGHT);
 			txtTotalIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
-			txtTotalIVA.setBounds(473, 409, 150, 34);
+			txtTotalIVA.setBounds(610, 409, 150, 34);
 		}
 		return txtTotalIVA;
 	}
@@ -293,7 +296,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			btnBuscar = new JButton("Buscar");
 			btnBuscar.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/search.png")));
-			btnBuscar.setBounds(534, 66, 89, 23);
+			btnBuscar.setBounds(671, 77, 89, 23);
 		}
 		return btnBuscar;
 	}

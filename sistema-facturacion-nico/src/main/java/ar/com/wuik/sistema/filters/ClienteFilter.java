@@ -3,8 +3,8 @@ package ar.com.wuik.sistema.filters;
 public class ClienteFilter {
 
 	private String razonSocial;
-	private String cuit;
-	
+	private String documento;
+
 	public String getRazonSocial() {
 		return razonSocial;
 	}
@@ -13,12 +13,12 @@ public class ClienteFilter {
 		this.razonSocial = razonSocial;
 	}
 
-	public String getCuit() {
-		return cuit;
+	public String getDocumento() {
+		return documento;
 	}
 
-	public void setCuit(String cuit) {
-		this.cuit = cuit;
+	public void setDocumento(String documento) {
+		this.documento = documento;
 	}
 
 }

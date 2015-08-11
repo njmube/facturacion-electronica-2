@@ -13,12 +13,11 @@ import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.dao.RemitoDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleRemito;
-import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.RemitoFilter;
-import ar.com.wuik.sistema.reportes.entities.DetalleFacturaDTO;
+import ar.com.wuik.sistema.reportes.entities.DetalleRemitoDTO;
 import ar.com.wuik.sistema.reportes.entities.RemitoDTO;
 import ar.com.wuik.sistema.utils.HibernateUtil;
 
@@ -33,7 +32,7 @@ public class RemitoBOImpl implements RemitoBO {
 	public RemitoBOImpl() {
 		remitoDAO = AbstractFactory.getInstance(RemitoDAO.class);
 		parametroDAO = AbstractFactory.getInstance(ParametroDAO.class);
-		parametroBO =  AbstractFactory.getInstance(ParametroBO.class);
+		parametroBO = AbstractFactory.getInstance(ParametroBO.class);
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class RemitoBOImpl implements RemitoBO {
 		try {
 			return remitoDAO.getById(id);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtener() - Error al obtener Remito",daexc);
+			LOGGER.error("obtener() - Error al obtener Remito", daexc);
 			throw new BusinessException(daexc, "Error al obtener Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -53,7 +52,7 @@ public class RemitoBOImpl implements RemitoBO {
 		try {
 			return remitoDAO.search(filter);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("buscar() - Error al buscar Remitos",daexc);
+			LOGGER.error("buscar() - Error al buscar Remitos", daexc);
 			throw new BusinessException(daexc, "Error al buscar Remitos");
 		} finally {
 			HibernateUtil.closeSession();
@@ -71,7 +70,7 @@ public class RemitoBOImpl implements RemitoBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("guardar() - Error al guardar Remito",daexc);
+			LOGGER.error("guardar() - Error al guardar Remito", daexc);
 			throw new BusinessException(daexc, "Error al guardar Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -86,7 +85,7 @@ public class RemitoBOImpl implements RemitoBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("guardar() - Error al actualizar Remito",daexc);
+			LOGGER.error("guardar() - Error al actualizar Remito", daexc);
 			throw new BusinessException(daexc, "Error al actualizar Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -101,7 +100,7 @@ public class RemitoBOImpl implements RemitoBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("eliminar() - Error al eliminar Remito",daexc);
+			LOGGER.error("eliminar() - Error al eliminar Remito", daexc);
 			throw new BusinessException(daexc, "Error al eliminar Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -113,7 +112,7 @@ public class RemitoBOImpl implements RemitoBO {
 		try {
 			return remitoDAO.estaEnUso(id);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("estaEnUso() - Error al validar uso de Remito",daexc);
+			LOGGER.error("estaEnUso() - Error al validar uso de Remito", daexc);
 			throw new BusinessException(daexc, "Error al validar uso de Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -125,7 +124,8 @@ public class RemitoBOImpl implements RemitoBO {
 		try {
 			return remitoDAO.getAll();
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtenerTodos() - Error al obtener todos los Remitos",daexc);
+			LOGGER.error("obtenerTodos() - Error al obtener todos los Remitos",
+					daexc);
 			throw new BusinessException(daexc,
 					"Error al obtener todos los Remitos");
 		} finally {
@@ -143,7 +143,7 @@ public class RemitoBOImpl implements RemitoBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("cancelar() - Error al cancelar Remito",daexc);
+			LOGGER.error("cancelar() - Error al cancelar Remito", daexc);
 			throw new BusinessException(daexc, "Error al cancelar Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -156,7 +156,7 @@ public class RemitoBOImpl implements RemitoBO {
 			Remito remito = remitoDAO.getById(id);
 			return convertToDTO(remito);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtenerDTO() - Error al obtener Remito",daexc);
+			LOGGER.error("obtenerDTO() - Error al obtener Remito", daexc);
 			throw new BusinessException(daexc, "Error al obtener Remito");
 		} finally {
 			HibernateUtil.closeSession();
@@ -170,30 +170,20 @@ public class RemitoBOImpl implements RemitoBO {
 		Cliente cliente = remito.getCliente();
 		remitoDTO
 				.setClienteCondIVA(cliente.getCondicionIVA().getDenominacion());
-		remitoDTO.setClienteCuit(cliente.getCuit());
+		remitoDTO.setClienteCuit(cliente.getDocumento());
 		remitoDTO.setClienteDomicilio(cliente.getDireccion());
 		remitoDTO.setClienteRazonSocial(cliente.getRazonSocial());
 
-		// DATOS PROPIOS. 
-		Parametro parametro = parametroBO.getParametro();
-		remitoDTO.setRazonSocial(parametro.getRazonSocial());
-		remitoDTO.setCondIVA(parametro.getCondIVA());
-		remitoDTO.setCuit(parametro.getCuit());
-		remitoDTO.setDomicilio(parametro.getDomicilio());
-		remitoDTO.setIngBrutos(parametro.getIngresosBrutos());
-		remitoDTO.setInicioAct(parametro.getInicioActividad());
-
 		List<DetalleRemito> detalles = remito.getDetalles();
-		List<DetalleFacturaDTO> detallesDTO = new ArrayList<DetalleFacturaDTO>();
-		DetalleFacturaDTO detalleFacturaDTO = null;
+		List<DetalleRemitoDTO> detallesDTO = new ArrayList<DetalleRemitoDTO>();
+		DetalleRemitoDTO detalleRemitoDTO = null;
 		for (DetalleRemito detalleRemito : detalles) {
-			detalleFacturaDTO = new DetalleFacturaDTO();
-			detalleFacturaDTO.setCantidad(detalleRemito.getCantidad());
-			detalleFacturaDTO
-					.setCodigo(detalleRemito.getProducto().getCodigo());
-			detalleFacturaDTO.setProducto(detalleRemito.getProducto()
+			detalleRemitoDTO = new DetalleRemitoDTO();
+			detalleRemitoDTO.setCantidad(detalleRemito.getCantidad());
+			detalleRemitoDTO.setCodigo(detalleRemito.getProducto().getCodigo());
+			detalleRemitoDTO.setProducto(detalleRemito.getProducto()
 					.getDescripcion());
-			detallesDTO.add(detalleFacturaDTO);
+			detallesDTO.add(detalleRemitoDTO);
 		}
 		remitoDTO.setDetalles(detallesDTO);
 		remitoDTO.setCompNro(remito.getNumero());

@@ -49,9 +49,10 @@ public class SeleccionarChequeIFrame extends WAbstractModelIFrame implements
 		this.reciboVerIFrame = reciboVerIFrame;
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
-		setTitle("Cheques");
+		setTitle("Seleccionar Cheques");
 		setFrameIcon(new ImageIcon(
-				SeleccionarChequeIFrame.class.getResource("/icons/cheque.png")));
+				SeleccionarComprobanteIFrame.class
+						.getResource("/icons/seleccionar.png")));
 		setBounds(0, 0, 751, 424);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

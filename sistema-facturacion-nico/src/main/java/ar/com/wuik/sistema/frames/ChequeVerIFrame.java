@@ -132,12 +132,27 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
+	
+	public ChequeVerIFrame(Long idCliente) {
+		initialize("Nuevo Cheque");
+		this.cheque = new Cheque();
+		this.cheque.setIdCliente(idCliente);
+		try {
+			ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
+			Cliente cliente = clienteBO.obtener(idCliente);
+			WModel model = populateModel();
+			model.addValue(CAMPO_CLIENTE, cliente.getRazonSocial());
+			populateComponents(model);
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				ChequeVerIFrame.class.getResource("/icons/clientes.png")));
+				ChequeVerIFrame.class.getResource("/icons/cheques.png")));
 		setBounds(0, 0, 445, 369);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);

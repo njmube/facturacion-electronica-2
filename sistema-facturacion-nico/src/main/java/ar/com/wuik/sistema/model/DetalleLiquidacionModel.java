@@ -2,12 +2,12 @@ package ar.com.wuik.sistema.model;
 
 import java.math.BigDecimal;
 
-import ar.com.wuik.sistema.entities.Liquidacion;
+import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
 import ar.com.wuik.swing.utils.WUtils;
 
-public class DetalleLiquidacionModel extends WTableModel<Liquidacion> {
+public class DetalleLiquidacionModel extends WTableModel<Comprobante> {
 
 	/**
 	 * Serial UID.
@@ -24,10 +24,10 @@ public class DetalleLiquidacionModel extends WTableModel<Liquidacion> {
 	}
 
 	@Override
-	protected Object[] getRow(Liquidacion t, Object[] fila) {
-		fila[0] = WUtils.getStringFromDate(t.getFecha());
-		fila[1] = t.getTipo();
-		fila[2] = t.getComprobante();
+	protected Object[] getRow(Comprobante t, Object[] fila) {
+		fila[0] = WUtils.getStringFromDate(t.getFechaVenta());
+		fila[1] = "";
+		fila[2] = t.getNroCompFormato();
 		fila[3] = AppUtils.formatPeso(t.getTotal());
 		fila[4] = t.getId();
 		return fila;

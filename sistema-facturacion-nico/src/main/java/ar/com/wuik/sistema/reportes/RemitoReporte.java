@@ -14,7 +14,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import ar.com.wuik.sistema.bo.RemitoBO;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.reportes.entities.DetalleFacturaDTO;
+import ar.com.wuik.sistema.reportes.entities.DetalleRemitoDTO;
 import ar.com.wuik.sistema.reportes.entities.RemitoDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 
@@ -25,17 +25,10 @@ public class RemitoReporte {
 		try {
 			RemitoBO remitoBO = AbstractFactory.getInstance(RemitoBO.class);
 			RemitoDTO remitoDTO = remitoBO.obtenerDTO(idRemito);
-			List<DetalleFacturaDTO> detalles = remitoDTO.getDetalles();
+			List<DetalleRemitoDTO> detalles = remitoDTO.getDetalles();
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("RAZON_SOCIAL", remitoDTO.getRazonSocial());
-			parameters.put("DOMICILIO", remitoDTO.getDomicilio());
-			parameters.put("COND_IVA", remitoDTO.getCondIVA());
-			parameters.put("PTO_VTA", remitoDTO.getPtoVta());
 			parameters.put("COMP_NRO", remitoDTO.getCompNro());
 			parameters.put("FECHA_EMISION", remitoDTO.getFechaEmision());
-			parameters.put("CUIT", remitoDTO.getCuit());
-			parameters.put("ING_BRUTOS", remitoDTO.getIngBrutos());
-			parameters.put("INICIO_ATC", remitoDTO.getInicioAct());
 			parameters.put("CLIENTE_CUIT", remitoDTO.getClienteCuit());
 			parameters.put("CLIENTE_COND_IVA", remitoDTO.getClienteCondIVA());
 			parameters.put("CLIENTE_RAZON", remitoDTO.getClienteRazonSocial());

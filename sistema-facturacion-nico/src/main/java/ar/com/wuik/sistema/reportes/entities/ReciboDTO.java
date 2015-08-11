@@ -1,27 +1,18 @@
 package ar.com.wuik.sistema.reportes.entities;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import ar.com.wuik.sistema.entities.Factura;
-import ar.com.wuik.sistema.entities.NotaDebito;
+import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.PagoReciboCheque;
 import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
 import ar.com.wuik.swing.utils.WUtils;
 
 public class ReciboDTO {
 
-	private String razonSocial;
-	private String domicilio;
-	private String condIVA;
 	private String compNro;
 	private Date fechaEmision;
-	private String cuit;
-	private String ingBrutos;
-	private Date inicioAct;
 	private String clienteCuit;
 	private String clienteDomicilio;
 	private String clienteRazonSocial;
@@ -68,30 +59,6 @@ public class ReciboDTO {
 	private BigDecimal totalComp6;
 	private BigDecimal totalComp;
 
-	public String getRazonSocial() {
-		return razonSocial;
-	}
-
-	public void setRazonSocial(String razonSocial) {
-		this.razonSocial = razonSocial;
-	}
-
-	public String getDomicilio() {
-		return domicilio;
-	}
-
-	public void setDomicilio(String domicilio) {
-		this.domicilio = domicilio;
-	}
-
-	public String getCondIVA() {
-		return condIVA;
-	}
-
-	public void setCondIVA(String condIVA) {
-		this.condIVA = condIVA;
-	}
-
 	public String getCompNro() {
 		return compNro;
 	}
@@ -106,30 +73,6 @@ public class ReciboDTO {
 
 	public void setFechaEmision(Date fechaEmision) {
 		this.fechaEmision = fechaEmision;
-	}
-
-	public String getCuit() {
-		return cuit;
-	}
-
-	public void setCuit(String cuit) {
-		this.cuit = cuit;
-	}
-
-	public String getIngBrutos() {
-		return ingBrutos;
-	}
-
-	public void setIngBrutos(String ingBrutos) {
-		this.ingBrutos = ingBrutos;
-	}
-
-	public Date getInicioAct() {
-		return inicioAct;
-	}
-
-	public void setInicioAct(Date inicioAct) {
-		this.inicioAct = inicioAct;
 	}
 
 	public String getClienteCuit() {
@@ -477,69 +420,56 @@ public class ReciboDTO {
 		this.efectivo = efectivo;
 	}
 
-	public void setComprobantes(Set<Factura> facturas,
-			Set<NotaDebito> notasDebito) {
+	public void setComprobantes(List<Comprobante> comprobantes) {
 
-		List<Comprobante> comprobantes = new ArrayList<Comprobante>();
 
 		BigDecimal totalComprobantes = BigDecimal.ZERO;
 
-		if (WUtils.isNotEmpty(facturas)) {
-			for (Factura factura : facturas) {
-				comprobantes.add(new Comprobante(factura.getFechaVenta(),
-						factura.getNroCompFormato(), factura.getTotal()));
-				totalComprobantes = totalComprobantes.add(factura.getTotal());
-			}
-		}
-
-		if (WUtils.isNotEmpty(notasDebito)) {
-			for (NotaDebito notaDebito : notasDebito) {
-				comprobantes.add(new Comprobante(notaDebito.getFechaVenta(),
-						notaDebito.getNroCompFormato(), notaDebito.getTotal()));
-				totalComprobantes = totalComprobantes
-						.add(notaDebito.getTotal());
+		if (WUtils.isNotEmpty(comprobantes)) {
+			for (Comprobante comprobante : comprobantes) {
+				totalComprobantes = totalComprobantes.add(comprobante.getTotal());
 			}
 		}
 
 		if (comprobantes.size() >= 1) {
 			Comprobante comp = comprobantes.get(0);
-			setNroComp1(comp.getNro());
-			setFechaComp1(comp.getFecha());
+			setNroComp1(comp.getNroCompFormato());
+			setFechaComp1(comp.getFechaVenta());
 			setTotalComp1(comp.getTotal());
 		}
 
 		if (comprobantes.size() >= 2) {
 			Comprobante comp = comprobantes.get(1);
-			setNroComp2(comp.getNro());
-			setFechaComp2(comp.getFecha());
+			setNroComp2(comp.getNroCompFormato());
+			setFechaComp2(comp.getFechaVenta());
 			setTotalComp2(comp.getTotal());
 		}
 
 		if (comprobantes.size() >= 3) {
 			Comprobante comp = comprobantes.get(2);
-			setNroComp3(comp.getNro());
-			setFechaComp3(comp.getFecha());
+			setNroComp3(comp.getNroCompFormato());
+			setFechaComp3(comp.getFechaVenta());
 			setTotalComp3(comp.getTotal());
 		}
 
 		if (comprobantes.size() >= 4) {
 			Comprobante comp = comprobantes.get(3);
-			setNroComp4(comp.getNro());
-			setFechaComp4(comp.getFecha());
+			setNroComp4(comp.getNroCompFormato());
+			setFechaComp4(comp.getFechaVenta());
 			setTotalComp4(comp.getTotal());
 		}
 
 		if (comprobantes.size() >= 5) {
 			Comprobante comp = comprobantes.get(4);
-			setNroComp5(comp.getNro());
-			setFechaComp5(comp.getFecha());
+			setNroComp5(comp.getNroCompFormato());
+			setFechaComp5(comp.getFechaVenta());
 			setTotalComp5(comp.getTotal());
 		}
 
 		if (comprobantes.size() >= 6) {
 			Comprobante comp = comprobantes.get(5);
-			setNroComp6(comp.getNro());
-			setFechaComp6(comp.getFecha());
+			setNroComp6(comp.getNroCompFormato());
+			setFechaComp6(comp.getFechaVenta());
 			setTotalComp6(comp.getTotal());
 		}
 
@@ -548,40 +478,3 @@ public class ReciboDTO {
 	}
 }
 
-class Comprobante {
-
-	public Comprobante(Date fecha, String nro, BigDecimal total) {
-		this.fecha = fecha;
-		this.nro = nro;
-		this.total = total;
-	}
-
-	private Date fecha;
-	private String nro;
-	private BigDecimal total;
-
-	public Date getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-
-	public String getNro() {
-		return nro;
-	}
-
-	public void setNro(String nro) {
-		this.nro = nro;
-	}
-
-	public BigDecimal getTotal() {
-		return total;
-	}
-
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
-}

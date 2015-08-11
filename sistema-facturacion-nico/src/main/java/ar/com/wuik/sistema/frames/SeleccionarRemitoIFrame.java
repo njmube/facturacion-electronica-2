@@ -38,20 +38,21 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 	private JButton btnCerrar;
 	private Long idCliente;
 	private List<Long> idsRemitosToExclude;
-	private FacturaVerIFrame ventaClienteVerIFrame;
+	private ComprobanteVerIFrame comprobanteVerIFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public SeleccionarRemitoIFrame(FacturaVerIFrame ventaClienteVerIFrame,  List<Long> idsRemitosToExclude,
+	public SeleccionarRemitoIFrame(ComprobanteVerIFrame comprobanteVerIFrame,  List<Long> idsRemitosToExclude,
 			Long idCliente) {
 		this.idsRemitosToExclude = idsRemitosToExclude;
-		this.ventaClienteVerIFrame = ventaClienteVerIFrame;
+		this.comprobanteVerIFrame = comprobanteVerIFrame;
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
-		setTitle("Remitos");
+		setTitle("Seleccionar Remitos");
 		setFrameIcon(new ImageIcon(
-				SeleccionarRemitoIFrame.class.getResource("/icons/remitos.png")));
+				SeleccionarComprobanteIFrame.class
+						.getResource("/icons/seleccionar.png")));
 		setBounds(0, 0, 636, 271);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -102,7 +103,7 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 							filter.setInicializarDetalles(Boolean.TRUE);
 							try {
 								List<Remito> remitos = remitoBO.buscar(filter);
-								ventaClienteVerIFrame.addRemitos(remitos);
+								comprobanteVerIFrame.addRemitos(remitos);
 								hideFrame();
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
