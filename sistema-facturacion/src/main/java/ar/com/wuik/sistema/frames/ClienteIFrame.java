@@ -97,7 +97,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			pnlBusqueda = new JPanel();
 			pnlBusqueda.setBorder(new TitledBorder(null, "B\u00FAsqueda",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 1154, 97);
+			pnlBusqueda.setBounds(10, 11, 1154, 109);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getBtnLimpiar());
@@ -121,7 +121,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnBuscar() {
 		if (btnBuscar == null) {
 			btnBuscar = new JButton("Buscar");
-			btnBuscar.setBounds(608, 61, 103, 25);
+			btnBuscar.setBounds(928, 66, 103, 30);
 			btnBuscar.setFocusable(false);
 			btnBuscar.addActionListener(new ActionListener() {
 
@@ -138,7 +138,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnLimpiar() {
 		if (btnLimpiar == null) {
 			btnLimpiar = new JButton("Limpiar");
-			btnLimpiar.setBounds(495, 61, 103, 25);
+			btnLimpiar.setBounds(1041, 66, 103, 30);
 			btnLimpiar.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -155,7 +155,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Cliente> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(ClienteModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 176, 1154, 478);
+			tablePanel.setBounds(10, 203, 1154, 451);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -267,7 +267,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new RemitoClienteIFrame(selectedItem));
+							addModalIFrame(new RemitoIFrame(selectedItem));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -332,7 +332,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Salir");
+			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 
@@ -342,7 +342,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			});
 			btnCerrar.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(1061, 665, 103, 25);
+			btnCerrar.setBounds(1061, 660, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -424,7 +424,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}
 			});
-			btnNotaDeCredito.setBounds(178, 119, 147, 46);
+			btnNotaDeCredito.setBounds(178, 146, 147, 46);
 		}
 		return btnNotaDeCredito;
 	}
@@ -434,7 +434,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnNotaDeDbito = new JButton("Nota de D\u00E9bito");
 			btnNotaDeDbito.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons32/notas_debito.png")));
-			btnNotaDeDbito.setBounds(347, 119, 147, 46);
+			btnNotaDeDbito.setBounds(347, 146, 147, 46);
 			btnNotaDeDbito.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
@@ -457,7 +457,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnVenta = new JButton("Venta");
 			btnVenta.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons32/facturas.png")));
-			btnVenta.setBounds(10, 119, 147, 46);
+			btnVenta.setBounds(10, 146, 147, 46);
 			btnVenta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
@@ -484,7 +484,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
 					if (null != selectedItem) {
-						addModalIFrame(new RemitoClienteVerIFrame(selectedItem));
+						addModalIFrame(new RemitoVerIFrame(selectedItem));
 					} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un solo Cliente",
@@ -492,7 +492,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}
 			});
-			btnRemito.setBounds(516, 119, 147, 46);
+			btnRemito.setBounds(516, 146, 147, 46);
 		}
 		return btnRemito;
 	}
@@ -502,7 +502,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnRecibo = new JButton("Recibo");
 			btnRecibo.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons32/recibo.png")));
-			btnRecibo.setBounds(684, 119, 147, 46);
+			btnRecibo.setBounds(684, 146, 147, 46);
 			btnRecibo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
@@ -524,7 +524,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnCheque = new JButton("Cheque");
 			btnCheque.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons32/cheques.png")));
-			btnCheque.setBounds(852, 119, 147, 46);
+			btnCheque.setBounds(852, 146, 147, 46);
 			btnCheque.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();

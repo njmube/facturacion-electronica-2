@@ -118,7 +118,7 @@ public class TipoProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(TipoProductoVerIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(184, 85, 103, 25);
+			btnCancelar.setBounds(184, 85, 103, 30);
 		}
 		return btnCancelar;
 	}
@@ -128,7 +128,7 @@ public class TipoProductoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(TipoProductoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(296, 85, 103, 25);
+			btnGuardar.setBounds(296, 85, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 
 				@Override

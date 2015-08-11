@@ -103,7 +103,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnBuscar() {
 		if (btnBuscar == null) {
 			btnBuscar = new JButton("Buscar");
-			btnBuscar.setBounds(480, 61, 103, 25);
+			btnBuscar.setBounds(658, 56, 103, 30);
 			btnBuscar.setFocusable(false);
 			btnBuscar.addActionListener(new ActionListener() {
 
@@ -120,7 +120,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnLimpiar() {
 		if (btnLimpiar == null) {
 			btnLimpiar = new JButton("Limpiar");
-			btnLimpiar.setBounds(367, 61, 103, 25);
+			btnLimpiar.setBounds(771, 56, 103, 30);
 			btnLimpiar.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -228,7 +228,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Salir");
+			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 
@@ -238,7 +238,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 			});
 			btnCerrar.setIcon(new ImageIcon(ProveedorIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(791, 459, 103, 25);
+			btnCerrar.setBounds(791, 454, 103, 30);
 		}
 		return btnCerrar;
 	}

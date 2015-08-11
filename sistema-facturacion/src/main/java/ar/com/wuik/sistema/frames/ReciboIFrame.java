@@ -187,7 +187,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Salir");
+			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 
@@ -197,7 +197,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(430, 451, 103, 25);
+			btnCerrar.setBounds(430, 451, 103, 30);
 		}
 		return btnCerrar;
 	}

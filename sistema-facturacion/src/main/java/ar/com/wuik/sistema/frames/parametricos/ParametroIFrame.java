@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -32,8 +33,6 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
-
-import javax.swing.SpinnerNumberModel;
 
 /**
  * 
@@ -116,7 +115,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 		setTitle("Parámetros");
 		setFrameIcon(new ImageIcon(
 				ParametroIFrame.class.getResource("/icons/parametros.png")));
-		setBounds(0, 0, 629, 484);
+		setBounds(0, 0, 629, 488);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlParametros());
@@ -237,7 +236,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(ParametroIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(399, 422, 103, 25);
+			btnCancelar.setBounds(399, 422, 103, 30);
 		}
 		return btnCancelar;
 	}
@@ -289,7 +288,7 @@ public class ParametroIFrame extends WAbstractModelIFrame {
 			});
 			btnGuardar.setIcon(new ImageIcon(ParametroIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(516, 422, 103, 25);
+			btnGuardar.setBounds(516, 422, 103, 30);
 		}
 		return btnGuardar;
 	}

@@ -76,10 +76,10 @@ public class MovimientoProductoIFrame extends WAbstractIFrame implements
 
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
-			btnSalir = new JButton("Salir");
+			btnSalir = new JButton("Cerrar");
 			btnSalir.setIcon(new ImageIcon(MovimientoProductoIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnSalir.setBounds(464, 289, 103, 25);
+			btnSalir.setBounds(464, 289, 103, 30);
 			btnSalir.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {

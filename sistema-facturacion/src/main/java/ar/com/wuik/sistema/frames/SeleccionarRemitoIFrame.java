@@ -135,7 +135,7 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 			});
 			btnCerrar.setIcon(new ImageIcon(SeleccionarRemitoIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(522, 206, 103, 25);
+			btnCerrar.setBounds(522, 203, 103, 30);
 		}
 		return btnCerrar;
 	}

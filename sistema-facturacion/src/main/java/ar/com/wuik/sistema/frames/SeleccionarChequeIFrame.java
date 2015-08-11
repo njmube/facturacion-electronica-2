@@ -126,7 +126,7 @@ public class SeleccionarChequeIFrame extends WAbstractModelIFrame implements
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Salir");
+			btnCerrar = new JButton("Cancelar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 
@@ -136,7 +136,7 @@ public class SeleccionarChequeIFrame extends WAbstractModelIFrame implements
 			});
 			btnCerrar.setIcon(new ImageIcon(SeleccionarChequeIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(636, 361, 103, 25);
+			btnCerrar.setBounds(636, 361, 103, 30);
 		}
 		return btnCerrar;
 	}

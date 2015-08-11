@@ -111,7 +111,7 @@ public class ConsultaComprobanteIFrame extends WAbstractModelIFrame implements
 			});
 			btnCerrar.setIcon(new ImageIcon(ConsultaComprobanteIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(885, 451, 103, 25);
+			btnCerrar.setBounds(885, 451, 103, 30);
 		}
 		return btnCerrar;
 	}

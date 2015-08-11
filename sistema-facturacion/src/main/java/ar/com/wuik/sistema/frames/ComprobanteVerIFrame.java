@@ -397,7 +397,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ComprobanteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(639, 678, 103, 25);
+			btnCerrar.setBounds(639, 678, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -407,7 +407,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ComprobanteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(752, 678, 103, 25);
+			btnGuardar.setBounds(752, 678, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -1056,7 +1056,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnGuardarYFacturar.setIcon(new ImageIcon(
 					ComprobanteVerIFrame.class.getResource("/icons/ok.png")));
-			btnGuardarYFacturar.setBounds(863, 679, 148, 25);
+			btnGuardarYFacturar.setBounds(863, 679, 148, 30);
 		}
 		return btnGuardarYFacturar;
 	}

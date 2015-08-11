@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.entities.enums;
 
 import java.math.BigDecimal;
 
-import ar.com.wuik.swing.components.WOption;
-
 public enum TipoIVAEnum {
 
 	IVA_105(1, "10.5 %", BigDecimal.valueOf(10.5)), IVA_21(2, "21 %",

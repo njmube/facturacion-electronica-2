@@ -36,7 +36,7 @@ import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
 
-public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
+public class RemitoVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
@@ -67,7 +67,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public RemitoClienteVistaIFrame(Long idRemito) {
+	public RemitoVistaIFrame(Long idRemito) {
 
 		WModel model = populateModel();
 		initialize("Ver Remito");
@@ -93,7 +93,7 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				RemitoClienteVistaIFrame.class
+				RemitoVistaIFrame.class
 						.getResource("/icons/remitos.png")));
 		setBounds(0, 0, 758, 493);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -161,9 +161,9 @@ public class RemitoClienteVistaIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(RemitoClienteVistaIFrame.class
+			btnCerrar.setIcon(new ImageIcon(RemitoVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(641, 430, 103, 25);
+			btnCerrar.setBounds(641, 429, 103, 30);
 		}
 		return btnCerrar;
 	}

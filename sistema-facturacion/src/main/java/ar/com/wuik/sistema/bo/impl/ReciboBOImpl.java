@@ -12,7 +12,6 @@ import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.dao.ReciboDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
-import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Recibo;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;

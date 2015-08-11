@@ -163,7 +163,7 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Salir");
+			btnCerrar = new JButton("Cancelar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 
@@ -173,7 +173,7 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 			});
 			btnCerrar.setIcon(new ImageIcon(SeleccionarComprobanteIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(900, 361, 103, 25);
+			btnCerrar.setBounds(900, 356, 103, 30);
 		}
 		return btnCerrar;
 	}

@@ -42,13 +42,13 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 	private JTextField txtProductoSeleccionado;
 	private JLabel lblProductoSeleccionado;
 	private Integer cantidadRemitida;
-	private RemitoClienteVerIFrame remitoClienteVerIFrame;
+	private RemitoVerIFrame remitoClienteVerIFrame;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public EditarDetalleRemitoIFrame(DetalleRemito detalle,
-			RemitoClienteVerIFrame remitoClienteVerIFrame) {
+			RemitoVerIFrame remitoClienteVerIFrame) {
 		this.detalle = detalle;
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 		initialize("Editar Detalle");
@@ -119,7 +119,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Cerrar");
+			btnCerrar = new JButton("Cancelar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -128,7 +128,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(EditarDetalleRemitoIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(280, 117, 103, 25);
+			btnCerrar.setBounds(280, 117, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -138,7 +138,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(EditarDetalleRemitoIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(393, 117, 103, 25);
+			btnGuardar.setBounds(393, 117, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();

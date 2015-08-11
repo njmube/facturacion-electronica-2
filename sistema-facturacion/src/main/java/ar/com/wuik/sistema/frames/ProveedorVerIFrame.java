@@ -116,7 +116,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ProveedorVerIFrame.class.getResource("/icons/proveedores.png")));
-		setBounds(0, 0, 470, 326);
+		setBounds(0, 0, 470, 329);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -234,7 +234,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Cerrar");
+			btnCerrar = new JButton("Cancelar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -243,7 +243,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ProveedorVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(242, 264, 103, 25);
+			btnCerrar.setBounds(242, 264, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -253,7 +253,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(355, 264, 103, 25);
+			btnGuardar.setBounds(355, 264, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();

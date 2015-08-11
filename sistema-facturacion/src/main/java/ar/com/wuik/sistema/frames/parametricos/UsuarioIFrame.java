@@ -71,7 +71,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 		setBorder( new LineBorder( null, 1, true ) );
 		setTitle( "Usuarios" );
 		setFrameIcon( new ImageIcon( UsuarioIFrame.class.getResource( "/icons/usuarios.png" ) ) );
-		setBounds( 0, 0, 555, 413 );
+		setBounds( 0, 0, 555, 421 );
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		getContentPane().setLayout( null );
 		getContentPane().add( getPnlBusqueda() );
@@ -96,7 +96,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 			pnlBusqueda = new JPanel();
 			pnlBusqueda.setBorder( new TitledBorder( null, "B\u00FAsqueda", TitledBorder.LEADING, TitledBorder.TOP,
 			    null, null ) );
-			pnlBusqueda.setBounds( 10, 11, 534, 90 );
+			pnlBusqueda.setBounds( 10, 11, 534, 102 );
 			pnlBusqueda.setLayout( null );
 			pnlBusqueda.add( getLblNombre() );
 			pnlBusqueda.add( getLblDNI() );
@@ -111,7 +111,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	private JLabel getLblNombre() {
 		if ( lblNombre == null ) {
 			lblNombre = new JLabel( "Nombre:" );
-			lblNombre.setBounds( 10, 24, 72, 20 );
+			lblNombre.setBounds( 10, 24, 72, 25 );
 			lblNombre.setHorizontalAlignment( SwingConstants.RIGHT );
 		}
 		return lblNombre;
@@ -119,8 +119,8 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 
 	private JLabel getLblDNI() {
 		if ( lblDNI == null ) {
-			lblDNI = new JLabel( "Dni:" );
-			lblDNI.setBounds( 276, 24, 31, 20 );
+			lblDNI = new JLabel( "DNI:" );
+			lblDNI.setBounds( 276, 24, 31, 25 );
 			lblDNI.setHorizontalAlignment( SwingConstants.RIGHT );
 		}
 		return lblDNI;
@@ -129,7 +129,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	private JTextField getTxtNombre() {
 		if ( txtNombre == null ) {
 			txtNombre = new JTextField();
-			txtNombre.setBounds( 92, 24, 171, 20 );
+			txtNombre.setBounds( 92, 24, 171, 25 );
 			txtNombre.setDocument( new WTextFieldLimit( 50 ) );
 			txtNombre.setName( CAMPO_NOMBRE );
 		}
@@ -139,7 +139,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	private JTextField getTxtDNI() {
 		if ( txtDNI == null ) {
 			txtDNI = new JTextField();
-			txtDNI.setBounds( 317, 24, 162, 20 );
+			txtDNI.setBounds( 317, 24, 162, 25 );
 			txtDNI.setDocument( new WTextFieldLimit( 50 ) );
 			txtDNI.setName( CAMPO_DNI );
 		}
@@ -149,7 +149,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	private JButton getBtnBuscar() {
 		if ( btnBuscar == null ) {
 			btnBuscar = new JButton( "Buscar" );
-			btnBuscar.setBounds( 334, 54, 89, 25 );
+			btnBuscar.setBounds( 336, 60, 89, 30 );
 			btnBuscar.setFocusable( false );
 			btnBuscar.addActionListener( new ActionListener() {
 
@@ -166,7 +166,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	private JButton getBtnLimpiar() {
 		if ( btnLimpiar == null ) {
 			btnLimpiar = new JButton( "Limpiar" );
-			btnLimpiar.setBounds( 433, 54, 89, 25 );
+			btnLimpiar.setBounds( 435, 60, 89, 30 );
 			btnLimpiar.addActionListener( new ActionListener() {
 
 
@@ -183,7 +183,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 	private WTablePanel<Usuario> getTablePanel() {
 		if ( tablePanel == null ) {
 			tablePanel = new WTablePanel( UsuarioModel.class, Boolean.FALSE );
-			tablePanel.setBounds( 10, 103, 534, 247 );
+			tablePanel.setBounds( 10, 121, 534, 229 );
 			tablePanel.addToolbarButtons( getToolbarButtons() );
 		}
 		return tablePanel;
@@ -265,7 +265,7 @@ public class UsuarioIFrame extends WAbstractModelIFrame implements WSecure{
 				}
 			} );
 			btnCerrar.setIcon( new ImageIcon( UsuarioIFrame.class.getResource( "/icons/cancel.png" ) ) );
-			btnCerrar.setBounds( 450, 350, 94, 25 );
+			btnCerrar.setBounds( 450, 353, 94, 30 );
 		}
 		return btnCerrar;
 	}

@@ -152,7 +152,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Cancelar");
+			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -161,7 +161,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(811, 443, 103, 25);
+			btnCerrar.setBounds(811, 437, 103, 30);
 		}
 		return btnCerrar;
 	}

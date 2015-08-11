@@ -135,7 +135,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ClienteVerIFrame.class.getResource("/icons/cliente.png")));
-		setBounds(0, 0, 445, 437);
+		setBounds(0, 0, 445, 401);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -237,7 +237,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 421, 339);
+			pnlBusqueda.setBounds(10, 11, 421, 313);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getTxtRazonSocial());
@@ -282,7 +282,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Cerrar");
+			btnCerrar = new JButton("Cancelar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -291,7 +291,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(201, 374, 103, 25);
+			btnCerrar.setBounds(217, 335, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -301,7 +301,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(314, 374, 103, 25);
+			btnGuardar.setBounds(330, 335, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -462,7 +462,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblTipoIva() {
 		if (lblTipoIva == null) {
-			lblTipoIva = new JLabel("* Tipo IVA:");
+			lblTipoIva = new JLabel("* Cond. IVA:");
 			lblTipoIva.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTipoIva.setBounds(10, 275, 121, 25);
 		}
