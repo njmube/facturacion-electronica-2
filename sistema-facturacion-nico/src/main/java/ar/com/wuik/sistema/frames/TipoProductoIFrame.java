@@ -171,7 +171,7 @@ public class TipoProductoIFrame extends WAbstractIFrame implements WSecure {
 			btnSalir = new JButton("Salir");
 			btnSalir.setIcon(new ImageIcon(TipoProductoIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnSalir.setBounds(241, 243, 91, 25);
+			btnSalir.setBounds(241, 240, 91, 30);
 			btnSalir.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {

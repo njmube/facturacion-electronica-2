@@ -445,6 +445,7 @@ public class MainFrame extends WApplication {
 	@Override
 	protected void showFrame() {
 		// applySecurity();
+		setTitle(getApplicationName());
 		super.showFrame();
 	}
 

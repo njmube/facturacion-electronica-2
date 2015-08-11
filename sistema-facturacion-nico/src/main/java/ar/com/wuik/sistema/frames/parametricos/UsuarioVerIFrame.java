@@ -255,7 +255,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnCerrar() {
 		if ( btnCerrar == null ) {
-			btnCerrar = new JButton( "Cerrar" );
+			btnCerrar = new JButton( "Cancelar" );
 			btnCerrar.setFocusable( false );
 			btnCerrar.addActionListener( new ActionListener() {
 
@@ -265,7 +265,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 				}
 			} );
 			btnCerrar.setIcon( new ImageIcon( UsuarioVerIFrame.class.getResource( "/icons/cancel.png" ) ) );
-			btnCerrar.setBounds( 313, 238, 94, 25 );
+			btnCerrar.setBounds( 290, 233, 103, 30 );
 		}
 		return btnCerrar;
 	}
@@ -274,7 +274,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 		if ( btnGuardar == null ) {
 			btnGuardar = new JButton( "Guardar" );
 			btnGuardar.setIcon( new ImageIcon( UsuarioVerIFrame.class.getResource( "/icons/ok.png" ) ) );
-			btnGuardar.setBounds( 412, 238, 94, 25 );
+			btnGuardar.setBounds( 403, 233, 103, 30 );
 			btnGuardar.addActionListener( new ActionListener() {
 
 

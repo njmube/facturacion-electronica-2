@@ -168,7 +168,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 				}, "Editar", null);
 		WToolbarButton buttonAnular = new WToolbarButton("Anular Comprobante",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cancel2.png")),
+						.getResource("/icons/anular.png")),
 				new ActionListener() {
 
 					@Override
@@ -240,7 +240,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 
 		WToolbarButton buttonVer = new WToolbarButton("Ver Comprobante",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/ver.png")),
+						.getResource("/icons/ver_detalle.png")),
 				new ActionListener() {
 
 					@Override
@@ -381,7 +381,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Salir");
+			btnCerrar = new JButton("Cerrar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 
@@ -391,7 +391,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 			});
 			btnCerrar.setIcon(new ImageIcon(ComprobanteIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(885, 451, 103, 25);
+			btnCerrar.setBounds(885, 451, 103, 30);
 		}
 		return btnCerrar;
 	}

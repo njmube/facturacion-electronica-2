@@ -58,7 +58,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_UBICACION = "ubicacion";
 	private ProductoIFrame productoIFrame;
 	private ComprobanteVerIFrame comprobanteVerIFrame;
-	private RemitoClienteVerIFrame remitoClienteVerIFrame;
+	private RemitoVerIFrame remitoClienteVerIFrame;
 	private Producto producto;
 	private WTextFieldDecimal txfCosto;
 	private JLabel lblCodigo;
@@ -85,8 +85,9 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		this.comprobanteVerIFrame = comprobanteVerIFrame;
 		this.producto = new Producto();
 	}
-	
-	public ProductoVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame, String texto) {
+
+	public ProductoVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame,
+			String texto) {
 		initializate("Nuevo Producto");
 		this.comprobanteVerIFrame = comprobanteVerIFrame;
 		this.producto = new Producto();
@@ -94,10 +95,19 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		getTxtDescripcion().setText(texto);
 	}
 
-	public ProductoVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
+	public ProductoVerIFrame(RemitoVerIFrame remitoClienteVerIFrame) {
 		initializate("Nuevo Producto");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 		this.producto = new Producto();
+	}
+
+	public ProductoVerIFrame(RemitoVerIFrame remitoClienteVerIFrame,
+			String texto) {
+		initializate("Nuevo Producto");
+		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
+		this.producto = new Producto();
+		this.producto.setDescripcion(texto);
+		getTxtDescripcion().setText(texto);
 	}
 
 	public ProductoVerIFrame(Long idProducto, ProductoIFrame productoIFrame) {
@@ -135,7 +145,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ClienteIFrame.class.getResource("/icons/productos.png")));
-		setBounds(0, 0, 462, 370);
+		setBounds(0, 0, 452, 374);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCancelar());
@@ -222,7 +232,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(ProductoVerIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(184, 307, 103, 25);
+			btnCancelar.setBounds(224, 307, 103, 30);
 		}
 		return btnCancelar;
 	}
@@ -232,7 +242,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ProductoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(296, 307, 103, 25);
+			btnGuardar.setBounds(336, 307, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 
 				@Override
@@ -281,7 +291,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 					comprobanteVerIFrame.search();
 				} else if (null != remitoClienteVerIFrame) {
 					remitoClienteVerIFrame.search();
-				} 
+				}
 				hideFrame();
 			} catch (BusinessException bexc) {
 				showGlobalErrorMsg(bexc.getMessage());
@@ -478,7 +488,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnNewButton.setIcon(new ImageIcon(ProductoVerIFrame.class
 					.getResource("/icons/add.png")));
-			btnNewButton.setBounds(388, 96, 26, 23);
+			btnNewButton.setBounds(388, 96, 26, 25);
 		}
 		return btnNewButton;
 	}

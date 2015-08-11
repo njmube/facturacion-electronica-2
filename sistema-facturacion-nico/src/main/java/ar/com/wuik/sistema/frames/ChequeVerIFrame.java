@@ -271,7 +271,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
-			btnCerrar = new JButton("Cerrar");
+			btnCerrar = new JButton("Cancelar");
 			btnCerrar.setFocusable(false);
 			btnCerrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -280,7 +280,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ChequeVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(217, 306, 103, 25);
+			btnCerrar.setBounds(217, 301, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -290,7 +290,7 @@ public class ChequeVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ChequeVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(330, 306, 103, 25);
+			btnGuardar.setBounds(330, 301, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();

@@ -47,7 +47,7 @@ public class BackupIFrame extends WAbstractIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				BackupIFrame.class.getResource("/icons/backup.png")));
-		setBounds(0, 0, 523, 196);
+		setBounds(0, 0, 577, 199);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -62,7 +62,7 @@ public class BackupIFrame extends WAbstractIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 500, 109);
+			pnlBusqueda.setBounds(10, 11, 555, 109);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getChckbxEnviarPorMail());
 			pnlBusqueda.add(getTxtDestino());
@@ -83,7 +83,7 @@ public class BackupIFrame extends WAbstractIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(BackupIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(294, 131, 103, 25);
+			btnCerrar.setBounds(349, 131, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -93,7 +93,7 @@ public class BackupIFrame extends WAbstractIFrame {
 			btnGuardar = new JButton("Realizar");
 			btnGuardar.setIcon(new ImageIcon(BackupIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(407, 131, 103, 25);
+			btnGuardar.setBounds(462, 131, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
@@ -188,7 +188,7 @@ public class BackupIFrame extends WAbstractIFrame {
 		if (txtDestino == null) {
 			txtDestino = new JTextField();
 			txtDestino.setEditable(false);
-			txtDestino.setBounds(98, 24, 291, 23);
+			txtDestino.setBounds(98, 24, 330, 25);
 			txtDestino.setColumns(10);
 		}
 		return txtDestino;
@@ -205,6 +205,7 @@ public class BackupIFrame extends WAbstractIFrame {
 	private JButton getBtnExaminar() {
 		if (btnExaminar == null) {
 			btnExaminar = new JButton("Examinar");
+			btnExaminar.setIcon(new ImageIcon(BackupIFrame.class.getResource("/icons/examinar.png")));
 			btnExaminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JFileChooser fc = new JFileChooser();
@@ -219,7 +220,7 @@ public class BackupIFrame extends WAbstractIFrame {
 					}
 				}
 			});
-			btnExaminar.setBounds(399, 24, 89, 23);
+			btnExaminar.setBounds(438, 24, 107, 25);
 		}
 		return btnExaminar;
 	}
@@ -231,7 +232,7 @@ public class BackupIFrame extends WAbstractIFrame {
 			progressBar.setIndeterminate(true);
 			progressBar.setStringPainted(true);
 			progressBar.setString("Enviando Mail");
-			progressBar.setBounds(10, 131, 168, 23);
+			progressBar.setBounds(10, 131, 168, 30);
 		}
 		return progressBar;
 	}

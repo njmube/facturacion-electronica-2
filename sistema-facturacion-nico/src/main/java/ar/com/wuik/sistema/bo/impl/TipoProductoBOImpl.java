@@ -2,7 +2,6 @@ package ar.com.wuik.sistema.bo.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

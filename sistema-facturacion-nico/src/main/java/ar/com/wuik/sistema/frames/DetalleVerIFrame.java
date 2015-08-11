@@ -44,7 +44,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_PRECIO = "precio";
 	private static final String CAMPO_DESCRIPCION = "descripcion";
 	private ComprobanteVerIFrame comprobanteVerIFrame;
-	private RemitoClienteVerIFrame remitoClienteVerIFrame;
+	private RemitoVerIFrame remitoClienteVerIFrame;
 	private JLabel lblIVA;
 	private JComboBox cmbTipoIva;
 	private JLabel lblPrecio;
@@ -58,7 +58,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 		this.comprobanteVerIFrame = comprobanteVerIFrame;
 	}
 
-	public DetalleVerIFrame(RemitoClienteVerIFrame remitoClienteVerIFrame) {
+	public DetalleVerIFrame(RemitoVerIFrame remitoClienteVerIFrame) {
 		initializate("Nuevo Detalle");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 	}
@@ -124,7 +124,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(DetalleVerIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(184, 156, 103, 25);
+			btnCancelar.setBounds(184, 156, 103, 30);
 		}
 		return btnCancelar;
 	}
@@ -134,7 +134,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(DetalleVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(296, 156, 103, 25);
+			btnGuardar.setBounds(296, 156, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 
 				@Override

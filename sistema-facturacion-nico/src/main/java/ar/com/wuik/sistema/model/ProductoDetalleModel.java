@@ -20,7 +20,7 @@ public class ProductoDetalleModel extends WTableModel<Producto> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.20, 0.20, 0.20, 0.20, 0.20 };
+		return new double[] { 0.15, 0.35, 0.20, 0.20, 0.10 };
 	}
 
 	@Override

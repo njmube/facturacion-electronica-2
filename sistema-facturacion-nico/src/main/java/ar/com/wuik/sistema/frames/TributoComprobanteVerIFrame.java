@@ -175,7 +175,7 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(TributoComprobanteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(280, 225, 103, 25);
+			btnCerrar.setBounds(280, 221, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -185,7 +185,7 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(TributoComprobanteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(393, 225, 103, 25);
+			btnGuardar.setBounds(393, 221, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();

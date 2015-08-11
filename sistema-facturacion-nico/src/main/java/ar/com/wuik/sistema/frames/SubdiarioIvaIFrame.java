@@ -106,10 +106,10 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			filter.setHasta(WUtils.getDateFromString(fechaHasta));
 			filter.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 			try {
-				List<Comprobante> comprobantes = comprobanteBO
-						.buscar(filter);
+				List<Comprobante> comprobantes = comprobanteBO.buscar(filter);
 				if (WUtils.isNotEmpty(comprobantes)) {
-					Collections.sort(comprobantes, new BeanComparator("fechaVenta"));
+					Collections.sort(comprobantes, new BeanComparator(
+							"fechaVenta"));
 				}
 				calcularTotal(comprobantes);
 				getTablePanel().addData(comprobantes);
@@ -126,7 +126,8 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isNotEmpty(comprobantes)) {
 			for (Comprobante comprobante : comprobantes) {
-				if (comprobante.getTipoComprobante().equals(TipoComprobante.NOTA_CREDITO)) {
+				if (comprobante.getTipoComprobante().equals(
+						TipoComprobante.NOTA_CREDITO)) {
 					totalIva = totalIva.add(comprobante.getIva());
 				} else {
 					totalIva = totalIva.subtract(comprobante.getIva());
@@ -161,7 +162,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 	private JPanel getPnlParametros() {
 		if (pnlParametros == null) {
 			pnlParametros = new JPanel();
-			pnlParametros.setBorder(new TitledBorder(null, "Parametros",
+			pnlParametros.setBorder(new TitledBorder(null, "",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnlParametros.setBounds(10, 11, 770, 454);
 			pnlParametros.setLayout(null);
@@ -189,7 +190,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(677, 476, 103, 25);
+			btnCancelar.setBounds(677, 476, 103, 30);
 		}
 		return btnCancelar;
 	}
@@ -223,7 +224,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			});
 			btnNewButton.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/calendar.png")));
-			btnNewButton.setBounds(228, 29, 27, 23);
+			btnNewButton.setBounds(228, 29, 27, 25);
 		}
 		return btnNewButton;
 	}
@@ -248,7 +249,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			});
 			button.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/calendar.png")));
-			button.setBounds(228, 65, 27, 23);
+			button.setBounds(228, 65, 27, 25);
 		}
 		return button;
 	}
@@ -296,7 +297,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			btnBuscar = new JButton("Buscar");
 			btnBuscar.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/search.png")));
-			btnBuscar.setBounds(671, 77, 89, 23);
+			btnBuscar.setBounds(671, 62, 89, 30);
 		}
 		return btnBuscar;
 	}

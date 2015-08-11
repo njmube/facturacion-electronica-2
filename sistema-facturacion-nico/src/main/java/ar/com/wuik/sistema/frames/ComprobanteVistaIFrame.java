@@ -287,7 +287,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(906, 678, 103, 25);
+			btnCerrar.setBounds(906, 678, 103, 30);
 		}
 		return btnCerrar;
 	}

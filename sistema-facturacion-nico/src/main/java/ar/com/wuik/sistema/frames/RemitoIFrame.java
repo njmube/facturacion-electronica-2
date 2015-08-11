@@ -31,7 +31,7 @@ import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
-public class RemitoClienteIFrame extends WAbstractModelIFrame implements
+public class RemitoIFrame extends WAbstractModelIFrame implements
 		WSecure {
 
 	/**
@@ -45,12 +45,12 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 	/**
 	 * Create the frame.
 	 */
-	public RemitoClienteIFrame(Long idCliente) {
+	public RemitoIFrame(Long idCliente) {
 		this.idCliente = idCliente;
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Remitos");
 		setFrameIcon(new ImageIcon(
-				RemitoClienteIFrame.class.getResource("/icons/remitos.png")));
+				RemitoIFrame.class.getResource("/icons/remitos.png")));
 		setBounds(0, 0, 660, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -107,8 +107,8 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 									boolean activo = remito.isActivo();
 
 									if (activo) {
-										addModalIFrame(new RemitoClienteVerIFrame(
-												RemitoClienteIFrame.this,
+										addModalIFrame(new RemitoVerIFrame(
+												RemitoIFrame.this,
 												idCliente, selectedItem));
 									} else {
 
@@ -141,7 +141,7 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 				}, "Editar", null);
 		WToolbarButton buttonAnular = new WToolbarButton("Anular Remito",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cancel2.png")),
+						.getResource("/icons/anular.png")),
 				new ActionListener() {
 
 					@Override
@@ -205,14 +205,14 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 
 		WToolbarButton buttonVer = new WToolbarButton("Ver Remito",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/ver.png")),
+						.getResource("/icons/ver_detalle.png")),
 				new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new RemitoClienteVistaIFrame(
+							addModalIFrame(new RemitoVistaIFrame(
 									selectedItem));
 						} else {
 							WTooltipUtils
@@ -285,9 +285,9 @@ public class RemitoClienteIFrame extends WAbstractModelIFrame implements
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(RemitoClienteIFrame.class
+			btnCerrar.setIcon(new ImageIcon(RemitoIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(541, 451, 103, 25);
+			btnCerrar.setBounds(541, 451, 103, 30);
 		}
 		return btnCerrar;
 	}

@@ -119,7 +119,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(ChequeModel.class, Boolean.FALSE);
 			tablePanel.addToolbarButtons(getToolbarButtons());
-			tablePanel.setBounds(10, 101, 690, 421);
+			tablePanel.setBounds(10, 132, 690, 390);
 		}
 		return tablePanel;
 	}
@@ -231,10 +231,10 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 
 	private JButton getBtnSalir() {
 		if (btnSalir == null) {
-			btnSalir = new JButton("Salir");
+			btnSalir = new JButton("Cerrar");
 			btnSalir.setIcon(new ImageIcon(ChequeIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnSalir.setBounds(609, 531, 91, 25);
+			btnSalir.setBounds(588, 531, 103, 30);
 			btnSalir.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -250,7 +250,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 			pnlBusqueda = new JPanel();
 			pnlBusqueda.setBorder(new TitledBorder(null, "B\u00FAsqueda",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 690, 90);
+			pnlBusqueda.setBounds(10, 11, 690, 116);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblNumero());
 			pnlBusqueda.add(getTxtNumero());
@@ -288,7 +288,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 			btnLimpiar = new JButton("Limpiar");
 			btnLimpiar.setIcon(new ImageIcon(ChequeIFrame.class
 					.getResource("/icons/clear.png")));
-			btnLimpiar.setBounds(251, 60, 103, 25);
+			btnLimpiar.setBounds(577, 75, 103, 30);
 			btnLimpiar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -306,7 +306,7 @@ public class ChequeIFrame extends WAbstractModelIFrame implements WSecure {
 			btnBuscar = new JButton("Buscar");
 			btnBuscar.setIcon(new ImageIcon(ChequeIFrame.class
 					.getResource("/icons/search.png")));
-			btnBuscar.setBounds(364, 60, 103, 25);
+			btnBuscar.setBounds(464, 75, 103, 30);
 			btnBuscar.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {

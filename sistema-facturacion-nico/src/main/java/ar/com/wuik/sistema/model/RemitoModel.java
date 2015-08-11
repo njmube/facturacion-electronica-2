@@ -16,7 +16,7 @@ public class RemitoModel extends WTableModel<Remito> {
 
 	public RemitoModel() {
 		super(new String[] { "NUMERO", "FECHA", "CANT. PRODUCTOS",
-				"FACTURA/CAE", "ESTADO" });
+				"NRO. COMP. ASOC.", "ESTADO" });
 	}
 
 	@Override

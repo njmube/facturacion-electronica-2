@@ -122,7 +122,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(new ImageIcon(
 				MovimientoProductoVerIFrame.class
 						.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 473, 340);
+		setBounds(0, 0, 473, 344);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -218,7 +218,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(MovimientoProductoVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(249, 279, 103, 25);
+			btnCerrar.setBounds(249, 279, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -228,7 +228,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(MovimientoProductoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(362, 279, 103, 25);
+			btnGuardar.setBounds(362, 279, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();

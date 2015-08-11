@@ -51,7 +51,7 @@ import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
 
-public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
+public class RemitoVerIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
@@ -66,7 +66,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 	private JButton btnCerrar;
 	private Remito remito;
 	private JButton btnGuardar;
-	private RemitoClienteIFrame remitoIFrame;
+	private RemitoIFrame remitoIFrame;
 	private JButton btnFechaEmision;
 	private JTextField txtFechaEmision;
 	private JLabel lblFechaEmisin;
@@ -87,8 +87,8 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public RemitoClienteVerIFrame(RemitoClienteIFrame remitoIFrame,
-			Long idCliente, Long idRemito) {
+	public RemitoVerIFrame(RemitoIFrame remitoIFrame, Long idCliente,
+			Long idRemito) {
 
 		initialize("Nuevo Remito");
 
@@ -127,7 +127,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		getTxtEstado().setText("SIN FACTURAR");
 	}
 
-	public RemitoClienteVerIFrame(Long idCliente) {
+	public RemitoVerIFrame(Long idCliente) {
 
 		initialize("Nuevo Remito");
 
@@ -153,8 +153,8 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				RemitoClienteVerIFrame.class.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 758, 616);
+				RemitoVerIFrame.class.getResource("/icons/remitos.png")));
+		setBounds(0, 0, 758, 619);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -239,9 +239,9 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
+			btnCerrar.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(528, 553, 103, 25);
+			btnCerrar.setBounds(528, 553, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -249,9 +249,9 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
-			btnGuardar.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
+			btnGuardar.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(641, 553, 103, 25);
+			btnGuardar.setBounds(641, 553, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -304,7 +304,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 					addModalIFrame(new WCalendarIFrame(txtFechaEmision));
 				}
 			});
-			btnFechaEmision.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
+			btnFechaEmision.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/calendar.png")));
 			btnFechaEmision.setBounds(257, 59, 25, 25);
 		}
@@ -371,11 +371,11 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 						if (null != selectedItem) {
 							DetalleRemito detalle = getDetalleById(selectedItem);
 							addModalIFrame(new EditarDetalleRemitoIFrame(
-									detalle, RemitoClienteVerIFrame.this));
+									detalle, RemitoVerIFrame.this));
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -392,7 +392,7 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 						if (null != selectedItem) {
 							int result = JOptionPane.showConfirmDialog(
 									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
+									"¿Desea eliminar los Detalles seleccionados?",
 									"Alerta", JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
@@ -559,16 +559,16 @@ public class RemitoClienteVerIFrame extends WAbstractModelIFrame {
 
 	private JButton getBtnAgregar() {
 		if (btnAgregar == null) {
-			btnAgregar = new JButton("");
+			btnAgregar = new JButton("Nuevo Producto");
 			btnAgregar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ProductoVerIFrame(
-							RemitoClienteVerIFrame.this));
+					addModalIFrame(new ProductoVerIFrame(RemitoVerIFrame.this,
+							getTextField().getText()));
 				}
 			});
-			btnAgregar.setIcon(new ImageIcon(RemitoClienteVerIFrame.class
+			btnAgregar.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/add.png")));
-			btnAgregar.setBounds(420, 95, 31, 25);
+			btnAgregar.setBounds(420, 95, 146, 25);
 		}
 		return btnAgregar;
 	}
