@@ -419,7 +419,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 								TipoComprobante.NOTA_CREDITO));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un solo Cliente",
+								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
@@ -443,7 +443,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 								TipoComprobante.NOTA_DEBITO));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un solo Cliente",
+								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
@@ -487,7 +487,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						addModalIFrame(new RemitoVerIFrame(selectedItem));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un solo Cliente",
+								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
@@ -510,7 +510,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						addModalIFrame(new ReciboVerIFrame(selectedItem));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un solo Cliente",
+								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
@@ -532,7 +532,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						addModalIFrame(new ChequeVerIFrame(selectedItem));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un solo Cliente",
+								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}

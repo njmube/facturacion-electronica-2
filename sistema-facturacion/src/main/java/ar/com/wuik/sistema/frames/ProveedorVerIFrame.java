@@ -151,11 +151,8 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	protected boolean validateModel(WModel model) {
 
 		String razonSocial = model.getValue(CAMPO_RAZON_SOCIAL);
-		String direccion = model.getValue(CAMPO_DIRECCION);
-		String telefono = model.getValue(CAMPO_TELEFONO);
 		WOption localidad = model.getValue(CAMPO_LOCALIDAD);
 		String cuit = model.getValue(CAMPO_CUIT);
-		String mail = model.getValue(CAMPO_MAIL);
 
 		List<String> messages = new ArrayList<String>();
 
@@ -165,18 +162,6 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 
 		if (!AppUtils.esValidoCUIT(cuit)) {
 			messages.add("Debe ingresar un Cuit válido");
-		}
-
-		if (WUtils.isEmpty(direccion)) {
-			messages.add("Debe ingresar una Dirección");
-		}
-
-		if (WUtils.isEmpty(telefono)) {
-			messages.add("Debe ingresar un Teléfono");
-		}
-
-		if (WUtils.isEmpty(mail)) {
-			messages.add("Debe ingresar un Mail");
 		}
 
 		if (WOption.getIdWOptionSeleccion().equals(localidad.getValue())) {
@@ -305,7 +290,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblDireccion() {
 		if (lblDireccion == null) {
-			lblDireccion = new JLabel("* Direcci\u00F3n:");
+			lblDireccion = new JLabel("Direcci\u00F3n:");
 			lblDireccion.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblDireccion.setBounds(10, 95, 121, 25);
 		}
@@ -314,7 +299,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblTelefono() {
 		if (lblTelefono == null) {
-			lblTelefono = new JLabel("* Mail:");
+			lblTelefono = new JLabel("Mail:");
 			lblTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTelefono.setBounds(10, 167, 121, 25);
 		}
@@ -409,14 +394,14 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		if (cmbLocalidad == null) {
 			cmbLocalidad = new JComboBox();
 			cmbLocalidad.setName(CAMPO_LOCALIDAD);
-			cmbLocalidad.setBounds(141, 203, 164, 25);
+			cmbLocalidad.setBounds(141, 203, 219, 25);
 		}
 		return cmbLocalidad;
 	}
 
 	private JLabel getLblTelfono() {
 		if (lblTelfono == null) {
-			lblTelfono = new JLabel("* Tel\u00E9fono:");
+			lblTelfono = new JLabel("Tel\u00E9fono:");
 			lblTelfono.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTelfono.setBounds(10, 131, 121, 25);
 		}

@@ -76,7 +76,7 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 		setFrameIcon(new ImageIcon(
 				SeleccionarComprobanteIFrame.class
 						.getResource("/icons/seleccionar.png")));
-		setBounds(0, 0, 751, 424);
+		setBounds(0, 0, 1015, 424);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getTablePanel());
@@ -115,7 +115,7 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
 
 		WToolbarButton buttonSeleccionar = new WToolbarButton(
-				"Seleccionar Factura(s)", new ImageIcon(
+				"Seleccionar Comprobante(s)", new ImageIcon(
 						WCalendarIFrame.class.getResource("/icons/add.png")),
 				new ActionListener() {
 
@@ -150,7 +150,7 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos una Comprobantes",
+											"Debe seleccionar al menos un Comprobante",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}

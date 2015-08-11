@@ -131,7 +131,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 
 		WToolbarButton buttonVer = new WToolbarButton("Ver Recibo",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/ver.png")),
+						.getResource("/icons/ver_detalle.png")),
 				new ActionListener() {
 
 					@Override

@@ -168,7 +168,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 				}, "Editar", null);
 		WToolbarButton buttonAnular = new WToolbarButton("Anular Comprobante",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cancel2.png")),
+						.getResource("/icons/anular.png")),
 				new ActionListener() {
 
 					@Override
@@ -240,7 +240,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 
 		WToolbarButton buttonVer = new WToolbarButton("Ver Comprobante",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/ver.png")),
+						.getResource("/icons/ver_detalle.png")),
 				new ActionListener() {
 
 					@Override

@@ -105,6 +105,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			String texto) {
 		initializate("Nuevo Producto");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
+		this.producto = new Producto();
 		this.producto.setDescripcion(texto);
 		getTxtDescripcion().setText(texto);
 	}

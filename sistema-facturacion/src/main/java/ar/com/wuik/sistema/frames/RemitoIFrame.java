@@ -141,7 +141,7 @@ public class RemitoIFrame extends WAbstractModelIFrame implements
 				}, "Editar", null);
 		WToolbarButton buttonAnular = new WToolbarButton("Anular Remito",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cancel2.png")),
+						.getResource("/icons/anular.png")),
 				new ActionListener() {
 
 					@Override
@@ -205,7 +205,7 @@ public class RemitoIFrame extends WAbstractModelIFrame implements
 
 		WToolbarButton buttonVer = new WToolbarButton("Ver Remito",
 				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/ver.png")),
+						.getResource("/icons/ver_detalle.png")),
 				new ActionListener() {
 
 					@Override

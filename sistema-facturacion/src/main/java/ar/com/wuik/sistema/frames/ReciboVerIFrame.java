@@ -533,7 +533,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			txtTotalLiquidacion = new JTextField();
 			txtTotalLiquidacion.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtTotalLiquidacion.setEditable(false);
-			txtTotalLiquidacion.setText("$ 0.00");
+			txtTotalLiquidacion.setText("0.00");
 			txtTotalLiquidacion.setBounds(344, 384, 125, 25);
 			txtTotalLiquidacion.setColumns(10);
 			txtTotalLiquidacion.setFont(WFrameUtils.getCustomFont(

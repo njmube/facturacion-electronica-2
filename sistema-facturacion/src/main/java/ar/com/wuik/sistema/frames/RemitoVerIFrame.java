@@ -375,7 +375,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -392,7 +392,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 						if (null != selectedItem) {
 							int result = JOptionPane.showConfirmDialog(
 									getParent(),
-									"¿Desea eliminar el Item seleccionado?",
+									"¿Desea eliminar los Detalles seleccionados?",
 									"Alerta", JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {

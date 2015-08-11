@@ -324,7 +324,7 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblFactura() {
 		if (lblFactura == null) {
-			lblFactura = new JLabel("Factura:");
+			lblFactura = new JLabel("Comprobante Asoc.:");
 			lblFactura.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFactura.setBounds(290, 59, 121, 25);
 		}
