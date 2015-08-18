@@ -128,9 +128,9 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			for (Comprobante comprobante : comprobantes) {
 				if (comprobante.getTipoComprobante().equals(
 						TipoComprobante.NOTA_CREDITO)) {
-					totalIva = totalIva.add(comprobante.getIva());
-				} else {
 					totalIva = totalIva.subtract(comprobante.getIva());
+				} else {
+					totalIva = totalIva.add(comprobante.getIva());
 				}
 			}
 		}
@@ -295,6 +295,11 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 	private JButton getBtnBuscar() {
 		if (btnBuscar == null) {
 			btnBuscar = new JButton("Buscar");
+			btnBuscar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					search();
+				}
+			});
 			btnBuscar.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/search.png")));
 			btnBuscar.setBounds(671, 62, 89, 30);

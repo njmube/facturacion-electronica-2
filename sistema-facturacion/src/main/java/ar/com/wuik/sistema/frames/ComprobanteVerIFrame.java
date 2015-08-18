@@ -486,7 +486,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Remito",
+											"Debe seleccionar un Remito",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -531,7 +531,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Comprobante",
+											"Debe seleccionar un Comprobante",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -666,7 +666,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -697,7 +697,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar al menos un Item",
+											"Debe seleccionar al menos un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}

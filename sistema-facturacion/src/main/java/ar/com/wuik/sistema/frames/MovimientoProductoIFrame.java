@@ -119,7 +119,7 @@ public class MovimientoProductoIFrame extends WAbstractIFrame implements
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Movimiento",
+											"Debe seleccionar un Movimiento",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}

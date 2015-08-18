@@ -293,7 +293,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 	@Override
 	protected JComponent getFocusComponent() {
-		return getTxtNro();
+		return getTextField();
 	}
 
 	private JButton getBtnFechaEmision() {
@@ -403,7 +403,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar al menos un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}

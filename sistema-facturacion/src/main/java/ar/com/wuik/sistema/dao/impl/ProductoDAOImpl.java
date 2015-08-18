@@ -10,7 +10,9 @@ import org.hibernate.criterion.Restrictions;
 
 import ar.com.wuik.sistema.dao.ProductoDAO;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
+import ar.com.wuik.sistema.entities.DetalleRemito;
 import ar.com.wuik.sistema.entities.Producto;
+import ar.com.wuik.sistema.entities.StockProducto;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ProductoFilter;
 
@@ -69,45 +71,45 @@ public class ProductoDAOImpl extends GenericCrudHBDAOImpl<Producto> implements
 			criteria.add(Restrictions.eq("producto.id", id));
 			Long cantidad = (Long) criteria.uniqueResult();
 
-//			if (cantidad > 0) {
-//				return Boolean.TRUE;
-//			} else {
-//				criteria = getSession()
-//						.createCriteria(DetalleNotaCredito.class);
-//				criteria.setProjection(Projections.rowCount());
-//				criteria.add(Restrictions.eq("producto.id", id));
-//				cantidad = (Long) criteria.uniqueResult();
-//				if (cantidad > 0) {
-//					return Boolean.TRUE;
-//				} else {
-//					criteria = getSession().createCriteria(
-//							DetalleNotaDebito.class);
-//					criteria.setProjection(Projections.rowCount());
-//					criteria.add(Restrictions.eq("producto.id", id));
-//					cantidad = (Long) criteria.uniqueResult();
-//					if (cantidad > 0) {
-//						return Boolean.TRUE;
-//					} else {
-//						criteria = getSession().createCriteria(
-//								DetalleRemito.class);
-//						criteria.setProjection(Projections.rowCount());
-//						criteria.add(Restrictions.eq("producto.id", id));
-//						cantidad = (Long) criteria.uniqueResult();
-//						if (cantidad > 0) {
-//							return Boolean.TRUE;
-//						} else {
-//							criteria = getSession().createCriteria(
-//									StockProducto.class);
-//							criteria.setProjection(Projections.rowCount());
-//							criteria.add(Restrictions.eq("idProducto", id));
-//							cantidad = (Long) criteria.uniqueResult();
-//							if (cantidad > 0) {
-//								return Boolean.TRUE;
-//							}
-//						}
-//					}
-//				}
-//			}
+			if (cantidad > 0) {
+				return Boolean.TRUE;
+			} else {
+				criteria = getSession()
+						.createCriteria(DetalleRemito.class);
+				criteria.setProjection(Projections.rowCount());
+				criteria.add(Restrictions.eq("producto.id", id));
+				cantidad = (Long) criteria.uniqueResult();
+				if (cantidad > 0) {
+					return Boolean.TRUE;
+				} else {
+					criteria = getSession().createCriteria(
+							StockProducto.class);
+					criteria.setProjection(Projections.rowCount());
+					criteria.add(Restrictions.eq("producto.id", id));
+					cantidad = (Long) criteria.uniqueResult();
+					if (cantidad > 0) {
+						return Boolean.TRUE;
+					} else {
+						criteria = getSession().createCriteria(
+								DetalleRemito.class);
+						criteria.setProjection(Projections.rowCount());
+						criteria.add(Restrictions.eq("producto.id", id));
+						cantidad = (Long) criteria.uniqueResult();
+						if (cantidad > 0) {
+							return Boolean.TRUE;
+						} else {
+							criteria = getSession().createCriteria(
+									StockProducto.class);
+							criteria.setProjection(Projections.rowCount());
+							criteria.add(Restrictions.eq("idProducto", id));
+							cantidad = (Long) criteria.uniqueResult();
+							if (cantidad > 0) {
+								return Boolean.TRUE;
+							}
+						}
+					}
+				}
+			}
 		} catch (HibernateException hexc) {
 			throw new DataAccessException(hexc);
 		}

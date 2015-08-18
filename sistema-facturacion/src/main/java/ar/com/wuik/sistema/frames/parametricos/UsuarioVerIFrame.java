@@ -435,6 +435,7 @@ public class UsuarioVerIFrame extends WAbstractModelIFrame {
 	private JComboBox getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox(getSkins().toArray());
+			comboBox.setVisible(false);
 			comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					final Skin s = (Skin)e.getItem();
