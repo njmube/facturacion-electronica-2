@@ -96,8 +96,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 		if (null == tipoComprobante) {
 			return new Resultado();
 		}
-		
-		
+
 		// Autorizacion.
 		FEAuthRequest authRequest = AuthorizationUtil.getAuthorization();
 
@@ -183,4 +182,32 @@ public class FacturacionServiceImpl implements FacturacionService {
 		}
 	}
 
+	@Override
+	public List<Resultado> solicitarComprobantes(List<Comprobante> comprobantes)
+			throws ServiceException {
+
+		// Autorizacion.
+		FEAuthRequest authRequest = AuthorizationUtil.getAuthorization();
+
+		try {
+			ServiceSoapProxy service = new ServiceSoapProxy();
+
+			// Request del Servicio.
+			FECAERequest caeRequest = ServiceRequestParser.getFECAERequest(
+					comprobantes, ptoVta);
+
+			// Response del Servicio.
+			FECAEResponse response = service.FECAESolicitar(authRequest,
+					caeRequest);
+
+			// Parseo de respuesta.
+			List<Resultado> resultados = ServiceRequestParser
+					.parseFECAEResponseMasivos(response);
+			return resultados;
+		} catch (RemoteException rexc) {
+			throw new ServiceException(rexc,
+					"Se ha producido un error al conectar a los servicios");
+		}
+
+	}
 }

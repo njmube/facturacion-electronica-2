@@ -37,6 +37,120 @@ import FEV1.dif.afip.gov.ar.utils.Utils;
 
 public class ServiceRequestParser {
 
+	public static FECAERequest getFECAERequest(List<Comprobante> comprobantes,
+			int ptoVta) {
+
+		if (null == comprobantes || comprobantes.isEmpty()) {
+			return null;
+		}
+
+		int cantidadProcesar = comprobantes.size();
+
+		Comprobante comprobante = comprobantes.get(0);
+
+		FECAERequest request = new FECAERequest();
+
+		// Cabecera
+		FECAECabRequest feCabReq = new FECAECabRequest();
+		feCabReq.setCantReg(cantidadProcesar);
+		feCabReq.setCbteTipo(comprobante.getTipoComprobante().getId());
+		feCabReq.setPtoVta(ptoVta);
+		request.setFeCabReq(feCabReq);
+
+		// Detalle
+		FECAEDetRequest[] detalles = new FECAEDetRequest[cantidadProcesar];
+
+		int i = 0;
+		for (Comprobante comprobanteFacturar : comprobantes) {
+
+			FECAEDetRequest detalle = new FECAEDetRequest();
+			detalle.setCbteDesde(comprobanteFacturar.getNroComprobante());
+			detalle.setCbteHasta(comprobanteFacturar.getNroComprobante());
+			detalle.setCbteFch(Utils.getStringFromDate(
+					comprobanteFacturar.getFechaComprobante(), "yyyyMMdd"));
+			detalle.setConcepto(comprobanteFacturar.getTipoConcepto().getId());
+			detalle.setDocNro(comprobanteFacturar.getDocNro());
+			detalle.setDocTipo(comprobanteFacturar.getDocTipo().getId());
+			detalle.setImpIVA(comprobanteFacturar.getImporteIVA().doubleValue());
+			detalle.setImpNeto(comprobanteFacturar.getImporteSubtotal()
+					.doubleValue());
+
+			BigDecimal total = comprobanteFacturar.getImporteTotal();
+			if (null != comprobanteFacturar.getImporteTributos()) {
+				detalle.setImpTrib(comprobanteFacturar.getImporteTributos()
+						.doubleValue());
+				total = total.add(comprobanteFacturar.getImporteTributos());
+			}
+			detalle.setImpTotal(total.doubleValue());
+			detalle.setMonId(comprobanteFacturar.getTipoMoneda().getId());
+			detalle.setMonCotiz((null != comprobanteFacturar.getCotizacion()) ? comprobanteFacturar
+					.getCotizacion().doubleValue() : comprobanteFacturar
+					.getTipoMoneda().getCotizacion().doubleValue());
+
+			// Comprobantes Asociados.
+			List<ComprobanteAsociado> comprobantesAsoc = comprobanteFacturar
+					.getComprobantesAsociados();
+			if (null != comprobantesAsoc && !comprobantesAsoc.isEmpty()) {
+				List<CbteAsoc> cbtesAsoc = new ArrayList<CbteAsoc>();
+				for (ComprobanteAsociado comprobanteAsociado : comprobantesAsoc) {
+					CbteAsoc cbteAsoc = new CbteAsoc();
+					cbteAsoc.setNro(comprobanteAsociado.getNumero());
+					cbteAsoc.setPtoVta(comprobanteAsociado.getPtoVta());
+					cbteAsoc.setTipo(comprobanteAsociado.getTipoComprobante()
+							.getId());
+					cbtesAsoc.add(cbteAsoc);
+				}
+				detalle.setCbtesAsoc(cbtesAsoc.toArray(new CbteAsoc[0]));
+			}
+
+			// Otros Tributos
+			List<TributoComprobante> tributosComprobante = comprobanteFacturar
+					.getTributos();
+			if (null != tributosComprobante && !tributosComprobante.isEmpty()) {
+				List<Tributo> tributos = new ArrayList<Tributo>();
+				Tributo tributo = null;
+				for (TributoComprobante tributoComprobante : tributosComprobante) {
+					tributo = new Tributo();
+					tributo.setAlic(tributoComprobante.getAlicuota()
+							.doubleValue());
+					tributo.setBaseImp(tributoComprobante.getBaseImporte()
+							.doubleValue());
+					tributo.setDesc(tributoComprobante.getDetalle());
+					tributo.setId((short) TipoTributoEnum.OTRO.getId());
+					tributo.setImporte(tributoComprobante.getImporte()
+							.doubleValue());
+					tributos.add(tributo);
+				}
+				detalle.setTributos(tributos.toArray(new Tributo[0]));
+			}
+
+			// Alicuotas IVA.
+			List<AlicuotaIVA> alicuotasComprobantes = comprobanteFacturar
+					.getAlicuotas();
+			if (null != alicuotasComprobantes
+					&& !alicuotasComprobantes.isEmpty()) {
+				List<AlicIva> alicuotas = new ArrayList<AlicIva>();
+				AlicIva alicuota = null;
+				for (AlicuotaIVA alicuotaIVA : alicuotasComprobantes) {
+					alicuota = new AlicIva();
+					alicuota.setBaseImp(alicuotaIVA.getBaseImponible()
+							.doubleValue());
+					alicuota.setImporte(alicuotaIVA.getTotalAlicuota()
+							.doubleValue());
+					alicuota.setId(alicuotaIVA.getTipoIVA().getId());
+					alicuotas.add(alicuota);
+				}
+				detalle.setIva(alicuotas.toArray(new AlicIva[0]));
+			}
+
+			detalles[i] = detalle;
+			i++;
+		}
+
+		request.setFeDetReq(detalles);
+		return request;
+	}
+
 	public static FECAERequest getFECAERequest(Comprobante comprobante,
 			int ptoVta) {
 
@@ -61,11 +175,11 @@ public class ServiceRequestParser {
 		detalle.setDocTipo(comprobante.getDocTipo().getId());
 		detalle.setImpIVA(comprobante.getImporteIVA().doubleValue());
 		detalle.setImpNeto(comprobante.getImporteSubtotal().doubleValue());
-		
+
 		BigDecimal total = comprobante.getImporteTotal();
 		if (null != comprobante.getImporteTributos()) {
 			detalle.setImpTrib(comprobante.getImporteTributos().doubleValue());
-			total = total.add(comprobante.getImporteTributos());	
+			total = total.add(comprobante.getImporteTributos());
 		}
 		detalle.setImpTotal(total.doubleValue());
 		detalle.setMonId(comprobante.getTipoMoneda().getId());
@@ -232,44 +346,8 @@ public class ServiceRequestParser {
 
 		FECAEDetResponse detalle = detalles[0];
 
-		Resultado resultado = new Resultado();
-		resultado.setCae(detalle.getCAE());
-		resultado.setNroComprobante(detalle.getCbteDesde());
-		resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
-				cabecera.getPtoVta(), detalle.getCbteDesde()));
-		resultado.setPtoVta(cabecera.getPtoVta());
-		resultado.setFechaVtoCAE(Utils.getDateFromString(
-				detalle.getCAEFchVto(), "yyyyMMdd"));
-		resultado.setPtoVtaFormato(Utils.generarFormatoPtoVta(cabecera
-				.getPtoVta()));
-		resultado.setFecha(Utils.getDateFromString(detalle.getCbteFch(),
-				"yyyyMMdd"));
-		resultado.setEstado(Resultado.Estado.valueOf(estado));
-		resultado
-				.setCodigoBarras(Utils.generarCodigoBarras(
-						ParametrosUtil.getProperty("cuit"),
-						cabecera.getCbteTipo(), cabecera.getPtoVta(),
-						detalle.getCAE(), detalle.getCAEFchVto()));
-
-		List<String> errores = new ArrayList<String>();
-
-		// / Observaciones - Validaciones
-		Obs[] obs = response.getFeDetResp()[0].getObservaciones();
-		if (null != obs) {
-			for (Obs obs2 : obs) {
-				errores.add("[" + obs2.getCode() + "] " + obs2.getMsg());
-			}
-		}
-		// Errores
-		Err[] errors = response.getErrors();
-		if (null != errors) {
-			String msg = "";
-			for (Err err : errors) {
-				msg = ErrorsUtil.getProperty("" + err.getCode(), err.getMsg());
-				errores.add("[" + err.getCode() + "] " + msg);
-			}
-		}
-		resultado.setErrores(errores);
+		Resultado resultado = parseFECAEDetResponse(detalle, cabecera, estado,
+				response);
 
 		return resultado;
 	}
@@ -310,6 +388,66 @@ public class ServiceRequestParser {
 			}
 		}
 		return tiposComprobantes;
+	}
+
+	public static List<Resultado> parseFECAEResponseMasivos(
+			FECAEResponse response) {
+
+		String estado = response.getFeCabResp().getResultado();
+		FECAEDetResponse[] detalles = response.getFeDetResp();
+		FECAECabResponse cabecera = response.getFeCabResp();
+
+		List<Resultado> resultados = new ArrayList<Resultado>();
+
+		for (FECAEDetResponse detalle : detalles) {
+			resultados.add(parseFECAEDetResponse(detalle, cabecera, estado,
+					response));
+		}
+
+		return resultados;
+	}
+
+	private static Resultado parseFECAEDetResponse(FECAEDetResponse detalle,
+			FECAECabResponse cabecera, String estado, FECAEResponse response) {
+		Resultado resultado = new Resultado();
+		resultado.setCae(detalle.getCAE());
+		resultado.setNroComprobante(detalle.getCbteDesde());
+		resultado.setNroComprobanteFormato(Utils.generarFormatoComprobante(
+				cabecera.getPtoVta(), detalle.getCbteDesde()));
+		resultado.setPtoVta(cabecera.getPtoVta());
+		resultado.setFechaVtoCAE(Utils.getDateFromString(
+				detalle.getCAEFchVto(), "yyyyMMdd"));
+		resultado.setPtoVtaFormato(Utils.generarFormatoPtoVta(cabecera
+				.getPtoVta()));
+		resultado.setFecha(Utils.getDateFromString(detalle.getCbteFch(),
+				"yyyyMMdd"));
+		resultado.setEstado(Resultado.Estado.valueOf(estado));
+		resultado
+				.setCodigoBarras(Utils.generarCodigoBarras(
+						ParametrosUtil.getProperty("cuit"),
+						cabecera.getCbteTipo(), cabecera.getPtoVta(),
+						detalle.getCAE(), detalle.getCAEFchVto()));
+
+		List<String> errores = new ArrayList<String>();
+
+		// / Observaciones - Validaciones
+		Obs[] obs = response.getFeDetResp()[0].getObservaciones();
+		if (null != obs) {
+			for (Obs obs2 : obs) {
+				errores.add("[" + obs2.getCode() + "] " + obs2.getMsg());
+			}
+		}
+		// Errores
+		Err[] errors = response.getErrors();
+		if (null != errors) {
+			String msg = "";
+			for (Err err : errors) {
+				msg = ErrorsUtil.getProperty("" + err.getCode(), err.getMsg());
+				errores.add("[" + err.getCode() + "] " + msg);
+			}
+		}
+		resultado.setErrores(errores);
+		return resultado;
 	}
 
 }

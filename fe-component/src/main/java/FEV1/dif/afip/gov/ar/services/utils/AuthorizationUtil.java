@@ -11,10 +11,15 @@ import java.util.Date;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.junit.Test;
 
 import FEV1.dif.afip.gov.ar.AfipWsaaClient;
 import FEV1.dif.afip.gov.ar.FEAuthRequest;
+import FEV1.dif.afip.gov.ar.entities.Resultado;
+import FEV1.dif.afip.gov.ar.entities.TipoComprobanteEnum;
 import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
+import FEV1.dif.afip.gov.ar.services.FacturacionService;
+import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
 import FEV1.dif.afip.gov.ar.utils.ParametrosUtil;
 
 public class AuthorizationUtil {
@@ -98,12 +103,28 @@ public class AuthorizationUtil {
 	}
 
 	public static void main(String[] args) throws Exception {
-
-		FEAuthRequest req = getAuthorization();
-		System.out.println("<ar:Token>" + req.getToken() + "</ar:Token>");
-		System.out.println("<ar:Sign>" + req.getSign() + "</ar:Sign>");
-		System.out.println("<ar:Cuit>20049746181</ar:Cuit>");
 		
+		
+		FacturacionService facturacionService = AbstractFactory
+				.getInstance(FacturacionService.class);
+
+		try {
+			Resultado resultado = facturacionService
+					.consultarUltimoComprobante(TipoComprobanteEnum.FACTURA_A);
+			
+//			Comprobante comprobante = createComprobante();
+//			Resultado resultado = facturacionService.solicitarComprobante(comprobante);
+			System.out.println(resultado);
+		} catch (ServiceException sexc) {
+			System.out.println(sexc.getMessage());
+			sexc.printStackTrace();
+		}
+
+//		FEAuthRequest req = getAuthorization();
+//		System.out.println("<ar:Token>" + req.getToken() + "</ar:Token>");
+//		System.out.println("<ar:Sign>" + req.getSign() + "</ar:Sign>");
+//		System.out.println("<ar:Cuit>20049746181</ar:Cuit>");
+//		
 //		AuthRequestType req2 = getAuthorizationDetalles();
 //
 //		System.out.println("<token>" + req2.getToken() + "</token>");

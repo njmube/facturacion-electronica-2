@@ -22,4 +22,7 @@ public interface FacturacionService {
 	List<TipoComprobante> getAllTiposComprobantes() throws ServiceException;
 
 	List<Comprobante> getAllComprobantes(long idTipoComp) throws ServiceException;
+
+	List<Resultado> solicitarComprobantes(List<Comprobante> comprobantes)
+			throws ServiceException;
 }
