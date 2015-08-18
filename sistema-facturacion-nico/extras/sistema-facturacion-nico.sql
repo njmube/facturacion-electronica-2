@@ -55,7 +55,7 @@ INSERT INTO `bancos` (`ID`,`NOMBRE`) VALUES
  (15,'BANCO FINANSUR'),
  (16,'BANCO GALICIA'),
  (17,'BANCO INDUSTRIAL'),
- (18,'BANCO ITA√ö'),
+ (18,'BANCO ITA⁄'),
  (19,'BANCO JULIO'),
  (20,'BANCO MACRO'),
  (21,'BANCO MARIVA'),
@@ -66,11 +66,11 @@ INSERT INTO `bancos` (`ID`,`NOMBRE`) VALUES
  (26,'BANCO PRIVADO'),
  (27,'BANCO ROELA'),
  (28,'BANCO SAENZ'),
- (29,'BANCO SANTANDER R√çO'),
+ (29,'BANCO SANTANDER RÕO'),
  (30,'BANCO SUPERVIELLE'),
  (31,'BANK OF AMERICA'),
  (32,'BANK OF TOKYO-MITSUBISHI UFJ'),
- (33,'BBVA BANCO FRANC√âS'),
+ (33,'BBVA BANCO FRANC…S'),
  (34,'BNP PARIBAS'),
  (35,'CITIBANK'),
  (36,'DEUTSCHE BANK'),
@@ -151,7 +151,7 @@ CREATE TABLE `comprobantes` (
   `FECHA_CAE` date DEFAULT NULL,
   `FECHA_VENTA` date NOT NULL,
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
-  `ID_CLIENTE` int(10) unsigned NOT NULL,
+  `ID_CLIENTE` int(10) unsigned DEFAULT NULL,
   `SUBTOTAL` decimal(12,2) NOT NULL,
   `TOTAL` decimal(12,2) NOT NULL,
   `IVA` decimal(12,2) NOT NULL,
@@ -164,8 +164,11 @@ CREATE TABLE `comprobantes` (
   `TIPO` varchar(20) NOT NULL,
   `TIPO_LETRA` varchar(2) NOT NULL,
   `TRIBUTOS` decimal(12,2) DEFAULT NULL,
+  `ID_PROVEEDOR` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   KEY `FK_comprobantes_1` (`ID_CLIENTE`),
+  KEY `FK_comprobantes_2` (`ID_PROVEEDOR`),
+  CONSTRAINT `FK_comprobantes_2` FOREIGN KEY (`ID_PROVEEDOR`) REFERENCES `proveedores` (`ID`),
   CONSTRAINT `FK_comprobantes_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -226,31 +229,6 @@ CREATE TABLE `detalles_comprobantes` (
 
 /*!40000 ALTER TABLE `detalles_comprobantes` DISABLE KEYS */;
 /*!40000 ALTER TABLE `detalles_comprobantes` ENABLE KEYS */;
-
-
---
--- Definition of table `detalles_notas_debitos2`
---
-
-DROP TABLE IF EXISTS `detalles_notas_debitos2`;
-CREATE TABLE `detalles_notas_debitos2` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ID_PRODUCTO` int(10) unsigned DEFAULT NULL,
-  `PRECIO` decimal(12,2) NOT NULL,
-  `CANTIDAD` int(10) unsigned NOT NULL,
-  `ID_NOTA_DEBITO` int(10) unsigned NOT NULL,
-  `DETALLE` varchar(100) DEFAULT NULL,
-  `COMENTARIO` varchar(100) DEFAULT NULL,
-  `ID_TIPO_IVA` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `detalles_notas_debitos2`
---
-
-/*!40000 ALTER TABLE `detalles_notas_debitos2` DISABLE KEYS */;
-/*!40000 ALTER TABLE `detalles_notas_debitos2` ENABLE KEYS */;
 
 
 --
