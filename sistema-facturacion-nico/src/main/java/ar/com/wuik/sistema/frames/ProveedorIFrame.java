@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Proveedor;
+import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.ProveedorFilter;
 import ar.com.wuik.sistema.model.ProveedorModel;
@@ -47,6 +48,9 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Proveedor> tablePanel;
 	private JButton btnCerrar;
 	private JTextField txtRazonSocial;
+	private JButton btnFactura;
+	private JButton btnNotaCred;
+	private JButton btnNotaDeb;
 
 	/**
 	 * Create the frame.
@@ -62,6 +66,9 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getTablePanel());
 		getContentPane().add(getBtnCerrar());
+		getContentPane().add(getBtnFactura());
+		getContentPane().add(getBtnNotaCred());
+		getContentPane().add(getBtnNotaDeb());
 	}
 
 	/**
@@ -137,7 +144,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Proveedor> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(ProveedorModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 119, 884, 329);
+			tablePanel.setBounds(10, 193, 884, 250);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -284,5 +291,76 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 			txtRazonSocial.setName(CAMPO_RAZON_SOCIAL);
 		}
 		return txtRazonSocial;
+	}
+	private JButton getBtnFactura() {
+		if (btnFactura == null) {
+			btnFactura = new JButton("Factura");
+			btnFactura.setIcon(new ImageIcon(ClienteIFrame.class
+					.getResource("/icons32/facturas.png")));
+			btnFactura.setBounds(10, 125, 147, 46);
+			btnFactura.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Long selectedItem = tablePanel.getSelectedItemID();
+					if (null != selectedItem) {
+						addModalIFrame(new ComprobanteProveedorVerIFrame(selectedItem,
+								TipoComprobante.FACTURA));
+					} else {
+						WTooltipUtils.showMessage(
+								"Debe seleccionar un solo Cliente",
+								(JButton) e.getSource(), MessageType.ALERTA);
+					}
+				}
+			});
+		}
+		return btnFactura;
+		
+		
+	}
+	private JButton getBtnNotaCred() {			
+		if (btnNotaCred == null) {
+			btnNotaCred = new JButton("Nota de Cr\u00E9dito");
+			btnNotaCred.setIcon(new ImageIcon(ClienteIFrame.class
+					.getResource("/icons32/notas_credito.png")));
+			btnNotaCred.setBounds(178, 125, 147, 46);
+			btnNotaCred.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Long selectedItem = tablePanel.getSelectedItemID();
+					if (null != selectedItem) {
+						addModalIFrame(new ComprobanteProveedorVerIFrame(selectedItem,
+								TipoComprobante.NOTA_CREDITO));
+					} else {
+						WTooltipUtils.showMessage(
+								"Debe seleccionar un Cliente",
+								(JButton) e.getSource(), MessageType.ALERTA);
+					}
+				}
+			});
+		}
+		return btnNotaCred;
+		
+		
+	}
+	private JButton getBtnNotaDeb() {
+		if (btnNotaDeb == null) {
+			btnNotaDeb = new JButton("Nota de  D\u00E9bito");
+			btnNotaDeb.setIcon(new ImageIcon(ClienteIFrame.class
+					.getResource("/icons32/notas_debito.png")));
+			btnNotaDeb.setBounds(347, 125, 147, 46);
+			btnNotaDeb.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Long selectedItem = tablePanel.getSelectedItemID();
+					if (null != selectedItem) {
+						addModalIFrame(new ComprobanteProveedorVerIFrame(selectedItem,
+								TipoComprobante.NOTA_DEBITO));
+					} else {
+						WTooltipUtils.showMessage(
+								"Debe seleccionar un Cliente",
+								(JButton) e.getSource(), MessageType.ALERTA);
+					}
+				}
+			});
+		}
+		return btnNotaDeb;
+		
 	}
 }
