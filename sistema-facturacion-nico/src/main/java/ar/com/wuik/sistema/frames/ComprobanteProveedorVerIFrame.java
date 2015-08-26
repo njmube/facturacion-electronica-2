@@ -28,15 +28,19 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.bo.ProductoBO;
+import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
 import ar.com.wuik.sistema.entities.DetalleRemito;
 import ar.com.wuik.sistema.entities.Producto;
+import ar.com.wuik.sistema.entities.Proveedor;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.TributoComprobante;
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
@@ -96,8 +100,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblIVA21;
 	private JTextField txtIVA21;
 	private JPanel panel_1;
-	private JLabel lblCliente;
-	private JLabel txtCliente;
+	private JLabel lblProveedor;
+	private JLabel txtProveedor;
 	private JLabel txtCondIVA;
 	private JLabel lblCondIva;
 	private JLabel lblLetra;
@@ -186,11 +190,11 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		
 
 		populateComponents(model);
-		loadCliente(comprobante.getCliente());
+		loadProveedor(comprobante.getProveedor());
 	}
 
 	public ComprobanteProveedorVerIFrame(ComprobanteIFrame comprobanteIFrame,
-			Long idCliente, TipoComprobante tipoComprobante) {
+			Long idProveedor, TipoComprobante tipoComprobante) {
 
 		initialize();
 
@@ -203,7 +207,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 				WUtils.getStringFromDate(new Date()));
 		this.comprobante = new Comprobante();
 		this.comprobante.setTipoComprobante(tipoComprobante);
-		this.comprobante.setIdCliente(idCliente);
+		this.comprobante.setIdProveedor(idProveedor);
 
 		String titulo = "";
 		Icon icon = null;
@@ -242,18 +246,18 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		
 
 		try {
-			ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
-			Cliente cliente = clienteBO.obtener(idCliente);
-			this.comprobante.setTipoLetraComprobante(cliente.getCondicionIVA()
-					.getTipoLetraComprobante());
-			loadCliente(cliente);
+			ProveedorBO proveedorBO = AbstractFactory.getInstance(ProveedorBO.class);
+			Proveedor proveedor = proveedorBO.obtener(idProveedor);
+//			this.comprobante.setTipoLetraComprobante(proveedor.getCondicionIVA()
+//					.getTipoLetraComprobante());
+			loadProveedor(proveedor);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 		populateComponents(model);
 	}
 
-	public ComprobanteProveedorVerIFrame(Long idCliente, TipoComprobante tipoComprobante) {
+	public ComprobanteProveedorVerIFrame(Long idProveedor, TipoComprobante tipoComprobante) {
 
 		initialize();
 
@@ -264,7 +268,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 				WUtils.getStringFromDate(new Date()));
 		this.comprobante = new Comprobante();
 		this.comprobante.setTipoComprobante(tipoComprobante);
-		this.comprobante.setIdCliente(idCliente);
+		this.comprobante.setIdProveedor(idProveedor);
 
 		String titulo = "";
 		Icon icon = null;
@@ -300,20 +304,20 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		popularEstado(comprobante);
 
 		try {
-			ClienteBO clienteBO = AbstractFactory.getInstance(ClienteBO.class);
-			Cliente cliente = clienteBO.obtener(idCliente);
-			this.comprobante.setTipoLetraComprobante(cliente.getCondicionIVA()
+			ProveedorBO proveedorBO = AbstractFactory.getInstance(ProveedorBO.class);
+			Proveedor proveedor = proveedorBO.obtener(idProveedor);
+			this.comprobante.setTipoLetraComprobante(proveedor.getCondicionIVA()
 					.getTipoLetraComprobante());
-			loadCliente(cliente);
+			loadProveedor(proveedor);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 		populateComponents(model);
 	}
 
-	private void loadCliente(Cliente cliente) {
-		getTxtCliente().setText(cliente.getRazonSocial());
-		getTxtCondIVA().setText(cliente.getCondicionIVA().getDenominacion());
+	private void loadProveedor(Proveedor proveedor) {
+		getTxtProveedor().setText(proveedor.getRazonSocial());	
+		getTxtCondIVA().setText(proveedor.getCondicionIVA().getDenominacion());
 		if (comprobante.getTipoLetraComprobante()
 				.equals(TipoLetraComprobante.A)) {
 			lblLetra.setIcon(new ImageIcon(ComprobanteProveedorVerIFrame.class
@@ -347,9 +351,13 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		if (WUtils.isEmpty(fechaEmision)) {
 			messages.add("Debe ingresar una Fecha de Emisión");
 		}
-
-		if (WUtils.isEmpty(comprobante.getDetalles())) {
-			messages.add("Debe ingresar al menos un Detalle");
+		
+		if (WUtils.isEmpty(txtNumComp.getText())) {
+			messages.add("Debe ingresar un número de comprobante");
+		}
+		
+		if (WUtils.isEmpty(txtGravados.getText())) {
+			messages.add("Debe ingresar el importe neto gravado");
 		}
 
 		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);
@@ -369,8 +377,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
 			pnlBusqueda.add(getPanel_1());
-			pnlBusqueda.add(getLblCliente());
-			pnlBusqueda.add(getTxtCliente());
+			pnlBusqueda.add(getLblProveedor());
+			pnlBusqueda.add(getTxtProveedor());
 			pnlBusqueda.add(getTxtCondIVA());
 			pnlBusqueda.add(getLblCondIva());
 			pnlBusqueda.add(getLblLetra());
@@ -650,17 +658,17 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		BigDecimal total = BigDecimal.ZERO;
 		BigDecimal totalTributo = BigDecimal.ZERO;
 
-		List<DetalleComprobante> detalles = comprobante.getDetalles();
-		for (DetalleComprobante detalleFactura : detalles) {
-			if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
-				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
-			} else if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
-				subtotalIVA105 = subtotalIVA105.add(detalleFactura
-						.getTotalIVA());
-			}
-			subtotal = subtotal.add(detalleFactura.getSubtotal());
-			total = total.add(detalleFactura.getTotal());
-		}
+//		List<DetalleComprobante> detalles = comprobante.getDetalles();
+//		for (DetalleComprobante detalleFactura : detalles) {
+//			if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
+//				subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
+//			} else if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
+//				subtotalIVA105 = subtotalIVA105.add(detalleFactura
+//						.getTotalIVA());
+//			}
+//			subtotal = subtotal.add(detalleFactura.getSubtotal());
+//			total = total.add(detalleFactura.getTotal());
+//		}
 
 		List<TributoComprobante> tributos = comprobante.getTributos();
 		for (TributoComprobante tributoComprobante : tributos) {
@@ -740,26 +748,26 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private void refreshComprobantesAsoc() {
 	}
 
-	private JLabel getLblCliente() {
-		if (lblCliente == null) {
-			lblCliente = new JLabel("Cliente:");
-			lblCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCliente.setIcon(new ImageIcon(ComprobanteProveedorVerIFrame.class
+	private JLabel getLblProveedor() {
+		if (lblProveedor == null) {
+			lblProveedor = new JLabel("Proveedor:");
+			lblProveedor.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblProveedor.setIcon(new ImageIcon(ComprobanteProveedorVerIFrame.class
 					.getResource("/icons/cliente.png")));
-			lblCliente.setBounds(10, 21, 69, 25);
+			lblProveedor.setBounds(10, 21, 85, 25);
 		}
-		return lblCliente;
+		return lblProveedor;
 	}
 
-	private JLabel getTxtCliente() {
-		if (txtCliente == null) {
-			txtCliente = new JLabel();
-			txtCliente.setBorder(null);
-			txtCliente.setBounds(89, 21, 296, 25);
-			txtCliente.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+	private JLabel getTxtProveedor() {
+		if (txtProveedor == null) {
+			txtProveedor = new JLabel();
+			txtProveedor.setBorder(null);
+			txtProveedor.setBounds(121, 21, 269, 25);
+			txtProveedor.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
 		}
-		return txtCliente;
+		return txtProveedor;
 	}
 
 	private JLabel getTxtCondIVA() {
@@ -1116,6 +1124,28 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			txtGravados.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
 			txtGravados.setBounds(846, 10, 125, 25);
+			txtGravados.getDocument().addDocumentListener(new DocumentListener() {
+				@Override  
+				public void changedUpdate(DocumentEvent e) {
+				    warn();
+				  }
+				@Override
+				  public void removeUpdate(DocumentEvent e) {
+//				    warn();
+				  }
+				@Override
+				  public void insertUpdate(DocumentEvent e) {
+//				    warn();
+				  }
+
+				  public void warn() {
+				    
+				       JOptionPane.showMessageDialog(null,
+				          "Error: Please enter number bigger than 0", "Error Massage",
+				          JOptionPane.ERROR_MESSAGE);
+				    
+				  }
+				});
 		}
 		return txtGravados;
 	}
