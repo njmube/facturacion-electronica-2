@@ -2,6 +2,8 @@ package ar.com.wuik.sistema.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,6 +32,7 @@ public class Proveedor extends BaseEntity {
 	private String cuit;
 	@Column(name = "ACTIVO")
 	private boolean activo = Boolean.TRUE;
+	@Enumerated(EnumType.STRING)
 	@Column(name = "COND_IVA")
 	private CondicionIVA condicionIVA;
 
