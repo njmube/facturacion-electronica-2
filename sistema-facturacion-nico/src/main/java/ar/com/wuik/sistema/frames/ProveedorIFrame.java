@@ -227,9 +227,31 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Eliminar", null);
 
+		WToolbarButton buttonFacturas = new WToolbarButton("Comprobantes",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/comprobantes.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							addModalIFrame(new ComprobanteProveedorIFrame(selectedItem));
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar un solo Cliente",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Ver Comprobantes", null);
+
+		
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
+		toolbarButtons.add(buttonFacturas);
 		return toolbarButtons;
 	}
 

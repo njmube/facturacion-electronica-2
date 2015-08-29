@@ -61,7 +61,7 @@ public class Login extends WAbstractModelFrame {
 	private JTextField getTxtUsuario() {
 		if (txtUsuario == null) {
 			txtUsuario = new JTextField();
-			txtUsuario.setBounds(new Rectangle(104, 82, 213, 25));
+			txtUsuario.setBounds(new Rectangle(104, 101, 213, 25));
 			txtUsuario.setDocument(new WTextFieldLimit(50));
 			txtUsuario.setName(CAMPO_DNI);
 			txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -92,7 +92,7 @@ public class Login extends WAbstractModelFrame {
 	private JPasswordField getTxpPassword() {
 		if (txpPassword == null) {
 			txpPassword = new JPasswordField();
-			txpPassword.setBounds(new Rectangle(104, 118, 213, 25));
+			txpPassword.setBounds(new Rectangle(104, 137, 213, 25));
 			txpPassword.setName(CAMPO_PASSWORD);
 			txpPassword.setDocument(new WTextFieldLimit(50));
 			txpPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -117,7 +117,7 @@ public class Login extends WAbstractModelFrame {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton();
 			btnAceptar.setIcon(new ImageIcon(Login.class.getResource("/icons/ok.png")));
-			btnAceptar.setBounds(new Rectangle(105, 154, 212, 30));
+			btnAceptar.setBounds(new Rectangle(105, 173, 212, 30));
 			btnAceptar.setText("Iniciar");
 			btnAceptar.addActionListener(new java.awt.event.ActionListener() {
 
@@ -173,7 +173,7 @@ public class Login extends WAbstractModelFrame {
 		if (btnCerrar == null) {
 			btnCerrar = new JButton();
 			btnCerrar.setIcon(new ImageIcon(Login.class.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(new Rectangle(10, 154, 90, 30));
+			btnCerrar.setBounds(new Rectangle(10, 173, 90, 30));
 			btnCerrar.setText("Salir");
 			btnCerrar.addActionListener(new java.awt.event.ActionListener() {
 
@@ -223,11 +223,11 @@ public class Login extends WAbstractModelFrame {
 			lblAplicacion.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPassword = new JLabel();
 			lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPassword.setBounds(new Rectangle(10, 118, 84, 25));
+			lblPassword.setBounds(new Rectangle(10, 137, 84, 25));
 			lblPassword.setText("Password:");
 			lblUsuario = new JLabel();
 			lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblUsuario.setBounds(new Rectangle(10, 82, 84, 25));
+			lblUsuario.setBounds(new Rectangle(10, 101, 84, 25));
 			lblUsuario.setText("DNI:");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
@@ -287,9 +287,8 @@ public class Login extends WAbstractModelFrame {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("");
 			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNewLabel.setIcon(new ImageIcon(Login.class
-					.getResource("/images/login-logo.png")));
-			lblNewLabel.setBounds(10, 11, 299, 51);
+			lblNewLabel.setIcon(new ImageIcon(Login.class.getResource("/images/login-logo-transp.png")));
+			lblNewLabel.setBounds(10, 11, 307, 87);
 		}
 		return lblNewLabel;
 	}

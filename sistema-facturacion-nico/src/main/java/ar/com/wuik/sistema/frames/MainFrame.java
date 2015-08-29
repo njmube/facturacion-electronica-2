@@ -40,8 +40,7 @@ import ar.com.wuik.swing.utils.WUtils;
 public class MainFrame extends WApplication {
 
 	public MainFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				MainFrame.class.getResource("/icons32/icono.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/images/auto.png")));
 	}
 
 	/**
