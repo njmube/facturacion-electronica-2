@@ -144,78 +144,7 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 						}
 					}
 				}, "Editar", null);
-		WToolbarButton buttonAnular = new WToolbarButton("Anular Comprobante",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/anular.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-							try {
-								int result = JOptionPane
-										.showConfirmDialog(
-												getParent(),
-												"¿Desea anular el Comprobante seleccionado?",
-												"Alerta",
-												JOptionPane.OK_CANCEL_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								if (result == JOptionPane.OK_OPTION) {
-									ComprobanteProveedorBO comprobanteProveedorBO = AbstractFactory
-											.getInstance(ComprobanteProveedorBO.class);
-
-									Comprobante comprobante = (Comprobante) comprobanteProveedorBO
-											.obtener(selectedItem);
-
-									if (comprobante.isActivo()) {
-										if (!comprobante
-												.getEstadoFacturacion()
-												.equals(EstadoFacturacion.FACTURADO_ERROR)) {
-
-											if (!comprobante.isPago()) {
-												comprobanteProveedorBO
-														.cancelar(selectedItem);
-												search();
-											} else {
-												WTooltipUtils
-														.showMessage(
-																"No es posible anular el Comprobante porque se encuentra pago.",
-																(JButton) e
-																		.getSource(),
-																MessageType.ALERTA);
-											}
-										} else {
-											WTooltipUtils
-													.showMessage(
-															"No es posible anular el Comprobante porque se encuentra facturado con error.",
-															(JButton) e
-																	.getSource(),
-															MessageType.ALERTA);
-										}
-
-									} else {
-
-										WTooltipUtils
-												.showMessage(
-														"El Comprobante se encuentra Anulado.",
-														(JButton) e.getSource(),
-														MessageType.ALERTA);
-									}
-								}
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
-							}
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Comprobante.",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Anular", null);
-
+		
 		WToolbarButton buttonVer = new WToolbarButton("Ver Comprobante",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/ver_detalle.png")),
@@ -294,7 +223,6 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 		if (isProveedorActivo()) {
 			// toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
-			toolbarButtons.add(buttonAnular);
 			toolbarButtons.add(buttonImprimir);
 		}
 		toolbarButtons.add(buttonVer);

@@ -70,7 +70,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblSubtotal;
 	private JLabel lblTotal;
 	private JLabel txtTotalPesos;
-	private JLabel lblEstado;
 	private JLabel lblIVA21;
 	private JLabel txtIVA21;
 	private JPanel panel_1;
@@ -87,8 +86,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblCae;
 	private JLabel lblFechaVtoCae;
 	private JLabel lblFechaCAE;
-	private JLabel lblFacturado;
-	private JLabel lblPago;
 	private JLabel lblTributos;
 
 	/**
@@ -109,10 +106,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_VTO_CAE,
 					WUtils.getStringFromDate(comprobante.getFechaCAE()));
 
-			popularEstadoFacturacion(comprobante);
-			popularEstadoPago(comprobante);
-			popularEstado(comprobante);
-			refreshDetalles();
+			calcularTotales();
 			refreshTributos();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -151,46 +145,10 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		loadProveedor(comprobante.getProveedor());
 	}
 
-	private void popularEstado(Comprobante comprobante) {
-		if (comprobante.isActivo()) {
-			lblEstado.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/activo.png")));
-		} else {
-			lblEstado.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/inactivo.png")));
-		}
 
-	}
 
-	private void popularEstadoPago(Comprobante comprobante) {
-		if (comprobante.isPago()) {
-			lblPago.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/pago.png")));
-		} else {
-			lblPago.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/impago.png")));
-		}
 
-	}
 
-	private void popularEstadoFacturacion(Comprobante comprobante) {
-		EstadoFacturacion estadoFacturacion = comprobante
-				.getEstadoFacturacion();
-		switch (estadoFacturacion) {
-		case FACTURADO:
-			lblFacturado.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/facturado.png")));
-			break;
-		case FACTURADO_ERROR:
-			lblFacturado.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/facturado_error.png")));
-			break;
-		case SIN_FACTURAR:
-			lblFacturado.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/sin_facturar.png")));
-			break;
-		}
-	}
 
 	private void loadProveedor(Proveedor proveedor) {
 		getTxtProveedor().setText(proveedor.getRazonSocial());
@@ -212,9 +170,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getBtnCerrar());
-		getContentPane().add(getLblEstado());
-		getContentPane().add(getLblFacturado());
-		getContentPane().add(getLblPago());
 	}
 
 	@Override
@@ -448,17 +403,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		return txtTotalPesos;
 	}
 
-	private JLabel getLblEstado() {
-		if (lblEstado == null) {
-			lblEstado = new JLabel("Estado:");
-			lblEstado.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblEstado.setBounds(10, 342, 76, 19);
-			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblEstado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
-		}
-		return lblEstado;
-	}
-
 	protected void addDetalle(Long selectedId) {
 		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
 		try {
@@ -547,9 +491,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		return txtIVA21;
 	}
 
-	public void refreshDetalles() {
-		calcularTotales();
-	}
+	
 
 	public void addRemitos(List<Remito> remitos) {
 		for (Remito remito : remitos) {
@@ -764,28 +706,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			lblFechaCAE.setBounds(486, 95, 141, 25);
 		}
 		return lblFechaCAE;
-	}
-
-	private JLabel getLblFacturado() {
-		if (lblFacturado == null) {
-			lblFacturado = new JLabel("Facturado:");
-			lblFacturado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFacturado.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblFacturado.setBounds(161, 342, 103, 19);
-			lblFacturado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
-		}
-		return lblFacturado;
-	}
-
-	private JLabel getLblPago() {
-		if (lblPago == null) {
-			lblPago = new JLabel("Pago:");
-			lblPago.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPago.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblPago.setBounds(323, 342, 89, 19);
-			lblPago.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
-		}
-		return lblPago;
 	}
 
 	private JLabel getLblTributos() {
