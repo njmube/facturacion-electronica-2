@@ -168,63 +168,9 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements
 					}
 				}, "Ver", null);
 
-		WToolbarButton buttonImprimir = new WToolbarButton("Imprimir",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/imprimir.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-
-							ComprobanteBO comprobanteProveedorBO = AbstractFactory
-									.getInstance(ComprobanteBO.class);
-							try {
-								Comprobante comprobante = comprobanteProveedorBO
-										.obtener(selectedItem);
-								if (comprobante.getEstadoFacturacion().equals(
-										EstadoFacturacion.FACTURADO)) {
-									if (comprobante.isActivo()) {
-										try {
-											ComprobanteReporte
-													.generarImpresion(selectedItem);
-										} catch (ReportException rexc) {
-											showGlobalErrorMsg(rexc
-													.getMessage());
-										}
-									} else {
-										WTooltipUtils
-												.showMessage(
-														"El Comprobante debe estar activo.",
-														(JButton) e.getSource(),
-														MessageType.ALERTA);
-									}
-								} else {
-									WTooltipUtils
-											.showMessage(
-													"El Comprobante debe estar facturado.",
-													(JButton) e.getSource(),
-													MessageType.ALERTA);
-								}
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
-							}
-
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Comprobante.",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Imprimir", null);
-
-		if (isProveedorActivo()) {
+				if (isProveedorActivo()) {
 			// toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
-			toolbarButtons.add(buttonImprimir);
 		}
 		toolbarButtons.add(buttonVer);
 		return toolbarButtons;

@@ -91,10 +91,10 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 
 		WModel model = populateModel();
 		initialize();
-		ComprobanteBO comprobanteProveedorBO = AbstractFactory
+		ComprobanteBO comprobanteBO = AbstractFactory
 				.getInstance(ComprobanteBO.class);
 		try {
-			this.comprobante = comprobanteProveedorBO.obtener(idComprobante);
+			this.comprobante = comprobanteBO.obtener(idComprobante);
 			model.addValue(CAMPO_FECHA_EMISION,
 					WUtils.getStringFromDate(comprobante.getFechaVenta()));
 			model.addValue(CAMPO_OBSERVACIONES, comprobante.getObservaciones());
