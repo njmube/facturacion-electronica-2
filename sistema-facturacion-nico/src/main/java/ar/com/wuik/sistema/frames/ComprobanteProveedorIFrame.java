@@ -13,9 +13,9 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
-import ar.com.wuik.sistema.bo.ComprobanteProveedorBO;
+
+import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.Proveedor;
@@ -23,7 +23,7 @@ import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.ComprobanteProveedorFilter;
+import ar.com.wuik.sistema.filters.ComprobanteFilter;
 import ar.com.wuik.sistema.model.ComprobanteProveedorModel;
 import ar.com.wuik.sistema.reportes.ComprobanteReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
@@ -37,7 +37,8 @@ import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
-public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements WSecure {
+public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements
+		WSecure {
 
 	/**
 	 * Serial UID.
@@ -58,7 +59,8 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Comprobantes");
 		setFrameIcon(new ImageIcon(
-				ComprobanteProveedorIFrame.class.getResource("/icons/comprobantes.png")));
+				ComprobanteProveedorIFrame.class
+						.getResource("/icons/comprobantes.png")));
 		setBounds(0, 0, 1000, 519);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -94,7 +96,8 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 
 	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(ComprobanteProveedorModel.class, Boolean.FALSE);
+			tablePanel = new WTablePanel(ComprobanteProveedorModel.class,
+					Boolean.FALSE);
 			tablePanel.setBounds(10, 47, 978, 393);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
@@ -112,24 +115,23 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							ComprobanteProveedorBO comprobanteProveedorBO = AbstractFactory
-									.getInstance(ComprobanteProveedorBO.class);
+							ComprobanteBO comprobanteProveedorBO = AbstractFactory
+									.getInstance(ComprobanteBO.class);
 							try {
 
-								Comprobante comprobante = (Comprobante) comprobanteProveedorBO.obtener(selectedItem);
+								Comprobante comprobante = (Comprobante) comprobanteProveedorBO
+										.obtener(selectedItem);
 								if (comprobante.isActivo()) {
-									addModalIFrame(new ComprobanteProveedorVerIFrame(comprobante.getIdProveedor(),TipoComprobante.FACTURA));
+									addModalIFrame(new ComprobanteProveedorVerIFrame(
+											comprobante.getIdProveedor(),
+											TipoComprobante.FACTURA));
 								} else {
 									WTooltipUtils
 											.showMessage(
 													"El Comprobante debe estar activo.",
-													(JButton) e
-															.getSource(),
+													(JButton) e.getSource(),
 													MessageType.ALERTA);
 								}
-								
-								
-								
 
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
@@ -144,7 +146,7 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 						}
 					}
 				}, "Editar", null);
-		
+
 		WToolbarButton buttonVer = new WToolbarButton("Ver Comprobante",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/ver_detalle.png")),
@@ -166,7 +168,6 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 					}
 				}, "Ver", null);
 
-		
 		WToolbarButton buttonImprimir = new WToolbarButton("Imprimir",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/imprimir.png")),
@@ -177,8 +178,8 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 
-							ComprobanteProveedorBO comprobanteProveedorBO = AbstractFactory
-									.getInstance(ComprobanteProveedorBO.class);
+							ComprobanteBO comprobanteProveedorBO = AbstractFactory
+									.getInstance(ComprobanteBO.class);
 							try {
 								Comprobante comprobante = comprobanteProveedorBO
 										.obtener(selectedItem);
@@ -251,14 +252,14 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 		WOption tipoComp = model.getValue(CAMPO_TIPO_COMP);
 
 		// Filtro
-		ComprobanteProveedorFilter filter = new ComprobanteProveedorFilter();
+		ComprobanteFilter filter = new ComprobanteFilter();
 		filter.setIdProveedor(idProveedor);
 		filter.setTipoComprobante(TipoComprobante.fromValue(tipoComp.getValue()
 				.intValue()));
 		try {
-			ComprobanteProveedorBO comprobanteProveedorBO = AbstractFactory
-					.getInstance(ComprobanteProveedorBO.class);
-			List<Comprobante> comprobantes = comprobanteProveedorBO.buscar(filter);
+			ComprobanteBO comprobanteBO = AbstractFactory
+					.getInstance(ComprobanteBO.class);
+			List<Comprobante> comprobantes = comprobanteBO.buscar(filter);
 			getTablePanel().addData(comprobantes);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -271,7 +272,8 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements 
 	}
 
 	private boolean isProveedorActivo() {
-		ProveedorBO proveedorBO = AbstractFactory.getInstance(ProveedorBO.class);
+		ProveedorBO proveedorBO = AbstractFactory
+				.getInstance(ProveedorBO.class);
 		try {
 			Proveedor proveedor = proveedorBO.obtener(idProveedor);
 			return proveedor.isActivo();

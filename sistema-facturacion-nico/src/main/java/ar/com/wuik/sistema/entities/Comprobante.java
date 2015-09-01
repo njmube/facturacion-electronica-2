@@ -1,3 +1,5 @@
+
+
 package ar.com.wuik.sistema.entities;
 
 import java.math.BigDecimal;
@@ -19,8 +21,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Formula;
 
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.entities.enums.TipoComprobante;

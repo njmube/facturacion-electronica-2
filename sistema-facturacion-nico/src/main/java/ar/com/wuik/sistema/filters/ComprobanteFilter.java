@@ -9,6 +9,7 @@ import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 public class ComprobanteFilter {
 
 	private Long idCliente;
+	private Long idProveedor;
 	private Boolean asignado;
 	private Boolean activo;
 	private List<Long> idsToExclude;
@@ -108,5 +109,12 @@ public class ComprobanteFilter {
 		this.tipoComprobante = tipoComprobante;
 	}
 
+	public Long getIdProveedor() {
+		return idProveedor;
+	}
+
+	public void setIdProveedor(Long idProveedor) {
+		this.idProveedor = idProveedor;
+	}
 
 }

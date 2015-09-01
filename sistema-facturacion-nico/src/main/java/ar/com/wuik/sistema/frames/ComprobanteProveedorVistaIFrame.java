@@ -21,7 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.bo.ComprobanteProveedorBO;
+import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
 import ar.com.wuik.sistema.entities.Proveedor;
@@ -91,8 +91,8 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 
 		WModel model = populateModel();
 		initialize();
-		ComprobanteProveedorBO comprobanteProveedorBO = AbstractFactory
-				.getInstance(ComprobanteProveedorBO.class);
+		ComprobanteBO comprobanteProveedorBO = AbstractFactory
+				.getInstance(ComprobanteBO.class);
 		try {
 			this.comprobante = comprobanteProveedorBO.obtener(idComprobante);
 			model.addValue(CAMPO_FECHA_EMISION,
@@ -141,21 +141,18 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		loadProveedor(comprobante.getProveedor());
 	}
 
-
-
-
-
-
 	private void loadProveedor(Proveedor proveedor) {
 		getTxtProveedor().setText(proveedor.getRazonSocial());
 		getTxtCondIVA().setText(proveedor.getCondicionIVA().getDenominacion());
 		if (comprobante.getTipoLetraComprobante()
 				.equals(TipoLetraComprobante.A)) {
-			lblLetra.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons32/letra_a.png")));
+			lblLetra.setIcon(new ImageIcon(
+					ComprobanteProveedorVistaIFrame.class
+							.getResource("/icons32/letra_a.png")));
 		} else {
-			lblLetra.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons32/letra_b.png")));
+			lblLetra.setIcon(new ImageIcon(
+					ComprobanteProveedorVistaIFrame.class
+							.getResource("/icons32/letra_b.png")));
 		}
 	}
 
@@ -222,8 +219,9 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/cancel.png")));
+			btnCerrar.setIcon(new ImageIcon(
+					ComprobanteProveedorVistaIFrame.class
+							.getResource("/icons/cancel.png")));
 			btnCerrar.setBounds(906, 342, 103, 30);
 		}
 		return btnCerrar;
@@ -289,8 +287,9 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblFechaEmisin() {
 		if (lblFechaEmisin == null) {
 			lblFechaEmisin = new JLabel("Fecha Emisi\u00F3n:");
-			lblFechaEmisin.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/calendar.png")));
+			lblFechaEmisin.setIcon(new ImageIcon(
+					ComprobanteProveedorVistaIFrame.class
+							.getResource("/icons/calendar.png")));
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFechaEmisin.setBounds(366, 21, 110, 25);
 		}
@@ -405,12 +404,12 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		BigDecimal subtotalIVA21 = BigDecimal.ZERO;
 		BigDecimal subtotalIVA105 = BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
-		BigDecimal totalTributo = BigDecimal.ZERO;		
-		
+		BigDecimal totalTributo = BigDecimal.ZERO;
+
 		subtotalIVA21 = comprobante.getIva();
 		subtotal = comprobante.getSubtotal();
 		total = comprobante.getTotal();
-		
+
 		List<TributoComprobante> tributos = comprobante.getTributos();
 		for (TributoComprobante tributoComprobante : tributos) {
 			totalTributo = totalTributo.add(tributoComprobante.getImporte());
@@ -501,8 +500,9 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblProveedor() {
 		if (lblProveedor == null) {
 			lblProveedor = new JLabel("Proveedor:");
-			lblProveedor.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/proveedores.png")));
+			lblProveedor.setIcon(new ImageIcon(
+					ComprobanteProveedorVistaIFrame.class
+							.getResource("/icons/proveedores.png")));
 			lblProveedor.setBounds(10, 21, 100, 25);
 		}
 		return lblProveedor;
@@ -658,10 +658,11 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblTributos() {
 		if (lblTributos == null) {
 			lblTributos = new JLabel("Tributos:");
-			lblTributos.setIcon(new ImageIcon(ComprobanteProveedorVistaIFrame.class
-					.getResource("/icons/compAsociados.png")));
+			lblTributos.setIcon(new ImageIcon(
+					ComprobanteProveedorVistaIFrame.class
+							.getResource("/icons/compAsociados.png")));
 			lblTributos.setBounds(10, 8, 184, 25);
-			
+
 		}
 		return lblTributos;
 	}
