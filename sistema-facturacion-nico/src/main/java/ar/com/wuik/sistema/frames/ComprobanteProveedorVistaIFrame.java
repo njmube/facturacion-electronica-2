@@ -20,17 +20,13 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
 import ar.com.wuik.sistema.bo.ComprobanteProveedorBO;
-import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
-import ar.com.wuik.sistema.entities.DetalleRemito;
-import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Proveedor;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.TributoComprobante;
-import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
-import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.TributoComprobanteModel;
@@ -403,37 +399,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		return txtTotalPesos;
 	}
 
-	protected void addDetalle(Long selectedId) {
-		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
-		try {
-			Producto producto = productoBO.obtener(selectedId);
-			List<DetalleComprobante> detalles = comprobante.getDetalles();
-			boolean existeEnDetalle = false;
-			for (DetalleComprobante detalleFactura : detalles) {
-				if (null != detalleFactura.getProducto()
-						&& detalleFactura.getProducto().getId()
-								.equals(selectedId)) {
-					detalleFactura
-							.setCantidad(detalleFactura.getCantidad() + 1);
-					existeEnDetalle = true;
-				}
-			}
-			if (!existeEnDetalle) {
-				DetalleComprobante detalle = new DetalleComprobante();
-				detalle.setCantidad(1);
-				detalle.setComprobante(comprobante);
-				detalle.setTipoIVA(producto.getTipoIVA());
-				detalle.setPrecio(producto.getPrecio());
-				detalle.setProducto(producto);
-				detalle.setTemporalId(System.currentTimeMillis());
-				detalles.add(detalle);
-			}
-			calcularTotales();
-		} catch (BusinessException bexc) {
-			showGlobalErrorMsg(bexc.getMessage());
-		}
-	}
-
 	private void calcularTotales() {
 
 		BigDecimal subtotal = BigDecimal.ZERO;
@@ -489,24 +454,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 		}
 		return txtIVA21;
-	}
-
-	
-
-	public void addRemitos(List<Remito> remitos) {
-		for (Remito remito : remitos) {
-			if (!comprobante.getRemitos().contains(remito)) {
-				List<DetalleRemito> detallesRemito = remito.getDetalles();
-				for (DetalleRemito detalleRemito : detallesRemito) {
-					for (int i = 0; i < detalleRemito.getCantidad(); i++) {
-						addDetalle(detalleRemito.getProducto().getId());
-					}
-				}
-				remito.setComprobante(comprobante);
-				comprobante.getRemitos().add(remito);
-			}
-		}
-		refreshRemitos();
 	}
 
 	public void addDetalle(DetalleComprobante detalle) {

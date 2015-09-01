@@ -37,7 +37,6 @@ public class ProductoDAOImpl extends GenericCrudHBDAOImpl<Producto> implements
 
 		String descripcion = filter.getDescripcion();
 		String descripcionCodigo = filter.getDescripcionCodigo();
-		String codigo = filter.getCodigo();
 		Long idToExclude = filter.getIdToExclude();
 
 		if (null != descripcion) {
@@ -45,12 +44,8 @@ public class ProductoDAOImpl extends GenericCrudHBDAOImpl<Producto> implements
 					MatchMode.ANYWHERE));
 		}
 		if (null != descripcionCodigo) {
-			criteria.add(Restrictions.or(Restrictions.like("descripcion",
-					descripcionCodigo, MatchMode.ANYWHERE), Restrictions.like(
-					"codigo", descripcionCodigo, MatchMode.ANYWHERE)));
-		}
-		if (null != codigo) {
-			criteria.add(Restrictions.eq("codigo", codigo));
+			criteria.add(Restrictions.like("descripcion",
+					descripcionCodigo, MatchMode.ANYWHERE));
 		}
 		if (null != idToExclude) {
 			criteria.add(Restrictions.ne("id", idToExclude));

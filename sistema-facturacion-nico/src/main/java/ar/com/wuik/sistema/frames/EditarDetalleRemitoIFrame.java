@@ -54,8 +54,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 		initialize("Editar Detalle");
 		WModel model = populateModel();
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
-		model.addValue(CAMPO_PRODUCTO, detalle.getProducto().getCodigo() + " "
-				+ detalle.getProducto().getDescripcion());
+		model.addValue(CAMPO_PRODUCTO, detalle.getProducto().getDescripcion());
 		populateComponents(model);
 	}
 

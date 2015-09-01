@@ -11,20 +11,19 @@ public class DetalleRemitoModel extends WTableModel<DetalleRemito> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public DetalleRemitoModel() {
-		super(new String[] { "CODIGO", "PRODUCTO", "CANTIDAD"});
+		super(new String[] {"PRODUCTO", "CANTIDAD"});
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.75, 0.15 };
+		return new double[] { 0.85, 0.15 };
 	}
 
 	@Override
 	protected Object[] getRow(DetalleRemito t, Object[] fila) {
-		fila[0] = t.getProducto().getCodigo();
-		fila[1] = t.getProducto().getDescripcion();
-		fila[2] = t.getCantidad();
-		fila[3] = t.getCoalesceId();
+		fila[0] = t.getProducto().getDescripcion();
+		fila[1] = t.getCantidad();
+		fila[2] = t.getCoalesceId();
 		return fila;
 	}
 
@@ -34,8 +33,6 @@ public class DetalleRemitoModel extends WTableModel<DetalleRemito> {
 		case 0:
 			return String.class;
 		case 1:
-			return String.class;
-		case 2:
 			return Integer.class;
 		}
 		return Object.class;

@@ -98,7 +98,7 @@ public class ModeloComprobanteReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarFactura(94L);
+		generarFactura(1L);
 //		generarRecibo(94L);
 //		generarRemito(94L);
 	}

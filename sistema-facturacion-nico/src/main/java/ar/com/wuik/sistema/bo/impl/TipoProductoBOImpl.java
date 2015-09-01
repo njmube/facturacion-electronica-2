@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ar.com.wuik.sistema.bo.ChequeBO;
 import ar.com.wuik.sistema.bo.TipoProductoBO;
 import ar.com.wuik.sistema.dao.TipoProductoDAO;
 import ar.com.wuik.sistema.entities.TipoProducto;
@@ -17,7 +16,7 @@ import ar.com.wuik.sistema.utils.HibernateUtil;
 public class TipoProductoBOImpl implements TipoProductoBO {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ChequeBO.class);
+			.getLogger(TipoProductoBOImpl.class);
 	private TipoProductoDAO tipoProductoDAO;
 
 	public TipoProductoBOImpl() {

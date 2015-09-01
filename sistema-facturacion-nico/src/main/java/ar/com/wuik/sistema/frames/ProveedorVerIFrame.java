@@ -58,7 +58,6 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_CUIT = "cuit";
 	private static final String CAMPO_MAIL = "mail";
 	private ProveedorIFrame proveedorIFrame;
-	private MovimientoProductoVerIFrame movimientoProductoVerIFrame;
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
 	private JFormattedTextField txfCuit;
@@ -101,13 +100,6 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	public ProveedorVerIFrame(ProveedorIFrame proveedorIFrame) {
 		initialize("Nuevo Proveedor");
 		this.proveedorIFrame = proveedorIFrame;
-		this.proveedor = new Proveedor();
-	}
-
-	public ProveedorVerIFrame(
-			MovimientoProductoVerIFrame movimientoProductoVerIFrame) {
-		initialize("Nuevo Proveedor");
-		this.movimientoProductoVerIFrame = movimientoProductoVerIFrame;
 		this.proveedor = new Proveedor();
 	}
 
@@ -268,8 +260,6 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 							}
 							if (null != proveedorIFrame) {
 								proveedorIFrame.search();
-							} else if (null != movimientoProductoVerIFrame) {
-								movimientoProductoVerIFrame.loadProveedores();
 							}
 							hideFrame();
 						} catch (BusinessException bexc) {

@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.SaharaSkin;
+import org.pushingpixels.substance.api.skin.CeruleanSkin;
 
 import ar.com.wuik.sistema.entities.Permiso;
 import ar.com.wuik.sistema.entities.Usuario;
@@ -53,7 +53,6 @@ public class MainFrame extends WApplication {
 	private WMenuItemSecurity itemCliente = null;
 	private WMenuItemSecurity itemUsuario = null;
 	private WMenuItemSecurity itemParametro = null;
-	private WMenuItemSecurity itemCheque = null;
 	private WMenuItemSecurity itemProveedor = null;
 	private WMenuItemSecurity itemBackup = null;
 	private WMenuItemSecurity itemSubdiarioIVA = null;
@@ -75,7 +74,7 @@ public class MainFrame extends WApplication {
 	protected void setLookAndFeel() {
 
 		try {
-			SubstanceLookAndFeel.setSkin(new SaharaSkin());
+			SubstanceLookAndFeel.setSkin(new CeruleanSkin());
 		} catch (Exception e) {
 			System.out.println("Substance Skin failed to initialize");
 		}
@@ -258,22 +257,6 @@ public class MainFrame extends WApplication {
 		return itemCerrarSesion;
 	}
 
-	private WMenuItemSecurity getItemCheque() {
-		if (null == itemCheque) {
-			itemCheque = new WMenuItemSecurity("Cheques", null, new ImageIcon(
-					MainFrame.class.getResource("/icons32/cheques.png")));
-			itemCheque.setVisible(Boolean.TRUE);
-			itemCheque.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ChequeIFrame());
-				}
-			});
-		}
-		return itemCheque;
-	}
-
 	protected void addMenuItems(JMenuBar menu, WMenuSecurity menuArchivo) {
 		menuArchivo.setIcon(new ImageIcon(WCalendarIFrame.class
 				.getResource("/icons32/home.png")));
@@ -291,7 +274,7 @@ public class MainFrame extends WApplication {
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/administraciones.png")),
 					getItemCliente(), getItemProducto(), getItemTipoProducto(),
-					getItemProveedor(), getItemCheque());
+					getItemProveedor());
 		}
 		return menuAdministraciones;
 	}

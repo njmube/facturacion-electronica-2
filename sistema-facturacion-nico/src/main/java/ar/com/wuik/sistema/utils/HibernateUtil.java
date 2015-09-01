@@ -10,21 +10,16 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import ar.com.wuik.sistema.entities.Banco;
-import ar.com.wuik.sistema.entities.Cheque;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
 import ar.com.wuik.sistema.entities.DetalleRemito;
 import ar.com.wuik.sistema.entities.Localidad;
-import ar.com.wuik.sistema.entities.PagoReciboCheque;
-import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
 import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Permiso;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Proveedor;
-import ar.com.wuik.sistema.entities.Recibo;
 import ar.com.wuik.sistema.entities.Remito;
-import ar.com.wuik.sistema.entities.StockProducto;
 import ar.com.wuik.sistema.entities.TipoProducto;
 import ar.com.wuik.sistema.entities.TributoComprobante;
 import ar.com.wuik.sistema.entities.Usuario;
@@ -97,22 +92,17 @@ public class HibernateUtil {
 	private static void getClasses(final Configuration cfg)
 			throws ClassNotFoundException, IOException {
 		cfg.addAnnotatedClass(Banco.class);
-		cfg.addAnnotatedClass(Cheque.class);
 		cfg.addAnnotatedClass(Cliente.class);
 		cfg.addAnnotatedClass(CondicionIVA.class);
 		cfg.addAnnotatedClass(DetalleComprobante.class);
 		cfg.addAnnotatedClass(DetalleRemito.class);
 		cfg.addAnnotatedClass(Comprobante.class);
 		cfg.addAnnotatedClass(Localidad.class);
-		cfg.addAnnotatedClass(PagoReciboCheque.class);
-		cfg.addAnnotatedClass(PagoReciboEfectivo.class);
 		cfg.addAnnotatedClass(Parametro.class);
 		cfg.addAnnotatedClass(Permiso.class);
 		cfg.addAnnotatedClass(Producto.class);
 		cfg.addAnnotatedClass(Proveedor.class);
-		cfg.addAnnotatedClass(Recibo.class);
 		cfg.addAnnotatedClass(Remito.class);
-		cfg.addAnnotatedClass(StockProducto.class);
 		cfg.addAnnotatedClass(TipoProducto.class);
 		cfg.addAnnotatedClass(TributoComprobante.class);
 		cfg.addAnnotatedClass(Usuario.class);

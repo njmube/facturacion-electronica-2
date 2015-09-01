@@ -67,8 +67,6 @@ public class Comprobante extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "ESTADO_FACTURACION")
 	private EstadoFacturacion estadoFacturacion;
-	@Formula(value = "(select IF(count(*) >= 1, 1, 0) from recibos_comprobantes rc where rc.ID_COMPROBANTE = ID)")
-	private boolean pago;
 	@Column(name = "NUMERO_COMP_FORMATO")
 	private String nroCompFormato;
 	@Column(name = "COD_BARRAS")
@@ -221,14 +219,6 @@ public class Comprobante extends BaseEntity {
 
 	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
 		this.estadoFacturacion = estadoFacturacion;
-	}
-
-	public boolean isPago() {
-		return pago;
-	}
-
-	public void setPago(boolean pago) {
-		this.pago = pago;
 	}
 
 	public String getNroCompFormato() {

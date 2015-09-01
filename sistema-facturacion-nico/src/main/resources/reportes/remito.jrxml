@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_a" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.2100000000000006"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="25"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -30,51 +30,38 @@
 	<field name="producto" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.Integer"/>
 	<background>
-		<band height="802" splitType="Stretch">
-			<image>
-				<reportElement x="1" y="257" width="552" height="434"/>
-				<imageExpression><![CDATA[$P{BG_IMG}]]></imageExpression>
-			</image>
-		</band>
+		<band height="802" splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="231" splitType="Stretch">
 			<rectangle>
 				<reportElement x="1" y="11" width="554" height="139"/>
 				<graphicElement>
-					<pen lineColor="#90B58D"/>
+					<pen lineColor="#C6413A"/>
 				</graphicElement>
 			</rectangle>
-			<staticText>
-				<reportElement x="11" y="11" width="246" height="50" forecolor="#90B58D"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="19" isBold="true"/>
-				</textElement>
-				<text><![CDATA[VAN DER BEKEN
-FRANCISCO NICOLAS]]></text>
-			</staticText>
 			<rectangle>
 				<reportElement x="258" y="11" width="39" height="36"/>
 				<graphicElement>
-					<pen lineColor="#90B58D"/>
+					<pen lineColor="#C6413A"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="11" y="84" width="94" height="15" forecolor="#90B58D"/>
+				<reportElement x="11" y="84" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Razón Social:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="103" width="94" height="15" forecolor="#90B58D"/>
+				<reportElement x="11" y="103" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Domicilio Comercial:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="122" width="94" height="15" forecolor="#90B58D"/>
+				<reportElement x="11" y="122" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -83,88 +70,88 @@ FRANCISCO NICOLAS]]></text>
 			<line>
 				<reportElement x="277" y="47" width="1" height="103"/>
 				<graphicElement>
-					<pen lineColor="#90B58D"/>
+					<pen lineColor="#C6413A"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="105" y="84" width="167" height="15" forecolor="#90B58D"/>
+				<reportElement x="105" y="84" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[VAN DER BEKEN FRANCISCO NICOLAS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="122" width="167" height="15" forecolor="#90B58D"/>
+				<reportElement x="105" y="122" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[IVA RESPONSABLE INSCRIPTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="103" width="167" height="15" forecolor="#90B58D"/>
+				<reportElement x="105" y="103" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[PASSO 50 - ROJAS, BUENOS AIRES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="289" y="75" width="84" height="15" forecolor="#90B58D"/>
+				<reportElement x="289" y="75" width="84" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de Emisión:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="375" y="75" width="98" height="15" forecolor="#90B58D"/>
+				<reportElement x="375" y="75" width="98" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{FECHA_EMISION}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="289" y="95" width="32" height="15" forecolor="#90B58D"/>
+				<reportElement x="289" y="95" width="32" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CUIT:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="323" y="95" width="99" height="15" forecolor="#90B58D"/>
+				<reportElement x="323" y="95" width="99" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[20-04974618-1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="289" y="114" width="73" height="15" forecolor="#90B58D"/>
+				<reportElement x="289" y="114" width="73" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ingresos Brutos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="364" y="114" width="68" height="15" forecolor="#90B58D"/>
+				<reportElement x="364" y="114" width="68" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[20-04974618-1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="289" y="133" width="131" height="15" forecolor="#90B58D"/>
+				<reportElement x="289" y="133" width="131" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de Inicio de Actividades:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="133" width="51" height="15" forecolor="#90B58D"/>
+				<reportElement x="422" y="133" width="51" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[01/01/1994]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="289" y="56" width="84" height="15" forecolor="#90B58D"/>
+				<reportElement x="289" y="56" width="84" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph rightIndent="4"/>
@@ -172,14 +159,14 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[Número:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="375" y="56" width="75" height="15" forecolor="#90B58D"/>
+				<reportElement x="375" y="56" width="75" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COMP_NRO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="258" y="11" width="39" height="36" forecolor="#90B58D"/>
+				<reportElement x="258" y="11" width="39" height="36" forecolor="#C6413A"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="28" isBold="true"/>
 				</textElement>
@@ -188,39 +175,39 @@ FRANCISCO NICOLAS]]></text>
 			<rectangle>
 				<reportElement x="1" y="155" width="554" height="54"/>
 				<graphicElement>
-					<pen lineColor="#90B58D"/>
+					<pen lineColor="#C6413A"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="12" y="180" width="111" height="15" forecolor="#90B58D"/>
+				<reportElement x="12" y="180" width="111" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Condición frente al IVA:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="123" y="180" width="110" height="15" forecolor="#90B58D"/>
+				<reportElement x="123" y="180" width="110" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_COND_IVA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="12" y="161" width="60" height="15" forecolor="#90B58D"/>
+				<reportElement x="12" y="161" width="60" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CUIT/CUIL/DNI:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="72" y="161" width="99" height="15" forecolor="#90B58D"/>
+				<reportElement x="72" y="161" width="99" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_CUIT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="236" y="180" width="94" height="15" forecolor="#90B58D"/>
+				<reportElement x="236" y="180" width="94" height="15" forecolor="#C6413A"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph rightIndent="4"/>
@@ -228,14 +215,14 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[Domicilio Comercial:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="330" y="180" width="223" height="23" forecolor="#90B58D"/>
+				<reportElement x="330" y="180" width="223" height="23" forecolor="#000000"/>
 				<textElement verticalAlignment="Top" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_DOM}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="176" y="161" width="154" height="15" forecolor="#90B58D"/>
+				<reportElement x="176" y="161" width="154" height="15" forecolor="#C6413A"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph rightIndent="4"/>
@@ -243,26 +230,23 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[Nombre y Apellido/Razón Social:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="330" y="161" width="223" height="15" forecolor="#90B58D"/>
+				<reportElement x="330" y="161" width="223" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_RAZON}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="11" y="61" width="246" height="14" forecolor="#90B58D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[VENTA DE REPUESTOS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="307" y="11" width="246" height="26" forecolor="#90B58D"/>
+				<reportElement x="307" y="11" width="246" height="26" forecolor="#C6413A"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="19" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REMITO]]></text>
 			</staticText>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement x="11" y="14" width="236" height="64"/>
+				<imageExpression><![CDATA[$P{BG_IMG}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -271,12 +255,12 @@ FRANCISCO NICOLAS]]></text>
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="67" y="0" width="104" height="26" forecolor="#90B58D" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="67" y="0" width="104" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
 				<box>
-					<topPen lineWidth="1.0" lineColor="#90B58D"/>
-					<leftPen lineWidth="1.0" lineColor="#90B58D"/>
-					<bottomPen lineWidth="1.0" lineColor="#90B58D"/>
-					<rightPen lineWidth="1.0" lineColor="#90B58D"/>
+					<topPen lineWidth="1.0" lineColor="#C6413A"/>
+					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
+					<bottomPen lineWidth="1.0" lineColor="#C6413A"/>
+					<rightPen lineWidth="1.0" lineColor="#C6413A"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
@@ -284,12 +268,12 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="171" y="0" width="384" height="26" forecolor="#90B58D" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="171" y="0" width="384" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
 				<box>
-					<topPen lineWidth="1.0" lineColor="#90B58D"/>
-					<leftPen lineWidth="1.0" lineColor="#90B58D"/>
-					<bottomPen lineWidth="1.0" lineColor="#90B58D"/>
-					<rightPen lineWidth="1.0" lineColor="#90B58D"/>
+					<topPen lineWidth="1.0" lineColor="#C6413A"/>
+					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
+					<bottomPen lineWidth="1.0" lineColor="#C6413A"/>
+					<rightPen lineWidth="1.0" lineColor="#C6413A"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
@@ -297,12 +281,12 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[Producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="0" width="66" height="26" forecolor="#90B58D" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="1" y="0" width="66" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
 				<box>
-					<topPen lineWidth="1.0" lineColor="#90B58D"/>
-					<leftPen lineWidth="1.0" lineColor="#90B58D"/>
-					<bottomPen lineWidth="1.0" lineColor="#90B58D"/>
-					<rightPen lineWidth="1.0" lineColor="#90B58D"/>
+					<topPen lineWidth="1.0" lineColor="#C6413A"/>
+					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
+					<bottomPen lineWidth="1.0" lineColor="#C6413A"/>
+					<rightPen lineWidth="1.0" lineColor="#C6413A"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
@@ -314,7 +298,7 @@ FRANCISCO NICOLAS]]></text>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="67" y="0" width="104" height="20" forecolor="#90B58D"/>
+				<reportElement mode="Transparent" x="67" y="0" width="104" height="20" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="4"/>
@@ -322,7 +306,7 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="171" y="0" width="384" height="20" forecolor="#90B58D"/>
+				<reportElement mode="Transparent" x="171" y="0" width="384" height="20" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph leftIndent="4"/>
@@ -330,7 +314,7 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="1" y="0" width="66" height="20" forecolor="#90B58D"/>
+				<reportElement mode="Transparent" x="1" y="0" width="66" height="20" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 					<paragraph rightIndent="4"/>
@@ -347,28 +331,28 @@ FRANCISCO NICOLAS]]></text>
 			<rectangle>
 				<reportElement x="1" y="16" width="554" height="92"/>
 				<graphicElement>
-					<pen lineColor="#90B58D"/>
+					<pen lineColor="#C6413A"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="22" y="74" width="200" height="15" forecolor="#90B58D"/>
+				<reportElement x="22" y="74" width="200" height="15" forecolor="#C6413A"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[RECIBI CONFORME]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="334" y="74" width="200" height="15" forecolor="#90B58D"/>
+				<reportElement x="334" y="74" width="200" height="15" forecolor="#C6413A"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ACLARACION]]></text>
 			</staticText>
 			<line>
-				<reportElement x="21" y="63" width="200" height="1" forecolor="#90B58D"/>
+				<reportElement x="21" y="63" width="200" height="1" forecolor="#C6413A"/>
 			</line>
 			<line>
-				<reportElement x="334" y="62" width="200" height="1" forecolor="#90B58D"/>
+				<reportElement x="334" y="62" width="200" height="1" forecolor="#C6413A"/>
 			</line>
 		</band>
 	</pageFooter>

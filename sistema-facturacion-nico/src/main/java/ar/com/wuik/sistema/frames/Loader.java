@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.SaharaSkin;
+import org.pushingpixels.substance.api.skin.CeruleanSkin;
 
 import ar.com.wuik.sistema.utils.HibernateUtil;
 import ar.com.wuik.swing.frames.WLoader;
@@ -23,7 +23,7 @@ public class Loader extends WLoader {
 	@Override
 	protected void setLookAndFeel() {
 		try {
-			SubstanceLookAndFeel.setSkin(new SaharaSkin());
+			SubstanceLookAndFeel.setSkin(new CeruleanSkin());
 		} catch (Exception e) {
 			System.out.println("Substance Skin failed to initialize");
 		}

@@ -38,7 +38,6 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 	private WTablePanel<Comprobante> tablePanel;
 	private JButton btnCerrar;
 	private ComprobanteVerIFrame comprobanteVerIFrame;
-	private ReciboVerIFrame reciboVerIFrame;
 	private ComprobanteFilter filter = new ComprobanteFilter();
 	
 
@@ -65,28 +64,6 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 		filter.setIdsToExclude(idsComprobantesToExclude);
 		filter.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 		
-		search();
-	}
-
-	public SeleccionarComprobanteIFrame(ReciboVerIFrame reciboVerIFrame,
-			List<Long> idsComprobantesToExclude, Long idCliente) {
-		this.reciboVerIFrame = reciboVerIFrame;
-		setBorder(new LineBorder(null, 1, true));
-		setTitle("Seleccionar Comprobantes");
-		setFrameIcon(new ImageIcon(
-				SeleccionarComprobanteIFrame.class
-						.getResource("/icons/seleccionar.png")));
-		setBounds(0, 0, 1015, 424);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
-		getContentPane().add(getTablePanel());
-		getContentPane().add(getBtnCerrar());
-		
-		
-		filter.setIdCliente(idCliente);
-		filter.setIdsToExclude(idsComprobantesToExclude);
-		filter.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
-		filter.setPaga(Boolean.FALSE);
 		search();
 	}
 
@@ -136,9 +113,6 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 
 								if (null != comprobanteVerIFrame) {
 									comprobanteVerIFrame
-											.addComprobantes(comprobantes);
-								} else if (null != reciboVerIFrame) {
-									reciboVerIFrame
 											.addComprobantes(comprobantes);
 								}
 

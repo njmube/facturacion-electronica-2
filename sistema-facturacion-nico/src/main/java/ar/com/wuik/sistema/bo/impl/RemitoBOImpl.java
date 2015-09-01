@@ -180,7 +180,7 @@ public class RemitoBOImpl implements RemitoBO {
 		for (DetalleRemito detalleRemito : detalles) {
 			detalleRemitoDTO = new DetalleRemitoDTO();
 			detalleRemitoDTO.setCantidad(detalleRemito.getCantidad());
-			detalleRemitoDTO.setCodigo(detalleRemito.getProducto().getCodigo());
+			detalleRemitoDTO.setCodigo("");
 			detalleRemitoDTO.setProducto(detalleRemito.getProducto()
 					.getDescripcion());
 			detallesDTO.add(detalleRemitoDTO);

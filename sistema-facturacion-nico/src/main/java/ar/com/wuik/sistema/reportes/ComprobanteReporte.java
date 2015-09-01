@@ -117,6 +117,6 @@ public class ComprobanteReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarImpresion(9L);
+		generarImpresion(1L);
 	}
 }

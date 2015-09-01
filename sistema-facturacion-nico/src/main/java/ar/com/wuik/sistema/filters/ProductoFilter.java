@@ -4,7 +4,6 @@ public class ProductoFilter {
 
 	private String descripcion;
 	private String descripcionCodigo;
-	private String codigo;
 	private Long idToExclude;
 
 	public String getDescripcion() {
@@ -21,14 +20,6 @@ public class ProductoFilter {
 
 	public void setDescripcionCodigo(String descripcionCodigo) {
 		this.descripcionCodigo = descripcionCodigo;
-	}
-
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
 	}
 
 	public Long getIdToExclude() {

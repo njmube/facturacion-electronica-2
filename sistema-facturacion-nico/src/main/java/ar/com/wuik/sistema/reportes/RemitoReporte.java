@@ -54,6 +54,6 @@ public class RemitoReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarRemito(18L);
+		generarRemito(1L);
 	}
 }

@@ -9,10 +9,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import ar.com.wuik.sistema.dao.ClienteDAO;
-import ar.com.wuik.sistema.entities.Cheque;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
-import ar.com.wuik.sistema.entities.Recibo;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ClienteFilter;
@@ -42,24 +40,6 @@ public class ClienteDAOImpl extends GenericCrudHBDAOImpl<Cliente> implements
 			cantidad = (Long) criteria.uniqueResult();
 			if (cantidad > 0) {
 				return Boolean.TRUE;
-			} else {
-				// Valida si el Cliente tiene asociados Recibos.
-				criteria = getSession().createCriteria(Recibo.class);
-				criteria.setProjection(Projections.rowCount());
-				criteria.add(Restrictions.eq("idCliente", id));
-				cantidad = (Long) criteria.uniqueResult();
-				if (cantidad > 0) {
-					return Boolean.TRUE;
-				} else {
-					// Valida si el Cliente tiene asociados Cheques.
-					criteria = getSession().createCriteria(Cheque.class);
-					criteria.setProjection(Projections.rowCount());
-					criteria.add(Restrictions.eq("idCliente", id));
-					cantidad = (Long) criteria.uniqueResult();
-					if (cantidad > 0) {
-						return Boolean.TRUE;
-					}
-				}
 			}
 		}
 		return Boolean.FALSE;

@@ -194,19 +194,9 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 										if (!comprobante
 												.getEstadoFacturacion()
 												.equals(EstadoFacturacion.FACTURADO_ERROR)) {
-
-											if (!comprobante.isPago()) {
-												comprobanteBO
-														.cancelar(selectedItem);
-												search();
-											} else {
-												WTooltipUtils
-														.showMessage(
-																"No es posible anular el Comprobante porque se encuentra pago.",
-																(JButton) e
-																		.getSource(),
-																MessageType.ALERTA);
-											}
+											comprobanteBO
+													.cancelar(selectedItem);
+											search();
 										} else {
 											WTooltipUtils
 													.showMessage(

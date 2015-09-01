@@ -185,7 +185,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(icon);
 		
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
 		
 
@@ -240,7 +239,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 
 		
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
 		
 		
@@ -300,7 +298,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(icon);
 
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
 
 		try {
@@ -1004,17 +1001,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		} else {
 			lblEstado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/inactivo.png")));
-		}
-
-	}
-
-	private void popularEstadoPago(Comprobante comprobante) {
-		if (comprobante.isPago()) {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/pago.png")));
-		} else {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/impago.png")));
 		}
 
 	}

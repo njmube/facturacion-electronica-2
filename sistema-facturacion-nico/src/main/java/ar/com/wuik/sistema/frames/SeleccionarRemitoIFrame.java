@@ -51,7 +51,7 @@ public class SeleccionarRemitoIFrame extends WAbstractModelIFrame implements
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Seleccionar Remitos");
 		setFrameIcon(new ImageIcon(
-				SeleccionarComprobanteIFrame.class
+				SeleccionarRemitoIFrame.class
 						.getResource("/icons/seleccionar.png")));
 		setBounds(0, 0, 636, 271);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

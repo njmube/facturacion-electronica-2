@@ -117,7 +117,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JButton btnNuevoProducto;
 	private JLabel label;
 	private JLabel label_1;
-	private JLabel lblPago;
 	private JLabel lblFacturado;
 	private JLabel lblEstado;
 
@@ -183,11 +182,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 		setTitle(titulo);
 		setFrameIcon(icon);
-		
+
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
-		
 
 		populateComponents(model);
 		loadCliente(comprobante.getCliente());
@@ -236,11 +233,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		setTitle(titulo);
 		setFrameIcon(icon);
 
-		
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
-		
+
 		getContentPane().add(getBtnGuardarYFacturar());
 
 		try {
@@ -296,7 +291,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(icon);
 
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
 
 		try {
@@ -333,7 +327,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getBtnCerrar());
 		getContentPane().add(getBtnGuardar());
 		getContentPane().add(getBtnGuardarYFacturar());
-		getContentPane().add(getLblPago());
 		getContentPane().add(getLblFacturado());
 		getContentPane().add(getLblEstado());
 	}
@@ -827,11 +820,28 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				@Override
 				public void doubleClickListener(Object[] selectedItem) {
 					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-					addDetalle(selectedId);
+
+					if (existeDetalleProducto(selectedId)) {
+						addDetalle(selectedId);
+					} else {
+						addModalIFrame(new DetalleComprobanteIFrame(selectedId,
+								ComprobanteVerIFrame.this));
+					}
 				}
 			});
 		}
 		return tblProducto;
+	}
+
+	protected boolean existeDetalleProducto(Long selectedId) {
+		List<DetalleComprobante> detalles = comprobante.getDetalles();
+		for (DetalleComprobante detalleFactura : detalles) {
+			if (null != detalleFactura.getProducto()
+					&& detalleFactura.getProducto().getId().equals(selectedId)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected void addDetalle(Long selectedId) {
@@ -854,7 +864,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				detalle.setCantidad(1);
 				detalle.setComprobante(comprobante);
 				detalle.setTipoIVA(producto.getTipoIVA());
-				detalle.setPrecio(producto.getPrecio());
+				detalle.setPrecio(BigDecimal.ZERO);
 				detalle.setProducto(producto);
 				detalle.setTemporalId(System.currentTimeMillis());
 				detalles.add(detalle);
@@ -1373,17 +1383,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		}
 		return label_1;
 	}
-	private JLabel getLblPago() {
-		if (lblPago == null) {
-			lblPago = new JLabel("Pago:");
-			lblPago.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblPago.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPago.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
-					Font.BOLD));
-			lblPago.setBounds(323, 678, 89, 19);
-		}
-		return lblPago;
-	}
+
 	private JLabel getLblFacturado() {
 		if (lblFacturado == null) {
 			lblFacturado = new JLabel("Facturado:");
@@ -1395,6 +1395,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		}
 		return lblFacturado;
 	}
+
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
@@ -1406,7 +1407,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		}
 		return lblEstado;
 	}
-	
+
 	private void popularEstado(Comprobante comprobante) {
 		if (comprobante.isActivo()) {
 			lblEstado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
@@ -1414,17 +1415,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		} else {
 			lblEstado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/inactivo.png")));
-		}
-
-	}
-
-	private void popularEstadoPago(Comprobante comprobante) {
-		if (comprobante.isPago()) {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/pago.png")));
-		} else {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/impago.png")));
 		}
 
 	}

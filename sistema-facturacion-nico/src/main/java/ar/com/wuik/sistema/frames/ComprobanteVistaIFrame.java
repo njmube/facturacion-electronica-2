@@ -22,12 +22,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.bo.ComprobanteBO;
-import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
-import ar.com.wuik.sistema.entities.DetalleRemito;
-import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.TributoComprobante;
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
@@ -95,7 +92,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblFechaVtoCae;
 	private JLabel lblFechaCAE;
 	private JLabel lblFacturado;
-	private JLabel lblPago;
 	private JLabel lblComprobantesAsociados;
 	private JLabel lblTributos;
 
@@ -118,7 +114,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 					WUtils.getStringFromDate(comprobante.getFechaCAE()));
 
 			popularEstadoFacturacion(comprobante);
-			popularEstadoPago(comprobante);
 			popularEstado(comprobante);
 
 			refreshDetalles();
@@ -172,17 +167,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 
 	}
 
-	private void popularEstadoPago(Comprobante comprobante) {
-		if (comprobante.isPago()) {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/pago.png")));
-		} else {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/impago.png")));
-		}
-
-	}
-
 	private void popularEstadoFacturacion(Comprobante comprobante) {
 		EstadoFacturacion estadoFacturacion = comprobante
 				.getEstadoFacturacion();
@@ -224,7 +208,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getBtnCerrar());
 		getContentPane().add(getLblEstado());
 		getContentPane().add(getLblFacturado());
-		getContentPane().add(getLblPago());
 	}
 
 	@Override
@@ -492,38 +475,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 		return lblEstado;
 	}
 
-	protected void addDetalle(Long selectedId) {
-		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
-		try {
-			Producto producto = productoBO.obtener(selectedId);
-			List<DetalleComprobante> detalles = comprobante.getDetalles();
-			boolean existeEnDetalle = false;
-			for (DetalleComprobante detalleFactura : detalles) {
-				if (null != detalleFactura.getProducto()
-						&& detalleFactura.getProducto().getId()
-								.equals(selectedId)) {
-					detalleFactura
-							.setCantidad(detalleFactura.getCantidad() + 1);
-					existeEnDetalle = true;
-				}
-			}
-			if (!existeEnDetalle) {
-				DetalleComprobante detalle = new DetalleComprobante();
-				detalle.setCantidad(1);
-				detalle.setComprobante(comprobante);
-				detalle.setTipoIVA(producto.getTipoIVA());
-				detalle.setPrecio(producto.getPrecio());
-				detalle.setProducto(producto);
-				detalle.setTemporalId(System.currentTimeMillis());
-				detalles.add(detalle);
-			}
-			getTblDetalle().addData(detalles);
-			calcularTotales();
-		} catch (BusinessException bexc) {
-			showGlobalErrorMsg(bexc.getMessage());
-		}
-	}
-
 	private void calcularTotales() {
 
 		BigDecimal subtotal = BigDecimal.ZERO;
@@ -592,22 +543,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	public void refreshDetalles() {
 		getTblDetalle().addData(comprobante.getDetalles());
 		calcularTotales();
-	}
-
-	public void addRemitos(List<Remito> remitos) {
-		for (Remito remito : remitos) {
-			if (!comprobante.getRemitos().contains(remito)) {
-				List<DetalleRemito> detallesRemito = remito.getDetalles();
-				for (DetalleRemito detalleRemito : detallesRemito) {
-					for (int i = 0; i < detalleRemito.getCantidad(); i++) {
-						addDetalle(detalleRemito.getProducto().getId());
-					}
-				}
-				remito.setComprobante(comprobante);
-				comprobante.getRemitos().add(remito);
-			}
-		}
-		refreshRemitos();
 	}
 
 	public void addDetalle(DetalleComprobante detalle) {
@@ -828,17 +763,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			lblFacturado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
 		}
 		return lblFacturado;
-	}
-
-	private JLabel getLblPago() {
-		if (lblPago == null) {
-			lblPago = new JLabel("Pago:");
-			lblPago.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPago.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblPago.setBounds(323, 678, 89, 19);
-			lblPago.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
-		}
-		return lblPago;
 	}
 
 	private JLabel getLblComprobantesAsociados() {

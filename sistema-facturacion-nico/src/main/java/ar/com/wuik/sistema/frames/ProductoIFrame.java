@@ -192,29 +192,10 @@ public class ProductoIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Eliminar", Permisos.ELI_CLI.getCodPermiso());
 
-		WToolbarButton buttonMovimiento = new WToolbarButton("Movimiento",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/movimiento.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-							addModalIFrame(new MovimientoProductoIFrame(
-									selectedItem));
-						} else {
-							WTooltipUtils.showMessage(
-									"Debe seleccionar un Producto",
-									(JButton) e.getSource(), MessageType.ALERTA);
-						}
-					}
-				}, "Movimiento", Permisos.ELI_CLI.getCodPermiso());
 
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
-		toolbarButtons.add(buttonMovimiento);
 		return toolbarButtons;
 	}
 

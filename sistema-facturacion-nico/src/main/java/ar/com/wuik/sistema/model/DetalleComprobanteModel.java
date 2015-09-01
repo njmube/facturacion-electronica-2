@@ -15,26 +15,25 @@ public class DetalleComprobanteModel extends WTableModel<DetalleComprobante> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public DetalleComprobanteModel() {
-		super(new String[] { "CODIGO", "PRODUCTO/DETALLE", "CANT.",
+		super(new String[] { "PRODUCTO/DETALLE", "CANT.",
 				"PRECIO X U", "SUBTOTAL", "% IVA", "TOTAL" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.10, 0.47, 0.05, 0.10, 0.10, 0.08, 0.10 };
+		return new double[] { 0.57, 0.05, 0.10, 0.10, 0.08, 0.10 };
 	}
 
 	@Override
 	protected Object[] getRow(DetalleComprobante t, Object[] fila) {
-		fila[0] = (null != t.getProducto()) ? t.getProducto().getCodigo() : "0";
-		fila[1] = (null != t.getProducto()) ? t.getProducto().getDescripcion()
+		fila[0] = (null != t.getProducto()) ? t.getProducto().getDescripcion()
 				: t.getDetalle();
-		fila[2] = t.getCantidad();
-		fila[3] = AppUtils.formatPeso(t.getPrecio());
-		fila[4] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
-		fila[5] = t.getTipoIVA().getDescripcion();
-		fila[6] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
-		fila[7] = t.getCoalesceId();
+		fila[1] = t.getCantidad();
+		fila[2] = AppUtils.formatPeso(t.getPrecio());
+		fila[3] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
+		fila[4] = t.getTipoIVA().getDescripcion();
+		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
+		fila[6] = t.getCoalesceId();
 		return fila;
 	}
 

@@ -55,8 +55,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton btnNotaDeDbito;
 	private JButton btnVenta;
 	private JButton btnRemito;
-	private JButton btnRecibo;
-	private JButton btnCheque;
 
 	/**
 	 * Create the frame.
@@ -76,8 +74,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 		getContentPane().add(getBtnNotaDeDbito());
 		getContentPane().add(getBtnVenta());
 		getContentPane().add(getBtnRemito());
-		getContentPane().add(getBtnRecibo());
-		getContentPane().add(getBtnCheque());
 	}
 
 	/**
@@ -278,55 +274,12 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Ver Remitos", null);
 
-		WToolbarButton buttonRecibos = new WToolbarButton("Recibos",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/recibo.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-							addModalIFrame(new ReciboIFrame(selectedItem));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Cliente",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Ver Recibos", null);
-		WToolbarButton buttonCheques = new WToolbarButton("Cheques",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/cheques.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tablePanel.getSelectedItemID();
-						if (null != selectedItem) {
-							addModalIFrame(new ChequeIFrame(selectedItem));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Cliente",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Ver Cheques", null);
 
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
-		// toolbarButtons.add(buttonActivar);
-		// toolbarButtons.add(buttonNotasCreditos);
-		// toolbarButtons.add(buttonNotasDebitos);
 		toolbarButtons.add(buttonFacturas);
 		toolbarButtons.add(buttonRemitos);
-		toolbarButtons.add(buttonRecibos);
-		toolbarButtons.add(buttonCheques);
 		return toolbarButtons;
 	}
 
@@ -495,49 +448,5 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnRemito.setBounds(516, 146, 147, 46);
 		}
 		return btnRemito;
-	}
-
-	private JButton getBtnRecibo() {
-		if (btnRecibo == null) {
-			btnRecibo = new JButton("Recibo");
-			btnRecibo.setIcon(new ImageIcon(ClienteIFrame.class
-					.getResource("/icons32/recibo.png")));
-			btnRecibo.setBounds(684, 146, 147, 46);
-			btnRecibo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Long selectedItem = tablePanel.getSelectedItemID();
-					if (null != selectedItem) {
-						addModalIFrame(new ReciboVerIFrame(selectedItem));
-					} else {
-						WTooltipUtils.showMessage(
-								"Debe seleccionar un Cliente",
-								(JButton) e.getSource(), MessageType.ALERTA);
-					}
-				}
-			});
-		}
-		return btnRecibo;
-	}
-
-	private JButton getBtnCheque() {
-		if (btnCheque == null) {
-			btnCheque = new JButton("Cheque");
-			btnCheque.setIcon(new ImageIcon(ClienteIFrame.class
-					.getResource("/icons32/cheques.png")));
-			btnCheque.setBounds(852, 146, 147, 46);
-			btnCheque.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Long selectedItem = tablePanel.getSelectedItemID();
-					if (null != selectedItem) {
-						addModalIFrame(new ChequeVerIFrame(selectedItem));
-					} else {
-						WTooltipUtils.showMessage(
-								"Debe seleccionar un Cliente",
-								(JButton) e.getSource(), MessageType.ALERTA);
-					}
-				}
-			});
-		}
-		return btnCheque;
 	}
 }

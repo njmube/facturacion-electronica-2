@@ -1,7 +1,5 @@
 package ar.com.wuik.sistema.entities;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,16 +17,8 @@ public class Producto extends BaseEntity {
 
 	@Column(name = "DESCRIPCION")
 	private String descripcion;
-	@Column(name = "CODIGO")
-	private String codigo;
-	@Column(name = "COSTO")
-	private BigDecimal costo;
-	@Column(name = "PRECIO")
-	private BigDecimal precio;
 	@Column(name = "ACTIVO")
 	private boolean activo;
-	@Column(name = "UBICACION")
-	private String ubicacion;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_TIPO", nullable = false, insertable = false, updatable = false)
 	private TipoProducto tipoProducto;
@@ -46,44 +36,12 @@ public class Producto extends BaseEntity {
 		this.descripcion = descripcion;
 	}
 
-	public String getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public BigDecimal getCosto() {
-		return costo;
-	}
-
-	public void setCosto(BigDecimal costo) {
-		this.costo = costo;
-	}
-
-	public BigDecimal getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(BigDecimal precio) {
-		this.precio = precio;
-	}
-
 	public boolean isActivo() {
 		return activo;
 	}
 
 	public void setActivo(boolean activo) {
 		this.activo = activo;
-	}
-
-	public String getUbicacion() {
-		return ubicacion;
-	}
-
-	public void setUbicacion(String ubicacion) {
-		this.ubicacion = ubicacion;
 	}
 
 	public TipoProducto getTipoProducto() {

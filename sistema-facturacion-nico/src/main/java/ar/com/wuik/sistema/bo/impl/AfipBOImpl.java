@@ -10,14 +10,13 @@ import FEV1.dif.afip.gov.ar.entities.TipoComprobante;
 import FEV1.dif.afip.gov.ar.exceptions.ServiceException;
 import FEV1.dif.afip.gov.ar.services.FacturacionService;
 import ar.com.wuik.sistema.bo.AfipBO;
-import ar.com.wuik.sistema.bo.ChequeBO;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 
 public class AfipBOImpl implements AfipBO {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ChequeBO.class);
+			.getLogger(AfipBOImpl.class);
 	private FacturacionService facturacionService;
 
 	public AfipBOImpl() {
