@@ -53,6 +53,7 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JTextField txtImporte;
 	private JLabel lblTipoTributo;
 	private ComprobanteVerIFrame comprobanteVerIFrame;
+	private ComprobanteProveedorVerIFrame comprobanteProveedorVerIFrame;
 	private WTextFieldDecimal txfBaseImponible;
 	private JLabel lblBaseImponible;
 	private JComboBox cmbTipoTributo;
@@ -80,6 +81,26 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 	public TributoComprobanteVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame) {
 		this.tributo = new TributoComprobante();
 		this.comprobanteVerIFrame = comprobanteVerIFrame;
+		initialize("Nuevo Tributo");
+	}
+	
+	public TributoComprobanteVerIFrame(TributoComprobante tributo,
+			ComprobanteProveedorVerIFrame comprobanteProveedorVerIFrame) {
+		this.tributo = tributo;
+		this.comprobanteProveedorVerIFrame = comprobanteProveedorVerIFrame;
+		initialize("Editar Tributo");
+		WModel model = populateModel();
+		model.addValue(CAMPO_TRIBUTO, tributo.getTributo().getId());
+		model.addValue(CAMPO_DESC, tributo.getDetalle());
+		model.addValue(CAMPO_BASE_IMP, tributo.getBaseImporte());
+		model.addValue(CAMPO_ALICUOTA, tributo.getAlicuota());
+		model.addValue(CAMPO_IMPORTE, tributo.getImporte());
+		populateComponents(model);
+	}
+
+	public TributoComprobanteVerIFrame(ComprobanteProveedorVerIFrame comprobanteProveedorVerIFrame) {
+		this.tributo = new TributoComprobante();
+		this.comprobanteProveedorVerIFrame = comprobanteProveedorVerIFrame;
 		initialize("Nuevo Tributo");
 	}
 
@@ -203,7 +224,11 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 						tributo.setTributo(TipoTributo.fromValue(tributoOpt
 								.getValue().intValue()));
 						
-						comprobanteVerIFrame.addTributo(tributo);
+						if (null != comprobanteVerIFrame) {
+							comprobanteVerIFrame.addTributo(tributo);
+						} else {
+							comprobanteProveedorVerIFrame.addTributo(tributo);
+						}						
 						hideFrame();
 					}
 
