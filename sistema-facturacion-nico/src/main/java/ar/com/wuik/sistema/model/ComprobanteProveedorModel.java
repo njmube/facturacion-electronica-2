@@ -45,8 +45,7 @@ public class ComprobanteProveedorModel extends WTableModel<Comprobante> {
 		BigDecimal totalTributos = (null != t.getTotalTributos()) ? t
 				.getTotalTributos() : BigDecimal.ZERO;
 
-		fila[7] = AppUtils.formatPeso(WUtils.getValue(t.getTotal().add(
-				totalTributos)));
+		fila[7] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
 		fila[8] = t.getId();
 		return fila;
 	}

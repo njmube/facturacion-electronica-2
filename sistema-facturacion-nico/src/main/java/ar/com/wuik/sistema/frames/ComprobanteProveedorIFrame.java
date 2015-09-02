@@ -123,8 +123,8 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements
 										.obtener(selectedItem);
 								if (comprobante.isActivo()) {
 									addModalIFrame(new ComprobanteProveedorVerIFrame(
-											comprobante.getIdProveedor(),
-											TipoComprobante.FACTURA));
+											ComprobanteProveedorIFrame.this,
+											comprobante.getId()));
 								} else {
 									WTooltipUtils
 											.showMessage(

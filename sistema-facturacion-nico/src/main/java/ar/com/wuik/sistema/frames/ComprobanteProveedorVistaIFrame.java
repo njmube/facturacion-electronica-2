@@ -60,9 +60,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblObservaciones;
 	private JTextArea txaObservaciones;
 	private JScrollPane scrollPane;
-	private JLabel lblIVA10;
 	private JLabel txtSubtotalPesos;
-	private JLabel txtIVA10;
 	private JLabel lblSubtotal;
 	private JLabel lblTotal;
 	private JLabel txtTotalPesos;
@@ -101,7 +99,10 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_CAE, comprobante.getCae());
 			model.addValue(CAMPO_VTO_CAE,
 					WUtils.getStringFromDate(comprobante.getFechaCAE()));
-
+			
+			txaObservaciones.setText(comprobante.getObservaciones());
+			lblFechaCAE.setText(comprobante.getFechaCAE().toString());
+			
 			calcularTotales();
 			refreshTributos();
 		} catch (BusinessException bexc) {
@@ -113,7 +114,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 
 		switch (comprobante.getTipoComprobante()) {
 		case FACTURA:
-			titulo = "Ver Venta";
+			titulo = "Ver Factura Proveedor";
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
 			lblTipoComp.setText("FACTURA");
@@ -335,15 +336,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		return null;
 	}
 
-	private JLabel getLblIVA10() {
-		if (lblIVA10 == null) {
-			lblIVA10 = new JLabel("IVA 10.5%: $");
-			lblIVA10.setBounds(751, 82, 76, 25);
-			lblIVA10.setHorizontalAlignment(SwingConstants.RIGHT);
-		}
-		return lblIVA10;
-	}
-
 	private JLabel getTxtSubtotalPesos() {
 		if (txtSubtotalPesos == null) {
 			txtSubtotalPesos = new JLabel();
@@ -354,18 +346,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 		}
 		return txtSubtotalPesos;
-	}
-
-	private JLabel getTxtIVA10() {
-		if (txtIVA10 == null) {
-			txtIVA10 = new JLabel();
-			txtIVA10.setBounds(837, 82, 125, 25);
-			txtIVA10.setText("$ 0.00");
-			txtIVA10.setHorizontalAlignment(SwingConstants.RIGHT);
-			txtIVA10.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
-					Font.BOLD));
-		}
-		return txtIVA10;
 	}
 
 	private JLabel getLblSubtotal() {
@@ -380,7 +360,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblTotal() {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Importe Total: $");
-			lblTotal.setBounds(702, 149, 125, 25);
+			lblTotal.setBounds(702, 113, 125, 25);
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblTotal;
@@ -389,7 +369,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getTxtTotalPesos() {
 		if (txtTotalPesos == null) {
 			txtTotalPesos = new JLabel();
-			txtTotalPesos.setBounds(837, 149, 125, 25);
+			txtTotalPesos.setBounds(837, 113, 125, 25);
 			txtTotalPesos.setText("$ 0.00");
 			txtTotalPesos.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtTotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
@@ -418,25 +398,20 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		comprobante.setSubtotal(subtotal);
 		comprobante.setTotalTributos(totalTributo);
 		comprobante.setTotal(total);
-		comprobante.setIva(total.subtract(subtotal));
+		comprobante.setIva(subtotalIVA21);
 
 		getTxtSubtotalPesos().setText(
 				WUtils.getValue(comprobante.getSubtotal())
 						.toEngineeringString());
-		getTxtIVA10().setText(
-				WUtils.getValue(subtotalIVA105).toEngineeringString());
-		getTxtIVA21().setText(
-				WUtils.getValue(subtotalIVA21).toEngineeringString());
-		getTxtTotalPesos().setText(
-				WUtils.getValue(comprobante.getTotal().add(totalTributo))
-						.toEngineeringString());
+		getTxtIVA21().setText(subtotalIVA21.toString());
+		getTxtTotalPesos().setText(total.toString());
 		getLblImporteOtrosTributos().setText(
 				WUtils.getValue(totalTributo).toEngineeringString());
 	}
 
 	private JLabel getLblIVA21() {
 		if (lblIVA21 == null) {
-			lblIVA21 = new JLabel("IVA 21%: $");
+			lblIVA21 = new JLabel("IVA: $");
 			lblIVA21.setBounds(751, 46, 76, 25);
 			lblIVA21.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
@@ -471,8 +446,6 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			panel_1.setLayout(null);
 			panel_1.add(getTxtTotalPesos());
 			panel_1.add(getLblTotal());
-			panel_1.add(getTxtIVA10());
-			panel_1.add(getLblIVA10());
 			panel_1.add(getLblIVA21());
 			panel_1.add(getTxtIVA21());
 			panel_1.add(getTxtSubtotalPesos());
@@ -503,7 +476,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			lblProveedor.setIcon(new ImageIcon(
 					ComprobanteProveedorVistaIFrame.class
 							.getResource("/icons/proveedores.png")));
-			lblProveedor.setBounds(10, 21, 100, 25);
+			lblProveedor.setBounds(10, 21, 81, 25);
 		}
 		return lblProveedor;
 	}
@@ -512,7 +485,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		if (txtProveedor == null) {
 			txtProveedor = new JLabel();
 			txtProveedor.setBorder(null);
-			txtProveedor.setBounds(140, 21, 216, 25);
+			txtProveedor.setBounds(101, 21, 255, 25);
 			txtProveedor.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
 		}
@@ -523,7 +496,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		if (txtCondIVA == null) {
 			txtCondIVA = new JLabel();
 			txtCondIVA.setBorder(null);
-			txtCondIVA.setBounds(84, 57, 302, 25);
+			txtCondIVA.setBounds(101, 57, 285, 25);
 			txtCondIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
 		}
@@ -533,7 +506,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblCondIva() {
 		if (lblCondIva == null) {
 			lblCondIva = new JLabel("Cond. IVA:");
-			lblCondIva.setBounds(10, 57, 64, 25);
+			lblCondIva.setBounds(10, 57, 81, 25);
 		}
 		return lblCondIva;
 	}
@@ -602,7 +575,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 					.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblImporteOtrosTributos.setFont(WFrameUtils.getCustomFont(
 					FontSize.LARGE, Font.BOLD));
-			lblImporteOtrosTributos.setBounds(837, 118, 125, 25);
+			lblImporteOtrosTributos.setBounds(837, 82, 125, 25);
 		}
 		return lblImporteOtrosTributos;
 	}
@@ -611,7 +584,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 		if (lblOtrosTributos == null) {
 			lblOtrosTributos = new JLabel("Importe Otros Tributos: $");
 			lblOtrosTributos.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblOtrosTributos.setBounds(687, 118, 140, 25);
+			lblOtrosTributos.setBounds(687, 82, 140, 25);
 		}
 		return lblOtrosTributos;
 	}

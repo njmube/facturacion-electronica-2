@@ -29,6 +29,12 @@ public class ComprobanteDAOImpl extends GenericCrudHBDAOImpl<Comprobante> implem
 	public Comprobante getById(Long id) throws DataAccessException {
 		Comprobante comprobante = super.getById(id);
 		
+		if (null != comprobante.getIdProveedor()) {
+			Hibernate.initialize(comprobante.getProveedor());
+		}
+		if (null != comprobante.getIdCliente()) {
+			Hibernate.initialize(comprobante.getCliente());
+		}
 		if (null != comprobante.getDetalles()) {
 			Hibernate.initialize(comprobante.getDetalles());
 		}

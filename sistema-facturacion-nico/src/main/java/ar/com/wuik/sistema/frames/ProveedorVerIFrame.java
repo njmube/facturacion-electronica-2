@@ -26,6 +26,7 @@ import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Localidad;
 import ar.com.wuik.sistema.entities.Proveedor;
+import ar.com.wuik.sistema.entities.enums.CondicionIVA;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.AppUtils;
@@ -57,6 +58,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_LOCALIDAD = "localidad";
 	private static final String CAMPO_CUIT = "cuit";
 	private static final String CAMPO_MAIL = "mail";
+	private static final String CAMPO_TIPO_IVA = "tipoIva";
 	private ProveedorIFrame proveedorIFrame;
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
@@ -249,6 +251,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 						proveedor.setIdLocalidad(localidad.getValue());
 						proveedor.setCuit(cuit);
 						proveedor.setMail(mail);
+						proveedor.setCondicionIVA(CondicionIVA.RESP_INSC);
 
 						ProveedorBO proveedorBO = AbstractFactory
 								.getInstance(ProveedorBO.class);

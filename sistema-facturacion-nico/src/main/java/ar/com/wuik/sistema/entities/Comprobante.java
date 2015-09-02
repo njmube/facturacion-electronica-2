@@ -30,7 +30,7 @@ import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 @Table(name = "comprobantes")
 public class Comprobante extends BaseEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_CLIENTE", nullable = false, insertable = false, updatable = false)
 	private Cliente cliente;
 	@Column(name = "ID_CLIENTE")
@@ -79,7 +79,7 @@ public class Comprobante extends BaseEntity {
 	private TipoComprobante tipoComprobante;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "comprobante", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TributoComprobante> tributos;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_PROVEEDOR", nullable = false, insertable = false, updatable = false)
 	private Proveedor proveedor;
 	@Column(name = "ID_PROVEEDOR")

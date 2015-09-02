@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.frames;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -76,6 +77,7 @@ import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
+
 import javax.swing.JComboBox;
 
 public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
@@ -91,6 +93,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private Comprobante comprobante;
 	private JButton btnGuardar;
 	private ComprobanteIFrame comprobanteIFrame;
+	private ComprobanteProveedorIFrame comprobanteProveedorIFrame;
 	private JButton btnFechaEmision;
 	private JTextField txtFechaEmision;
 	private JLabel lblFechaEmisin;
@@ -128,10 +131,10 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ComprobanteProveedorVerIFrame(ComprobanteIFrame comprobanteIFrame,
+	public ComprobanteProveedorVerIFrame(ComprobanteProveedorIFrame comprobanteProveedorIFrame,
 			Long idComprobante) {
-
-		this.comprobanteIFrame = comprobanteIFrame;
+		
+		this.comprobanteProveedorIFrame = comprobanteProveedorIFrame;
 
 		WModel model = populateModel();
 		initialize();
@@ -143,15 +146,34 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 					WUtils.getStringFromDate(comprobante.getFechaVenta()));
 			model.addValue(CAMPO_OBSERVACIONES, comprobante.getObservaciones());
 			model.addValue(CAMPO_FECHA_CAE,
-					WUtils.getStringFromDate(comprobante.getFechaVenta()));
-			refreshDetalles();
+					WUtils.getStringFromDate(comprobante.getFechaVenta()));			
+			
+			BigDecimal subtotal = BigDecimal.ZERO;
+			BigDecimal subtotalIVA = BigDecimal.ZERO;
+			BigDecimal total = BigDecimal.ZERO;
+			BigDecimal totalTributo = BigDecimal.ZERO;
+
+			subtotal = comprobante.getSubtotal();
+			subtotalIVA = comprobante.getIva();
+			total = comprobante.getTotal();
+			totalTributo = comprobante.getTotalTributos();
+			
+			txtNumComp.setText(comprobante.getNroComprobante());
+			txtCAE.setText(comprobante.getCae());
+			txaObservaciones.setText(comprobante.getObservaciones());
+			txtGravados.setText(subtotal.toString());
+			txtIVA.setText(subtotalIVA.toString());
+			txtTotalPesos.setText(total.toString());
 
 			if (!comprobante.getTributos().isEmpty()) {
 				getChckbxAgregarTributos().setSelected(Boolean.TRUE);
 			}
 
-			refreshTributos();
+			getTblTributos().addData(comprobante.getTributos());
 
+			getLblImporteOtrosTributos().setText(totalTributo.toString());
+			
+			
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
@@ -424,6 +446,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 								comprobanteBO.actualizar(comprobante);
 							}
 							hideFrame();
+
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							}
