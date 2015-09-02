@@ -86,7 +86,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_FECHA_EMISION = "fechaEmision";
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
 	private static final String CAMPO_FECHA_CAE = "fechaCAE";
-	private static final String COMBO_TIPO_IVA = "tipoIVA";
 	private JPanel pnlBusqueda;
 	private JButton btnCerrar;
 	private Comprobante comprobante;
@@ -329,7 +328,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	protected boolean validateModel(WModel model, JComponent component) {
 
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
-
+		
 		List<String> messages = new ArrayList<String>();
 
 		if (WUtils.isEmpty(fechaEmision)) {
@@ -538,15 +537,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		return lblObservaciones;
 	}
 	
-//	private JScrollPane getScrollPane() {
-//		if (scrollPane == null) {
-//			scrollPane = new JScrollPane();
-//			scrollPane.setBounds(482, 42, 187, 83);
-//			scrollPane.setViewportView(getTxaObservaciones());
-//		}
-//		return scrollPane;
-//	}
-
 	private JTextArea getTxaObservaciones() {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
@@ -632,6 +622,21 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		// subtotal = subtotal.add(detalleFactura.getSubtotal());
 		// total = total.add(detalleFactura.getTotal());
 		// }
+		String numComp = null;
+		if (null != txtNumComp.getText() && txtNumComp.getText().trim().length() > 0){
+			numComp = txtNumComp.getText();
+		}
+		comprobante.setNroComprobante(numComp);
+		
+		String cae = null;
+		if (null != txtCAE.getText() && txtCAE.getText().trim().length() > 0){
+			cae = txtCAE.getText();
+		}
+		comprobante.setCae(cae);
+		
+		WModel model = populateModel();		
+		String fechaCAE = model.getValue(CAMPO_FECHA_CAE);		
+		comprobante.setFechaCAE(WUtils.getDateFromString(fechaCAE));		
 
 		List<TributoComprobante> tributos = comprobante.getTributos();
 		for (TributoComprobante tributoComprobante : tributos) {
