@@ -1,6 +1,5 @@
 package ar.com.wuik.sistema.frames;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -23,7 +22,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,44 +30,26 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-import ar.com.wuik.sistema.bo.ClienteBO;
 import ar.com.wuik.sistema.bo.ComprobanteBO;
-import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.bo.ProveedorBO;
-import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
-import ar.com.wuik.sistema.entities.DetalleRemito;
-import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Proveedor;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.TributoComprobante;
-import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.entities.enums.TipoComprobante;
-import ar.com.wuik.sistema.entities.enums.TipoIVAEnum;
 import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.ProductoFilter;
-import ar.com.wuik.sistema.model.DetalleComprobanteModel;
-import ar.com.wuik.sistema.model.DetalleComprobantesAsocModel;
-import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
-import ar.com.wuik.sistema.model.ProductoDetalleModel;
 import ar.com.wuik.sistema.model.TributoComprobanteModel;
-import ar.com.wuik.sistema.reportes.ComprobanteReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
-import ar.com.wuik.swing.components.WOption;
 import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.listeners.WTableListener;
 import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
 import ar.com.wuik.swing.utils.WTooltipUtils;
@@ -77,8 +57,6 @@ import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
 import com.lowagie.text.Font;
-
-import javax.swing.JComboBox;
 
 public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	/**
@@ -92,7 +70,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private JButton btnCerrar;
 	private Comprobante comprobante;
 	private JButton btnGuardar;
-	private ComprobanteIFrame comprobanteIFrame;
 	private ComprobanteProveedorIFrame comprobanteProveedorIFrame;
 	private JButton btnFechaEmision;
 	private JTextField txtFechaEmision;
@@ -209,63 +186,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 
 		populateComponents(model);
 		loadProveedor(comprobante.getProveedor());
-	}
-
-	public ComprobanteProveedorVerIFrame(ComprobanteIFrame comprobanteIFrame,
-			Long idProveedor, TipoComprobante tipoComprobante) {
-
-		initialize();
-
-		this.comprobanteIFrame = comprobanteIFrame;
-
-		WModel model = populateModel();
-		model.addValue(CAMPO_FECHA_EMISION,
-				WUtils.getStringFromDate(new Date()));
-		model.addValue(CAMPO_FECHA_CAE, WUtils.getStringFromDate(new Date()));
-		this.comprobante = new Comprobante();
-		this.comprobante.setTipoComprobante(tipoComprobante);
-		this.comprobante.setIdProveedor(idProveedor);
-
-		String titulo = "";
-		Icon icon = null;
-
-		switch (tipoComprobante) {
-		case FACTURA:
-			titulo = "Nueva Factura de Proveedor";
-			icon = new ImageIcon(
-					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
-			lblTipoComp.setText("FACTURA");
-			break;
-		case NOTA_CREDITO:
-			titulo = "Nueva Nota de Crédito";
-			icon = new ImageIcon(
-					ComprobanteIFrame.class
-							.getResource("/icons/notas_credito.png"));
-			lblTipoComp.setText("NOTA DE CRÉDITO");
-			break;
-		case NOTA_DEBITO:
-			titulo = "Nueva Nota de Débito";
-			icon = new ImageIcon(
-					ComprobanteIFrame.class
-							.getResource("/icons/notas_debito.png"));
-			lblTipoComp.setText("NOTA DE DÉBITO");
-			break;
-		}
-
-		setTitle(titulo);
-		setFrameIcon(icon);
-
-		try {
-			ProveedorBO proveedorBO = AbstractFactory
-					.getInstance(ProveedorBO.class);
-			Proveedor proveedor = proveedorBO.obtener(idProveedor);
-			// this.comprobante.setTipoLetraComprobante(proveedor.getCondicionIVA()
-			// .getTipoLetraComprobante());
-			loadProveedor(proveedor);
-		} catch (BusinessException bexc) {
-			showGlobalErrorMsg(bexc.getMessage());
-		}
-		populateComponents(model);
 	}
 
 	public ComprobanteProveedorVerIFrame(Long idProveedor,
@@ -447,8 +367,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 							}
 							hideFrame();
 
-							if (null != comprobanteIFrame) {
-								comprobanteIFrame.search();
+							if (null != comprobanteProveedorIFrame) {
+								comprobanteProveedorIFrame.search();
 							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
