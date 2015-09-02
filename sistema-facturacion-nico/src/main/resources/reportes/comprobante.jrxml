@@ -79,14 +79,14 @@
 				<text><![CDATA[Razón Social:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="103" width="94" height="15" forecolor="#C6413A"/>
+				<reportElement x="11" y="113" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Domicilio Comercial:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="122" width="94" height="15" forecolor="#C6413A"/>
+				<reportElement x="11" y="132" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -99,25 +99,25 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="105" y="84" width="167" height="15" forecolor="#C6413A"/>
+				<reportElement x="105" y="84" width="167" height="26" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[VAN DER BEKEN FRANCISCO NICOLAS]]></text>
+				<text><![CDATA[MARIA N. NOGUERA, MARIA JOSE FERRE Y SERGIO M. ROLDAN S.H.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="122" width="167" height="15" forecolor="#C6413A"/>
+				<reportElement x="105" y="132" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[IVA RESPONSABLE INSCRIPTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="103" width="167" height="15" forecolor="#C6413A"/>
+				<reportElement x="105" y="113" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[PASSO 50 - ROJAS, BUENOS AIRES]]></text>
+				<text><![CDATA[H. Yrigoyen 23 - Tel. Part. 02475 462419]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="305" y="11" width="229" height="36" forecolor="#000000"/>
@@ -166,7 +166,7 @@
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[20-04974618-1]]></text>
+				<text><![CDATA[30-71444607-6]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="289" y="114" width="73" height="15" forecolor="#C6413A"/>
@@ -180,7 +180,7 @@
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[20-04974618-1]]></text>
+				<text><![CDATA[30-71444607-6]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="289" y="133" width="131" height="15" forecolor="#C6413A"/>
@@ -194,7 +194,7 @@
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[01/01/1994]]></text>
+				<text><![CDATA[01/05/2014]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="403" y="55" width="66" height="15" forecolor="#C6413A"/>
@@ -326,7 +326,7 @@
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="0" width="43" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="1" y="0" width="43" height="26" forecolor="#C6413A" backcolor="#FAEBEB"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#C6413A"/>
 					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
@@ -339,7 +339,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="42" y="0" width="191" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="42" y="0" width="191" height="26" forecolor="#C6413A" backcolor="#FAEBEB"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#C6413A"/>
 					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
@@ -352,7 +352,7 @@
 				<text><![CDATA[Producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="233" y="0" width="50" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="233" y="0" width="50" height="26" forecolor="#C6413A" backcolor="#FAEBEB"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#C6413A"/>
 					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
@@ -365,7 +365,7 @@
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="283" y="0" width="65" height="26" forecolor="#C6413A" backcolor="#E7F1E5">
+				<reportElement mode="Opaque" x="283" y="0" width="65" height="26" forecolor="#C6413A" backcolor="#FAEBEB">
 					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("A")]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -380,7 +380,7 @@
 				<text><![CDATA[Precio Unit.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="348" y="0" width="76" height="26" forecolor="#C6413A" backcolor="#E7F1E5">
+				<reportElement mode="Opaque" x="348" y="0" width="76" height="26" forecolor="#C6413A" backcolor="#FAEBEB">
 					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("A")]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -395,7 +395,7 @@
 				<text><![CDATA[Subtotal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="424" y="0" width="49" height="26" forecolor="#C6413A" backcolor="#E7F1E5">
+				<reportElement mode="Opaque" x="424" y="0" width="49" height="26" forecolor="#C6413A" backcolor="#FAEBEB">
 					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("A")]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -410,7 +410,7 @@
 				<text><![CDATA[Alicuota IVA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="473" y="0" width="82" height="26" forecolor="#C6413A" backcolor="#E7F1E5">
+				<reportElement mode="Opaque" x="473" y="0" width="82" height="26" forecolor="#C6413A" backcolor="#FAEBEB">
 					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("A")]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -425,7 +425,7 @@
 				<text><![CDATA[Subtotal c/IVA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="420" y="0" width="135" height="26" forecolor="#C6413A" backcolor="#E7F1E5">
+				<reportElement mode="Opaque" x="420" y="0" width="135" height="26" forecolor="#C6413A" backcolor="#FAEBEB">
 					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("B")]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -440,7 +440,7 @@
 				<text><![CDATA[Subtotal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="283" y="0" width="137" height="26" forecolor="#C6413A" backcolor="#E7F1E5">
+				<reportElement mode="Opaque" x="283" y="0" width="137" height="26" forecolor="#C6413A" backcolor="#FAEBEB">
 					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("B")]]></printWhenExpression>
 				</reportElement>
 				<box>

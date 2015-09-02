@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_a" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.2100000000000006"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="25"/>
+	<property name="ireport.y" value="48"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -54,14 +54,14 @@
 				<text><![CDATA[Razón Social:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="103" width="94" height="15" forecolor="#C6413A"/>
+				<reportElement x="11" y="113" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Domicilio Comercial:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="122" width="94" height="15" forecolor="#C6413A"/>
+				<reportElement x="11" y="132" width="94" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -74,25 +74,25 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="105" y="84" width="167" height="15" forecolor="#C6413A"/>
+				<reportElement x="105" y="84" width="167" height="26" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[VAN DER BEKEN FRANCISCO NICOLAS]]></text>
+				<text><![CDATA[MARIA N. NOGUERA, MARIA JOSE FERRE Y SERGIO M. ROLDAN S.H.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="122" width="167" height="15" forecolor="#C6413A"/>
+				<reportElement x="105" y="132" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[IVA RESPONSABLE INSCRIPTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="105" y="103" width="167" height="15" forecolor="#C6413A"/>
+				<reportElement x="105" y="113" width="167" height="15" forecolor="#C6413A"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[PASSO 50 - ROJAS, BUENOS AIRES]]></text>
+				<text><![CDATA[H. Yrigoyen 23 - Tel. Part. 02475 462419]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="289" y="75" width="84" height="15" forecolor="#C6413A"/>
@@ -120,7 +120,7 @@
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[20-04974618-1]]></text>
+				<text><![CDATA[30-71444607-6]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="289" y="114" width="73" height="15" forecolor="#C6413A"/>
@@ -134,7 +134,7 @@
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[20-04974618-1]]></text>
+				<text><![CDATA[30-71444607-6]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="289" y="133" width="131" height="15" forecolor="#C6413A"/>
@@ -148,7 +148,7 @@
 				<textElement verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[01/01/1994]]></text>
+				<text><![CDATA[01/05/2014]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="289" y="56" width="84" height="15" forecolor="#C6413A"/>
@@ -255,7 +255,7 @@
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="67" y="0" width="104" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="67" y="0" width="104" height="26" forecolor="#C6413A" backcolor="#FAEBEB"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#C6413A"/>
 					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
@@ -268,7 +268,7 @@
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="171" y="0" width="384" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="171" y="0" width="384" height="26" forecolor="#C6413A" backcolor="#FAEBEB"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#C6413A"/>
 					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
@@ -281,7 +281,7 @@
 				<text><![CDATA[Producto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="0" width="66" height="26" forecolor="#C6413A" backcolor="#E7F1E5"/>
+				<reportElement mode="Opaque" x="1" y="0" width="66" height="26" forecolor="#C6413A" backcolor="#FAEBEB"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#C6413A"/>
 					<leftPen lineWidth="1.0" lineColor="#C6413A"/>
