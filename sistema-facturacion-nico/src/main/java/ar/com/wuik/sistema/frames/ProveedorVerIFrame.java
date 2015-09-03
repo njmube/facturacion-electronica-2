@@ -129,10 +129,16 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			List<Localidad> localidades = parametricoBO
 					.obtenerTodosLocalidades();
 			if (WUtils.isNotEmpty(localidades)) {
+				int indexRojas = -1;
 				for (Localidad localidad : localidades) {
 					getCmbLocalidad().addItem(
-							new WOption(localidad.getId(), localidad
-									.getNombre()));
+							new WOption(localidad.getId(), localidad.getNombre()));
+					if (localidad.getNombre().equalsIgnoreCase("Rojas")){
+						indexRojas = localidad.getId().intValue();
+					}
+				}
+				if (indexRojas != -1){
+					getCmbLocalidad().setSelectedIndex(indexRojas);
 				}
 			}
 		} catch (BusinessException bexc) {

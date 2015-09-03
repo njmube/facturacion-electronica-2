@@ -351,10 +351,12 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						try {
 							if (cliente.getId() == null) {
 								clienteBO.guardar(cliente);
+								
 							} else {
 								clienteBO.actualizar(cliente);
 							}
 							hideFrame();
+							showGlobalMsg("Cliente agregado exitosamente");
 							clienteIFrame.search();
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());

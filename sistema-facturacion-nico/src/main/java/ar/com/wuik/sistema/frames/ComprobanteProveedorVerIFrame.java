@@ -361,12 +361,12 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
 							if (comprobante.getId() == null) {
-								comprobanteBO.guardar(comprobante);
+								comprobanteBO.guardar(comprobante);								
 							} else {
 								comprobanteBO.actualizar(comprobante);
 							}
 							hideFrame();
-
+							showGlobalMsg("Comprobante de proveedor agregado exitosamente");
 							if (null != comprobanteProveedorIFrame) {
 								comprobanteProveedorIFrame.search();
 							}
@@ -550,21 +550,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 
 		BigDecimal subtotal = BigDecimal.ZERO;
 		BigDecimal subtotalIVA = BigDecimal.ZERO;
-//		BigDecimal subtotalIVA105 = BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
 		BigDecimal totalTributo = BigDecimal.ZERO;
-
-		// List<DetalleComprobante> detalles = comprobante.getDetalles();
-		// for (DetalleComprobante detalleFactura : detalles) {
-		// if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_21)) {
-		// subtotalIVA21 = subtotalIVA21.add(detalleFactura.getTotalIVA());
-		// } else if (detalleFactura.getTipoIVA().equals(TipoIVAEnum.IVA_105)) {
-		// subtotalIVA105 = subtotalIVA105.add(detalleFactura
-		// .getTotalIVA());
-		// }
-		// subtotal = subtotal.add(detalleFactura.getSubtotal());
-		// total = total.add(detalleFactura.getTotal());
-		// }
 		String numComp = null;
 		if (null != txtNumComp.getText() && txtNumComp.getText().trim().length() > 0){
 			numComp = txtNumComp.getText();
