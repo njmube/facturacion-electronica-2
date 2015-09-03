@@ -148,10 +148,18 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private void loadTiposIva() {
 		CondicionIVA[] condiciones = CondicionIVA.values();
 		if (WUtils.isNotEmpty(condiciones)) {
+			int indexConsFinal = -1;
 			for (CondicionIVA condicionIVA : condiciones) {
+				
 				getCmbTipoIva().addItem(
 						new WOption((long) condicionIVA.getId(), condicionIVA
 								.getDenominacion()));
+				if (condicionIVA.getDenominacion().equalsIgnoreCase("CONSUMIDOR FINAL")){
+					indexConsFinal = condicionIVA.getId();
+				}
+			}
+			if (indexConsFinal != -1){
+				getCmbTipoIva().setSelectedIndex(indexConsFinal - 1);
 			}
 		}
 	}
@@ -171,9 +179,16 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		}
 
 		if (WUtils.isNotEmpty(localidades)) {
+			int indexRojas = -1;
 			for (Localidad localidad : localidades) {
 				getCmbLocalidad().addItem(
 						new WOption(localidad.getId(), localidad.getNombre()));
+				if (localidad.getNombre().equalsIgnoreCase("Rojas")){
+					indexRojas = localidad.getId().intValue();
+				}
+			}
+			if (indexRojas != -1){
+				getCmbLocalidad().setSelectedIndex(indexRojas);
 			}
 		}
 	}
