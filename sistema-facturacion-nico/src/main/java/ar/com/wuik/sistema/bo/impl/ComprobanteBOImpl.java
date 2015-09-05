@@ -25,6 +25,7 @@ import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.dao.ClienteDAO;
 import ar.com.wuik.sistema.dao.ComprobanteDAO;
 import ar.com.wuik.sistema.dao.ParametroDAO;
+import ar.com.wuik.sistema.dao.RemitoDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.DetalleComprobante;
@@ -52,6 +53,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 	private ComprobanteDAO comprobanteDAO;
 	private ClienteDAO clienteDAO;
 	private ParametroDAO parametroDAO;
+	private RemitoDAO remitoDAO;
 
 	public ComprobanteBOImpl() {
 		facturacionService = AbstractFactory
@@ -62,6 +64,8 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 				.getInstance(ClienteDAO.class);
 		parametroDAO = ar.com.wuik.sistema.utils.AbstractFactory
 				.getInstance(ParametroDAO.class);
+		remitoDAO = ar.com.wuik.sistema.utils.AbstractFactory
+				.getInstance(RemitoDAO.class);
 	}
 
 	@Override
@@ -483,6 +487,15 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			HibernateUtil.startTransaction();
 			Comprobante comprobanteAfip = comprobanteDAO.getById(id);
 			comprobanteAfip.setActivo(Boolean.FALSE);
+			
+			List<Remito> remitos = comprobanteAfip.getRemitos();
+			if (null != remitos) {
+				for (Remito remito : remitos) {
+					remito.setComprobante(null);
+					remitoDAO.saveOrUpdate(remito);
+				}
+			}
+			
 			comprobanteDAO.saveOrUpdate(comprobanteAfip);
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
