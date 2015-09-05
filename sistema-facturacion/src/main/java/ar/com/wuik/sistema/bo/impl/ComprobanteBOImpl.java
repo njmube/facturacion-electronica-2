@@ -375,7 +375,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			AlicuotaIVA alicuota21 = new AlicuotaIVA();
 			alicuota21.setBaseImponible(subtotal21);
 			alicuota21.setTipoIVA(TipoIVAEnum.IVA_21);
-			alicuota21.setTotalAlicuota(totalIVA21);
+			alicuota21.setTotalAlicuota(WUtils.getValue(totalIVA21));
 			alicuotas.add(alicuota21);
 		}
 
@@ -384,7 +384,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			AlicuotaIVA alicuota105 = new AlicuotaIVA();
 			alicuota105.setBaseImponible(subtotal105);
 			alicuota105.setTipoIVA(TipoIVAEnum.IVA_10_5);
-			alicuota105.setTotalAlicuota(totalIVA105);
+			alicuota105.setTotalAlicuota(WUtils.getValue(totalIVA105));
 			alicuotas.add(alicuota105);
 		}
 
