@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.frames;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -33,6 +34,8 @@ import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
+import ar.com.wuik.swing.utils.WFrameUtils;
+import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -61,9 +64,9 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 	private WTextFieldNumeric txtCantidad;
 	private JLabel lblProveedor;
 	private JComboBox cmbProveedor;
-	private JTextField txtCodigo;
+	private JLabel txtCodigo;
 	private JLabel lblCodigo;
-	private JTextField txtProducto;
+	private JLabel txtProducto;
 	private JLabel lblProducto;
 	private JTextField txtFactura;
 	private JLabel lblFactura;
@@ -104,12 +107,15 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		try {
 			stockProducto = productoBO.obtenerStockProducto(idStockMovimiento);
 			WModel model = populateModel();
-			model.addValue(CAMPO_CODIGO, stockProducto.getProducto().getCodigo());
-			model.addValue(CAMPO_NOMBRE, stockProducto.getProducto().getDescripcion());
+			model.addValue(CAMPO_CODIGO, stockProducto.getProducto()
+					.getCodigo());
+			model.addValue(CAMPO_NOMBRE, stockProducto.getProducto()
+					.getDescripcion());
 			model.addValue(CAMPO_CANTIDAD, stockProducto.getCantidad());
 			model.addValue(CAMPO_FACTURA, stockProducto.getFactura());
 			model.addValue(CAMPO_PROVEEDOR, stockProducto.getIdProveedor());
-			model.addValue(CAMPO_FECHA, WUtils.getStringFromDate(stockProducto.getFecha()));
+			model.addValue(CAMPO_FECHA,
+					WUtils.getStringFromDate(stockProducto.getFecha()));
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -122,7 +128,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(new ImageIcon(
 				MovimientoProductoVerIFrame.class
 						.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 473, 344);
+		setBounds(0, 0, 473, 335);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -132,6 +138,10 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 	}
 
 	public void loadProveedores() {
+		loadProveedores(null);
+	}
+
+	public void loadProveedores(Long idProveedor) {
 		getCmbProveedor().removeAllItems();
 		getCmbProveedor().addItem(WOption.getWOptionSelecione());
 		ProveedorBO proveedorBO = AbstractFactory
@@ -148,7 +158,9 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
-
+		if (null != idProveedor) {
+			getCmbProveedor().setSelectedItem(new WOption(idProveedor));
+		}
 	}
 
 	@Override
@@ -187,7 +199,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 455, 257);
+			pnlBusqueda.setBounds(10, 11, 455, 244);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getBtnFecha());
 			pnlBusqueda.add(getTxtFecha());
@@ -218,7 +230,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(MovimientoProductoVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(249, 279, 103, 30);
+			btnCerrar.setBounds(249, 266, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -228,7 +240,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(MovimientoProductoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(362, 279, 103, 30);
+			btnGuardar.setBounds(362, 266, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -250,7 +262,8 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 							if (null == stockProducto.getId()) {
 								productoBO.guardarStockProducto(stockProducto);
 							} else {
-								productoBO.actualizarStockProducto(stockProducto);
+								productoBO
+										.actualizarStockProducto(stockProducto);
 							}
 							hideFrame();
 							movimientoProductoIFrame.search();
@@ -284,7 +297,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnFecha.setIcon(new ImageIcon(MovimientoProductoVerIFrame.class
 					.getResource("/icons/calendar.png")));
-			btnFecha.setBounds(229, 111, 25, 25);
+			btnFecha.setBounds(229, 95, 25, 25);
 		}
 		return btnFecha;
 	}
@@ -294,7 +307,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			txtFecha = new JTextField();
 			txtFecha.setName(CAMPO_FECHA);
 			txtFecha.setEditable(false);
-			txtFecha.setBounds(113, 111, 106, 25);
+			txtFecha.setBounds(113, 95, 106, 25);
 		}
 		return txtFecha;
 	}
@@ -303,7 +316,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		if (lblFecha == null) {
 			lblFecha = new JLabel("* Fecha:");
 			lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFecha.setBounds(10, 111, 93, 25);
+			lblFecha.setBounds(10, 95, 93, 25);
 		}
 		return lblFecha;
 	}
@@ -312,7 +325,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("* Cantidad:");
 			lblCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCantidad.setBounds(10, 147, 93, 25);
+			lblCantidad.setBounds(10, 131, 93, 25);
 		}
 		return lblCantidad;
 	}
@@ -321,7 +334,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		if (txtCantidad == null) {
 			txtCantidad = new WTextFieldNumeric();
 			txtCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			txtCantidad.setBounds(113, 147, 125, 25);
+			txtCantidad.setBounds(113, 131, 125, 25);
 			txtCantidad.setColumns(10);
 			txtCantidad.setName(CAMPO_CANTIDAD);
 		}
@@ -332,7 +345,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		if (lblProveedor == null) {
 			lblProveedor = new JLabel("* Proveedor:");
 			lblProveedor.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblProveedor.setBounds(10, 183, 93, 25);
+			lblProveedor.setBounds(10, 167, 93, 25);
 		}
 		return lblProveedor;
 	}
@@ -341,16 +354,17 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		if (cmbProveedor == null) {
 			cmbProveedor = new JComboBox();
 			cmbProveedor.setEditable(false);
-			cmbProveedor.setBounds(113, 183, 280, 25);
+			cmbProveedor.setBounds(113, 167, 280, 25);
 			cmbProveedor.setName(CAMPO_PROVEEDOR);
 		}
 		return cmbProveedor;
 	}
 
-	private JTextField getTxtCodigo() {
+	private JLabel getTxtCodigo() {
 		if (txtCodigo == null) {
-			txtCodigo = new JTextField();
-			txtCodigo.setEditable(false);
+			txtCodigo = new JLabel();
+			txtCodigo.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 			txtCodigo.setBounds(113, 23, 130, 25);
 			txtCodigo.setName(CAMPO_CODIGO);
 		}
@@ -366,11 +380,12 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		return lblCodigo;
 	}
 
-	private JTextField getTxtProducto() {
+	private JLabel getTxtProducto() {
 		if (txtProducto == null) {
-			txtProducto = new JTextField();
-			txtProducto.setEditable(false);
-			txtProducto.setBounds(113, 59, 194, 25);
+			txtProducto = new JLabel();
+			txtProducto.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
+			txtProducto.setBounds(113, 59, 280, 25);
 			txtProducto.setName(CAMPO_NOMBRE);
 		}
 		return txtProducto;
@@ -388,7 +403,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtFactura() {
 		if (txtFactura == null) {
 			txtFactura = new JTextField();
-			txtFactura.setBounds(113, 219, 142, 25);
+			txtFactura.setBounds(113, 203, 142, 25);
 			txtFactura.setName(CAMPO_FACTURA);
 			txtFactura.setDocument(new WTextFieldLimit(50));
 		}
@@ -399,7 +414,7 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 		if (lblFactura == null) {
 			lblFactura = new JLabel("Factura:");
 			lblFactura.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblFactura.setBounds(10, 219, 93, 25);
+			lblFactura.setBounds(10, 203, 93, 25);
 		}
 		return lblFactura;
 	}
@@ -416,8 +431,9 @@ public class MovimientoProductoVerIFrame extends WAbstractModelIFrame {
 			btnProveedor.setIcon(new ImageIcon(
 					MovimientoProductoVerIFrame.class
 							.getResource("/icons/add.png")));
-			btnProveedor.setBounds(403, 184, 25, 23);
+			btnProveedor.setBounds(403, 168, 25, 23);
 		}
 		return btnProveedor;
 	}
+
 }

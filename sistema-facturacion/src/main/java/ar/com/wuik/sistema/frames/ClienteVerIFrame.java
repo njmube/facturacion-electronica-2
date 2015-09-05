@@ -161,21 +161,22 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		getCmbLocalidad().removeAllItems();
 		getCmbLocalidad().addItem(WOption.getWOptionSelecione());
 
-		List<Localidad> localidades = null;
 		try {
 			ParametricoBO parametricoBO = AbstractFactory
 					.getInstance(ParametricoBO.class);
-			localidades = parametricoBO.obtenerTodosLocalidades();
+			List<Localidad> localidades = parametricoBO.obtenerTodosLocalidades();
+			if (WUtils.isNotEmpty(localidades)) {
+				for (Localidad localidad : localidades) {
+					getCmbLocalidad().addItem(
+							new WOption(localidad.getId(), localidad.getNombre()));
+				}
+			}
+			getCmbLocalidad().setSelectedItem(new WOption(105L));
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 
-		if (WUtils.isNotEmpty(localidades)) {
-			for (Localidad localidad : localidades) {
-				getCmbLocalidad().addItem(
-						new WOption(localidad.getId(), localidad.getNombre()));
-			}
-		}
+		
 	}
 
 	@Override

@@ -373,6 +373,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JTextArea getTxaObservaciones() {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
+			txaObservaciones.setEnabled(false);
 			txaObservaciones.setEditable(false);
 			txaObservaciones.setLineWrap(true);
 			txaObservaciones.setName(CAMPO_OBSERVACIONES);

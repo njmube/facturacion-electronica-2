@@ -56,22 +56,21 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 	private JPanel pnlBusqueda;
 	private JButton btnCerrar;
 	private Recibo recibo;
-	private JButton btnFechaEmision;
-	private JTextField txtFechaEmision;
+	private JLabel txtFechaEmision;
 	private JLabel lblFechaEmisin;
 	private JLabel lblObservaciones;
 	private JTextArea txaObservaciones;
 	private JScrollPane scrollPane;
-	private JTextField txtTotalLiquidacion;
+	private JLabel txtTotalLiquidacion;
 	private JLabel lblTotalLiq;
 	private JLabel lblTotal;
-	private JTextField txtTotalPesos;
+	private JLabel txtTotalPesos;
 	private WTablePanel<Comprobante> tblLiquidacion;
 	private WTablePanel<PagoReciboCheque> tblCheques;
-	private WTextFieldDecimal txfEfectivo;
+	private JLabel txfEfectivo;
 	private JLabel lblEfectivo;
 	private JLabel lblNro;
-	private JTextField txtNro;
+	private JLabel txtNro;
 
 	/**
 	 * @wbp.parser.constructor
@@ -131,7 +130,6 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnlBusqueda.setBounds(10, 11, 904, 421);
 			pnlBusqueda.setLayout(null);
-			pnlBusqueda.add(getBtnFechaEmision());
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
 			pnlBusqueda.add(getLblObservaciones());
@@ -195,34 +193,22 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		return null;
 	}
 
-	private JButton getBtnFechaEmision() {
-		if (btnFechaEmision == null) {
-			btnFechaEmision = new JButton("");
-			btnFechaEmision.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new WCalendarIFrame(txtFechaEmision));
-				}
-			});
-			btnFechaEmision.setIcon(new ImageIcon(ReciboVistaIFrame.class
-					.getResource("/icons/calendar.png")));
-			btnFechaEmision.setBounds(257, 61, 25, 25);
-		}
-		return btnFechaEmision;
-	}
-
-	private JTextField getTxtFechaEmision() {
+	private JLabel getTxtFechaEmision() {
 		if (txtFechaEmision == null) {
-			txtFechaEmision = new JTextField();
+			txtFechaEmision = new JLabel();
+			txtFechaEmision.setHorizontalAlignment(SwingConstants.LEFT);
 			txtFechaEmision.setName(CAMPO_FECHA_EMISION);
-			txtFechaEmision.setEditable(false);
 			txtFechaEmision.setBounds(141, 61, 106, 25);
+			txtFechaEmision.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return txtFechaEmision;
 	}
 
 	private JLabel getLblFechaEmisin() {
 		if (lblFechaEmisin == null) {
-			lblFechaEmisin = new JLabel("* Fecha Emisi\u00F3n:");
+			lblFechaEmisin = new JLabel("Fecha Emisi\u00F3n:");
+			lblFechaEmisin.setIcon(new ImageIcon(ReciboVistaIFrame.class.getResource("/icons/calendar.png")));
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFechaEmisin.setBounds(10, 61, 121, 25);
 		}
@@ -232,6 +218,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
+			lblObservaciones.setIcon(new ImageIcon(ReciboVistaIFrame.class.getResource("/icons/observaciones.png")));
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblObservaciones.setBounds(445, 26, 116, 25);
 		}
@@ -241,6 +228,8 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 	private JTextArea getTxaObservaciones() {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
+			txaObservaciones.setEnabled(false);
+			txaObservaciones.setEditable(false);
 			txaObservaciones.setLineWrap(true);
 			txaObservaciones.setName(CAMPO_OBSERVACIONES);
 			txaObservaciones.setDocument(new WTextFieldLimit(100));
@@ -266,14 +255,12 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		return null;
 	}
 
-	private JTextField getTxtTotalLiquidacion() {
+	private JLabel getTxtTotalLiquidacion() {
 		if (txtTotalLiquidacion == null) {
-			txtTotalLiquidacion = new JTextField();
-			txtTotalLiquidacion.setHorizontalAlignment(SwingConstants.RIGHT);
-			txtTotalLiquidacion.setEditable(false);
+			txtTotalLiquidacion = new JLabel();
+			txtTotalLiquidacion.setHorizontalAlignment(SwingConstants.LEFT);
 			txtTotalLiquidacion.setText("$ 0.00");
 			txtTotalLiquidacion.setBounds(344, 384, 125, 25);
-			txtTotalLiquidacion.setColumns(10);
 			txtTotalLiquidacion.setFont(WFrameUtils.getCustomFont(
 					FontSize.LARGE, Font.BOLD));
 		}
@@ -298,15 +285,13 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		return lblTotal;
 	}
 
-	private JTextField getTxtTotalPesos() {
+	private JLabel getTxtTotalPesos() {
 		if (txtTotalPesos == null) {
-			txtTotalPesos = new JTextField();
+			txtTotalPesos = new JLabel();
 			txtTotalPesos.setText("0.00");
-			txtTotalPesos.setHorizontalAlignment(SwingConstants.RIGHT);
+			txtTotalPesos.setHorizontalAlignment(SwingConstants.LEFT);
 			txtTotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
-			txtTotalPesos.setEditable(false);
-			txtTotalPesos.setColumns(10);
 			txtTotalPesos.setBounds(769, 384, 125, 25);
 		}
 		return txtTotalPesos;
@@ -334,7 +319,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		BigDecimal total = BigDecimal.ZERO;
 
 		BigDecimal efectivo = WUtils.getValue(getTxfEfectivo().getText());
-
+		
 		BigDecimal cheques = BigDecimal.ZERO;
 		List<PagoReciboCheque> pagoCheques = recibo.getPagosCheque();
 		for (PagoReciboCheque pagoReciboCheque : pagoCheques) {
@@ -356,18 +341,13 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 				.setText(totalLiquidacion.toEngineeringString());
 	}
 
-	private WTextFieldDecimal getTxfEfectivo() {
+	private JLabel getTxfEfectivo() {
 		if (txfEfectivo == null) {
-			txfEfectivo = new WTextFieldDecimal(7, 2);
-			txfEfectivo.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					calcularTotales();
-				}
-			});
-			txfEfectivo.setHorizontalAlignment(SwingConstants.RIGHT);
+			txfEfectivo = new JLabel("New label");
+			txfEfectivo.setHorizontalAlignment(SwingConstants.LEFT);
 			txfEfectivo.setName(CAMPO_EFECTIVO);
-			txfEfectivo.setColumns(10);
+			txfEfectivo.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 			txfEfectivo.setBounds(565, 133, 125, 25);
 		}
 		return txfEfectivo;
@@ -391,12 +371,13 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		return lblNro;
 	}
 
-	private JTextField getTxtNro() {
+	private JLabel getTxtNro() {
 		if (txtNro == null) {
-			txtNro = new JTextField();
-			txtNro.setEditable(false);
+			txtNro = new JLabel();
+			txtNro.setHorizontalAlignment(SwingConstants.LEFT);
 			txtNro.setBounds(141, 24, 106, 26);
 			txtNro.setName(CAMPO_NUMERO);
+			txtNro.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
 		}
 		return txtNro;
 	}

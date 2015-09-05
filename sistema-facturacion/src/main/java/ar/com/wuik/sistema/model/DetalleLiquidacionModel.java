@@ -15,21 +15,20 @@ public class DetalleLiquidacionModel extends WTableModel<Comprobante> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public DetalleLiquidacionModel() {
-		super(new String[] { "FECHA", "TIPO COMP.", "COMPROBANTE", "TOTAL" });
+		super(new String[] { "FECHA", "COMPROBANTE", "TOTAL" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.15, 0.25, 0.35, 0.25 };
+		return new double[] { 0.15, 0.60, 0.25 };
 	}
 
 	@Override
 	protected Object[] getRow(Comprobante t, Object[] fila) {
 		fila[0] = WUtils.getStringFromDate(t.getFechaVenta());
-		fila[1] = "";
-		fila[2] = t.getNroCompFormato();
-		fila[3] = AppUtils.formatPeso(t.getTotal());
-		fila[4] = t.getId();
+		fila[1] = t.getTipoComprobante().getValue() + "-" + t.getNroCompFormato();
+		fila[2] = AppUtils.formatPeso(t.getTotal());
+		fila[3] = t.getId();
 		return fila;
 	}
 

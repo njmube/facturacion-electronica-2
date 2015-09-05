@@ -30,7 +30,7 @@ public class TributoComprobanteModel extends WTableModel<TributoComprobante> {
 		fila[2] = AppUtils.formatPeso(t.getBaseImporte());
 		fila[3] = t.getAlicuota() + " %";
 		fila[4] = AppUtils.formatPeso(t.getImporte());
-		fila[5] = t.getId();
+		fila[5] = t.getCoalesceId();
 		return fila;
 	}
 

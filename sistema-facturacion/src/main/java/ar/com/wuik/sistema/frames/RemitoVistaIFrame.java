@@ -48,21 +48,21 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_FACTURA = "factura";
 	private JPanel pnlBusqueda;
 	private JLabel lblNro;
-	private JTextField txtNro;
+	private JLabel txtNro;
 	private JButton btnCerrar;
 	private Remito remito;
-	private JTextField txtFechaEmision;
+	private JLabel txtFechaEmision;
 	private JLabel lblFechaEmisin;
 	private JLabel lblObservaciones;
 	private JTextArea txaObservaciones;
 	private JScrollPane scrollPane;
-	private JTextField txtCantidad;
+	private JLabel txtCantidad;
 	private JLabel lblCantidad;
 	private WTablePanel<DetalleRemito> tblDetalle;
 	private JLabel lblEstado;
-	private JTextField txtEstado;
+	private JLabel txtEstado;
 	private JLabel lblFactura;
-	private JTextField txtFactura;
+	private JLabel txtFactura;
 
 	/**
 	 * @wbp.parser.constructor
@@ -141,13 +141,13 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 		return lblNro;
 	}
 
-	private JTextField getTxtNro() {
+	private JLabel getTxtNro() {
 		if (txtNro == null) {
-			txtNro = new JTextField();
-			txtNro.setEditable(false);
+			txtNro = new JLabel();
 			txtNro.setName(CAMPO_NRO_COMP);
-			txtNro.setDocument(new WTextFieldLimit(50));
 			txtNro.setBounds(141, 23, 141, 25);
+			txtNro.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return txtNro;
 	}
@@ -173,12 +173,13 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 		return getTxtNro();
 	}
 
-	private JTextField getTxtFechaEmision() {
+	private JLabel getTxtFechaEmision() {
 		if (txtFechaEmision == null) {
-			txtFechaEmision = new JTextField();
+			txtFechaEmision = new JLabel();
 			txtFechaEmision.setName(CAMPO_FECHA_EMISION);
-			txtFechaEmision.setEditable(false);
 			txtFechaEmision.setBounds(141, 59, 106, 25);
+			txtFechaEmision.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return txtFechaEmision;
 	}
@@ -186,6 +187,7 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblFechaEmisin() {
 		if (lblFechaEmisin == null) {
 			lblFechaEmisin = new JLabel("Fecha Emisi\u00F3n:");
+			lblFechaEmisin.setIcon(new ImageIcon(RemitoVistaIFrame.class.getResource("/icons/calendar.png")));
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFechaEmisin.setBounds(10, 59, 121, 25);
 		}
@@ -195,8 +197,9 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
+			lblObservaciones.setIcon(new ImageIcon(RemitoVistaIFrame.class.getResource("/icons/observaciones.png")));
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(10, 334, 93, 25);
+			lblObservaciones.setBounds(10, 334, 106, 25);
 		}
 		return lblObservaciones;
 	}
@@ -204,6 +207,7 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 	private JTextArea getTxaObservaciones() {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
+			txaObservaciones.setEnabled(false);
 			txaObservaciones.setEditable(false);
 			txaObservaciones.setLineWrap(true);
 			txaObservaciones.setName(CAMPO_OBSERVACIONES);
@@ -231,14 +235,12 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 		return null;
 	}
 
-	private JTextField getTxtCantidad() {
+	private JLabel getTxtCantidad() {
 		if (txtCantidad == null) {
-			txtCantidad = new JTextField();
+			txtCantidad = new JLabel();
 			txtCantidad.setText("0");
 			txtCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			txtCantidad.setEditable(false);
 			txtCantidad.setBounds(599, 368, 125, 25);
-			txtCantidad.setColumns(10);
 			txtCantidad.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
 		}
@@ -271,12 +273,13 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 		return lblEstado;
 	}
 
-	private JTextField getTxtEstado() {
+	private JLabel getTxtEstado() {
 		if (txtEstado == null) {
-			txtEstado = new JTextField();
+			txtEstado = new JLabel();
 			txtEstado.setName(CAMPO_ESTADO);
-			txtEstado.setEditable(false);
 			txtEstado.setBounds(421, 23, 178, 25);
+			txtEstado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return txtEstado;
 	}
@@ -331,12 +334,13 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 		return lblFactura;
 	}
 
-	private JTextField getTxtFactura() {
+	private JLabel getTxtFactura() {
 		if (txtFactura == null) {
-			txtFactura = new JTextField();
+			txtFactura = new JLabel();
 			txtFactura.setName(CAMPO_FACTURA);
-			txtFactura.setEditable(false);
 			txtFactura.setBounds(421, 59, 178, 25);
+			txtFactura.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return txtFactura;
 	}

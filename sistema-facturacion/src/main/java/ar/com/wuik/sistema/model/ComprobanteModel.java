@@ -32,11 +32,10 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 
 	@Override
 	protected Object[] getRow(Comprobante t, Object[] fila) {
-		fila[0] = ((WUtils.isNotEmpty(t.getNroCompFormato())) ? t
-				.getTipoComprobante().getValue() + t.getNroCompFormato()
-				: (WUtils.isNotEmpty(t.getNroComprobante()) ? t
-						.getTipoComprobante().getValue()
-						+ t.getNroComprobante() : ""));
+		fila[0] = t.getTipoComprobante().getValue() + "-"
+				+ ((WUtils.isNotEmpty(t.getNroCompFormato())) ? t
+						.getNroCompFormato() : (WUtils.isNotEmpty(t
+						.getNroComprobante()) ? t.getNroComprobante() : "0000-00000000"));
 		fila[1] = t.getCae();
 		fila[2] = WUtils.getStringFromDate(t.getFechaCAE());
 		fila[3] = WUtils.getStringFromDate(t.getFechaVenta());

@@ -1140,7 +1140,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		if (txtCondIVA == null) {
 			txtCondIVA = new JLabel();
 			txtCondIVA.setBorder(null);
-			txtCondIVA.setBounds(89, 59, 284, 25);
+			txtCondIVA.setBounds(89, 57, 284, 25);
 			txtCondIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
 		}

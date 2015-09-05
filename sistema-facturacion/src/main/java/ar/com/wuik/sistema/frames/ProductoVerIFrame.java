@@ -131,13 +131,20 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		}
 	}
 
-	public void loadTiposProducto() {
+	public void loadTiposProducto(Long idTipoProducto) {
 		getCmbTipoProd().removeAllItems();
 		getCmbTipoProd().addItem(WOption.getWOptionSelecione());
 		List<WOption> items = getTiposProducto();
 		for (WOption wOption : items) {
 			getCmbTipoProd().addItem(wOption);
 		}
+		if (null != idTipoProducto) {
+			getCmbTipoProd().setSelectedItem(new WOption(idTipoProducto));
+		}
+	}
+
+	public void loadTiposProducto() {
+		loadTiposProducto(null);
 	}
 
 	private void initializate(String title) {

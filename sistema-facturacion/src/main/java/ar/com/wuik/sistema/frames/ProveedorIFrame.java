@@ -201,7 +201,11 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 									boolean enUso = proveedorBO
 											.estaEnUso(idProveedor);
 									if (enUso) {
-										showGlobalMsg("El Proveedor se encuentra en uso");
+										WTooltipUtils
+												.showMessage(
+														"El Proveedor se encuentra en uso",
+														(JButton) e.getSource(),
+														MessageType.ERROR);
 									} else {
 										proveedorBO.eliminar(idProveedor);
 										search();

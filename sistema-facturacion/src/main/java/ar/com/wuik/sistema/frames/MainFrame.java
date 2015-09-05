@@ -268,7 +268,7 @@ public class MainFrame extends WApplication {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ChequeIFrame());
+					addIFrame(new ChequeIFrame());
 				}
 			});
 		}

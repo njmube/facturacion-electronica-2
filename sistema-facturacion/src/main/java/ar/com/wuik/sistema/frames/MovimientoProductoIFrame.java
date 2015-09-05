@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.ProductoBO;
@@ -135,14 +136,21 @@ public class MovimientoProductoIFrame extends WAbstractIFrame implements
 						List<Long> idsStockProducto = tablePanel
 								.getSelectedItemsID();
 						if (WUtils.isNotEmpty(idsStockProducto)) {
-							try {
-								ProductoBO productoBO = AbstractFactory
-										.getInstance(ProductoBO.class);
-								productoBO
-										.eliminarStockProducto(idsStockProducto);
-								search();
-							} catch (BusinessException bexc) {
-								showGlobalErrorMsg(bexc.getMessage());
+							int result = JOptionPane.showConfirmDialog(
+									getParent(),
+									"¿Desea eliminar los Movimientos seleccionados?",
+									"Alerta", JOptionPane.OK_CANCEL_OPTION,
+									JOptionPane.WARNING_MESSAGE);
+							if (result == JOptionPane.OK_OPTION) {
+								try {
+									ProductoBO productoBO = AbstractFactory
+											.getInstance(ProductoBO.class);
+									productoBO
+											.eliminarStockProducto(idsStockProducto);
+									search();
+								} catch (BusinessException bexc) {
+									showGlobalErrorMsg(bexc.getMessage());
+								}
 							}
 						} else {
 							WTooltipUtils

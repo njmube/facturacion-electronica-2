@@ -59,7 +59,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_NRO_COMP = "nroComprobante";
 	private static final String CAMPO_FECHA_EMISION = "fechaEmision";
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
-	private static final String CAMPO_ESTADO = "estado";
 	private JPanel pnlBusqueda;
 	private JLabel lblNro;
 	private JTextField txtNro;
@@ -77,8 +76,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private Long idCliente;
 	private JLabel lblCantidad;
 	private WTablePanel<DetalleRemito> tblDetalle;
-	private JLabel lblEstado;
-	private JTextField txtEstado;
 	private WTablePanel<Producto> tblProducto;
 	private JTextField textField;
 	private JButton btnAgregar;
@@ -124,7 +121,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 		}
 		populateComponents(model);
-		getTxtEstado().setText("SIN FACTURAR");
 	}
 
 	public RemitoVerIFrame(Long idCliente) {
@@ -146,7 +142,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 		populateComponents(model);
-		getTxtEstado().setText("SIN FACTURAR");
 	}
 
 	private void initialize(String title) {
@@ -200,8 +195,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtCantidad());
 			pnlBusqueda.add(getLblCantidad());
 			pnlBusqueda.add(getTblDetalle());
-			pnlBusqueda.add(getLblEstado());
-			pnlBusqueda.add(getTxtEstado());
 			pnlBusqueda.add(getTblProducto());
 			pnlBusqueda.add(getTextField());
 			pnlBusqueda.add(getBtnAgregar());
@@ -333,8 +326,9 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
+			lblObservaciones.setIcon(new ImageIcon(RemitoVerIFrame.class.getResource("/icons/observaciones.png")));
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(10, 462, 93, 25);
+			lblObservaciones.setBounds(10, 462, 121, 25);
 		}
 		return lblObservaciones;
 	}
@@ -352,7 +346,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(113, 461, 192, 60);
+			scrollPane.setBounds(142, 462, 192, 60);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -455,25 +449,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			tblDetalle.setBounds(10, 266, 714, 185);
 		}
 		return tblDetalle;
-	}
-
-	private JLabel getLblEstado() {
-		if (lblEstado == null) {
-			lblEstado = new JLabel("Estado:");
-			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblEstado.setBounds(508, 23, 76, 25);
-		}
-		return lblEstado;
-	}
-
-	private JTextField getTxtEstado() {
-		if (txtEstado == null) {
-			txtEstado = new JTextField();
-			txtEstado.setName(CAMPO_ESTADO);
-			txtEstado.setEditable(false);
-			txtEstado.setBounds(595, 23, 121, 25);
-		}
-		return txtEstado;
 	}
 
 	private WTablePanel<Producto> getTblProducto() {

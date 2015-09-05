@@ -141,6 +141,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 									.getNombre()));
 				}
 			}
+			getCmbLocalidad().setSelectedItem(new WOption(105L));
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
@@ -269,7 +270,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 							if (null != proveedorIFrame) {
 								proveedorIFrame.search();
 							} else if (null != movimientoProductoVerIFrame) {
-								movimientoProductoVerIFrame.loadProveedores();
+								movimientoProductoVerIFrame.loadProveedores(proveedor.getId());
 							}
 							hideFrame();
 						} catch (BusinessException bexc) {
