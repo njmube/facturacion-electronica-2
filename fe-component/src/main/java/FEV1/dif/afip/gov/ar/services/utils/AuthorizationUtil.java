@@ -11,7 +11,6 @@ import java.util.Date;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-import org.junit.Test;
 
 import FEV1.dif.afip.gov.ar.AfipWsaaClient;
 import FEV1.dif.afip.gov.ar.FEAuthRequest;
@@ -105,31 +104,26 @@ public class AuthorizationUtil {
 	public static void main(String[] args) throws Exception {
 		
 		
-		FacturacionService facturacionService = AbstractFactory
-				.getInstance(FacturacionService.class);
-
-		try {
-			Resultado resultado = facturacionService
-					.consultarUltimoComprobante(TipoComprobanteEnum.FACTURA_A);
-			
-//			Comprobante comprobante = createComprobante();
-//			Resultado resultado = facturacionService.solicitarComprobante(comprobante);
-			System.out.println(resultado);
-		} catch (ServiceException sexc) {
-			System.out.println(sexc.getMessage());
-			sexc.printStackTrace();
-		}
-
-//		FEAuthRequest req = getAuthorization();
-//		System.out.println("<ar:Token>" + req.getToken() + "</ar:Token>");
-//		System.out.println("<ar:Sign>" + req.getSign() + "</ar:Sign>");
-//		System.out.println("<ar:Cuit>20049746181</ar:Cuit>");
-//		
-//		AuthRequestType req2 = getAuthorizationDetalles();
+//		FacturacionService facturacionService = AbstractFactory
+//				.getInstance(FacturacionService.class);
 //
-//		System.out.println("<token>" + req2.getToken() + "</token>");
-//		System.out.println("<sign>" + req2.getSign() + "</sign>");
-//		System.out.println("<cuitRepresentada>20049746181</cuitRepresentada>");
+//		try {
+//			Resultado resultado = facturacionService
+//					.consultarUltimoComprobante(TipoComprobanteEnum.FACTURA_A);
+//			
+////			Comprobante comprobante = createComprobante();
+////			Resultado resultado = facturacionService.solicitarComprobante(comprobante);
+//			System.out.println(resultado);
+//		} catch (ServiceException sexc) {
+//			System.out.println(sexc.getMessage());
+//			sexc.printStackTrace();
+//		}
+
+		FEAuthRequest req = getAuthorization();
+		System.out.println("<ar:Token>" + req.getToken() + "</ar:Token>");
+		System.out.println("<ar:Sign>" + req.getSign() + "</ar:Sign>");
+		System.out.println("<ar:Cuit>20049746181</ar:Cuit>");
+		
 	}
 
 }
