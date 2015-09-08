@@ -21,6 +21,8 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.commons.beanutils.BeanComparator;
 
+import com.lowagie.text.Font;
+
 import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
@@ -63,8 +65,12 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 	private JLabel lblHasta;
 	private WTablePanel<Comprobante> tablePanel;
 	private JLabel lblTotalIVA;
-	private JTextField txtTotalIVA;
+	private JLabel txtTotalIVA;
 	private JButton btnBuscar;
+	private JLabel lblCompra;
+	private JLabel txtCompra;
+	private JLabel lblVenta;
+	private JLabel txtVenta;
 
 	public SubdiarioIvaIFrame() {
 		setBorder(new LineBorder(null, 1, true));
@@ -122,20 +128,35 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 
 	private void calcularTotal(List<Comprobante> comprobantes) {
 
-		BigDecimal totalIva = BigDecimal.ZERO;
+		BigDecimal totalIvaCompra = BigDecimal.ZERO;
+		BigDecimal totalIvaVenta = BigDecimal.ZERO;
 
 		if (WUtils.isNotEmpty(comprobantes)) {
 			for (Comprobante comprobante : comprobantes) {
 				if (comprobante.getTipoComprobante().equals(
 						TipoComprobante.NOTA_CREDITO)) {
-					totalIva = totalIva.add(comprobante.getIva());
+					if (null != comprobante.getIdProveedor()) {
+						totalIvaCompra = totalIvaCompra.subtract(comprobante
+								.getIva());
+					} else {
+						totalIvaVenta = totalIvaVenta.subtract(comprobante
+								.getIva());
+					}
 				} else {
-					totalIva = totalIva.subtract(comprobante.getIva());
+					if (null != comprobante.getIdProveedor()) {
+						totalIvaCompra = totalIvaCompra.add(comprobante
+								.getIva());
+					} else {
+						totalIvaVenta = totalIvaVenta.add(comprobante.getIva());
+					}
 				}
 			}
 		}
 
-		getTxtTotalIVA().setText(totalIva.toEngineeringString());
+		getTxtCompra().setText(totalIvaCompra.toEngineeringString());
+		getTxtVenta().setText(totalIvaVenta.toEngineeringString());
+		getTxtTotalIVA().setText(
+				totalIvaCompra.subtract(totalIvaVenta).toEngineeringString());
 	}
 
 	@Override
@@ -176,6 +197,10 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			pnlParametros.add(getLabel_2());
 			pnlParametros.add(getTxtTotalIVA());
 			pnlParametros.add(getBtnBuscar());
+			pnlParametros.add(getLblCompra());
+			pnlParametros.add(getTxtCompra());
+			pnlParametros.add(getLabel_1_1());
+			pnlParametros.add(getTxtVenta());
 		}
 		return pnlParametros;
 	}
@@ -276,18 +301,18 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			lblTotalIVA = new JLabel("Total IVA Venta: $");
 			lblTotalIVA.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTotalIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
-			lblTotalIVA.setBounds(416, 409, 184, 34);
+			lblTotalIVA.setBounds(521, 408, 126, 34);
 		}
 		return lblTotalIVA;
 	}
 
-	private JTextField getTxtTotalIVA() {
+	private JLabel getTxtTotalIVA() {
 		if (txtTotalIVA == null) {
-			txtTotalIVA = new JTextField("0.00");
-			txtTotalIVA.setEditable(false);
+			txtTotalIVA = new JLabel("0.00");
 			txtTotalIVA.setHorizontalAlignment(JTextField.RIGHT);
-			txtTotalIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
-			txtTotalIVA.setBounds(610, 409, 150, 34);
+			txtTotalIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
+			txtTotalIVA.setBounds(657, 409, 103, 34);
 		}
 		return txtTotalIVA;
 	}
@@ -298,6 +323,13 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			btnBuscar.setIcon(new ImageIcon(SubdiarioIvaIFrame.class
 					.getResource("/icons/search.png")));
 			btnBuscar.setBounds(671, 62, 89, 30);
+			btnBuscar.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					search();
+				}
+			});
 		}
 		return btnBuscar;
 	}
@@ -305,5 +337,47 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 	@Override
 	protected JComponent getFocusComponent() {
 		return null;
+	}
+
+	private JLabel getLblCompra() {
+		if (lblCompra == null) {
+			lblCompra = new JLabel("Total IVA Compra: $");
+			lblCompra.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblCompra.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
+			lblCompra.setBounds(10, 409, 126, 34);
+		}
+		return lblCompra;
+	}
+
+	private JLabel getTxtCompra() {
+		if (txtCompra == null) {
+			txtCompra = new JLabel("0.00");
+			txtCompra.setHorizontalAlignment(SwingConstants.RIGHT);
+			txtCompra.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
+			txtCompra.setBounds(146, 409, 109, 34);
+		}
+		return txtCompra;
+	}
+
+	private JLabel getLabel_1_1() {
+		if (lblVenta == null) {
+			lblVenta = new JLabel("Total IVA Venta: $");
+			lblVenta.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblVenta.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
+			lblVenta.setBounds(265, 408, 126, 34);
+		}
+		return lblVenta;
+	}
+
+	private JLabel getTxtVenta() {
+		if (txtVenta == null) {
+			txtVenta = new JLabel("0.00");
+			txtVenta.setHorizontalAlignment(SwingConstants.RIGHT);
+			txtVenta.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
+			txtVenta.setBounds(401, 409, 103, 34);
+		}
+		return txtVenta;
 	}
 }

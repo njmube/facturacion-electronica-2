@@ -38,6 +38,7 @@ import ar.com.wuik.sistema.entities.DetalleComprobante;
 import ar.com.wuik.sistema.entities.Proveedor;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.TributoComprobante;
+import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 import ar.com.wuik.sistema.entities.enums.TipoLetraComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
@@ -200,6 +201,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		this.comprobante = new Comprobante();
 		this.comprobante.setTipoComprobante(tipoComprobante);
 		this.comprobante.setIdProveedor(idProveedor);
+		this.comprobante.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
 
 		String titulo = "";
 		Icon icon = null;
