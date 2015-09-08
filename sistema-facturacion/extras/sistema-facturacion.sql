@@ -592,7 +592,7 @@ CREATE TABLE `recibos` (
   PRIMARY KEY (`ID`),
   KEY `FK_recibos_1` (`ID_CLIENTE`),
   CONSTRAINT `FK_recibos_1` FOREIGN KEY (`ID_CLIENTE`) REFERENCES `clientes` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `recibos`
@@ -737,7 +737,7 @@ CREATE TABLE `usuarios` (
   `ACTIVO` tinyint(1) NOT NULL DEFAULT '1',
   `NOMBRE` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `usuarios`
@@ -745,8 +745,8 @@ CREATE TABLE `usuarios` (
 
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` (`ID`,`DNI`,`PASSWORD`,`ACTIVO`,`NOMBRE`) VALUES 
- (1,'1','uboEp3KLIIc=',1,'JUAN MANUEL VAZQUEZ'),
- (2,'2','XMRCqDJaMOM=',1,'PRUEBA');
+ (1,'33709399','tFHkimcH5bA=',1,'JUAN MANUEL VAZQUEZ'),
+ (3,'4974618','JxnRwT3jFHI=',1,'ADMINISTRADOR');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 
 
