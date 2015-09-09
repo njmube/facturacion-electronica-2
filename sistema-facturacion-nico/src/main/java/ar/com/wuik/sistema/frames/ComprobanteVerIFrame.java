@@ -935,10 +935,10 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			totalTributo = totalTributo.add(tributoComprobante.getImporte());
 		}
 
-		comprobante.setSubtotal(subtotal);
-		comprobante.setTotalTributos(totalTributo);
-		comprobante.setTotal(total);
-		comprobante.setIva(total.subtract(subtotal));
+		comprobante.setSubtotal(WUtils.getValue(subtotal));
+		comprobante.setTotalTributos(WUtils.getValue(totalTributo));
+		comprobante.setTotal(WUtils.getValue(total));
+		comprobante.setIva(WUtils.getValue(total.subtract(subtotal)));
 
 		getTxtSubtotalPesos().setText(
 				WUtils.getValue(comprobante.getSubtotal())
@@ -1059,7 +1059,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							showGlobalErrorMsg(bexc.getMessage());
 						} finally {
 							hideFrame();
-							comprobanteIFrame.search();
+							if (null != comprobanteIFrame) {
+								comprobanteIFrame.search();
+							}
 						}
 					}
 				}

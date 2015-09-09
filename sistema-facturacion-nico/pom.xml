@@ -65,7 +65,27 @@
 							<resources>
 								<resource>
 									<directory>extras</directory>
-									<filtering>true</filtering>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-resources-2</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/assembly</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}</directory>
+									<includes>
+										<include>alias.p12</include>
+										<include>keystore.jks</include>
+										<include>wsaa_client.properties</include>
+									</includes>
 								</resource>
 							</resources>
 						</configuration>
