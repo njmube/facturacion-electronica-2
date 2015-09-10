@@ -49,15 +49,11 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_ALICUOTA = "alicuota";
 	private static final String CAMPO_IMPORTE = "importe";
 	private JLabel lblImporte;
-	private WTextFieldNumeric txfAlicuota;
 	private JTextField txtImporte;
 	private JLabel lblTipoTributo;
 	private ComprobanteVerIFrame comprobanteVerIFrame;
 	private ComprobanteProveedorVerIFrame comprobanteProveedorVerIFrame;
-	private WTextFieldDecimal txfBaseImponible;
-	private JLabel lblBaseImponible;
 	private JComboBox cmbTipoTributo;
-	private JLabel lblAlicuota;
 	private JLabel lblDetalle;
 	private JTextField txtDescripcion;
 
@@ -110,7 +106,7 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(new ImageIcon(
 				TributoComprobanteVerIFrame.class
 						.getResource("/icons/productos.png")));
-		setBounds(0, 0, 508, 289);
+		setBounds(0, 0, 508, 235);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -133,22 +129,12 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 	protected boolean validateModel(WModel model) {
 
 		String detalle = model.getValue(CAMPO_DESC);
-		String baseImp = model.getValue(CAMPO_BASE_IMP);
-		String alicuota = model.getValue(CAMPO_ALICUOTA);
 		String importe = model.getValue(CAMPO_IMPORTE);
 
 		List<String> messages = new ArrayList<String>();
 
 		if (WUtils.isEmpty(detalle)) {
 			messages.add("Debe ingresar una Descripción");
-		}
-
-		if (WUtils.isEmpty(baseImp)) {
-			messages.add("Debe ingresar una Base Imponible");
-		}
-
-		if (WUtils.isEmpty(alicuota)) {
-			messages.add("Debe ingresar una Alicuota");
 		}
 
 		if (WUtils.isNotEmpty(importe)) {
@@ -169,16 +155,12 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 486, 203);
+			pnlBusqueda.setBounds(10, 11, 486, 142);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblImporte());
-			pnlBusqueda.add(getTxfAlicuota());
 			pnlBusqueda.add(getTxtImporte());
 			pnlBusqueda.add(getLblTipoTributo());
-			pnlBusqueda.add(getTxfBaseImponible());
-			pnlBusqueda.add(getLblBaseImponible());
 			pnlBusqueda.add(getCmbTipoTributo());
-			pnlBusqueda.add(getLblAlicuota());
 			pnlBusqueda.add(getLblDetalle());
 			pnlBusqueda.add(getTxtDescripcion());
 		}
@@ -196,7 +178,7 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(TributoComprobanteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(280, 221, 103, 30);
+			btnCerrar.setBounds(280, 164, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -206,19 +188,17 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(TributoComprobanteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(393, 221, 103, 30);
+			btnGuardar.setBounds(393, 164, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
 					if (validateModel(model)) {
 						WOption tributoOpt = model.getValue(CAMPO_TRIBUTO);
 						String detalle = model.getValue(CAMPO_DESC);
-						String baseImp = model.getValue(CAMPO_BASE_IMP);
-						String alicuota = model.getValue(CAMPO_ALICUOTA);
 						String importe = model.getValue(CAMPO_IMPORTE);
 
-						tributo.setAlicuota(WUtils.getValue(alicuota));
-						tributo.setBaseImporte(WUtils.getValue(baseImp));
+						tributo.setAlicuota(WUtils.getValue("100"));
+						tributo.setBaseImporte(WUtils.getValue(importe));
 						tributo.setDetalle(detalle);
 						tributo.setImporte(WUtils.getValue(importe));
 						tributo.setTributo(TipoTributo.fromValue(tributoOpt
@@ -247,32 +227,16 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 		if (lblImporte == null) {
 			lblImporte = new JLabel("Importe: $");
 			lblImporte.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblImporte.setBounds(10, 165, 121, 25);
+			lblImporte.setBounds(10, 93, 121, 25);
 		}
 		return lblImporte;
-	}
-
-	private WTextFieldNumeric getTxfAlicuota() {
-		if (txfAlicuota == null) {
-			txfAlicuota = new WTextFieldNumeric();
-			txfAlicuota.setBounds(141, 129, 121, 25);
-			txfAlicuota.setName(CAMPO_ALICUOTA);
-			txfAlicuota.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					calcularImporte();
-				}
-			});
-		}
-		return txfAlicuota;
 	}
 
 	private JTextField getTxtImporte() {
 		if (txtImporte == null) {
 			txtImporte = new JTextField();
 			txtImporte.setHorizontalAlignment(SwingConstants.RIGHT);
-			txtImporte.setEditable(Boolean.FALSE);
-			txtImporte.setBounds(141, 165, 121, 25);
+			txtImporte.setBounds(141, 93, 121, 25);
 			txtImporte.setColumns(10);
 			txtImporte.setName(CAMPO_IMPORTE);
 		}
@@ -288,30 +252,6 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 		return lblTipoTributo;
 	}
 
-	private WTextFieldDecimal getTxfBaseImponible() {
-		if (txfBaseImponible == null) {
-			txfBaseImponible = new WTextFieldDecimal(10, 2);
-			txfBaseImponible.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					calcularImporte();
-				}
-			});
-			txfBaseImponible.setName(CAMPO_BASE_IMP);
-			txfBaseImponible.setBounds(141, 93, 121, 25);
-		}
-		return txfBaseImponible;
-	}
-
-	private JLabel getLblBaseImponible() {
-		if (lblBaseImponible == null) {
-			lblBaseImponible = new JLabel("* Base Imponible:");
-			lblBaseImponible.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblBaseImponible.setBounds(10, 93, 121, 25);
-		}
-		return lblBaseImponible;
-	}
-
 	private JComboBox getCmbTipoTributo() {
 		if (cmbTipoTributo == null) {
 			cmbTipoTributo = new JComboBox();
@@ -320,15 +260,6 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			cmbTipoTributo.setBounds(141, 21, 236, 25);
 		}
 		return cmbTipoTributo;
-	}
-
-	private JLabel getLblAlicuota() {
-		if (lblAlicuota == null) {
-			lblAlicuota = new JLabel("* Alicuota: %");
-			lblAlicuota.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblAlicuota.setBounds(10, 129, 121, 25);
-		}
-		return lblAlicuota;
 	}
 
 	private JLabel getLblDetalle() {
@@ -349,14 +280,5 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 			txtDescripcion.setDocument(new WTextFieldLimit(100));
 		}
 		return txtDescripcion;
-	}
-	
-	private void calcularImporte(){
-		BigDecimal baseImponible = WUtils.getValue(getTxfBaseImponible().getText());
-		BigDecimal alicuota = WUtils.getValue(getTxfAlicuota().getText());
-		
-		BigDecimal importe = baseImponible.multiply(alicuota).divide(new BigDecimal(100));
-		tributo.setImporte(importe);
-		getTxtImporte().setText(WUtils.getValue(importe).toEngineeringString());
 	}
 }

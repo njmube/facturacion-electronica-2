@@ -14,23 +14,20 @@ public class TributoComprobanteModel extends WTableModel<TributoComprobante> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public TributoComprobanteModel() {
-		super(new String[] { "TRIBUTO", "DETALLE", "BASE IMPONIBLE",
-				"ALICUOTA %", "IMPORTE" });
+		super(new String[] { "TRIBUTO", "DETALLE", "IMPORTE" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.20, 0.20, 0.20, 0.20, 0.20 };
+		return new double[] { 0.40, 0.40, 0.20 };
 	}
 
 	@Override
 	protected Object[] getRow(TributoComprobante t, Object[] fila) {
 		fila[0] = t.getTributo().getDescripcion();
 		fila[1] = t.getDetalle();
-		fila[2] = AppUtils.formatPeso(t.getBaseImporte());
-		fila[3] = t.getAlicuota() + " %";
-		fila[4] = AppUtils.formatPeso(t.getImporte());
-		fila[5] = t.getCoalesceId();
+		fila[2] = AppUtils.formatPeso(t.getImporte());
+		fila[3] = t.getCoalesceId();
 		return fila;
 	}
 
@@ -42,10 +39,6 @@ public class TributoComprobanteModel extends WTableModel<TributoComprobante> {
 		case 1:
 			return String.class;
 		case 2:
-			return BigDecimal.class;
-		case 3:
-			return BigDecimal.class;
-		case 4:
 			return BigDecimal.class;
 		}
 		return Object.class;
