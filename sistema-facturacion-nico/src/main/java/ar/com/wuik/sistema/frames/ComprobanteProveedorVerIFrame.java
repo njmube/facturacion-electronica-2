@@ -136,7 +136,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			total = comprobante.getTotal();
 			totalTributo = comprobante.getTotalTributos();
 			
-			txtNumComp.setText(comprobante.getNroComprobante());
+			txtNumComp.setText(comprobante.getNroCompFormato());
 			txtCAE.setText(comprobante.getCae());
 			txaObservaciones.setText(comprobante.getObservaciones());
 			txtGravados.setText(subtotal.toString());
@@ -161,7 +161,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 
 		switch (comprobante.getTipoComprobante()) {
 		case FACTURA:
-			titulo = "Editar Venta";
+			titulo = "Editar Factura";
 			lblTipoComp.setText("FACTURA");
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
@@ -558,7 +558,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		if (null != txtNumComp.getText() && txtNumComp.getText().trim().length() > 0){
 			numComp = txtNumComp.getText();
 		}
-		comprobante.setNroComprobante(numComp);
+		comprobante.setNroCompFormato(numComp);
 		
 		String cae = null;
 		if (null != txtCAE.getText() && txtCAE.getText().trim().length() > 0){

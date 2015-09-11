@@ -201,7 +201,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 
 	private void initialize() {
 		setBorder(new LineBorder(null, 1, true));
-		setBounds(0, 0, 1021, 761);
+		setBounds(0, 0, 1021, 727);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -236,7 +236,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 1001, 656);
+			pnlBusqueda.setBounds(10, 11, 1001, 635);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
@@ -270,7 +270,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(906, 678, 103, 30);
+			btnCerrar.setBounds(906, 657, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -347,7 +347,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
-			lblObservaciones.setBounds(482, 8, 116, 25);
+			lblObservaciones.setBounds(10, 7, 116, 25);
 			lblObservaciones.setHorizontalAlignment(SwingConstants.LEFT);
 		}
 		return lblObservaciones;
@@ -367,7 +367,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(482, 42, 187, 83);
+			scrollPane.setBounds(10, 41, 187, 83);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -428,7 +428,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getLblTotal() {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Importe Total: $");
-			lblTotal.setBounds(702, 149, 125, 25);
+			lblTotal.setBounds(702, 118, 125, 25);
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblTotal;
@@ -437,7 +437,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel getTxtTotalPesos() {
 		if (txtTotalPesos == null) {
 			txtTotalPesos = new JLabel();
-			txtTotalPesos.setBounds(837, 149, 125, 25);
+			txtTotalPesos.setBounds(837, 118, 125, 25);
 			txtTotalPesos.setText("$ 0.00");
 			txtTotalPesos.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtTotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
@@ -468,7 +468,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
 			lblEstado.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblEstado.setBounds(10, 678, 76, 19);
+			lblEstado.setBounds(10, 657, 76, 19);
 			lblEstado.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblEstado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
 		}
@@ -558,7 +558,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			panel_1 = new JPanel();
 			panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING,
 					TitledBorder.TOP, null, null));
-			panel_1.setBounds(10, 460, 981, 185);
+			panel_1.setBounds(10, 460, 981, 160);
 			panel_1.setLayout(null);
 			panel_1.add(getTxtTotalPesos());
 			panel_1.add(getLblTotal());
@@ -570,10 +570,10 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			panel_1.add(getLblSubtotal());
 			panel_1.add(getLblObservaciones());
 			panel_1.add(getScrollPane());
-			panel_1.add(getTblTributos());
-			panel_1.add(getLblImporteOtrosTributos());
-			panel_1.add(getLblOtrosTributos());
-			panel_1.add(getLblTributos());
+//			panel_1.add(getTblTributos());
+//			panel_1.add(getLblImporteOtrosTributos());
+//			panel_1.add(getLblOtrosTributos());
+//			panel_1.add(getLblTributos());
 		}
 		return panel_1;
 	}
@@ -759,7 +759,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			lblFacturado = new JLabel("Facturado:");
 			lblFacturado.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFacturado.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblFacturado.setBounds(161, 678, 103, 19);
+			lblFacturado.setBounds(161, 657, 103, 19);
 			lblFacturado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
 		}
 		return lblFacturado;
