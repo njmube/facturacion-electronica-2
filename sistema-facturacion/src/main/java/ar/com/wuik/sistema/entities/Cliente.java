@@ -1,5 +1,7 @@
 package ar.com.wuik.sistema.entities;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Formula;
 
 import ar.com.wuik.sistema.entities.enums.CondicionIVA;
 import ar.com.wuik.sistema.entities.enums.TipoDocumento;
@@ -39,6 +43,10 @@ public class Cliente extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "COND_IVA")
 	private CondicionIVA condicionIVA;
+	@Formula(value = "(SELECT (v.HABER - v.DEBE) + v.SALDO_INICIAL from vw_saldos v WHERE v.ID_CLIENTE = ID)")
+	private BigDecimal saldo;
+	@Column(name = "SALDO_INICIAL")
+	private BigDecimal saldoInicial;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -118,6 +126,22 @@ public class Cliente extends BaseEntity {
 
 	public void setTipoDocumento(TipoDocumento tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
+	}
+
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
+	}
+
+	public BigDecimal getSaldoInicial() {
+		return saldoInicial;
+	}
+
+	public void setSaldoInicial(BigDecimal saldoInicial) {
+		this.saldoInicial = saldoInicial;
 	}
 
 }

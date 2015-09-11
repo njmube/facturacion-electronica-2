@@ -24,7 +24,6 @@ public class ReciboDAOImpl extends GenericCrudHBDAOImpl<Recibo> implements
 		Recibo recibo = super.getById(id);
 		if (null != recibo) {
 			Hibernate.initialize(recibo.getCliente());
-			Hibernate.initialize(recibo.getComprobantes());
 			Hibernate.initialize(recibo.getPagosCheque());
 			Hibernate.initialize(recibo.getPagosEfectivo());
 		}

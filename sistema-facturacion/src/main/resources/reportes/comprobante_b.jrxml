@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_data" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="203"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -13,26 +13,47 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="COMP_LETRA" class="java.lang.String"/>
+	<parameter name="COMP_TIPO" class="java.lang.String"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
+	<parameter name="DOMICILIO" class="java.lang.String"/>
+	<parameter name="COND_IVA" class="java.lang.String"/>
+	<parameter name="PTO_VTA" class="java.lang.String"/>
 	<parameter name="COMP_NRO" class="java.lang.String"/>
 	<parameter name="FECHA_EMISION" class="java.util.Date"/>
+	<parameter name="CUIT" class="java.lang.String"/>
+	<parameter name="ING_BRUTOS" class="java.lang.String"/>
+	<parameter name="INICIO_ATC" class="java.util.Date"/>
 	<parameter name="CLIENTE_CUIT" class="java.lang.String"/>
 	<parameter name="CLIENTE_COND_IVA" class="java.lang.String"/>
 	<parameter name="CLIENTE_RAZON" class="java.lang.String"/>
 	<parameter name="CLIENTE_DOM" class="java.lang.String"/>
-	<parameter name="TOTAL_LETRAS" class="java.lang.String"/>
+	<parameter name="REMITOS" class="java.lang.String"/>
+	<parameter name="SUBTOTAL" class="java.math.BigDecimal"/>
+	<parameter name="IVA_21" class="java.math.BigDecimal"/>
+	<parameter name="IVA_105" class="java.math.BigDecimal"/>
 	<parameter name="TOTAL" class="java.math.BigDecimal"/>
+	<parameter name="CAE" class="java.lang.String"/>
+	<parameter name="VTO_CAE" class="java.util.Date"/>
 	<parameter name="BG_IMG" class="java.io.InputStream"/>
+	<parameter name="COD_BARRAS" class="java.lang.String"/>
 	<parameter name="COPIA" class="java.lang.String"/>
+	<parameter name="OTROS_TRIBUTOS" class="java.math.BigDecimal"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-FE\\sistema-facturacion\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-UTN\\atenea\\sigma\\sigma-web\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_OBJECT" class="java.lang.Object"/>
-	<parameter name="EFECTIVO" class="java.math.BigDecimal"/>
-	<parameter name="CHEQUE" class="java.math.BigDecimal"/>
-	<field name="nroCheque" class="java.lang.String"/>
-	<field name="tipo" class="java.lang.String"/>
-	<field name="banco" class="java.lang.String"/>
-	<field name="total" class="java.math.BigDecimal"/>
+	<parameter name="TRIBUTOS" class="java.lang.Object"/>
+	<parameter name="SUBTOTAL_CON_IVA" class="java.math.BigDecimal"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="producto" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="precioUnit" class="java.math.BigDecimal"/>
+	<field name="subtotal" class="java.math.BigDecimal"/>
+	<field name="alicuota" class="java.math.BigDecimal"/>
+	<field name="subtotalConIVA" class="java.math.BigDecimal"/>
+	<field name="comentario" class="java.lang.String"/>
+	<field name="precioUnitConIVA" class="java.math.BigDecimal"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<rectangle>
@@ -224,13 +245,13 @@ FRANCISCO NICOLAS]]></text>
 	</background>
 	<title>
 		<band height="231" splitType="Stretch">
-			<staticText>
+			<textField isBlankWhenNull="true">
 				<reportElement x="305" y="0" width="229" height="36" forecolor="#000000"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="19" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RECIBO]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{COMP_TIPO}]]></textFieldExpression>
+			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="373" y="64" width="98" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -245,13 +266,13 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COMP_NRO}]]></textFieldExpression>
 			</textField>
-			<staticText>
+			<textField>
 				<reportElement x="258" y="0" width="39" height="36" forecolor="#000000"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="28" isBold="true"/>
 				</textElement>
-				<text><![CDATA[R]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{COMP_LETRA}]]></textFieldExpression>
+			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="123" y="169" width="110" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -267,8 +288,8 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$P{CLIENTE_CUIT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="330" y="169" width="223" height="15" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle" markup="none">
+				<reportElement x="330" y="169" width="223" height="23" forecolor="#000000"/>
+				<textElement verticalAlignment="Top" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_DOM}]]></textFieldExpression>
@@ -280,6 +301,24 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_RAZON}]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="330" y="195" width="223" height="15" forecolor="#000000">
+					<printWhenExpression><![CDATA[null != $P{REMITOS}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REMITOS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="237" y="195" width="93" height="15" forecolor="#000000">
+					<printWhenExpression><![CDATA[null != $P{REMITOS}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Remito(s):]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
@@ -288,106 +327,154 @@ FRANCISCO NICOLAS]]></text>
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="26"/>
+				<reportElement mode="Opaque" x="1" y="0" width="43" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[TIPO]]></text>
+				<text><![CDATA[CODIGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="100" height="26"/>
+				<reportElement mode="Opaque" x="42" y="0" width="191" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[NRO. CHEQUE]]></text>
+				<text><![CDATA[PRODUCTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="0" width="255" height="26"/>
+				<reportElement mode="Opaque" x="233" y="0" width="56" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[BANCO]]></text>
+				<text><![CDATA[CANTIDAD]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="0" width="100" height="26"/>
+				<reportElement mode="Opaque" x="420" y="0" width="135" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="9" isBold="false"/>
 				</textElement>
-				<text><![CDATA[TOTAL]]></text>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="289" y="0" width="131" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PRECIO UNITARIO]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1" y="0" width="41" height="20" forecolor="#000000"/>
 				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="100" y="0" width="100" height="20"/>
-				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineStyle="Dashed"/>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
 					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
 					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
 				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
 					<paragraph leftIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(null == $F{nroCheque}) ? "-" : $F{nroCheque}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="200" y="0" width="255" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="42" y="0" width="191" height="20" forecolor="#000000">
+					<printWhenExpression><![CDATA[(null != $F{producto})]]></printWhenExpression>
+				</reportElement>
 				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineStyle="Dashed"/>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
 					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
 					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
 				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
 					<paragraph leftIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(null == $F{banco}) ? "-" : $F{banco}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{producto} + ((null != $F{comentario}) ? " - " + $F{comentario} : "")]]></textFieldExpression>
 			</textField>
-			<textField pattern="$ #,##0.00">
-				<reportElement x="455" y="0" width="100" height="20"/>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="233" y="0" width="56" height="20" forecolor="#000000"/>
 				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineStyle="Dashed"/>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
 					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
 					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
 					<paragraph rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="289" y="0" width="131" height="20" forecolor="#000000">
+					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("B")]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineStyle="Dashed"/>
+					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precioUnitConIVA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="420" y="0" width="135" height="20" forecolor="#000000">
+					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("B")]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineStyle="Dashed"/>
+					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subtotalConIVA}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -397,73 +484,105 @@ FRANCISCO NICOLAS]]></text>
 	<pageFooter>
 		<band height="201" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="3" width="555" height="115"/>
+				<reportElement x="1" y="3" width="554" height="115"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="27" width="82" height="25" forecolor="#000000"/>
+				<reportElement x="469" y="49" width="80" height="15" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(null == $P{EFECTIVO}) ? "-" : $P{EFECTIVO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{SUBTOTAL_CON_IVA}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="123" y="12" width="426" height="15" forecolor="#000000"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="454" y="129" width="99" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CAE}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="11" y="11" width="321" height="100"/>
+				<subreportParameter name="TOTAL">
+					<subreportParameterExpression><![CDATA[$P{OTROS_TRIBUTOS}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[$P{TRIBUTOS}]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_OBJECT}]]></subreportExpression>
+			</subreport>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="469" y="69" width="80" height="15" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL_LETRAS}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{OTROS_TRIBUTOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="454" y="146" width="99" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{VTO_CAE}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="455" y="172" width="100" height="25" forecolor="#000000"/>
+				<reportElement x="455" y="175" width="100" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COPIA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="87" width="80" height="25" forecolor="#000000"/>
+				<reportElement x="469" y="90" width="80" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TOTAL}]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="12" y="130" width="246" height="40">
+					<printWhenExpression><![CDATA[(null != $P{COD_BARRAS} && !$P{COD_BARRAS}.isEmpty())]]></printWhenExpression>
+				</reportElement>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Int2of5" drawText="true" checksumRequired="false" barWidth="2" barHeight="110">
+					<jr:codeExpression><![CDATA[$P{COD_BARRAS}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
 			<staticText>
-				<reportElement x="404" y="52" width="65" height="25" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="true"/>
+				<reportElement x="333" y="129" width="121" height="15" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Cheque(s): $]]></text>
+				<text><![CDATA[CAE N°:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="351" y="87" width="118" height="25" forecolor="#000000"/>
+				<reportElement x="333" y="146" width="121" height="15" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Vto. de CAE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="90" width="118" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total: $]]></text>
+				<text><![CDATA[Importe Total: $]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="403" y="27" width="66" height="25" forecolor="#000000"/>
+				<reportElement x="351" y="69" width="118" height="15" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Efectivo: $]]></text>
+				<text><![CDATA[Importe Otros Tributos: $]]></text>
 			</staticText>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="52" width="82" height="25" forecolor="#000000"/>
+			<staticText>
+				<reportElement x="351" y="49" width="118" height="15" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[(null == $P{CHEQUE}) ? "-" :$P{CHEQUE}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="5" y="12" width="118" height="15" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Recibimos la suma de: ]]></text>
+				<text><![CDATA[Subtotal: $]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

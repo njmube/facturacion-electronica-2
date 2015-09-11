@@ -15,7 +15,6 @@ public class ComprobanteFilter {
 	private List<Long> idsToInclude;
 	private Boolean inicializarDetalles;
 	private EstadoFacturacion estadoFacturacion;
-	private Boolean paga;
 	private Date desde;
 	private Date hasta;
 	private TipoComprobante tipoComprobante;
@@ -74,14 +73,6 @@ public class ComprobanteFilter {
 
 	public void setEstadoFacturacion(EstadoFacturacion estadoFacturacion) {
 		this.estadoFacturacion = estadoFacturacion;
-	}
-
-	public Boolean getPaga() {
-		return paga;
-	}
-
-	public void setPaga(Boolean paga) {
-		this.paga = paga;
 	}
 
 	public Date getDesde() {

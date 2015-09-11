@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -15,7 +13,6 @@ import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +47,6 @@ import ar.com.wuik.sistema.model.DetalleComprobanteModel;
 import ar.com.wuik.sistema.model.DetalleComprobantesAsocModel;
 import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
 import ar.com.wuik.sistema.model.ProductoDetalleModel;
-import ar.com.wuik.sistema.model.TributoComprobanteModel;
 import ar.com.wuik.sistema.reportes.ComprobanteReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
@@ -80,7 +76,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private Comprobante comprobante;
 	private JButton btnGuardar;
 	private ComprobanteIFrame comprobanteIFrame;
-	private JButton btnFechaEmision;
 	private JTextField txtFechaEmision;
 	private JLabel lblFechaEmisin;
 	private JLabel lblObservaciones;
@@ -109,24 +104,20 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblCondIva;
 	private JLabel lblLetra;
 	private JLabel lblTipoComp;
-	private WTablePanel<TributoComprobante> tblTributos;
 	private JLabel lblImporteOtrosTributos;
 	private JLabel lblOtrosTributos;
-	private JCheckBox chckbxAgregarComprobantes;
-	private JCheckBox chckbxAgregarTributos;
 	private JButton btnNuevoProducto;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel lblPago;
 	private JLabel lblFacturado;
 	private JLabel lblEstado;
+	private ClienteIFrame clienteIFrame;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public ComprobanteVerIFrame(ComprobanteIFrame comprobanteIFrame,
-			Long idComprobante) {
+			Long idComprobante, ClienteIFrame clienteIFrame) {
 
+		this.clienteIFrame = clienteIFrame;
 		this.comprobanteIFrame = comprobanteIFrame;
 
 		WModel model = populateModel();
@@ -140,15 +131,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_OBSERVACIONES, comprobante.getObservaciones());
 			refreshDetalles();
 			refreshRemitos();
-
-			if (!comprobante.getTributos().isEmpty()) {
-				getChckbxAgregarTributos().setSelected(Boolean.TRUE);
-			}
-
-			if (!comprobante.getComprobantesAsociados().isEmpty()) {
-				getChckbxAgregarComprobantes().setSelected(Boolean.TRUE);
-			}
-
 			refreshTributos();
 			refreshComprobantesAsoc();
 		} catch (BusinessException bexc) {
@@ -183,11 +165,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 		setTitle(titulo);
 		setFrameIcon(icon);
-		
+
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
-		
 
 		populateComponents(model);
 		loadCliente(comprobante.getCliente());
@@ -236,11 +216,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		setTitle(titulo);
 		setFrameIcon(icon);
 
-		
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
-		
+
 		getContentPane().add(getBtnGuardarYFacturar());
 
 		try {
@@ -255,10 +233,11 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		populateComponents(model);
 	}
 
-	public ComprobanteVerIFrame(Long idCliente, TipoComprobante tipoComprobante) {
+	public ComprobanteVerIFrame(Long idCliente,
+			TipoComprobante tipoComprobante, ClienteIFrame clienteIFrame) {
 
 		initialize();
-
+		this.clienteIFrame = clienteIFrame;
 		WModel model = populateModel();
 		model.addValue(CAMPO_FECHA_EMISION,
 				WUtils.getStringFromDate(new Date()));
@@ -296,7 +275,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		setFrameIcon(icon);
 
 		popularEstadoFacturacion(comprobante);
-		popularEstadoPago(comprobante);
 		popularEstado(comprobante);
 
 		try {
@@ -333,7 +311,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getBtnCerrar());
 		getContentPane().add(getBtnGuardar());
 		getContentPane().add(getBtnGuardarYFacturar());
-		getContentPane().add(getLblPago());
 		getContentPane().add(getLblFacturado());
 		getContentPane().add(getLblEstado());
 	}
@@ -341,13 +318,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	@Override
 	protected boolean validateModel(WModel model, JComponent component) {
 
-		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
-
 		List<String> messages = new ArrayList<String>();
-
-		if (WUtils.isEmpty(fechaEmision)) {
-			messages.add("Debe ingresar una Fecha de Emisión");
-		}
 
 		if (WUtils.isEmpty(comprobante.getDetalles())) {
 			messages.add("Debe ingresar al menos un Detalle");
@@ -366,7 +337,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnlBusqueda.setBounds(10, 11, 1001, 656);
 			pnlBusqueda.setLayout(null);
-			pnlBusqueda.add(getBtnFechaEmision());
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
 			pnlBusqueda.add(getTblDetalle());
@@ -380,8 +350,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblCondIva());
 			pnlBusqueda.add(getLblLetra());
 			pnlBusqueda.add(getLblTipoComp());
-			pnlBusqueda.add(getChckbxAgregarComprobantes());
-			pnlBusqueda.add(getLabel());
 		}
 		return pnlBusqueda;
 	}
@@ -412,26 +380,16 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
 					if (validateModel(model, btnGuardar)) {
-						String fechaVenta = model.getValue(CAMPO_FECHA_EMISION);
 						String observaciones = model
 								.getValue(CAMPO_OBSERVACIONES);
 
-						comprobante.setFechaVenta(WUtils
-								.getDateFromString(fechaVenta));
 						comprobante.setObservaciones(observaciones);
-
-						if (!getChckbxAgregarComprobantes().isSelected()) {
-							comprobante.getComprobantesAsociados().clear();
-						}
-
-						if (!getChckbxAgregarTributos().isSelected()) {
-							comprobante.getTributos().clear();
-						}
 
 						try {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
 							if (comprobante.getId() == null) {
+								comprobante.setFechaVenta(new Date());
 								comprobanteBO.guardar(comprobante);
 							} else {
 								comprobanteBO.actualizar(comprobante);
@@ -439,6 +397,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							hideFrame();
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
+							}
+							if (null != clienteIFrame) {
+								clienteIFrame.search();
 							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
@@ -484,11 +445,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							comprobante.getRemitos().remove(remito);
 							refreshRemitos();
 						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un Remito",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
+							WTooltipUtils.showMessage(
+									"Debe seleccionar un Remito",
+									(JButton) e.getSource(), MessageType.ALERTA);
 						}
 					}
 				}, "Quitar", null);
@@ -585,21 +544,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return null;
 	}
 
-	private JButton getBtnFechaEmision() {
-		if (btnFechaEmision == null) {
-			btnFechaEmision = new JButton("");
-			btnFechaEmision.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new WCalendarIFrame(txtFechaEmision));
-				}
-			});
-			btnFechaEmision.setIcon(new ImageIcon(ComprobanteVerIFrame.class
-					.getResource("/icons/calendar.png")));
-			btnFechaEmision.setBounds(602, 21, 25, 25);
-		}
-		return btnFechaEmision;
-	}
-
 	private JTextField getTxtFechaEmision() {
 		if (txtFechaEmision == null) {
 			txtFechaEmision = new JTextField();
@@ -612,7 +556,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblFechaEmisin() {
 		if (lblFechaEmisin == null) {
-			lblFechaEmisin = new JLabel("* Fecha Emisi\u00F3n:");
+			lblFechaEmisin = new JLabel("Fecha Emisi\u00F3n:");
 			lblFechaEmisin.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFechaEmisin.setBounds(384, 21, 92, 25);
 		}
@@ -664,11 +608,9 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							addModalIFrame(new EditarDetalleComprobanteIFrame(
 									detalle, ComprobanteVerIFrame.this));
 						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un Detalle",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
+							WTooltipUtils.showMessage(
+									"Debe seleccionar un Detalle",
+									(JButton) e.getSource(), MessageType.ALERTA);
 						}
 					}
 				}, "Editar", null);
@@ -809,7 +751,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			tblRemitos = new WTablePanel(DetalleFacturaRemitoModel.class,
 					"Remitos");
 			tblRemitos.addToolbarButtons(getToolbarButtons());
-			tblRemitos.setBounds(695, 289, 296, 160);
+			tblRemitos.setBounds(695, 95, 296, 183);
 		}
 		return tblRemitos;
 	}
@@ -906,7 +848,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		BigDecimal subtotalIVA21 = BigDecimal.ZERO;
 		BigDecimal subtotalIVA105 = BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
-		BigDecimal totalTributo = BigDecimal.ZERO;
+		// BigDecimal totalTributo = BigDecimal.ZERO;
 
 		List<DetalleComprobante> detalles = comprobante.getDetalles();
 		for (DetalleComprobante detalleFactura : detalles) {
@@ -920,15 +862,15 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			total = total.add(detalleFactura.getTotal());
 		}
 
-		List<TributoComprobante> tributos = comprobante.getTributos();
-		for (TributoComprobante tributoComprobante : tributos) {
-			totalTributo = totalTributo.add(tributoComprobante.getImporte());
-		}
+		// List<TributoComprobante> tributos = comprobante.getTributos();
+		// for (TributoComprobante tributoComprobante : tributos) {
+		// totalTributo = totalTributo.add(tributoComprobante.getImporte());
+		// }
 
-		comprobante.setSubtotal(subtotal);
-		comprobante.setTotalTributos(totalTributo);
-		comprobante.setTotal(total);
-		comprobante.setIva(total.subtract(subtotal));
+		comprobante.setSubtotal(WUtils.getValue(subtotal));
+		// comprobante.setTotalTributos(totalTributo);
+		comprobante.setTotal(WUtils.getValue(total));
+		comprobante.setIva(WUtils.getValue(total.subtract(subtotal)));
 
 		getTxtSubtotalPesos().setText(
 				WUtils.getValue(comprobante.getSubtotal())
@@ -938,10 +880,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		getTxtIVA21().setText(
 				WUtils.getValue(subtotalIVA21).toEngineeringString());
 		getTxtTotalPesos().setText(
-				WUtils.getValue(comprobante.getTotal().add(totalTributo))
-						.toEngineeringString());
-		getLblImporteOtrosTributos().setText(
-				WUtils.getValue(totalTributo).toEngineeringString());
+				WUtils.getValue(comprobante.getTotal()).toEngineeringString());
+		// getTxtTotalPesos().setText(
+		// WUtils.getValue(comprobante.getTotal().add(totalTributo))
+		// .toEngineeringString());
+		// getLblImporteOtrosTributos().setText(
+		// WUtils.getValue(totalTributo).toEngineeringString());
 	}
 
 	private JLabel getLblIVA21() {
@@ -1027,14 +971,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 								.getDateFromString(fechaVenta));
 						comprobante.setObservaciones(observaciones);
 
-						if (!getChckbxAgregarComprobantes().isSelected()) {
-							comprobante.getComprobantesAsociados().clear();
-						}
-
-						if (!getChckbxAgregarTributos().isSelected()) {
-							comprobante.getTributos().clear();
-						}
-
 						try {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
@@ -1049,7 +985,11 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							showGlobalErrorMsg(bexc.getMessage());
 						} finally {
 							hideFrame();
-							comprobanteIFrame.search();
+							if (null != comprobanteIFrame) {
+								comprobanteIFrame.search();
+							} else if (null != clienteIFrame) {
+								clienteIFrame.search();
+							}
 						}
 					}
 				}
@@ -1086,21 +1026,18 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			panel_1.add(getLblSubtotal());
 			panel_1.add(getLblObservaciones());
 			panel_1.add(getScrollPane());
-			panel_1.add(getTblTributos());
 			panel_1.add(getLblImporteOtrosTributos());
 			panel_1.add(getLblOtrosTributos());
-			panel_1.add(getChckbxAgregarTributos());
-			panel_1.add(getLabel_1());
 		}
 		return panel_1;
 	}
 
 	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class, "");
+			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class, "Comprobantes asociados");
 			tablePanel.setVisible(false);
 			tablePanel.addToolbarButtons(getToolbarButtonsComprobantes());
-			tablePanel.setBounds(695, 136, 296, 142);
+			tablePanel.setBounds(695, 289, 296, 160);
 		}
 		return tablePanel;
 	}
@@ -1180,16 +1117,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return lblTipoComp;
 	}
 
-	private WTablePanel<TributoComprobante> getTblTributos() {
-		if (tblTributos == null) {
-			tblTributos = new WTablePanel(TributoComprobanteModel.class, "");
-			tblTributos.setVisible(false);
-			tblTributos.addToolbarButtons(getToolbarButtonsTributos());
-			tblTributos.setBounds(10, 42, 462, 132);
-		}
-		return tblTributos;
-	}
-
 	public void addTributo(TributoComprobante tributo) {
 		if (null == tributo.getCoalesceId()) {
 			tributo.setComprobante(comprobante);
@@ -1200,74 +1127,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	}
 
 	private void refreshTributos() {
-		getTblTributos().addData(comprobante.getTributos());
 		calcularTotales();
-	}
-
-	private List<WToolbarButton> getToolbarButtonsTributos() {
-		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Tributo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/add.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new TributoComprobanteVerIFrame(
-								ComprobanteVerIFrame.this));
-					}
-				}, "Nuevo", null);
-
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Tributo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblTributos.getSelectedItemID();
-						if (null != selectedItem) {
-							TributoComprobante tributo = getTributoById(selectedItem);
-							addModalIFrame(new TributoComprobanteVerIFrame(
-									tributo, ComprobanteVerIFrame.this));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Tributo",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Editar", null);
-		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Tributo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/delete.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						List<Long> selectedItems = tblTributos
-								.getSelectedItemsID();
-						if (WUtils.isNotEmpty(selectedItems)) {
-							for (Long selectedItem : selectedItems) {
-								TributoComprobante tributo = getTributoById(selectedItem);
-								comprobante.getTributos().remove(tributo);
-							}
-							refreshTributos();
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar al menos un Tributo",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Eliminar", null);
-
-		toolbarButtons.add(buttonAdd);
-		toolbarButtons.add(buttonEdit);
-		toolbarButtons.add(buttonEliminar);
-		return toolbarButtons;
 	}
 
 	protected TributoComprobante getTributoById(Long selectedItem) {
@@ -1302,40 +1162,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return lblOtrosTributos;
 	}
 
-	private JCheckBox getChckbxAgregarComprobantes() {
-		if (chckbxAgregarComprobantes == null) {
-			chckbxAgregarComprobantes = new JCheckBox("Agregar Comprobantes");
-			chckbxAgregarComprobantes.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						getTablePanel().setVisible(Boolean.TRUE);
-					} else {
-						getTablePanel().setVisible(Boolean.FALSE);
-					}
-				}
-			});
-			chckbxAgregarComprobantes.setBounds(729, 106, 150, 23);
-		}
-		return chckbxAgregarComprobantes;
-	}
-
-	private JCheckBox getChckbxAgregarTributos() {
-		if (chckbxAgregarTributos == null) {
-			chckbxAgregarTributos = new JCheckBox("Agregar Tributos");
-			chckbxAgregarTributos.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						getTblTributos().setVisible(Boolean.TRUE);
-					} else {
-						getTblTributos().setVisible(Boolean.FALSE);
-					}
-				}
-			});
-			chckbxAgregarTributos.setBounds(44, 9, 157, 23);
-		}
-		return chckbxAgregarTributos;
-	}
-
 	private JButton getBtnNuevoProducto() {
 		if (btnNuevoProducto == null) {
 			btnNuevoProducto = new JButton("Nuevo Producto");
@@ -1352,38 +1178,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return btnNuevoProducto;
 	}
 
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("");
-			label.setHorizontalAlignment(SwingConstants.CENTER);
-			label.setIcon(new ImageIcon(ComprobanteVerIFrame.class
-					.getResource("/icons/compAsociados.png")));
-			label.setBounds(698, 106, 25, 23);
-		}
-		return label;
-	}
-
-	private JLabel getLabel_1() {
-		if (label_1 == null) {
-			label_1 = new JLabel("");
-			label_1.setIcon(new ImageIcon(ComprobanteVerIFrame.class
-					.getResource("/icons/compAsociados.png")));
-			label_1.setHorizontalAlignment(SwingConstants.CENTER);
-			label_1.setBounds(13, 11, 25, 23);
-		}
-		return label_1;
-	}
-	private JLabel getLblPago() {
-		if (lblPago == null) {
-			lblPago = new JLabel("Pago:");
-			lblPago.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblPago.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPago.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
-					Font.BOLD));
-			lblPago.setBounds(323, 678, 89, 19);
-		}
-		return lblPago;
-	}
 	private JLabel getLblFacturado() {
 		if (lblFacturado == null) {
 			lblFacturado = new JLabel("Facturado:");
@@ -1395,6 +1189,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		}
 		return lblFacturado;
 	}
+
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
@@ -1406,7 +1201,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		}
 		return lblEstado;
 	}
-	
+
 	private void popularEstado(Comprobante comprobante) {
 		if (comprobante.isActivo()) {
 			lblEstado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
@@ -1414,17 +1209,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		} else {
 			lblEstado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/inactivo.png")));
-		}
-
-	}
-
-	private void popularEstadoPago(Comprobante comprobante) {
-		if (comprobante.isPago()) {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/pago.png")));
-		} else {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/impago.png")));
 		}
 
 	}

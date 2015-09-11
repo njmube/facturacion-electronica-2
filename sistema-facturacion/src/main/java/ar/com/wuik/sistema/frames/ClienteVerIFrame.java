@@ -41,6 +41,7 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
+import ar.com.wuik.swing.components.WTextFieldDecimal;
 
 public class ClienteVerIFrame extends WAbstractModelIFrame {
 	/**
@@ -65,6 +66,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_NUMERO_DOC2 = "nroDoc2";
 	private static final String CAMPO_TIPO_DOC = "tipoDoc";
 	private static final String CAMPO_TIPO_IVA = "tipoIva";
+	private static final String CAMPO_SALDO_INICIAL = "saldoInicial";
 	private ClienteIFrame clienteIFrame;
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
@@ -80,6 +82,8 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private JComboBox cmbTipoDoc;
 	private JLabel lblTipoDoc;
 	private WTextFieldNumeric txtDNIOtros;
+	private JLabel lblSaldoInicial;
+	private WTextFieldDecimal textFieldDecimal;
 
 	/**
 	 * Create the frame.
@@ -117,6 +121,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_TIPO_DOC, cliente.getTipoDocumento().getId());
 			model.addValue(CAMPO_CELULAR, cliente.getCelular());
 			model.addValue(CAMPO_TIPO_IVA, cliente.getCondicionIVA().getId());
+			model.addValue(CAMPO_SALDO_INICIAL, cliente.getSaldoInicial());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -135,7 +140,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ClienteVerIFrame.class.getResource("/icons/cliente.png")));
-		setBounds(0, 0, 445, 401);
+		setBounds(0, 0, 445, 475);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -190,6 +195,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		String documento2 = model.getValue(CAMPO_NUMERO_DOC2);
 		WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
 		WOption tipoDoc = model.getValue(CAMPO_TIPO_DOC);
+		String saldoInicial = model.getValue(CAMPO_SALDO_INICIAL);
 
 		List<String> messages = new ArrayList<String>();
 
@@ -200,16 +206,16 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		TipoDocumento tipoDocumento = TipoDocumento.fromValue(tipoDoc
 				.getValue().intValue());
 
-		if (tipoDocumento.equals(TipoDocumento.CUIL)
-				|| tipoDocumento.equals(TipoDocumento.CUIT)) {
+//		if (tipoDocumento.equals(TipoDocumento.CUIL)
+//				|| tipoDocumento.equals(TipoDocumento.CUIT)) {
 			if (!AppUtils.esValidoCUIT(documento)) {
-				messages.add("Debe ingresar un Documento válido");
+				messages.add("Debe ingresar un CUIT válido");
 			}
-		} else {
-			if (WUtils.isEmpty(documento2)) {
-				messages.add("Debe ingresar un Documento válido");
-			}
-		}
+//		} else {
+//			if (WUtils.isEmpty(documento2)) {
+//				messages.add("Debe ingresar un Documento válido");
+//			}
+//		}
 
 		if (WUtils.isEmpty(direccion)) {
 			messages.add("Debe ingresar una Dirección");
@@ -226,6 +232,10 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		if (WOption.getIdWOptionSeleccion().equals(tipoIva.getValue())) {
 			messages.add("Debe seleccionar un Tipo de Iva");
 		}
+		
+		if (WUtils.isEmpty(saldoInicial)) {
+			messages.add("Debe ingresar un Saldo Inicial");
+		}
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
 
@@ -238,7 +248,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 421, 313);
+			pnlBusqueda.setBounds(10, 11, 421, 359);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getTxtRazonSocial());
@@ -258,6 +268,8 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getCmbTipoDoc());
 			pnlBusqueda.add(getLblTipoDoc());
 			pnlBusqueda.add(getTxtDNIOtros());
+			pnlBusqueda.add(getLblSaldoInicial());
+			pnlBusqueda.add(getTextFieldDecimal());
 		}
 		return pnlBusqueda;
 	}
@@ -292,7 +304,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(217, 335, 103, 30);
+			btnCerrar.setBounds(217, 407, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -302,7 +314,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(330, 335, 103, 30);
+			btnGuardar.setBounds(330, 407, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -317,6 +329,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						WOption tipoDoc = model.getValue(CAMPO_TIPO_DOC);
 						String celular = model.getValue(CAMPO_CELULAR);
 						WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
+						String saldoInicial = model.getValue(CAMPO_SALDO_INICIAL);
 
 						cliente.setRazonSocial(razonSocial);
 						cliente.setDireccion(direccion);
@@ -328,6 +341,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						cliente.setCelular(celular);
 						cliente.setCondicionIVA(CondicionIVA.fromValue(tipoIva
 								.getValue().intValue()));
+						cliente.setSaldoInicial(WUtils.getValue(saldoInicial));
 
 						cliente.setDocumento((WUtils.isNotEmpty(documento) && !"##-########-#"
 								.equals(documento)) ? documento : documento2);
@@ -435,7 +449,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblDocumento() {
 		if (lblDocumento == null) {
-			lblDocumento = new JLabel("* Documento:");
+			lblDocumento = new JLabel("* CUIT:");
 			lblDocumento.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblDocumento.setBounds(10, 95, 121, 25);
 		}
@@ -519,14 +533,14 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						WOption selectedOption = (WOption) e.getItem();
 						TipoDocumento tipoDocumento = TipoDocumento
 								.fromValue(selectedOption.getValue().intValue());
-						if (tipoDocumento.equals(TipoDocumento.CUIL)
-								|| tipoDocumento.equals(TipoDocumento.CUIT)) {
+//						if (tipoDocumento.equals(TipoDocumento.CUIL)
+//								|| tipoDocumento.equals(TipoDocumento.CUIT)) {
 							getTxtDNIOtros().setText("");
 							getTxfCuit().setVisible(Boolean.TRUE);
-						} else {
-							getTxfCuit().setText("");
-							getTxtDNIOtros().setVisible(Boolean.TRUE);
-						}
+//						} else {
+//							getTxfCuit().setText("");
+//							getTxtDNIOtros().setVisible(Boolean.TRUE);
+//						}
 					}
 				}
 			});
@@ -553,5 +567,22 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			txtDNIOtros.setBounds(141, 95, 145, 25);
 		}
 		return txtDNIOtros;
+	}
+	private JLabel getLblSaldoInicial() {
+		if (lblSaldoInicial == null) {
+			lblSaldoInicial = new JLabel("* Saldo Inicial:");
+			lblSaldoInicial.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblSaldoInicial.setBounds(10, 311, 121, 25);
+		}
+		return lblSaldoInicial;
+	}
+	private WTextFieldDecimal getTextFieldDecimal() {
+		if (textFieldDecimal == null) {
+			textFieldDecimal = new WTextFieldDecimal(8,2, true);
+			textFieldDecimal.setText("0.00");
+			textFieldDecimal.setName(CAMPO_SALDO_INICIAL);
+			textFieldDecimal.setBounds(141, 311, 145, 25);
+		}
+		return textFieldDecimal;
 	}
 }

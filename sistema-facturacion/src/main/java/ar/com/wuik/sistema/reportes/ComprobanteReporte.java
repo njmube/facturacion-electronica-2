@@ -24,8 +24,9 @@ import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class ComprobanteReporte {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ComprobanteReporte.class);
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ComprobanteReporte.class);
 
 	public static void generarImpresion(Long idComprobante)
 			throws ReportException {
@@ -35,11 +36,11 @@ public class ComprobanteReporte {
 					.getInstance(ComprobanteBO.class);
 			ComprobanteDTO comprobanteDTO = comprobanteBO
 					.obtenerDTO(idComprobante);
+
 			List<DetalleComprobanteDTO> detalles = comprobanteDTO.getDetalles();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_LETRA", comprobanteDTO.getLetra());
 			parameters.put("COMP_TIPO", comprobanteDTO.getTipo());
-			parameters.put("PTO_VTA", comprobanteDTO.getPtoVta());
 			parameters.put("COMP_NRO", comprobanteDTO.getCompNro());
 			parameters.put("FECHA_EMISION", comprobanteDTO.getFechaEmision());
 			parameters.put("CLIENTE_CUIT", comprobanteDTO.getClienteCuit());
@@ -53,7 +54,8 @@ public class ComprobanteReporte {
 			parameters.put("IVA_21", comprobanteDTO.getIva21());
 			parameters.put("IVA_105", comprobanteDTO.getIva105());
 			parameters.put("OTROS_TRIBUTOS", comprobanteDTO.getOtrosTributos());
-			parameters.put("SUBTOTAL_CON_IVA",comprobanteDTO.getSubtotalConIVA());
+			parameters.put("SUBTOTAL_CON_IVA",
+					comprobanteDTO.getSubtotalConIVA());
 			parameters.put("TOTAL", comprobanteDTO.getTotal());
 			parameters.put("CAE", comprobanteDTO.getCae());
 			parameters.put("VTO_CAE", comprobanteDTO.getVtoCAE());
@@ -70,9 +72,12 @@ public class ComprobanteReporte {
 			parameters.put("BG_IMG", ComprobanteReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 
+			String reporte = comprobanteDTO.getLetra().equals("A") ? "comprobante_a.jasper"
+					: "comprobante_b.jasper";
+
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(ComprobanteReporte.class
-							.getResourceAsStream("/reportes/comprobante.jasper"));
+							.getResourceAsStream("/reportes/" + reporte));
 
 			// ORIGINAL
 			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
@@ -82,11 +87,11 @@ public class ComprobanteReporte {
 			// DUPLICADO
 			parameters.put("COPIA", "DUPLICADO");
 			parameters
-			.put("TRIBUTOS",
-					new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
-							comprobanteDTO.getTributos()));
+					.put("TRIBUTOS",
+							new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+									comprobanteDTO.getTributos()));
 			parameters.put("BG_IMG", ComprobanteReporte.class
-					.getResourceAsStream("/reportes/bg-comprobante_a.png"));
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
 			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
@@ -94,11 +99,11 @@ public class ComprobanteReporte {
 			// TRIPLICADO
 			parameters.put("COPIA", "TRIPLICADO");
 			parameters
-			.put("TRIBUTOS",
-					new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
-							comprobanteDTO.getTributos()));
+					.put("TRIBUTOS",
+							new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+									comprobanteDTO.getTributos()));
 			parameters.put("BG_IMG", ComprobanteReporte.class
-					.getResourceAsStream("/reportes/bg-comprobante_a.png"));
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
 			JasperPrint jasperPrintTriplicado = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
@@ -117,6 +122,6 @@ public class ComprobanteReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarImpresion(9L);
+		generarImpresion(1L);
 	}
 }

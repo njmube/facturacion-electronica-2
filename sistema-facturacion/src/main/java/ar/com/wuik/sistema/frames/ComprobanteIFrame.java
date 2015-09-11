@@ -50,12 +50,14 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 	private static final String CAMPO_TIPO_COMP = "tipoComprobante";
 	private JLabel lblTipoComprobante;
 	private JComboBox cmbTipoComp;
-
+	private ClienteIFrame clienteIFrame;
+	
 	/**
 	 * Create the frame.
 	 */
-	public ComprobanteIFrame(Long idCliente) {
+	public ComprobanteIFrame(Long idCliente, ClienteIFrame clienteIFrame) {
 		this.idCliente = idCliente;
+		this.clienteIFrame =clienteIFrame;
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Comprobantes");
 		setFrameIcon(new ImageIcon(
@@ -128,7 +130,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 										if (comprobante.isActivo()) {
 											addModalIFrame(new ComprobanteVerIFrame(
 													ComprobanteIFrame.this,
-													selectedItem));
+													selectedItem, clienteIFrame));
 										} else {
 											WTooltipUtils
 													.showMessage(
@@ -199,6 +201,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 												comprobanteBO
 														.cancelar(selectedItem);
 												search();
+												clienteIFrame.search();
 											} else {
 												WTooltipUtils
 														.showMessage(

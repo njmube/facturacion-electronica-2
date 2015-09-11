@@ -39,12 +39,14 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Recibo> tablePanel;
 	private JButton btnCerrar;
 	private Long idCliente;
+	private ClienteIFrame clienteIFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public ReciboIFrame(Long idCliente) {
+	public ReciboIFrame(Long idCliente, ClienteIFrame clienteIFrame) {
 		this.idCliente = idCliente;
+		this.clienteIFrame = clienteIFrame;
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Recibos");
 		setFrameIcon(new ImageIcon( 
@@ -91,7 +93,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 							addModalIFrame(new ReciboVerIFrame(
-									ReciboIFrame.this, idCliente, selectedItem));
+									ReciboIFrame.this, idCliente, selectedItem, clienteIFrame));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -116,6 +118,7 @@ public class ReciboIFrame extends WAbstractModelIFrame implements WSecure {
 										.getInstance(ReciboBO.class);
 								reciboBO.eliminar(selectedItem);
 								search();
+								clienteIFrame.search();
 							} catch (BusinessException bexc) {
 								showGlobalErrorMsg(bexc.getMessage());
 							}

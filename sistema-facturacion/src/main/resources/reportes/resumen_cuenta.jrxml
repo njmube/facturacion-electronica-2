@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="203"/>
+	<property name="ireport.y" value="302"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -13,26 +13,23 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="COMP_NRO" class="java.lang.String"/>
 	<parameter name="FECHA_EMISION" class="java.util.Date"/>
 	<parameter name="CLIENTE_CUIT" class="java.lang.String"/>
 	<parameter name="CLIENTE_COND_IVA" class="java.lang.String"/>
 	<parameter name="CLIENTE_RAZON" class="java.lang.String"/>
 	<parameter name="CLIENTE_DOM" class="java.lang.String"/>
-	<parameter name="TOTAL_LETRAS" class="java.lang.String"/>
-	<parameter name="TOTAL" class="java.math.BigDecimal"/>
+	<parameter name="SALDO" class="java.math.BigDecimal"/>
 	<parameter name="BG_IMG" class="java.io.InputStream"/>
-	<parameter name="COPIA" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-FE\\sistema-facturacion\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_OBJECT" class="java.lang.Object"/>
-	<parameter name="EFECTIVO" class="java.math.BigDecimal"/>
-	<parameter name="CHEQUE" class="java.math.BigDecimal"/>
-	<field name="nroCheque" class="java.lang.String"/>
-	<field name="tipo" class="java.lang.String"/>
-	<field name="banco" class="java.lang.String"/>
-	<field name="total" class="java.math.BigDecimal"/>
+	<field name="fecha" class="java.util.Date"/>
+	<field name="nroComprobante" class="java.lang.String"/>
+	<field name="fechaVto" class="java.util.Date"/>
+	<field name="saldo" class="java.math.BigDecimal"/>
+	<field name="debe" class="java.math.BigDecimal"/>
+	<field name="haber" class="java.math.BigDecimal"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<rectangle>
@@ -71,13 +68,6 @@
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[PASSO 50 - ROJAS, BUENOS AIRES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="12" y="188" width="111" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Condición de venta:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="11" y="111" width="94" height="15" forecolor="#90B58D"/>
@@ -152,15 +142,8 @@
 				<text><![CDATA[VAN DER BEKEN
 FRANCISCO NICOLAS]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="289" y="44" width="73" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Comp. Nro.:]]></text>
-			</staticText>
 			<line>
-				<reportElement x="277" y="36" width="1" height="103"/>
+				<reportElement x="277" y="0" width="1" height="139"/>
 				<graphicElement>
 					<pen lineColor="#90B58D"/>
 				</graphicElement>
@@ -170,14 +153,7 @@ FRANCISCO NICOLAS]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha de Emisión:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="122" y="188" width="111" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Otra]]></text>
+				<text><![CDATA[Resumen al:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="420" y="122" width="51" height="15" forecolor="#90B58D"/>
@@ -214,23 +190,17 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<text><![CDATA[CUIT:]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement x="258" y="0" width="39" height="36"/>
-				<graphicElement>
-					<pen lineColor="#90B58D"/>
-				</graphicElement>
-			</rectangle>
+			<staticText>
+				<reportElement x="278" y="0" width="277" height="36" forecolor="#90B58D"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESUMEN DE CUENTA]]></text>
+			</staticText>
 		</band>
 	</background>
 	<title>
 		<band height="231" splitType="Stretch">
-			<staticText>
-				<reportElement x="305" y="0" width="229" height="36" forecolor="#000000"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="19" isBold="true"/>
-				</textElement>
-				<text><![CDATA[RECIBO]]></text>
-			</staticText>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="373" y="64" width="98" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -238,20 +208,6 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{FECHA_EMISION}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="362" y="44" width="75" height="15" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{COMP_NRO}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="258" y="0" width="39" height="36" forecolor="#000000"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="28" isBold="true"/>
-				</textElement>
-				<text><![CDATA[R]]></text>
-			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="123" y="169" width="110" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -288,7 +244,7 @@ FRANCISCO NICOLAS]]></text>
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="26"/>
+				<reportElement x="0" y="0" width="67" height="26"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -298,10 +254,10 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[TIPO]]></text>
+				<text><![CDATA[FECHA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="100" height="26"/>
+				<reportElement x="67" y="0" width="154" height="26"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -311,10 +267,10 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[NRO. CHEQUE]]></text>
+				<text><![CDATA[NRO. COMP.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="0" width="255" height="26"/>
+				<reportElement x="221" y="0" width="72" height="26"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -324,7 +280,7 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[BANCO]]></text>
+				<text><![CDATA[FECHA VTO.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="455" y="0" width="100" height="26"/>
@@ -337,47 +293,73 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[TOTAL]]></text>
+				<text><![CDATA[SALDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="0" width="80" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[DEBE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="0" width="82" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[HABER]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="100" height="20"/>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="67" height="20"/>
 				<box>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
 					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
 					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="100" y="0" width="100" height="20"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="67" y="0" width="154" height="20"/>
 				<box>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
 					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
 					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(null == $F{nroCheque}) ? "-" : $F{nroCheque}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nroComprobante}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="200" y="0" width="255" height="20"/>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="221" y="0" width="72" height="20"/>
 				<box>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
 					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
 					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(null == $F{banco}) ? "-" : $F{banco}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fechaVto}]]></textFieldExpression>
 			</textField>
-			<textField pattern="$ #,##0.00">
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="455" y="0" width="100" height="20"/>
 				<box>
 					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
@@ -387,7 +369,31 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<paragraph rightIndent="4"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="293" y="0" width="80" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{debe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="373" y="0" width="82" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{haber}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -395,75 +401,26 @@ FRANCISCO NICOLAS]]></text>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="201" splitType="Stretch">
+		<band height="56" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="3" width="555" height="115"/>
+				<reportElement x="0" y="3" width="555" height="46"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="27" width="82" height="25" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[(null == $P{EFECTIVO}) ? "-" : $P{EFECTIVO}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="123" y="12" width="426" height="15" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL_LETRAS}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="455" y="172" width="100" height="25" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{COPIA}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="87" width="80" height="25" forecolor="#000000"/>
+				<reportElement x="455" y="14" width="96" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="14" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{TOTAL}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{SALDO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="404" y="52" width="65" height="25" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Cheque(s): $]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="351" y="87" width="118" height="25" forecolor="#000000"/>
+				<reportElement x="337" y="14" width="118" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total: $]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="403" y="27" width="66" height="25" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Efectivo: $]]></text>
-			</staticText>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="52" width="82" height="25" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-					<font size="10" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[(null == $P{CHEQUE}) ? "-" :$P{CHEQUE}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="5" y="12" width="118" height="15" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Recibimos la suma de: ]]></text>
+				<text><![CDATA[SALDO: $]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

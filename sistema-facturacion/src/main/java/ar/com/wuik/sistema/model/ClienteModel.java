@@ -1,9 +1,12 @@
 package ar.com.wuik.sistema.model;
 
+import java.math.BigDecimal;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import ar.com.wuik.sistema.entities.Cliente;
+import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.table.WTableModel;
 
 public class ClienteModel extends WTableModel<Cliente> {
@@ -14,8 +17,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 	private static final long serialVersionUID = -3277760177146580417L;
 
 	public ClienteModel() {
-		super(new String[] { "RAZÓN SOCIAL", "CUIT/CUIL/DNI", "DIRECCIÓN", "TELÉFONO",
-				"CELULAR", "LOCALIDAD", "COND. IVA", "ESTADO" });
+		super(new String[] { "RAZÓN SOCIAL", "CUIT/CUIL/DNI", "DIRECCIÓN", "TELÉFONO", "LOCALIDAD", "COND. IVA", "SALDO", "ESTADO" });
 	}
 
 	@Override
@@ -29,9 +31,9 @@ public class ClienteModel extends WTableModel<Cliente> {
 		fila[1] = t.getTipoDocumento() + " " + t.getDocumento();
 		fila[2] = t.getDireccion();
 		fila[3] = t.getTelefono();
-		fila[4] = t.getCelular();
-		fila[5] = t.getLocalidad().getNombre();
-		fila[6] = t.getCondicionIVA().getAbreviacion();
+		fila[4] = t.getLocalidad().getNombre();
+		fila[5] = t.getCondicionIVA().getAbreviacion();
+		fila[6] = AppUtils.formatPeso(t.getSaldo());
 		fila[7] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
 				"/icons/activo.png")) : new ImageIcon(this.getClass()
 				.getResource("/icons/inactivo.png"));
@@ -55,7 +57,7 @@ public class ClienteModel extends WTableModel<Cliente> {
 		case 5:
 			return String.class;
 		case 6:
-			return String.class;
+			return BigDecimal.class;
 		case 7:
 			return Icon.class;
 		}

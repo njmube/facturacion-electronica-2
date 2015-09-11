@@ -102,6 +102,7 @@ public class AppUtils {
 	}
 
 	public static String formatPeso(BigDecimal value) {
-		return "$ " + WUtils.getValue(value).toEngineeringString();
+		boolean negativo = (value.doubleValue() < 0);
+		return (negativo ? "-" : "") + "$ " + WUtils.getValue(value).abs().toEngineeringString();
 	}
 }

@@ -21,21 +21,23 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 	public ComprobanteModel() {
 		super(new String[] { "TIPO/NRO COMP", "CAE", "VTO. CAE", "F. VTA.",
 				"SUBTOTAL", "TOTAL IVA", "OTROS IMP.", "TOTAL", "FACTURADA",
-				"PAGADO", "ESTADO" });
+				"ESTADO" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.11, 0.12, 0.09, 0.08, 0.10, 0.10, 0.10, 0.10,
-				0.10, 0.05, 0.05 };
+		return new double[] { 0.16, 0.12, 0.09, 0.08, 0.10, 0.10, 0.10, 0.10,
+				0.10, 0.05};
 	}
 
 	@Override
 	protected Object[] getRow(Comprobante t, Object[] fila) {
-		fila[0] = t.getTipoComprobante().getValue() + "-"
+		fila[0] = t.getTipoComprobante().getValue()
+				+ "-"
 				+ ((WUtils.isNotEmpty(t.getNroCompFormato())) ? t
 						.getNroCompFormato() : (WUtils.isNotEmpty(t
-						.getNroComprobante()) ? t.getNroComprobante() : "0000-00000000"));
+						.getNroComprobante()) ? t.getNroComprobante()
+						: "0000-00000000"));
 		fila[1] = t.getCae();
 		fila[2] = WUtils.getStringFromDate(t.getFechaCAE());
 		fila[3] = WUtils.getStringFromDate(t.getFechaVenta());
@@ -49,13 +51,10 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 		fila[7] = AppUtils.formatPeso(WUtils.getValue(t.getTotal().add(
 				totalTributos)));
 		fila[8] = getEstadoFacturacion(t.getEstadoFacturacion());
-		fila[9] = t.isPago() ? new ImageIcon(this.getClass().getResource(
-				"/icons/pago.png")) : new ImageIcon(this.getClass()
-				.getResource("/icons/impago.png"));
-		fila[10] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
+		fila[9] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
 				"/icons/activo.png")) : new ImageIcon(this.getClass()
 				.getResource("/icons/inactivo.png"));
-		fila[11] = t.getId();
+		fila[10] = t.getId();
 		return fila;
 	}
 
@@ -116,8 +115,6 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 		case 8:
 			return Icon.class;
 		case 9:
-			return Icon.class;
-		case 10:
 			return Icon.class;
 		}
 		return Object.class;

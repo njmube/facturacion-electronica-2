@@ -14,12 +14,18 @@ public class WTextFieldDecimal extends JTextField {
 	private static final long serialVersionUID = 6489470619885871880L;
 	private int integers;
 	private int decimals;
+	private boolean negativeAllowed = Boolean.FALSE;
 
 	public WTextFieldDecimal(int integers, int decimals) {
+		this(integers, decimals, false);
+	}
+
+	public WTextFieldDecimal(int integers, int decimals, boolean negativeAllowed) {
 		setHorizontalAlignment(JTextField.RIGHT);
 		addKeyListener(new KeyListenerDecimal());
 		this.integers = integers;
 		this.decimals = decimals;
+		this.negativeAllowed = negativeAllowed;
 	}
 
 	public WTextFieldDecimal() {
@@ -42,7 +48,7 @@ public class WTextFieldDecimal extends JTextField {
 				final JTextField component = (JTextField) event.getSource();
 				final String decimalNumber = component.getText()
 						+ event.getKeyChar();
-				final String regExp = "^\\d{0," + integers + "}+\\.?\\d{0,"
+				String regExp = ((negativeAllowed) ? "^-?" : "^") +"\\d{0," + integers + "}+\\.?\\d{0,"
 						+ decimals + "}$";
 				boolean match = Pattern.matches(regExp, decimalNumber);
 				if (!match) {

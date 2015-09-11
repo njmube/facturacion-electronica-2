@@ -247,7 +247,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new ComprobanteIFrame(selectedItem));
+							addModalIFrame(new ComprobanteIFrame(selectedItem, ClienteIFrame.this));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -287,7 +287,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new ReciboIFrame(selectedItem));
+							addModalIFrame(new ReciboIFrame(selectedItem,
+									ClienteIFrame.this));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -317,16 +318,34 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Ver Cheques", null);
 
+		WToolbarButton buttonResumen = new WToolbarButton("Resumen de Cuenta",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/resumen_cuenta.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							addModalIFrame(new ResumenCuentaIFrame(selectedItem));
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar un solo Cliente",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Resumen de Cuenta", null);
+
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
-		// toolbarButtons.add(buttonActivar);
-		// toolbarButtons.add(buttonNotasCreditos);
-		// toolbarButtons.add(buttonNotasDebitos);
 		toolbarButtons.add(buttonFacturas);
 		toolbarButtons.add(buttonRemitos);
 		toolbarButtons.add(buttonRecibos);
 		toolbarButtons.add(buttonCheques);
+		toolbarButtons.add(buttonResumen);
 		return toolbarButtons;
 	}
 
@@ -416,7 +435,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					Long selectedItem = tablePanel.getSelectedItemID();
 					if (null != selectedItem) {
 						addModalIFrame(new ComprobanteVerIFrame(selectedItem,
-								TipoComprobante.NOTA_CREDITO));
+								TipoComprobante.NOTA_CREDITO,
+								ClienteIFrame.this));
 					} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un Cliente",
@@ -440,7 +460,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					Long selectedItem = tablePanel.getSelectedItemID();
 					if (null != selectedItem) {
 						addModalIFrame(new ComprobanteVerIFrame(selectedItem,
-								TipoComprobante.NOTA_DEBITO));
+								TipoComprobante.NOTA_DEBITO, ClienteIFrame.this));
 					} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un Cliente",
@@ -463,7 +483,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					Long selectedItem = tablePanel.getSelectedItemID();
 					if (null != selectedItem) {
 						addModalIFrame(new ComprobanteVerIFrame(selectedItem,
-								TipoComprobante.FACTURA));
+								TipoComprobante.FACTURA, ClienteIFrame.this));
 					} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un solo Cliente",
@@ -507,7 +527,8 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
 					if (null != selectedItem) {
-						addModalIFrame(new ReciboVerIFrame(selectedItem));
+						addModalIFrame(new ReciboVerIFrame(selectedItem,
+								ClienteIFrame.this));
 					} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un Cliente",

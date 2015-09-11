@@ -395,14 +395,14 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 	private TipoDocumentoEnum getTipoDocumento(TipoDocumento tipoDocumento) {
 		switch (tipoDocumento) {
-		case CUIL:
-			return TipoDocumentoEnum.CUIL;
+//		case CUIL:
+//			return TipoDocumentoEnum.CUIL;
 		case CUIT:
 			return TipoDocumentoEnum.CUIT;
-		case DNI:
-			return TipoDocumentoEnum.DNI;
-		case OTROS:
-			return TipoDocumentoEnum.OTROS;
+//		case DNI:
+//			return TipoDocumentoEnum.DNI;
+//		case OTROS:
+//			return TipoDocumentoEnum.OTROS;
 		}
 		return null;
 	}
@@ -602,13 +602,12 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		comprobanteDTO.setDetalles(detallesDTO);
 		comprobanteDTO.setCae(comprobanteAfip.getCae());
 		comprobanteDTO.setVtoCAE(comprobanteAfip.getFechaCAE());
-		comprobanteDTO.setCompNro(comprobanteAfip.getNroComprobante());
+		comprobanteDTO.setCompNro(comprobanteAfip.getNroCompFormato());
 		comprobanteDTO.setFechaEmision(comprobanteAfip.getFechaVenta());
 		comprobanteDTO.setIva105(subtotalIVA105);
 		comprobanteDTO.setIva21(subtotalIVA21);
 		comprobanteDTO.setLetra(comprobanteAfip.getTipoLetraComprobante()
 				.name());
-		comprobanteDTO.setPtoVta(comprobanteAfip.getPtoVenta().toString());
 		comprobanteDTO.setSubtotal(comprobanteAfip.getSubtotal());
 		comprobanteDTO.setSubtotalConIVA(comprobanteAfip.getTotal());
 		comprobanteDTO.setTipo(comprobanteAfip.getTipoComprobante()

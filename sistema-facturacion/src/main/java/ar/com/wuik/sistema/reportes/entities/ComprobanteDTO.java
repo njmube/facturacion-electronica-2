@@ -9,7 +9,6 @@ public class ComprobanteDTO {
 	private String letra;
 	private String tipo;
 	private String compNro;
-	private String ptoVta;
 	private Date fechaEmision;
 	private String clienteCuit;
 	private String clienteDomicilio;
@@ -162,14 +161,6 @@ public class ComprobanteDTO {
 
 	public void setCodigoBarras(String codigoBarras) {
 		this.codigoBarras = codigoBarras;
-	}
-
-	public String getPtoVta() {
-		return ptoVta;
-	}
-
-	public void setPtoVta(String ptoVta) {
-		this.ptoVta = ptoVta;
 	}
 
 	public BigDecimal getOtrosTributos() {

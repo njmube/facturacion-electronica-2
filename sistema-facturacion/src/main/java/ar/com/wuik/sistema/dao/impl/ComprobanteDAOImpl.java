@@ -64,7 +64,6 @@ public class ComprobanteDAOImpl extends GenericCrudHBDAOImpl<Comprobante> implem
 		List<Long> idsToExclude = filter.getIdsToExclude();
 		List<Long> idsToInclude = filter.getIdsToInclude();
 		EstadoFacturacion estadoFacturacion = filter.getEstadoFacturacion();
-		Boolean paga = filter.getPaga();
 		Date desde = filter.getDesde();
 		Date hasta = filter.getHasta();
 		TipoComprobante tipo = filter.getTipoComprobante();
@@ -102,10 +101,6 @@ public class ComprobanteDAOImpl extends GenericCrudHBDAOImpl<Comprobante> implem
 
 		if (WUtils.isNotEmpty(idsToExclude)) {
 			criteria.add(Restrictions.not(Restrictions.in("id", idsToExclude)));
-		}
-
-		if (null != paga) {
-			criteria.add(Restrictions.eq("pago", paga));
 		}
 
 		if (null != desde && null != hasta) {

@@ -61,11 +61,8 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblObservaciones;
 	private JTextArea txaObservaciones;
 	private JScrollPane scrollPane;
-	private JLabel txtTotalLiquidacion;
-	private JLabel lblTotalLiq;
 	private JLabel lblTotal;
 	private JLabel txtTotalPesos;
-	private WTablePanel<Comprobante> tblLiquidacion;
 	private WTablePanel<PagoReciboCheque> tblCheques;
 	private JLabel txfEfectivo;
 	private JLabel lblEfectivo;
@@ -89,7 +86,6 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_EFECTIVO, obtenerPagoEfectivo());
 			model.addValue(CAMPO_OBSERVACIONES, recibo.getObservaciones());
 			populateComponents(model);
-			refreshLiquidaciones();
 			refreshPagosCheques();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -110,7 +106,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ReciboVistaIFrame.class.getResource("/icons/recibo.png")));
-		setBounds(0, 0, 926, 505);
+		setBounds(0, 0, 650, 505);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -128,17 +124,14 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 904, 421);
+			pnlBusqueda.setBounds(10, 11, 631, 421);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
 			pnlBusqueda.add(getLblObservaciones());
 			pnlBusqueda.add(getScrollPane());
-			pnlBusqueda.add(getTxtTotalLiquidacion());
-			pnlBusqueda.add(getLblTotalLiq());
 			pnlBusqueda.add(getLblTotal());
 			pnlBusqueda.add(getTxtTotalPesos());
-			pnlBusqueda.add(getTblLiquidacion());
 			pnlBusqueda.add(getTblCheques());
 			pnlBusqueda.add(getTxfEfectivo());
 			pnlBusqueda.add(getLblEfectivo());
@@ -159,7 +152,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(811, 437, 103, 30);
+			btnCerrar.setBounds(538, 437, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -220,7 +213,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			lblObservaciones = new JLabel("Observaciones:");
 			lblObservaciones.setIcon(new ImageIcon(ReciboVistaIFrame.class.getResource("/icons/observaciones.png")));
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(445, 26, 116, 25);
+			lblObservaciones.setBounds(309, 26, 116, 25);
 		}
 		return lblObservaciones;
 	}
@@ -240,47 +233,17 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(571, 25, 187, 43);
+			scrollPane.setBounds(435, 25, 187, 43);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
-	}
-
-	protected Comprobante getComprobanteById(Long selectedItem) {
-		for (Comprobante comprobante : recibo.getComprobantes()) {
-			if (comprobante.getId().equals(selectedItem)) {
-				return comprobante;
-			}
-		}
-		return null;
-	}
-
-	private JLabel getTxtTotalLiquidacion() {
-		if (txtTotalLiquidacion == null) {
-			txtTotalLiquidacion = new JLabel();
-			txtTotalLiquidacion.setHorizontalAlignment(SwingConstants.LEFT);
-			txtTotalLiquidacion.setText("$ 0.00");
-			txtTotalLiquidacion.setBounds(344, 384, 125, 25);
-			txtTotalLiquidacion.setFont(WFrameUtils.getCustomFont(
-					FontSize.LARGE, Font.BOLD));
-		}
-		return txtTotalLiquidacion;
-	}
-
-	private JLabel getLblTotalLiq() {
-		if (lblTotalLiq == null) {
-			lblTotalLiq = new JLabel("Total a Liquidar: $");
-			lblTotalLiq.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotalLiq.setBounds(209, 384, 125, 25);
-		}
-		return lblTotalLiq;
 	}
 
 	private JLabel getLblTotal() {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Total Entrega: $");
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotal.setBounds(638, 384, 121, 25);
+			lblTotal.setBounds(436, 172, 121, 25);
 		}
 		return lblTotal;
 	}
@@ -292,24 +255,15 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			txtTotalPesos.setHorizontalAlignment(SwingConstants.LEFT);
 			txtTotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
-			txtTotalPesos.setBounds(769, 384, 125, 25);
+			txtTotalPesos.setBounds(567, 172, 125, 25);
 		}
 		return txtTotalPesos;
-	}
-
-	private WTablePanel<Comprobante> getTblLiquidacion() {
-		if (tblLiquidacion == null) {
-			tblLiquidacion = new WTablePanel(DetalleLiquidacionModel.class,
-					"Liquidación");
-			tblLiquidacion.setBounds(10, 122, 459, 250);
-		}
-		return tblLiquidacion;
 	}
 
 	private WTablePanel<PagoReciboCheque> getTblCheques() {
 		if (tblCheques == null) {
 			tblCheques = new WTablePanel(PagoReciboChequeModel.class, "Cheques");
-			tblCheques.setBounds(479, 171, 415, 202);
+			tblCheques.setBounds(10, 172, 415, 238);
 		}
 		return tblCheques;
 	}
@@ -331,14 +285,6 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		total = total.add(cheques);
 		recibo.setTotal(total);
 		getTxtTotalPesos().setText(recibo.getTotal().toEngineeringString());
-
-		// TOTAL LIQUIDACION
-		BigDecimal totalLiquidacion = BigDecimal.ZERO;
-		for (Comprobante liquidacion : recibo.getComprobantes()) {
-			totalLiquidacion = totalLiquidacion.add(liquidacion.getTotal());
-		}
-		getTxtTotalLiquidacion()
-				.setText(totalLiquidacion.toEngineeringString());
 	}
 
 	private JLabel getTxfEfectivo() {
@@ -348,7 +294,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			txfEfectivo.setName(CAMPO_EFECTIVO);
 			txfEfectivo.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
-			txfEfectivo.setBounds(565, 133, 125, 25);
+			txfEfectivo.setBounds(96, 134, 125, 25);
 		}
 		return txfEfectivo;
 	}
@@ -357,7 +303,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		if (lblEfectivo == null) {
 			lblEfectivo = new JLabel("Efectivo: $");
 			lblEfectivo.setHorizontalAlignment(SwingConstants.LEFT);
-			lblEfectivo.setBounds(479, 133, 76, 25);
+			lblEfectivo.setBounds(10, 134, 76, 25);
 		}
 		return lblEfectivo;
 	}
@@ -407,23 +353,5 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		pagoCheques.add(pagoReciboCheque);
 		getTblCheques().addData(pagoCheques);
 		calcularTotales();
-	}
-
-	public void addComprobantes(List<Comprobante> comprobantes) {
-		this.recibo.getComprobantes().addAll(comprobantes);
-		refreshLiquidaciones();
-	}
-
-	protected void refreshLiquidaciones() {
-		getTblLiquidacion().addData(this.recibo.getComprobantes());
-		calcularTotales();
-	}
-
-	private List<Long> getIdsComprobantes() {
-		List<Long> ids = new ArrayList<Long>();
-		for (Comprobante comprobante : recibo.getComprobantes()) {
-			ids.add(comprobante.getId());
-		}
-		return ids;
 	}
 }

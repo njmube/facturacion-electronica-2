@@ -68,28 +68,6 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 		search();
 	}
 
-	public SeleccionarComprobanteIFrame(ReciboVerIFrame reciboVerIFrame,
-			List<Long> idsComprobantesToExclude, Long idCliente) {
-		this.reciboVerIFrame = reciboVerIFrame;
-		setBorder(new LineBorder(null, 1, true));
-		setTitle("Seleccionar Comprobantes");
-		setFrameIcon(new ImageIcon(
-				SeleccionarComprobanteIFrame.class
-						.getResource("/icons/seleccionar.png")));
-		setBounds(0, 0, 1015, 424);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(null);
-		getContentPane().add(getTablePanel());
-		getContentPane().add(getBtnCerrar());
-		
-		
-		filter.setIdCliente(idCliente);
-		filter.setIdsToExclude(idsComprobantesToExclude);
-		filter.setEstadoFacturacion(EstadoFacturacion.FACTURADO);
-		filter.setPaga(Boolean.FALSE);
-		search();
-	}
-
 	/**
 	 * @see ar.com.wuik.swing.components.security.WSecure#applySecurity(java.util.List)
 	 */
@@ -136,9 +114,6 @@ public class SeleccionarComprobanteIFrame extends WAbstractModelIFrame
 
 								if (null != comprobanteVerIFrame) {
 									comprobanteVerIFrame
-											.addComprobantes(comprobantes);
-								} else if (null != reciboVerIFrame) {
-									reciboVerIFrame
 											.addComprobantes(comprobantes);
 								}
 

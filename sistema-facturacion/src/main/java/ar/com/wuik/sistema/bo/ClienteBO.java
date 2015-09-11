@@ -5,6 +5,7 @@ import java.util.List;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.ClienteFilter;
+import ar.com.wuik.sistema.reportes.entities.ResumenCuentaDTO;
 
 public interface ClienteBO {
 
@@ -25,4 +26,7 @@ public interface ClienteBO {
 	void activar(Long id) throws BusinessException;
 
 	void desactivar(Long id) throws BusinessException;
+
+	ResumenCuentaDTO obtenerResumenCuenta(Long id)
+			throws BusinessException;
 }

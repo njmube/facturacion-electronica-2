@@ -37,7 +37,6 @@ import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.DetalleComprobanteModel;
 import ar.com.wuik.sistema.model.DetalleComprobantesAsocModel;
 import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
-import ar.com.wuik.sistema.model.TributoComprobanteModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
@@ -87,7 +86,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblCondIva;
 	private JLabel lblLetra;
 	private JLabel lblTipoComp;
-	private WTablePanel<TributoComprobante> tblTributos;
 	private JLabel lblImporteOtrosTributos;
 	private JLabel lblOtrosTributos;
 	private JLabel lblCAE;
@@ -95,9 +93,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblFechaVtoCae;
 	private JLabel lblFechaCAE;
 	private JLabel lblFacturado;
-	private JLabel lblPago;
 	private JLabel lblComprobantesAsociados;
-	private JLabel lblTributos;
 
 	/**
 	 * @wbp.parser.constructor
@@ -118,7 +114,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 					WUtils.getStringFromDate(comprobante.getFechaCAE()));
 
 			popularEstadoFacturacion(comprobante);
-			popularEstadoPago(comprobante);
 			popularEstado(comprobante);
 
 			refreshDetalles();
@@ -172,17 +167,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 
 	}
 
-	private void popularEstadoPago(Comprobante comprobante) {
-		if (comprobante.isPago()) {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/pago.png")));
-		} else {
-			lblPago.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/impago.png")));
-		}
-
-	}
-
 	private void popularEstadoFacturacion(Comprobante comprobante) {
 		EstadoFacturacion estadoFacturacion = comprobante
 				.getEstadoFacturacion();
@@ -224,7 +208,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 		getContentPane().add(getBtnCerrar());
 		getContentPane().add(getLblEstado());
 		getContentPane().add(getLblFacturado());
-		getContentPane().add(getLblPago());
 	}
 
 	@Override
@@ -636,10 +619,8 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			panel_1.add(getLblSubtotal());
 			panel_1.add(getLblObservaciones());
 			panel_1.add(getScrollPane());
-			panel_1.add(getTblTributos());
 			panel_1.add(getLblImporteOtrosTributos());
 			panel_1.add(getLblOtrosTributos());
-			panel_1.add(getLblTributos());
 		}
 		return panel_1;
 	}
@@ -727,14 +708,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 		return lblTipoComp;
 	}
 
-	private WTablePanel<TributoComprobante> getTblTributos() {
-		if (tblTributos == null) {
-			tblTributos = new WTablePanel(TributoComprobanteModel.class, "");
-			tblTributos.setBounds(10, 36, 462, 138);
-		}
-		return tblTributos;
-	}
-
 	public void addTributo(TributoComprobante tributo) {
 		if (null == tributo.getCoalesceId()) {
 			tributo.setComprobante(comprobante);
@@ -745,7 +718,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 	}
 
 	private void refreshTributos() {
-		getTblTributos().addData(comprobante.getTributos());
 		calcularTotales();
 	}
 
@@ -831,17 +803,6 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 		return lblFacturado;
 	}
 
-	private JLabel getLblPago() {
-		if (lblPago == null) {
-			lblPago = new JLabel("Pago:");
-			lblPago.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblPago.setHorizontalTextPosition(SwingConstants.LEFT);
-			lblPago.setBounds(323, 678, 89, 19);
-			lblPago.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
-		}
-		return lblPago;
-	}
-
 	private JLabel getLblComprobantesAsociados() {
 		if (lblComprobantesAsociados == null) {
 			lblComprobantesAsociados = new JLabel("Comprobantes asociados:");
@@ -851,16 +812,5 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			lblComprobantesAsociados.setBounds(695, 129, 184, 25);
 		}
 		return lblComprobantesAsociados;
-	}
-
-	private JLabel getLblTributos() {
-		if (lblTributos == null) {
-			lblTributos = new JLabel("Tributos:");
-			lblTributos.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
-					.getResource("/icons/compAsociados.png")));
-			lblTributos.setBounds(10, 8, 184, 25);
-			
-		}
-		return lblTributos;
 	}
 }
