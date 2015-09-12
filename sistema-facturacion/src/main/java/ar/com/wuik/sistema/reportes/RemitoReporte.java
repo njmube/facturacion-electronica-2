@@ -17,6 +17,7 @@ import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.reportes.entities.DetalleRemitoDTO;
 import ar.com.wuik.sistema.reportes.entities.RemitoDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
+import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class RemitoReporte {
 
@@ -33,17 +34,30 @@ public class RemitoReporte {
 			parameters.put("CLIENTE_COND_IVA", remitoDTO.getClienteCondIVA());
 			parameters.put("CLIENTE_RAZON", remitoDTO.getClienteRazonSocial());
 			parameters.put("CLIENTE_DOM", remitoDTO.getClienteDomicilio());
+			parameters.put("OBSERVACIONES", remitoDTO.getObservaciones());
 			parameters.put("BG_IMG", RemitoReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			parameters.put("COPIA", "ORIGINAL");
 
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(RemitoReporte.class
 							.getResourceAsStream("/reportes/remito.jasper"));
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
+			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
 
+			// DUPLICADO
+			parameters.put("COPIA", "DUPLICADO");
+			parameters.put("BG_IMG", RemitoReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(
+							detalles));
+
+			JasperPrint jasperPrint = WJasperUtils.concatReports(
+					jasperPrintOriginal, jasperPrintDuplicado);
+			
 			// JasperPrintManager.printReport(jasperPrint, Boolean.TRUE);
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {

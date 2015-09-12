@@ -35,13 +35,13 @@ import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.AppUtils;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
+import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
-import ar.com.wuik.swing.components.WTextFieldDecimal;
 
 public class ClienteVerIFrame extends WAbstractModelIFrame {
 	/**
@@ -67,6 +67,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_TIPO_DOC = "tipoDoc";
 	private static final String CAMPO_TIPO_IVA = "tipoIva";
 	private static final String CAMPO_SALDO_INICIAL = "saldoInicial";
+	private static final String CAMPO_MAIL = "mail";
 	private ClienteIFrame clienteIFrame;
 	private JTextField txtDireccion;
 	private JTextField txtTelefono;
@@ -84,6 +85,8 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 	private WTextFieldNumeric txtDNIOtros;
 	private JLabel lblSaldoInicial;
 	private WTextFieldDecimal textFieldDecimal;
+	private JLabel lblMail;
+	private JTextField txtMail;
 
 	/**
 	 * Create the frame.
@@ -122,6 +125,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_CELULAR, cliente.getCelular());
 			model.addValue(CAMPO_TIPO_IVA, cliente.getCondicionIVA().getId());
 			model.addValue(CAMPO_SALDO_INICIAL, cliente.getSaldoInicial());
+			model.addValue(CAMPO_MAIL, cliente.getMail());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -248,7 +252,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 421, 359);
+			pnlBusqueda.setBounds(10, 11, 421, 385);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getTxtRazonSocial());
@@ -270,6 +274,8 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtDNIOtros());
 			pnlBusqueda.add(getLblSaldoInicial());
 			pnlBusqueda.add(getTextFieldDecimal());
+			pnlBusqueda.add(getLblMail());
+			pnlBusqueda.add(getTxtMail());
 		}
 		return pnlBusqueda;
 	}
@@ -330,6 +336,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						String celular = model.getValue(CAMPO_CELULAR);
 						WOption tipoIva = model.getValue(CAMPO_TIPO_IVA);
 						String saldoInicial = model.getValue(CAMPO_SALDO_INICIAL);
+						String mail = model.getValue(CAMPO_MAIL);
 
 						cliente.setRazonSocial(razonSocial);
 						cliente.setDireccion(direccion);
@@ -345,6 +352,8 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 						cliente.setDocumento((WUtils.isNotEmpty(documento) && !"##-########-#"
 								.equals(documento)) ? documento : documento2);
+						
+						cliente.setMail(mail);
 
 						ClienteBO clienteBO = AbstractFactory
 								.getInstance(ClienteBO.class);
@@ -584,5 +593,22 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 			textFieldDecimal.setBounds(141, 311, 145, 25);
 		}
 		return textFieldDecimal;
+	}
+	private JLabel getLblMail() {
+		if (lblMail == null) {
+			lblMail = new JLabel("Mail:");
+			lblMail.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblMail.setBounds(10, 347, 121, 25);
+		}
+		return lblMail;
+	}
+	private JTextField getTxtMail() {
+		if (txtMail == null) {
+			txtMail = new JTextField();
+			txtMail.setName(CAMPO_MAIL);
+			txtMail.setBounds(141, 347, 247, 25);
+			txtMail.setDocument(new WTextFieldLimit(55, Boolean.TRUE));
+		}
+		return txtMail;
 	}
 }

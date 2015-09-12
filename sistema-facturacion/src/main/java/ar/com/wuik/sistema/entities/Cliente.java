@@ -47,6 +47,8 @@ public class Cliente extends BaseEntity {
 	private BigDecimal saldo;
 	@Column(name = "SALDO_INICIAL")
 	private BigDecimal saldoInicial;
+	@Column(name = "MAIL")
+	private String mail;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -142,6 +144,14 @@ public class Cliente extends BaseEntity {
 
 	public void setSaldoInicial(BigDecimal saldoInicial) {
 		this.saldoInicial = saldoInicial;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 
 }

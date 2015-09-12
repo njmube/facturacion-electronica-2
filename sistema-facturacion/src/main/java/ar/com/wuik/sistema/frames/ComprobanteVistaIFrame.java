@@ -496,7 +496,7 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 				detalle.setCantidad(1);
 				detalle.setComprobante(comprobante);
 				detalle.setTipoIVA(producto.getTipoIVA());
-				detalle.setPrecio(producto.getPrecio());
+//				detalle.setPrecio(producto.getPrecio());
 				detalle.setProducto(producto);
 				detalle.setTemporalId(System.currentTimeMillis());
 				detalles.add(detalle);

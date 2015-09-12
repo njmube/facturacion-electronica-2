@@ -188,6 +188,7 @@ public class RemitoBOImpl implements RemitoBO {
 		remitoDTO.setDetalles(detallesDTO);
 		remitoDTO.setCompNro(remito.getNumero());
 		remitoDTO.setFechaEmision(remito.getFecha());
+		remitoDTO.setObservaciones(remito.getObservaciones());
 		return remitoDTO;
 	}
 }

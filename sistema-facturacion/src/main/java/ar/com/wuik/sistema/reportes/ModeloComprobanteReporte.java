@@ -11,6 +11,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import ar.com.wuik.sistema.exceptions.ReportException;
+import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class ModeloComprobanteReporte {
 
@@ -24,10 +25,22 @@ public class ModeloComprobanteReporte {
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(ModeloComprobanteReporte.class
 							.getResourceAsStream("/reportes/comprobante_template.jasper"));
+			
+			
+			JasperReport jasperReport2 = (JasperReport) JRLoader
+					.loadObject(ModeloComprobanteReporte.class
+							.getResourceAsStream("/reportes/resumen_cuenta_template.jasper"));
 
-			// ORIGINAL
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
+			JasperPrint jasperPrint1 = JasperFillManager.fillReport(
 					jasperReport, parameters, new JREmptyDataSource());
+			
+			parameters.put("BG_IMG", ModeloComprobanteReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrint2 = JasperFillManager.fillReport(
+					jasperReport2, parameters, new JREmptyDataSource());
+
+			JasperPrint jasperPrint = WJasperUtils.concatReports(
+					jasperPrint1, jasperPrint2);
 
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 

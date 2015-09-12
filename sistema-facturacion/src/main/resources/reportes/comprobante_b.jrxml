@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_data" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="14"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -13,17 +13,9 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="COMP_LETRA" class="java.lang.String"/>
 	<parameter name="COMP_TIPO" class="java.lang.String"/>
-	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
-	<parameter name="DOMICILIO" class="java.lang.String"/>
-	<parameter name="COND_IVA" class="java.lang.String"/>
-	<parameter name="PTO_VTA" class="java.lang.String"/>
 	<parameter name="COMP_NRO" class="java.lang.String"/>
 	<parameter name="FECHA_EMISION" class="java.util.Date"/>
-	<parameter name="CUIT" class="java.lang.String"/>
-	<parameter name="ING_BRUTOS" class="java.lang.String"/>
-	<parameter name="INICIO_ATC" class="java.util.Date"/>
 	<parameter name="CLIENTE_CUIT" class="java.lang.String"/>
 	<parameter name="CLIENTE_COND_IVA" class="java.lang.String"/>
 	<parameter name="CLIENTE_RAZON" class="java.lang.String"/>
@@ -42,9 +34,10 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-UTN\\atenea\\sigma\\sigma-web\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SUBREPORT_OBJECT" class="java.lang.Object"/>
+	<parameter name="SUBREPORT" class="java.lang.Object"/>
 	<parameter name="TRIBUTOS" class="java.lang.Object"/>
 	<parameter name="SUBTOTAL_CON_IVA" class="java.math.BigDecimal"/>
+	<parameter name="OBSERVACIONES" class="java.lang.String"/>
 	<field name="codigo" class="java.lang.String"/>
 	<field name="producto" class="java.lang.String"/>
 	<field name="cantidad" class="java.lang.Integer"/>
@@ -92,13 +85,6 @@
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[PASSO 50 - ROJAS, BUENOS AIRES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="12" y="188" width="111" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Condición de venta:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="11" y="111" width="94" height="15" forecolor="#90B58D"/>
@@ -173,13 +159,6 @@
 				<text><![CDATA[VAN DER BEKEN
 FRANCISCO NICOLAS]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="289" y="44" width="73" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Comp. Nro.:]]></text>
-			</staticText>
 			<line>
 				<reportElement x="277" y="36" width="1" height="103"/>
 				<graphicElement>
@@ -192,13 +171,6 @@ FRANCISCO NICOLAS]]></text>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de Emisión:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="122" y="188" width="111" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Otra]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="420" y="122" width="51" height="15" forecolor="#90B58D"/>
@@ -266,13 +238,13 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COMP_NRO}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<staticText>
 				<reportElement x="258" y="0" width="39" height="36" forecolor="#000000"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="28" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{COMP_LETRA}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[B]]></text>
+			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="123" y="169" width="110" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -318,6 +290,27 @@ FRANCISCO NICOLAS]]></text>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Remito(s):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="44" width="73" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comp. Nro.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="195" width="111" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición de venta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="122" y="195" width="111" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Otra]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -444,7 +437,7 @@ FRANCISCO NICOLAS]]></text>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="289" y="0" width="131" height="20" forecolor="#000000">
-					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("B")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<pen lineStyle="Dashed"/>
@@ -461,7 +454,7 @@ FRANCISCO NICOLAS]]></text>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="420" y="0" width="135" height="20" forecolor="#000000">
-					<printWhenExpression><![CDATA[$P{COMP_LETRA}.equals("B")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<pen lineStyle="Dashed"/>
@@ -479,7 +472,22 @@ FRANCISCO NICOLAS]]></text>
 		</band>
 	</detail>
 	<columnFooter>
-		<band splitType="Stretch"/>
+		<band height="56" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="77" y="8" width="457" height="41"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(null == $P{OBSERVACIONES}) ? "-" : $P{OBSERVACIONES} + "-------"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="8" width="77" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Observaciones:]]></text>
+			</staticText>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="201" splitType="Stretch">
@@ -510,7 +518,7 @@ FRANCISCO NICOLAS]]></text>
 					<subreportParameterExpression><![CDATA[$P{OTROS_TRIBUTOS}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[$P{TRIBUTOS}]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_OBJECT}]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT}]]></subreportExpression>
 			</subreport>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="469" y="69" width="80" height="15" forecolor="#000000"/>

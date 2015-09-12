@@ -15,6 +15,7 @@ import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.reportes.entities.ReciboDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
+import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class ReciboReporte {
 
@@ -35,16 +36,36 @@ public class ReciboReporte {
 			parameters.put("CHEQUE", reciboDTO.getTotalCheque());
 			parameters.put("TOTAL", reciboDTO.getTotal());
 			parameters.put("TOTAL_LETRAS", reciboDTO.getTotalLetras());
+			parameters.put("OBSERVACIONES", reciboDTO.getObservaciones());
+			parameters.put("LIQUIDACIONES", reciboDTO.getLiquidaciones());
 			parameters.put("BG_IMG", ReciboReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			parameters.put("COPIA", "ORIGINAL");
 
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(ReciboReporte.class
 							.getResourceAsStream("/reportes/recibo.jasper"));
-
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
+			
+			JasperReport subReport = (JasperReport) JRLoader
+					.loadObject(ReciboReporte.class
+							.getResourceAsStream("/reportes/sub_liquidaciones.jasper"));
+			
+			parameters.put("SUBREPORT", subReport);
+			
+			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(reciboDTO.getDetalles()));
+			
+			// DUPLICADO
+			parameters.put("COPIA", "DUPLICADO");
+			parameters.put("BG_IMG", ReciboReporte.class
+					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(reciboDTO.getDetalles()));
 
+			
+			JasperPrint jasperPrint = WJasperUtils.concatReports(
+					jasperPrintOriginal, jasperPrintDuplicado);
+			
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {
 			throw new ReportException(bexc, "Error al obtener Recibo");
@@ -54,6 +75,6 @@ public class ReciboReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarRecibo(1L);
+		generarRecibo(6L);
 	}
 }

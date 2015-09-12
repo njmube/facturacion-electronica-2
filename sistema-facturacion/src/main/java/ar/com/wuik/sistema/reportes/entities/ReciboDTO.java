@@ -17,6 +17,8 @@ public class ReciboDTO {
 	private BigDecimal total;
 	private String totalLetras;
 	private List<DetalleReciboDTO> detalles;
+	private List<LiquidacionDTO> liquidaciones;
+	private String observaciones;
 
 	public String getCompNro() {
 		return compNro;
@@ -104,6 +106,22 @@ public class ReciboDTO {
 
 	public void setTotalCheque(BigDecimal totalCheque) {
 		this.totalCheque = totalCheque;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+
+	public List<LiquidacionDTO> getLiquidaciones() {
+		return liquidaciones;
+	}
+
+	public void setLiquidaciones(List<LiquidacionDTO> liquidaciones) {
+		this.liquidaciones = liquidaciones;
 	}
 
 }

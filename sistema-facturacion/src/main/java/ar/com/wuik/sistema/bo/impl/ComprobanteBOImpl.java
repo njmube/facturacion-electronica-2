@@ -621,6 +621,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		comprobanteDTO.setTotal(total);
 		comprobanteDTO.setOtrosTributos(comprobanteAfip.getTotalTributos());
 		comprobanteDTO.setCodigoBarras(comprobanteAfip.getCodBarras());
+		comprobanteDTO.setObservaciones(comprobanteAfip.getObservaciones());
 		return comprobanteDTO;
 	}
 

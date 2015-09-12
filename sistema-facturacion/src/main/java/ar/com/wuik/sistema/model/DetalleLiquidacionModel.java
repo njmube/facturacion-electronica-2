@@ -20,7 +20,7 @@ public class DetalleLiquidacionModel extends WTableModel<Comprobante> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.15, 0.60, 0.25 };
+		return new double[] { 0.30, 0.50, 0.20 };
 	}
 
 	@Override

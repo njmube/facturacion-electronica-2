@@ -33,6 +33,9 @@ public class Recibo extends BaseEntity {
 	private String numero;
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinTable(name = "recibos_comprobantes", joinColumns = { @JoinColumn(name = "ID_RECIBO", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "ID_COMPROBANTE", nullable = false, updatable = false) })
+	private Set<Comprobante> comprobantes;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PagoReciboEfectivo> pagosEfectivo;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recibo", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -43,6 +46,7 @@ public class Recibo extends BaseEntity {
 	public Recibo() {
 		this.pagosCheque = new ArrayList<PagoReciboCheque>();
 		this.pagosEfectivo = new ArrayList<PagoReciboEfectivo>();
+		this.comprobantes = new HashSet<Comprobante>();
 	}
 
 	public Cliente getCliente() {
@@ -107,6 +111,14 @@ public class Recibo extends BaseEntity {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	public Set<Comprobante> getComprobantes() {
+		return comprobantes;
+	}
+
+	public void setComprobantes(Set<Comprobante> comprobantes) {
+		this.comprobantes = comprobantes;
 	}
 
 }

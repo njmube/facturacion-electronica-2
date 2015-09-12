@@ -1,7 +1,6 @@
 package ar.com.wuik.sistema.reportes.entities;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class DetalleReciboDTO {
 

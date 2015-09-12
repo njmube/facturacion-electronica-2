@@ -12,6 +12,7 @@ public class RemitoDTO {
 	private String clienteRazonSocial;
 	private String clienteCondIVA;
 	private List<DetalleRemitoDTO> detalles;
+	private String observaciones;
 
 	public String getCompNro() {
 		return compNro;
@@ -67,6 +68,14 @@ public class RemitoDTO {
 
 	public void setDetalles(List<DetalleRemitoDTO> detalles) {
 		this.detalles = detalles;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }

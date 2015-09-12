@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="302"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -143,18 +143,11 @@
 FRANCISCO NICOLAS]]></text>
 			</staticText>
 			<line>
-				<reportElement x="277" y="0" width="1" height="139"/>
+				<reportElement x="277" y="36" width="1" height="103"/>
 				<graphicElement>
 					<pen lineColor="#90B58D"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement x="289" y="64" width="84" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Resumen al:]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="420" y="122" width="51" height="15" forecolor="#90B58D"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -190,12 +183,18 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<text><![CDATA[CUIT:]]></text>
 			</staticText>
+			<rectangle>
+				<reportElement x="257" y="0" width="39" height="36"/>
+				<graphicElement>
+					<pen lineColor="#90B58D"/>
+				</graphicElement>
+			</rectangle>
 			<staticText>
-				<reportElement x="278" y="0" width="277" height="36" forecolor="#90B58D"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="19" isBold="true"/>
+				<reportElement x="289" y="64" width="84" height="15" forecolor="#90B58D"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[RESUMEN DE CUENTA]]></text>
+				<text><![CDATA[Fecha de Emisión:]]></text>
 			</staticText>
 		</band>
 	</background>
@@ -236,6 +235,20 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_RAZON}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="296" y="0" width="259" height="36" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESUMEN DE CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="0" width="39" height="36" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="28" isBold="true"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

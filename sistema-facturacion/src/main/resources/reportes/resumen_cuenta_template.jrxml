@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_template" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="429"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -13,47 +13,23 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="COMP_LETRA" class="java.lang.String"/>
-	<parameter name="COMP_TIPO" class="java.lang.String"/>
-	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
-	<parameter name="DOMICILIO" class="java.lang.String"/>
-	<parameter name="COND_IVA" class="java.lang.String"/>
-	<parameter name="PTO_VTA" class="java.lang.String"/>
-	<parameter name="COMP_NRO" class="java.lang.String"/>
 	<parameter name="FECHA_EMISION" class="java.util.Date"/>
-	<parameter name="CUIT" class="java.lang.String"/>
-	<parameter name="ING_BRUTOS" class="java.lang.String"/>
-	<parameter name="INICIO_ATC" class="java.util.Date"/>
 	<parameter name="CLIENTE_CUIT" class="java.lang.String"/>
 	<parameter name="CLIENTE_COND_IVA" class="java.lang.String"/>
 	<parameter name="CLIENTE_RAZON" class="java.lang.String"/>
 	<parameter name="CLIENTE_DOM" class="java.lang.String"/>
-	<parameter name="REMITOS" class="java.lang.String"/>
-	<parameter name="SUBTOTAL" class="java.math.BigDecimal"/>
-	<parameter name="IVA_21" class="java.math.BigDecimal"/>
-	<parameter name="IVA_105" class="java.math.BigDecimal"/>
-	<parameter name="TOTAL" class="java.math.BigDecimal"/>
-	<parameter name="CAE" class="java.lang.String"/>
-	<parameter name="VTO_CAE" class="java.util.Date"/>
+	<parameter name="SALDO" class="java.math.BigDecimal"/>
 	<parameter name="BG_IMG" class="java.io.InputStream"/>
-	<parameter name="COD_BARRAS" class="java.lang.String"/>
-	<parameter name="COPIA" class="java.lang.String"/>
-	<parameter name="OTROS_TRIBUTOS" class="java.math.BigDecimal"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-UTN\\atenea\\sigma\\sigma-web\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-FE\\sistema-facturacion\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_OBJECT" class="java.lang.Object"/>
-	<parameter name="TRIBUTOS" class="java.lang.Object"/>
-	<parameter name="SUBTOTAL_CON_IVA" class="java.math.BigDecimal"/>
-	<field name="codigo" class="java.lang.String"/>
-	<field name="producto" class="java.lang.String"/>
-	<field name="cantidad" class="java.lang.Integer"/>
-	<field name="precioUnit" class="java.math.BigDecimal"/>
-	<field name="subtotal" class="java.math.BigDecimal"/>
-	<field name="alicuota" class="java.math.BigDecimal"/>
-	<field name="subtotalConIVA" class="java.math.BigDecimal"/>
-	<field name="comentario" class="java.lang.String"/>
-	<field name="precioUnitConIVA" class="java.math.BigDecimal"/>
+	<field name="fecha" class="java.util.Date"/>
+	<field name="nroComprobante" class="java.lang.String"/>
+	<field name="fechaVto" class="java.util.Date"/>
+	<field name="saldo" class="java.math.BigDecimal"/>
+	<field name="debe" class="java.math.BigDecimal"/>
+	<field name="haber" class="java.math.BigDecimal"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<rectangle>
@@ -167,11 +143,18 @@
 FRANCISCO NICOLAS]]></text>
 			</staticText>
 			<line>
-				<reportElement x="277" y="36" width="1" height="103"/>
+				<reportElement x="277" y="0" width="1" height="139"/>
 				<graphicElement>
 					<pen lineColor="#90B58D"/>
 				</graphicElement>
 			</line>
+			<staticText>
+				<reportElement x="289" y="64" width="84" height="15" forecolor="#90B58D"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resumen al:]]></text>
+			</staticText>
 			<staticText>
 				<reportElement x="420" y="122" width="51" height="15" forecolor="#90B58D"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -207,18 +190,12 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<text><![CDATA[CUIT:]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement x="258" y="0" width="39" height="36"/>
-				<graphicElement>
-					<pen lineColor="#90B58D"/>
-				</graphicElement>
-			</rectangle>
 			<staticText>
-				<reportElement x="289" y="64" width="84" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+				<reportElement x="278" y="0" width="277" height="36" forecolor="#90B58D"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="19" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha de Emisión:]]></text>
+				<text><![CDATA[RESUMEN DE CUENTA]]></text>
 			</staticText>
 		</band>
 	</background>
@@ -238,7 +215,7 @@ FRANCISCO NICOLAS]]></text>
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="201" splitType="Stretch"/>
+		<band height="56" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
 		<band splitType="Stretch"/>

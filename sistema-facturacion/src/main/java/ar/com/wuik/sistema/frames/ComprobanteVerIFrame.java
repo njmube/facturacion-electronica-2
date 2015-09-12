@@ -595,25 +595,25 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 	private List<WToolbarButton> getToolbarButtonsDetalles() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Detalle",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
-							DetalleComprobante detalle = getDetalleById(selectedItem);
-							addModalIFrame(new EditarDetalleComprobanteIFrame(
-									detalle, ComprobanteVerIFrame.this));
-						} else {
-							WTooltipUtils.showMessage(
-									"Debe seleccionar un Detalle",
-									(JButton) e.getSource(), MessageType.ALERTA);
-						}
-					}
-				}, "Editar", null);
+		// WToolbarButton buttonEdit = new WToolbarButton("Editar Detalle",
+		// new ImageIcon(WCalendarIFrame.class
+		// .getResource("/icons/edit.png")),
+		// new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// Long selectedItem = tblDetalle.getSelectedItemID();
+		// if (null != selectedItem) {
+		// DetalleComprobante detalle = getDetalleById(selectedItem);
+		// addModalIFrame(new EditarDetalleComprobanteIFrame(
+		// detalle, ComprobanteVerIFrame.this));
+		// } else {
+		// WTooltipUtils.showMessage(
+		// "Debe seleccionar un Detalle",
+		// (JButton) e.getSource(), MessageType.ALERTA);
+		// }
+		// }
+		// }, "Editar", null);
 		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Detalle",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
@@ -658,7 +658,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				}, "Nuevo Detalle", null);
 
 		toolbarButtons.add(buttonNuevoDetalle);
-		toolbarButtons.add(buttonEdit);
+		// toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonEliminar);
 		return toolbarButtons;
 	}
@@ -742,6 +742,21 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 					"Detalles");
 			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
 			tblDetalle.setBounds(10, 289, 675, 160);
+			tblDetalle.addWTableListener(new WTableListener() {
+
+				@Override
+				public void singleClickListener(Object[] selectedItem) {
+				}
+
+				@Override
+				public void doubleClickListener(Object[] selectedItem) {
+					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
+
+					DetalleComprobante detalle = getDetalleById(selectedId);
+					addModalIFrame(new EditarDetalleComprobanteIFrame(detalle,
+							ComprobanteVerIFrame.this));
+				}
+			});
 		}
 		return tblDetalle;
 	}
@@ -769,11 +784,28 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				@Override
 				public void doubleClickListener(Object[] selectedItem) {
 					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-					addDetalle(selectedId);
+
+					if (existeDetalleProducto(selectedId)) {
+						addDetalle(selectedId);
+					} else {
+						addModalIFrame(new DetalleComprobanteIFrame(selectedId,
+								ComprobanteVerIFrame.this));
+					}
 				}
 			});
 		}
 		return tblProducto;
+	}
+
+	protected boolean existeDetalleProducto(Long selectedId) {
+		List<DetalleComprobante> detalles = comprobante.getDetalles();
+		for (DetalleComprobante detalleFactura : detalles) {
+			if (null != detalleFactura.getProducto()
+					&& detalleFactura.getProducto().getId().equals(selectedId)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	protected void addDetalle(Long selectedId) {
@@ -796,7 +828,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				detalle.setCantidad(1);
 				detalle.setComprobante(comprobante);
 				detalle.setTipoIVA(producto.getTipoIVA());
-				detalle.setPrecio(producto.getPrecio());
+				detalle.setPrecio(BigDecimal.ZERO);
 				detalle.setProducto(producto);
 				detalle.setTemporalId(System.currentTimeMillis());
 				detalles.add(detalle);
@@ -1034,7 +1066,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class, "Comprobantes asociados");
+			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class,
+					"Comprobantes asociados");
 			tablePanel.setVisible(false);
 			tablePanel.addToolbarButtons(getToolbarButtonsComprobantes());
 			tablePanel.setBounds(695, 289, 296, 160);

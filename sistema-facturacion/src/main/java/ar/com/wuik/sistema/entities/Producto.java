@@ -1,7 +1,5 @@
 package ar.com.wuik.sistema.entities;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,10 +19,6 @@ public class Producto extends BaseEntity {
 	private String descripcion;
 	@Column(name = "CODIGO")
 	private String codigo;
-	@Column(name = "COSTO")
-	private BigDecimal costo;
-	@Column(name = "PRECIO")
-	private BigDecimal precio;
 	@Column(name = "ACTIVO")
 	private boolean activo;
 	@Column(name = "UBICACION")
@@ -52,22 +46,6 @@ public class Producto extends BaseEntity {
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
-	}
-
-	public BigDecimal getCosto() {
-		return costo;
-	}
-
-	public void setCosto(BigDecimal costo) {
-		this.costo = costo;
-	}
-
-	public BigDecimal getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(BigDecimal precio) {
-		this.precio = precio;
 	}
 
 	public boolean isActivo() {

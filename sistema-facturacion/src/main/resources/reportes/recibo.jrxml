@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="203"/>
+	<property name="ireport.y" value="631"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -26,9 +26,11 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-FE\\sistema-facturacion\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="SUBREPORT_OBJECT" class="java.lang.Object"/>
 	<parameter name="EFECTIVO" class="java.math.BigDecimal"/>
 	<parameter name="CHEQUE" class="java.math.BigDecimal"/>
+	<parameter name="OBSERVACIONES" class="java.lang.String"/>
+	<parameter name="LIQUIDACIONES" class="java.util.List"/>
+	<parameter name="SUBREPORT" class="java.lang.Object"/>
 	<field name="nroCheque" class="java.lang.String"/>
 	<field name="tipo" class="java.lang.String"/>
 	<field name="banco" class="java.lang.String"/>
@@ -71,13 +73,6 @@
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[PASSO 50 - ROJAS, BUENOS AIRES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="12" y="188" width="111" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Condición de venta:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="11" y="111" width="94" height="15" forecolor="#90B58D"/>
@@ -152,33 +147,12 @@
 				<text><![CDATA[VAN DER BEKEN
 FRANCISCO NICOLAS]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="289" y="44" width="73" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Comp. Nro.:]]></text>
-			</staticText>
 			<line>
 				<reportElement x="277" y="36" width="1" height="103"/>
 				<graphicElement>
 					<pen lineColor="#90B58D"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement x="289" y="64" width="84" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Fecha de Emisión:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="122" y="188" width="111" height="15" forecolor="#90B58D"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Otra]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="420" y="122" width="51" height="15" forecolor="#90B58D"/>
 				<textElement verticalAlignment="Middle" markup="none">
@@ -220,6 +194,13 @@ FRANCISCO NICOLAS]]></text>
 					<pen lineColor="#90B58D"/>
 				</graphicElement>
 			</rectangle>
+			<staticText>
+				<reportElement x="289" y="64" width="84" height="15" forecolor="#90B58D"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Emisión:]]></text>
+			</staticText>
 		</band>
 	</background>
 	<title>
@@ -250,7 +231,7 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="28" isBold="true"/>
 				</textElement>
-				<text><![CDATA[R]]></text>
+				<text><![CDATA[-]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="123" y="169" width="110" height="15" forecolor="#000000"/>
@@ -280,6 +261,27 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CLIENTE_RAZON}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="289" y="44" width="73" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comp. Nro.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="190" width="111" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición de venta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="123" y="190" width="111" height="15" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Otra]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
@@ -392,18 +394,33 @@ FRANCISCO NICOLAS]]></text>
 		</band>
 	</detail>
 	<columnFooter>
-		<band splitType="Stretch"/>
+		<band height="56" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="77" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Observaciones:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="77" y="10" width="457" height="41"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(null == $P{OBSERVACIONES}) ? "-" : $P{OBSERVACIONES} + "-------"]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="201" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="3" width="555" height="115"/>
+				<reportElement x="0" y="3" width="555" height="153"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</rectangle>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="27" width="82" height="25" forecolor="#000000"/>
+				<reportElement x="467" y="69" width="82" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -424,35 +441,35 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$P{COPIA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="87" width="80" height="25" forecolor="#000000"/>
+				<reportElement x="467" y="129" width="82" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TOTAL}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="404" y="52" width="65" height="25" forecolor="#000000"/>
+				<reportElement x="401" y="94" width="66" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cheque(s): $]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="351" y="87" width="118" height="25" forecolor="#000000"/>
+				<reportElement x="401" y="129" width="66" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total: $]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="403" y="27" width="66" height="25" forecolor="#000000"/>
+				<reportElement x="401" y="69" width="66" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Efectivo: $]]></text>
 			</staticText>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="469" y="52" width="82" height="25" forecolor="#000000"/>
+				<reportElement x="467" y="94" width="82" height="25" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -465,6 +482,11 @@ FRANCISCO NICOLAS]]></text>
 				</textElement>
 				<text><![CDATA[Recibimos la suma de: ]]></text>
 			</staticText>
+			<subreport>
+				<reportElement x="5" y="39" width="284" height="104"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{LIQUIDACIONES})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT}]]></subreportExpression>
+			</subreport>
 		</band>
 	</pageFooter>
 	<summary>

@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -78,7 +77,6 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 	private Long idCliente;
 	private JLabel lblTotal;
 	private JTextField txtTotalPesos;
-	private WTablePanel<Comprobante> tblLiquidacion;
 	private WTablePanel<PagoReciboCheque> tblCheques;
 	private WTextFieldDecimal txfEfectivo;
 	private JLabel lblEfectivo;
@@ -89,6 +87,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblSaldoTotal;
 	private JTextField txtSaldo;
 	private BigDecimal saldoTotal;
+	private WTablePanel<Comprobante> tblLiquidacion;
 
 	/**
 	 * @wbp.parser.constructor
@@ -192,7 +191,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ReciboVerIFrame.class.getResource("/icons/recibo.png")));
-		setBounds(0, 0, 692, 506);
+		setBounds(0, 0, 773, 506);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -222,7 +221,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 674, 421);
+			pnlBusqueda.setBounds(10, 11, 751, 421);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
@@ -239,6 +238,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtSaldoActual());
 			pnlBusqueda.add(getLblSaldoTotal());
 			pnlBusqueda.add(getTxtSaldo());
+			pnlBusqueda.add(getTblLiquidacion());
 		}
 		return pnlBusqueda;
 	}
@@ -461,7 +461,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Entrega: $");
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotal.setBounds(435, 214, 90, 25);
+			lblTotal.setBounds(516, 349, 90, 25);
 		}
 		return lblTotal;
 	}
@@ -475,7 +475,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtTotalPesos.setEditable(false);
 			txtTotalPesos.setColumns(10);
-			txtTotalPesos.setBounds(535, 214, 125, 25);
+			txtTotalPesos.setBounds(616, 349, 125, 25);
 		}
 		return txtTotalPesos;
 	}
@@ -586,7 +586,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		if (lblSaldo == null) {
 			lblSaldo = new JLabel("Saldo Actual:");
 			lblSaldo.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblSaldo.setBounds(435, 178, 90, 25);
+			lblSaldo.setBounds(516, 313, 90, 25);
 		}
 		return lblSaldo;
 	}
@@ -600,7 +600,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtSaldoActual.setEditable(false);
 			txtSaldoActual.setColumns(10);
-			txtSaldoActual.setBounds(535, 178, 125, 25);
+			txtSaldoActual.setBounds(616, 313, 125, 25);
 		}
 		return txtSaldoActual;
 	}
@@ -609,7 +609,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 		if (lblSaldoTotal == null) {
 			lblSaldoTotal = new JLabel("Nuevo Saldo: $");
 			lblSaldoTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblSaldoTotal.setBounds(435, 250, 90, 25);
+			lblSaldoTotal.setBounds(516, 385, 90, 25);
 		}
 		return lblSaldoTotal;
 	}
@@ -623,8 +623,100 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 					Font.BOLD));
 			txtSaldo.setEditable(false);
 			txtSaldo.setColumns(10);
-			txtSaldo.setBounds(535, 250, 125, 25);
+			txtSaldo.setBounds(616, 385, 125, 25);
 		}
 		return txtSaldo;
+	}
+
+	private WTablePanel<Comprobante> getTblLiquidacion() {
+		if (tblLiquidacion == null) {
+			tblLiquidacion = new WTablePanel(DetalleLiquidacionModel.class,
+					"Comprobantes");
+			tblLiquidacion.addToolbarButtons(getToolbarButtonsDetalles());
+			tblLiquidacion.setBounds(435, 171, 306, 128);
+		}
+		return tblLiquidacion;
+	}
+
+	public void addComprobantes(List<Comprobante> comprobantes) {
+		this.recibo.getComprobantes().addAll(comprobantes);
+		refreshLiquidaciones();
+	}
+
+	protected void refreshLiquidaciones() {
+		getTblLiquidacion().addData(this.recibo.getComprobantes());
+		calcularTotales();
+	}
+
+	private List<Long> getIdsComprobantes() {
+		List<Long> ids = new ArrayList<Long>();
+		for (Comprobante comprobante : recibo.getComprobantes()) {
+			ids.add(comprobante.getId());
+		}
+		return ids;
+	}
+
+	private List<WToolbarButton> getToolbarButtonsDetalles() {
+		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
+		WToolbarButton buttonEdit = new WToolbarButton("Agregar Comprobante",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/add.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addModalIFrame(new SeleccionarComprobanteIFrame(
+								ReciboVerIFrame.this, getIdsComprobantes(),
+								idCliente));
+					}
+				}, "Agregar", null);
+		WToolbarButton buttonEliminar = new WToolbarButton(
+				"Quitar Comprobante",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/delete.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						List<Long> selectedItems = tblLiquidacion
+								.getSelectedItemsID();
+						if (WUtils.isNotEmpty(selectedItems)) {
+							int result = JOptionPane
+									.showConfirmDialog(
+											getParent(),
+											"¿Desea eliminar los Comprobantes seleccionados?",
+											"Alerta",
+											JOptionPane.OK_CANCEL_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+							if (result == JOptionPane.OK_OPTION) {
+								for (Long selectedItem : selectedItems) {
+									Comprobante comprobante = getComprobanteById(selectedItem);
+									recibo.getComprobantes()
+											.remove(comprobante);
+								}
+								refreshLiquidaciones();
+							}
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar al menos un Comprobante",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Quitar", null);
+
+		toolbarButtons.add(buttonEdit);
+		toolbarButtons.add(buttonEliminar);
+		return toolbarButtons;
+	}
+
+	protected Comprobante getComprobanteById(Long selectedItem) {
+		for (Comprobante comprobante : recibo.getComprobantes()) {
+			if (comprobante.getId().equals(selectedItem)) {
+				return comprobante;
+			}
+		}
+		return null;
 	}
 }

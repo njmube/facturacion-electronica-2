@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -33,11 +30,9 @@ import ar.com.wuik.sistema.model.DetalleLiquidacionModel;
 import ar.com.wuik.sistema.model.PagoReciboChequeModel;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
-import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
-import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
 import ar.com.wuik.swing.utils.WUtils;
@@ -68,6 +63,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblEfectivo;
 	private JLabel lblNro;
 	private JLabel txtNro;
+	private WTablePanel<Comprobante> tblLiquidaciones;
 
 	/**
 	 * @wbp.parser.constructor
@@ -87,8 +83,15 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_OBSERVACIONES, recibo.getObservaciones());
 			populateComponents(model);
 			refreshPagosCheques();
+			refreshLiquidaciones();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
+		}
+	}
+
+	private void refreshLiquidaciones() {
+		if (WUtils.isNotEmpty(this.recibo.getComprobantes())) {
+			getTblLiquidaciones().addData(this.recibo.getComprobantes());
 		}
 	}
 
@@ -106,7 +109,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ReciboVistaIFrame.class.getResource("/icons/recibo.png")));
-		setBounds(0, 0, 650, 505);
+		setBounds(0, 0, 755, 505);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -124,7 +127,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 631, 421);
+			pnlBusqueda.setBounds(10, 11, 733, 421);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getTxtFechaEmision());
 			pnlBusqueda.add(getLblFechaEmisin());
@@ -137,6 +140,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblEfectivo());
 			pnlBusqueda.add(getLblNro());
 			pnlBusqueda.add(getTxtNro());
+			pnlBusqueda.add(getTblLiquidaciones());
 		}
 		return pnlBusqueda;
 	}
@@ -152,7 +156,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboVistaIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(538, 437, 103, 30);
+			btnCerrar.setBounds(640, 437, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -243,7 +247,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		if (lblTotal == null) {
 			lblTotal = new JLabel("Total Entrega: $");
 			lblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTotal.setBounds(436, 172, 121, 25);
+			lblTotal.setBounds(435, 374, 121, 25);
 		}
 		return lblTotal;
 	}
@@ -255,7 +259,7 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 			txtTotalPesos.setHorizontalAlignment(SwingConstants.LEFT);
 			txtTotalPesos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
-			txtTotalPesos.setBounds(567, 172, 125, 25);
+			txtTotalPesos.setBounds(566, 374, 125, 25);
 		}
 		return txtTotalPesos;
 	}
@@ -353,5 +357,13 @@ public class ReciboVistaIFrame extends WAbstractModelIFrame {
 		pagoCheques.add(pagoReciboCheque);
 		getTblCheques().addData(pagoCheques);
 		calcularTotales();
+	}
+	private WTablePanel<Comprobante> getTblLiquidaciones() {
+		if (tblLiquidaciones == null) {
+			tblLiquidaciones = new WTablePanel(DetalleLiquidacionModel.class,
+					"Comprobantes");
+			tblLiquidaciones.setBounds(435, 172, 288, 172);
+		}
+		return tblLiquidaciones;
 	}
 }

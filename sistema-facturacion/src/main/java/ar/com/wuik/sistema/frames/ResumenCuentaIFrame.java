@@ -12,13 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.ClienteBO;
-import ar.com.wuik.sistema.bo.ComprobanteBO;
-import ar.com.wuik.sistema.entities.Comprobante;
-import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.model.DetalleResumenCuentaModel;
-import ar.com.wuik.sistema.reportes.ComprobanteReporte;
 import ar.com.wuik.sistema.reportes.ResumenReporte;
 import ar.com.wuik.sistema.reportes.entities.DetalleResumenCuentaDTO;
 import ar.com.wuik.sistema.reportes.entities.ResumenCuentaDTO;
@@ -29,8 +25,6 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
-import ar.com.wuik.swing.utils.WTooltipUtils;
-import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
 public class ResumenCuentaIFrame extends WAbstractModelIFrame implements
 		WSecure {

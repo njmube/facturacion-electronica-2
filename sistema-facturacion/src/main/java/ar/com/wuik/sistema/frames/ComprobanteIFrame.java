@@ -37,6 +37,7 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
+import ar.com.wuik.swing.utils.WUtils;
 
 public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 
@@ -51,13 +52,13 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 	private JLabel lblTipoComprobante;
 	private JComboBox cmbTipoComp;
 	private ClienteIFrame clienteIFrame;
-	
+
 	/**
 	 * Create the frame.
 	 */
 	public ComprobanteIFrame(Long idCliente, ClienteIFrame clienteIFrame) {
 		this.idCliente = idCliente;
-		this.clienteIFrame =clienteIFrame;
+		this.clienteIFrame = clienteIFrame;
 		setBorder(new LineBorder(null, 1, true));
 		setTitle("Comprobantes");
 		setFrameIcon(new ImageIcon(
@@ -371,14 +372,70 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Imprimir", null);
 
+		WToolbarButton buttonEnviar = new WToolbarButton("Enviar por Mail",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/mail.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							ComprobanteBO comprobanteBO = AbstractFactory
+									.getInstance(ComprobanteBO.class);
+							try {
+								Comprobante comprobante = comprobanteBO
+										.obtener(selectedItem);
+
+								if (comprobante.getEstadoFacturacion().equals(
+										EstadoFacturacion.FACTURADO)) {
+
+									Cliente cliente = comprobante.getCliente();
+
+									if (WUtils.isNotEmpty(cliente.getMail())) {
+										ComprobanteReporte
+												.generarImpresionEnviarMail(
+														selectedItem,
+														cliente.getMail());
+									} else {
+										WTooltipUtils
+												.showMessage(
+														"El cliente no posee Mail, debe agregarlo.",
+														(JButton) e.getSource(),
+														MessageType.ALERTA);
+									}
+								} else {
+									WTooltipUtils
+											.showMessage(
+													"El Comprobante debe estar facturado.",
+													(JButton) e.getSource(),
+													MessageType.ALERTA);
+								}
+							} catch (BusinessException bexc) {
+								showGlobalErrorMsg(bexc.getMessage());
+							} catch (ReportException rexc) {
+								showGlobalErrorMsg(rexc.getMessage());
+							}
+
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar un solo Comprobante.",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Enviar por Mail", null);
+
 		if (isClienteActivo()) {
 			// toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
 			toolbarButtons.add(buttonAnular);
 			toolbarButtons.add(buttonFacturar);
-			toolbarButtons.add(buttonImprimir);
 		}
+		toolbarButtons.add(buttonImprimir);
 		toolbarButtons.add(buttonVer);
+		toolbarButtons.add(buttonEnviar);
 		return toolbarButtons;
 	}
 

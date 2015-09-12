@@ -119,7 +119,7 @@ public class BackupIFrame extends WAbstractIFrame {
 									public void run() {
 										boolean error = Boolean.FALSE;
 										try {
-											MailUtil.sendMailBackup(targetBackup);
+											MailUtil.sendMailAttachment(targetBackup);
 										} catch (final Exception exc) {
 											error = Boolean.TRUE;
 											java.awt.EventQueue

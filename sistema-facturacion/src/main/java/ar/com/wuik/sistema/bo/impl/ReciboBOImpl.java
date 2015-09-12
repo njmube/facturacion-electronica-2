@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.bo.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import ar.com.wuik.sistema.bo.ReciboBO;
 import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.dao.ReciboDAO;
 import ar.com.wuik.sistema.entities.Cliente;
+import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.PagoReciboCheque;
 import ar.com.wuik.sistema.entities.PagoReciboEfectivo;
 import ar.com.wuik.sistema.entities.Recibo;
@@ -19,6 +21,7 @@ import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ReciboFilter;
 import ar.com.wuik.sistema.reportes.entities.DetalleReciboDTO;
+import ar.com.wuik.sistema.reportes.entities.LiquidacionDTO;
 import ar.com.wuik.sistema.reportes.entities.ReciboDTO;
 import ar.com.wuik.sistema.utils.HibernateUtil;
 import ar.com.wuik.sistema.utils.MonedaUtils;
@@ -126,7 +129,8 @@ public class ReciboBOImpl implements ReciboBO {
 		if (WUtils.isNotEmpty(pagosEfectivo)) {
 			BigDecimal totalEfectivo = BigDecimal.ZERO;
 			for (PagoReciboEfectivo pagoReciboEfectivo : pagosEfectivo) {
-				totalEfectivo = totalEfectivo.add(pagoReciboEfectivo.getTotal());
+				totalEfectivo = totalEfectivo
+						.add(pagoReciboEfectivo.getTotal());
 			}
 			reciboDTO.setTotalEfectivo(totalEfectivo);
 		}
@@ -134,7 +138,8 @@ public class ReciboBOImpl implements ReciboBO {
 		if (WUtils.isNotEmpty(pagosCheque)) {
 			BigDecimal totalCheque = BigDecimal.ZERO;
 			for (PagoReciboCheque pagoReciboCheque : pagosCheque) {
-				totalCheque = totalCheque.add(pagoReciboCheque.getCheque().getImporte());
+				totalCheque = totalCheque.add(pagoReciboCheque.getCheque()
+						.getImporte());
 			}
 			reciboDTO.setTotalCheque(totalCheque);
 		}
@@ -142,15 +147,36 @@ public class ReciboBOImpl implements ReciboBO {
 				pagosCheque);
 
 		reciboDTO.setDetalles(detalles);
+
+		List<LiquidacionDTO> liquidaciones = convertirLiquidaciones(recibo
+				.getComprobantes());
+
+		reciboDTO.setLiquidaciones(liquidaciones);
 		reciboDTO.setCompNro(recibo.getNumero());
 		reciboDTO.setFechaEmision(recibo.getFecha());
 
 		reciboDTO.setTotal(recibo.getTotal());
-		reciboDTO.setTotalLetras(MonedaUtils.enLetras(recibo.getTotal()).toUpperCase() + " --------------------------------");
-
+		reciboDTO.setTotalLetras(MonedaUtils.enLetras(recibo.getTotal())
+				.toUpperCase() + " PESOS --------------------------------");
+		reciboDTO.setObservaciones(recibo.getObservaciones());
 		return reciboDTO;
 	}
 
+	private List<LiquidacionDTO> convertirLiquidaciones(
+			Set<Comprobante> comprobantes) {
+		List<LiquidacionDTO> liquidaciones = new ArrayList<LiquidacionDTO>();
+		if (WUtils.isNotEmpty(comprobantes)) {
+			LiquidacionDTO liquidacion = null;
+			for (Comprobante comprobante : comprobantes) {
+				liquidacion = new LiquidacionDTO();
+				liquidacion.setFecha(comprobante.getFechaVenta());
+				liquidacion.setTotal(comprobante.getTotal());
+				liquidacion.setNro(comprobante.getNroCompFormato());
+				liquidaciones.add(liquidacion);
+			}
+		}
+		return liquidaciones;
+	}
 
 	private List<DetalleReciboDTO> convertirDetalles(
 			List<PagoReciboEfectivo> pagosEfectivo,
@@ -173,7 +199,8 @@ public class ReciboBOImpl implements ReciboBO {
 			for (PagoReciboCheque pagoReciboCheque : pagosCheque) {
 				detalle = new DetalleReciboDTO();
 				detalle.setTipo("CHEQUE");
-				detalle.setBanco(pagoReciboCheque.getCheque().getBanco().getNombre());
+				detalle.setBanco(pagoReciboCheque.getCheque().getBanco()
+						.getNombre());
 				detalle.setNroCheque(pagoReciboCheque.getCheque().getNumero());
 				detalle.setTotal(pagoReciboCheque.getCheque().getImporte());
 				detalles.add(detalle);
