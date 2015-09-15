@@ -409,16 +409,16 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 	private TipoTributoEnum getTipoTributo(TipoTributo tributo) {
 		switch (tributo) {
-		case IMP_INTERNOS:
-			return TipoTributoEnum.IMP_INTERNO;
-		case IMP_MUNIC:
-			return TipoTributoEnum.IMP_MUNICIPAL;
-		case PER_RET_IMP_GANANCIAS:
-			return TipoTributoEnum.OTRO;
+//		case IMP_INTERNOS:
+//			return TipoTributoEnum.IMP_INTERNO;
+//		case IMP_MUNIC:
+//			return TipoTributoEnum.IMP_MUNICIPAL;
+//		case PER_RET_IMP_GANANCIAS:
+//			return TipoTributoEnum.OTRO;
 		case PER_RET_ING_BRUTOS:
 			return TipoTributoEnum.OTRO;
-		case PER_RET_IVA:
-			return TipoTributoEnum.OTRO;
+//		case PER_RET_IVA:
+//			return TipoTributoEnum.OTRO;
 		case OTROS:
 			return TipoTributoEnum.OTRO;
 		}
