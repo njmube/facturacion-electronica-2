@@ -596,25 +596,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 	private List<WToolbarButton> getToolbarButtonsDetalles() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		// WToolbarButton buttonEdit = new WToolbarButton("Editar Detalle",
-		// new ImageIcon(WCalendarIFrame.class
-		// .getResource("/icons/edit.png")),
-		// new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// Long selectedItem = tblDetalle.getSelectedItemID();
-		// if (null != selectedItem) {
-		// DetalleComprobante detalle = getDetalleById(selectedItem);
-		// addModalIFrame(new EditarDetalleComprobanteIFrame(
-		// detalle, ComprobanteVerIFrame.this));
-		// } else {
-		// WTooltipUtils.showMessage(
-		// "Debe seleccionar un Detalle",
-		// (JButton) e.getSource(), MessageType.ALERTA);
-		// }
-		// }
-		// }, "Editar", null);
 		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Detalle",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
@@ -785,17 +766,20 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				@Override
 				public void doubleClickListener(Object[] selectedItem) {
 					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-
-					if (existeDetalleProducto(selectedId)) {
-						addDetalle(selectedId);
-					} else {
-						addModalIFrame(new DetalleComprobanteIFrame(selectedId,
-								ComprobanteVerIFrame.this));
-					}
+					addDetalleProducto(selectedId);
 				}
 			});
 		}
 		return tblProducto;
+	}
+
+	protected void addDetalleProducto(Long selectedId) {
+		if (existeDetalleProducto(selectedId)) {
+			addDetalle(selectedId);
+		} else {
+			addModalIFrame(new DetalleComprobanteIFrame(selectedId,
+					ComprobanteVerIFrame.this));
+		}
 	}
 
 	protected boolean existeDetalleProducto(Long selectedId) {
@@ -857,13 +841,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						} else {
 							if (productos.size() == 1) {
 								Long idProducto = productos.get(0).getId();
-								if (existeDetalleProducto(idProducto)) {
-									addDetalle(idProducto);
-								} else {
-									addModalIFrame(new DetalleComprobanteIFrame(
-											idProducto,
-											ComprobanteVerIFrame.this));
-								}
+								addDetalleProducto(idProducto);
 							}
 						}
 					} else {
@@ -903,7 +881,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		BigDecimal subtotalIVA21 = BigDecimal.ZERO;
 		BigDecimal subtotalIVA105 = BigDecimal.ZERO;
 		BigDecimal total = BigDecimal.ZERO;
-		// BigDecimal totalTributo = BigDecimal.ZERO;
 
 		List<DetalleComprobante> detalles = comprobante.getDetalles();
 		for (DetalleComprobante detalleFactura : detalles) {
@@ -917,13 +894,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			total = total.add(detalleFactura.getTotal());
 		}
 
-		// List<TributoComprobante> tributos = comprobante.getTributos();
-		// for (TributoComprobante tributoComprobante : tributos) {
-		// totalTributo = totalTributo.add(tributoComprobante.getImporte());
-		// }
-
 		comprobante.setSubtotal(WUtils.getValue(subtotal));
-		// comprobante.setTotalTributos(totalTributo);
 		comprobante.setTotal(WUtils.getValue(total));
 		comprobante.setIva(WUtils.getValue(total.subtract(subtotal)));
 
@@ -936,11 +907,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				WUtils.getValue(subtotalIVA21).toEngineeringString());
 		getTxtTotalPesos().setText(
 				WUtils.getValue(comprobante.getTotal()).toEngineeringString());
-		// getTxtTotalPesos().setText(
-		// WUtils.getValue(comprobante.getTotal().add(totalTributo))
-		// .toEngineeringString());
-		// getLblImporteOtrosTributos().setText(
-		// WUtils.getValue(totalTributo).toEngineeringString());
 	}
 
 	private JLabel getLblIVA21() {

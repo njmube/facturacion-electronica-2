@@ -73,12 +73,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		this.producto = new Producto();
 	}
 
-	public ProductoVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame) {
-		initializate("Nuevo Producto");
-		this.comprobanteVerIFrame = comprobanteVerIFrame;
-		this.producto = new Producto();
-	}
-
 	public ProductoVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame,
 			String texto) {
 		initializate("Nuevo Producto");
@@ -276,6 +270,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 					productoIFrame.search();
 				} else if (null != comprobanteVerIFrame) {
 					comprobanteVerIFrame.search();
+					comprobanteVerIFrame.addDetalleProducto(producto.getId());
 				} else if (null != remitoClienteVerIFrame) {
 					remitoClienteVerIFrame.search();
 				}

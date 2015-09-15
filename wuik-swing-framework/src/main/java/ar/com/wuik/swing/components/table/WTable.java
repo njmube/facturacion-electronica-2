@@ -86,7 +86,7 @@ public final class WTable<T> extends JTable {
 	 * //TODO: Describir el metodo resizeRows
 	 */
 	private void resizeRows() {
-		setRowHeight(25);
+		setRowHeight(22);
 	}
 
 	private void showColumnsSize() {
@@ -95,8 +95,6 @@ public final class WTable<T> extends JTable {
 
 					@Override
 					public void columnSelectionChanged(ListSelectionEvent e) {
-						// TODO Auto-generated method stub
-
 					}
 
 					@Override
