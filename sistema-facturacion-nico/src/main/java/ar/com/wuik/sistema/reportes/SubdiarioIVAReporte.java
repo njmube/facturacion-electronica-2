@@ -177,7 +177,7 @@ public class SubdiarioIVAReporte {
 							comprobante.getDetalles());
 					
 					
-					if (comprobante.getTipoComprobante().equals(TipoComprobante.NOTA_DEBITO)) {
+					if (comprobante.getTipoComprobante().equals(TipoComprobante.NOTA_CREDITO)) {
 						comprobanteDTO.setTotal(comprobanteDTO.getTotal().negate());
 						comprobanteDTO.setIva(comprobanteDTO.getIva().negate());
 						comprobanteDTO.setNeto(comprobanteDTO.getNeto().negate());
@@ -297,7 +297,7 @@ public class SubdiarioIVAReporte {
 									.getNroCompFormato() : "0000-00000000"));
 					comprobanteDTO.setTotal(comprobante.getTotal());
 					
-					if (comprobante.getTipoComprobante().equals(TipoComprobante.NOTA_DEBITO)) {
+					if (comprobante.getTipoComprobante().equals(TipoComprobante.NOTA_CREDITO)) {
 						comprobanteDTO.setTotal(comprobanteDTO.getTotal().negate());
 						comprobanteDTO.setIva(comprobanteDTO.getIva().negate());
 						comprobanteDTO.setNeto(comprobanteDTO.getNeto().negate());
