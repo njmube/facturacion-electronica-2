@@ -29,10 +29,12 @@ public class RemitoReporte {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_NRO", remitoDTO.getCompNro());
 			parameters.put("FECHA_EMISION", remitoDTO.getFechaEmision());
+			parameters.put("SHOW_ALL", true);
 			parameters.put("CLIENTE_CUIT", remitoDTO.getClienteCuit());
 			parameters.put("CLIENTE_COND_IVA", remitoDTO.getClienteCondIVA());
 			parameters.put("CLIENTE_RAZON", remitoDTO.getClienteRazonSocial());
 			parameters.put("CLIENTE_DOM", remitoDTO.getClienteDomicilio());
+			parameters.put("OBSERVACIONES", remitoDTO.getObservaciones());
 			parameters.put("BG_IMG", RemitoReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 

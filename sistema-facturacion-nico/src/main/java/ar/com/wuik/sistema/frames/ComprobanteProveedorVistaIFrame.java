@@ -52,6 +52,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
 	private static final String CAMPO_VTO_CAE = "vtoCae";
 	private static final String CAMPO_CAE = "cae";
+	private static final String CAMPO_NRO_COMP = "nroComp";
 	private JPanel pnlBusqueda;
 	private JButton btnCerrar;
 	private Comprobante comprobante;
@@ -81,6 +82,8 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 	private JLabel lblFechaVtoCae;
 	private JLabel lblFechaCAE;
 	private JLabel lblTributos;
+	private JLabel lblNroComp;
+	private JLabel txtNroComp;
 
 	/**
 	 * @wbp.parser.constructor
@@ -99,6 +102,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_CAE, comprobante.getCae());
 			model.addValue(CAMPO_VTO_CAE,
 					WUtils.getStringFromDate(comprobante.getFechaCAE()));
+			model.addValue(CAMPO_NRO_COMP, comprobante.getNroCompFormato());
 			
 			txaObservaciones.setText(comprobante.getObservaciones());
 			lblFechaCAE.setText(comprobante.getFechaCAE().toString());
@@ -207,6 +211,8 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblCae());
 			pnlBusqueda.add(getLblFechaVtoCae());
 			pnlBusqueda.add(getLblFechaCAE());
+			pnlBusqueda.add(getLblNroComp());
+			pnlBusqueda.add(getTxtNroComp());
 		}
 		return pnlBusqueda;
 	}
@@ -610,7 +616,7 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblFechaVtoCae() {
 		if (lblFechaVtoCae == null) {
-			lblFechaVtoCae = new JLabel("Fecha Vto. CAE:");
+			lblFechaVtoCae = new JLabel("Fecha Vto.:");
 			lblFechaVtoCae.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblFechaVtoCae.setBounds(366, 95, 110, 25);
 		}
@@ -638,5 +644,23 @@ public class ComprobanteProveedorVistaIFrame extends WAbstractModelIFrame {
 
 		}
 		return lblTributos;
+	}
+	private JLabel getLblNroComp() {
+		if (lblNroComp == null) {
+			lblNroComp = new JLabel("Nro. Comp.:");
+			lblNroComp.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNroComp.setBounds(10, 93, 81, 25);
+		}
+		return lblNroComp;
+	}
+	private JLabel getTxtNroComp() {
+		if (txtNroComp == null) {
+			txtNroComp = new JLabel();
+			txtNroComp.setText((String) null);
+			txtNroComp.setName(CAMPO_NRO_COMP);
+			txtNroComp.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
+			txtNroComp.setBounds(101, 93, 141, 25);
+		}
+		return txtNroComp;
 	}
 }

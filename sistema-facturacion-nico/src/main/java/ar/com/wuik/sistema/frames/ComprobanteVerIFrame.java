@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -15,7 +13,6 @@ import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +47,6 @@ import ar.com.wuik.sistema.model.DetalleComprobanteModel;
 import ar.com.wuik.sistema.model.DetalleComprobantesAsocModel;
 import ar.com.wuik.sistema.model.DetalleFacturaRemitoModel;
 import ar.com.wuik.sistema.model.ProductoDetalleModel;
-import ar.com.wuik.sistema.model.TributoComprobanteModel;
 import ar.com.wuik.sistema.reportes.ComprobanteReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
@@ -109,14 +105,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblCondIva;
 	private JLabel lblLetra;
 	private JLabel lblTipoComp;
-	private WTablePanel<TributoComprobante> tblTributos;
-	private JLabel lblImporteOtrosTributos;
-	private JLabel lblOtrosTributos;
-	private JCheckBox chckbxAgregarComprobantes;
-	private JCheckBox chckbxAgregarTributos;
 	private JButton btnNuevoProducto;
-	private JLabel label;
-	private JLabel label_1;
 	private JLabel lblFacturado;
 	private JLabel lblEstado;
 
@@ -140,15 +129,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			refreshDetalles();
 			refreshRemitos();
 
-			if (!comprobante.getTributos().isEmpty()) {
-				getChckbxAgregarTributos().setSelected(Boolean.TRUE);
-			}
-
-			if (!comprobante.getComprobantesAsociados().isEmpty()) {
-				getChckbxAgregarComprobantes().setSelected(Boolean.TRUE);
-			}
-
-			refreshTributos();
 			refreshComprobantesAsoc();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -373,8 +353,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblCondIva());
 			pnlBusqueda.add(getLblLetra());
 			pnlBusqueda.add(getLblTipoComp());
-			pnlBusqueda.add(getChckbxAgregarComprobantes());
-			pnlBusqueda.add(getLabel());
 		}
 		return pnlBusqueda;
 	}
@@ -412,14 +390,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						comprobante.setFechaVenta(WUtils
 								.getDateFromString(fechaVenta));
 						comprobante.setObservaciones(observaciones);
-
-						if (!getChckbxAgregarComprobantes().isSelected()) {
-							comprobante.getComprobantesAsociados().clear();
-						}
-
-						if (!getChckbxAgregarTributos().isSelected()) {
-							comprobante.getTributos().clear();
-						}
 
 						try {
 							ComprobanteBO comprobanteBO = AbstractFactory
@@ -950,8 +920,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		getTxtTotalPesos().setText(
 				WUtils.getValue(comprobante.getTotal().add(totalTributo))
 						.toEngineeringString());
-		getLblImporteOtrosTributos().setText(
-				WUtils.getValue(totalTributo).toEngineeringString());
 	}
 
 	private JLabel getLblIVA21() {
@@ -1037,14 +1005,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 								.getDateFromString(fechaVenta));
 						comprobante.setObservaciones(observaciones);
 
-						if (!getChckbxAgregarComprobantes().isSelected()) {
-							comprobante.getComprobantesAsociados().clear();
-						}
-
-						if (!getChckbxAgregarTributos().isSelected()) {
-							comprobante.getTributos().clear();
-						}
-
 						try {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
@@ -1098,19 +1058,13 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			panel_1.add(getLblSubtotal());
 			panel_1.add(getLblObservaciones());
 			panel_1.add(getScrollPane());
-//			panel_1.add(getTblTributos());
-//			panel_1.add(getLblImporteOtrosTributos());
-//			panel_1.add(getLblOtrosTributos());
-//			panel_1.add(getChckbxAgregarTributos());
-//			panel_1.add(getLabel_1());
 		}
 		return panel_1;
 	}
 
 	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class, "");
-			tablePanel.setVisible(false);
+			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class, "Comprobantes asociados");
 			tablePanel.addToolbarButtons(getToolbarButtonsComprobantes());
 			tablePanel.setBounds(695, 136, 296, 142);
 		}
@@ -1192,162 +1146,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return lblTipoComp;
 	}
 
-	private WTablePanel<TributoComprobante> getTblTributos() {
-		if (tblTributos == null) {
-			tblTributos = new WTablePanel(TributoComprobanteModel.class, "");
-			tblTributos.setVisible(false);
-			tblTributos.addToolbarButtons(getToolbarButtonsTributos());
-			tblTributos.setBounds(10, 42, 462, 132);
-		}
-		return tblTributos;
-	}
-
-	public void addTributo(TributoComprobante tributo) {
-		if (null == tributo.getCoalesceId()) {
-			tributo.setComprobante(comprobante);
-			tributo.setTemporalId(System.currentTimeMillis());
-			comprobante.getTributos().add(tributo);
-		}
-		refreshTributos();
-	}
-
-	private void refreshTributos() {
-		getTblTributos().addData(comprobante.getTributos());
-		calcularTotales();
-	}
-
-	private List<WToolbarButton> getToolbarButtonsTributos() {
-		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		WToolbarButton buttonAdd = new WToolbarButton("Nuevo Tributo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/add.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addModalIFrame(new TributoComprobanteVerIFrame(
-								ComprobanteVerIFrame.this));
-					}
-				}, "Nuevo", null);
-
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Tributo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblTributos.getSelectedItemID();
-						if (null != selectedItem) {
-							TributoComprobante tributo = getTributoById(selectedItem);
-							addModalIFrame(new TributoComprobanteVerIFrame(
-									tributo, ComprobanteVerIFrame.this));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Tributo",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Editar", null);
-		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Tributo",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/delete.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						List<Long> selectedItems = tblTributos
-								.getSelectedItemsID();
-						if (WUtils.isNotEmpty(selectedItems)) {
-							for (Long selectedItem : selectedItems) {
-								TributoComprobante tributo = getTributoById(selectedItem);
-								comprobante.getTributos().remove(tributo);
-							}
-							refreshTributos();
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar al menos un Tributo",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Eliminar", null);
-
-		toolbarButtons.add(buttonAdd);
-		toolbarButtons.add(buttonEdit);
-		toolbarButtons.add(buttonEliminar);
-		return toolbarButtons;
-	}
-
-	protected TributoComprobante getTributoById(Long selectedItem) {
-		List<TributoComprobante> tributos = comprobante.getTributos();
-		for (TributoComprobante tributoComprobante : tributos) {
-			if (tributoComprobante.getCoalesceId().equals(selectedItem)) {
-				return tributoComprobante;
-			}
-		}
-		return null;
-	}
-
-	private JLabel getLblImporteOtrosTributos() {
-		if (lblImporteOtrosTributos == null) {
-			lblImporteOtrosTributos = new JLabel();
-			lblImporteOtrosTributos.setText("$ 0.00");
-			lblImporteOtrosTributos
-					.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblImporteOtrosTributos.setFont(WFrameUtils.getCustomFont(
-					FontSize.LARGE, Font.BOLD));
-			lblImporteOtrosTributos.setBounds(837, 118, 125, 25);
-		}
-		return lblImporteOtrosTributos;
-	}
-
-	private JLabel getLblOtrosTributos() {
-		if (lblOtrosTributos == null) {
-			lblOtrosTributos = new JLabel("Importe Otros Tributos: $");
-			lblOtrosTributos.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblOtrosTributos.setBounds(687, 118, 140, 25);
-		}
-		return lblOtrosTributos;
-	}
-
-	private JCheckBox getChckbxAgregarComprobantes() {
-		if (chckbxAgregarComprobantes == null) {
-			chckbxAgregarComprobantes = new JCheckBox("Agregar Comprobantes");
-			chckbxAgregarComprobantes.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						getTablePanel().setVisible(Boolean.TRUE);
-					} else {
-						getTablePanel().setVisible(Boolean.FALSE);
-					}
-				}
-			});
-			chckbxAgregarComprobantes.setBounds(729, 106, 150, 23);
-		}
-		return chckbxAgregarComprobantes;
-	}
-
-	private JCheckBox getChckbxAgregarTributos() {
-		if (chckbxAgregarTributos == null) {
-			chckbxAgregarTributos = new JCheckBox("Agregar Tributos");
-			chckbxAgregarTributos.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						getTblTributos().setVisible(Boolean.TRUE);
-					} else {
-						getTblTributos().setVisible(Boolean.FALSE);
-					}
-				}
-			});
-			chckbxAgregarTributos.setBounds(44, 9, 157, 23);
-		}
-		return chckbxAgregarTributos;
-	}
-
 	private JButton getBtnNuevoProducto() {
 		if (btnNuevoProducto == null) {
 			btnNuevoProducto = new JButton("Nuevo Producto");
@@ -1362,28 +1160,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			btnNuevoProducto.setBounds(524, 11, 141, 25);
 		}
 		return btnNuevoProducto;
-	}
-
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("");
-			label.setHorizontalAlignment(SwingConstants.CENTER);
-			label.setIcon(new ImageIcon(ComprobanteVerIFrame.class
-					.getResource("/icons/compAsociados.png")));
-			label.setBounds(698, 106, 25, 23);
-		}
-		return label;
-	}
-
-	private JLabel getLabel_1() {
-		if (label_1 == null) {
-			label_1 = new JLabel("");
-			label_1.setIcon(new ImageIcon(ComprobanteVerIFrame.class
-					.getResource("/icons/compAsociados.png")));
-			label_1.setHorizontalAlignment(SwingConstants.CENTER);
-			label_1.setBounds(13, 11, 25, 23);
-		}
-		return label_1;
 	}
 
 	private JLabel getLblFacturado() {

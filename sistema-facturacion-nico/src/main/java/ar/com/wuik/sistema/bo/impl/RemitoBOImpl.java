@@ -173,6 +173,7 @@ public class RemitoBOImpl implements RemitoBO {
 		remitoDTO.setClienteCuit(cliente.getDocumento());
 		remitoDTO.setClienteDomicilio(cliente.getDireccion());
 		remitoDTO.setClienteRazonSocial(cliente.getRazonSocial());
+		remitoDTO.setObservaciones(remito.getObservaciones());
 
 		List<DetalleRemito> detalles = remito.getDetalles();
 		List<DetalleRemitoDTO> detallesDTO = new ArrayList<DetalleRemitoDTO>();

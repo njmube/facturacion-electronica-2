@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +23,7 @@ import ar.com.wuik.sistema.entities.TributoComprobante;
 import ar.com.wuik.sistema.entities.enums.TipoTributo;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WOption;
-import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
-import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
@@ -51,35 +47,11 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblImporte;
 	private JTextField txtImporte;
 	private JLabel lblTipoTributo;
-	private ComprobanteVerIFrame comprobanteVerIFrame;
 	private ComprobanteProveedorVerIFrame comprobanteProveedorVerIFrame;
 	private JComboBox cmbTipoTributo;
 	private JLabel lblDetalle;
 	private JTextField txtDescripcion;
 
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public TributoComprobanteVerIFrame(TributoComprobante tributo,
-			ComprobanteVerIFrame comprobanteVerIFrame) {
-		this.tributo = tributo;
-		this.comprobanteVerIFrame = comprobanteVerIFrame;
-		initialize("Editar Tributo");
-		WModel model = populateModel();
-		model.addValue(CAMPO_TRIBUTO, tributo.getTributo().getId());
-		model.addValue(CAMPO_DESC, tributo.getDetalle());
-		model.addValue(CAMPO_BASE_IMP, tributo.getBaseImporte());
-		model.addValue(CAMPO_ALICUOTA, tributo.getAlicuota());
-		model.addValue(CAMPO_IMPORTE, tributo.getImporte());
-		populateComponents(model);
-	}
-
-	public TributoComprobanteVerIFrame(ComprobanteVerIFrame comprobanteVerIFrame) {
-		this.tributo = new TributoComprobante();
-		this.comprobanteVerIFrame = comprobanteVerIFrame;
-		initialize("Nuevo Tributo");
-	}
-	
 	public TributoComprobanteVerIFrame(TributoComprobante tributo,
 			ComprobanteProveedorVerIFrame comprobanteProveedorVerIFrame) {
 		this.tributo = tributo;
@@ -204,9 +176,7 @@ public class TributoComprobanteVerIFrame extends WAbstractModelIFrame {
 						tributo.setTributo(TipoTributo.fromValue(tributoOpt
 								.getValue().intValue()));
 						
-						if (null != comprobanteVerIFrame) {
-							comprobanteVerIFrame.addTributo(tributo);
-						} else {
+						if (null != comprobanteProveedorVerIFrame) {
 							comprobanteProveedorVerIFrame.addTributo(tributo);
 						}						
 						hideFrame();

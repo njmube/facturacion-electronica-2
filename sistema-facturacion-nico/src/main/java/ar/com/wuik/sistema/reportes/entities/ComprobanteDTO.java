@@ -27,6 +27,7 @@ public class ComprobanteDTO {
 	private List<DetalleComprobanteDTO> detalles;
 	private List<TributoDTO> tributos;
 	private String codigoBarras;
+	private String observaciones;
 
 	public String getLetra() {
 		return letra;
@@ -194,6 +195,14 @@ public class ComprobanteDTO {
 
 	public void setSubtotalConIVA(BigDecimal subtotalConIVA) {
 		this.subtotalConIVA = subtotalConIVA;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }

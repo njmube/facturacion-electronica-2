@@ -67,6 +67,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_FECHA_EMISION = "fechaEmision";
 	private static final String CAMPO_OBSERVACIONES = "observaciones";
 	private static final String CAMPO_FECHA_CAE = "fechaCAE";
+	private static final String CAMPO_NRO_COMP = "nroComp";
 	private JPanel pnlBusqueda;
 	private JButton btnCerrar;
 	private Comprobante comprobante;
@@ -102,16 +103,17 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	private JLabel label;
 	private JTextField txtCAE;
 	private WTextFieldDecimal txtGravados;
-	private WTextFieldDecimal txtIVA; 
+	private WTextFieldDecimal txtIVA;
 	private JTextArea textArea;
 	private JScrollPane scrollPane;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ComprobanteProveedorVerIFrame(ComprobanteProveedorIFrame comprobanteProveedorIFrame,
+	public ComprobanteProveedorVerIFrame(
+			ComprobanteProveedorIFrame comprobanteProveedorIFrame,
 			Long idComprobante) {
-		
+
 		this.comprobanteProveedorIFrame = comprobanteProveedorIFrame;
 
 		WModel model = populateModel();
@@ -123,9 +125,10 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_FECHA_EMISION,
 					WUtils.getStringFromDate(comprobante.getFechaVenta()));
 			model.addValue(CAMPO_OBSERVACIONES, comprobante.getObservaciones());
+			model.addValue(CAMPO_NRO_COMP, comprobante.getNroCompFormato());
 			model.addValue(CAMPO_FECHA_CAE,
-					WUtils.getStringFromDate(comprobante.getFechaVenta()));			
-			
+					WUtils.getStringFromDate(comprobante.getFechaVenta()));
+
 			BigDecimal subtotal = BigDecimal.ZERO;
 			BigDecimal subtotalIVA = BigDecimal.ZERO;
 			BigDecimal total = BigDecimal.ZERO;
@@ -135,7 +138,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			subtotalIVA = comprobante.getIva();
 			total = comprobante.getTotal();
 			totalTributo = comprobante.getTotalTributos();
-			
+
 			txtNumComp.setText(comprobante.getNroCompFormato());
 			txtCAE.setText(comprobante.getCae());
 			txaObservaciones.setText(comprobante.getObservaciones());
@@ -150,8 +153,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			getTblTributos().addData(comprobante.getTributos());
 
 			getLblImporteOtrosTributos().setText(totalTributo.toString());
-			
-			
+
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
@@ -272,7 +274,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 	protected boolean validateModel(WModel model, JComponent component) {
 
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
-		
+
 		List<String> messages = new ArrayList<String>();
 
 		if (WUtils.isEmpty(fechaEmision)) {
@@ -286,7 +288,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		if (WUtils.isEmpty(txtGravados.getText())) {
 			messages.add("Debe ingresar el importe neto gravado");
 		}
-		
+
 		if (WUtils.isEmpty(txtIVA.getText())) {
 			messages.add("Debe ingresar un valor de IVA");
 		}
@@ -350,11 +352,13 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 						String fechaVenta = model.getValue(CAMPO_FECHA_EMISION);
 						String observaciones = model
 								.getValue(CAMPO_OBSERVACIONES);
+						String nroComp = model.getValue(CAMPO_NRO_COMP);
 
 						comprobante.setFechaVenta(WUtils
 								.getDateFromString(fechaVenta));
 						comprobante.setObservaciones(observaciones);
-
+						comprobante.setNroCompFormato(nroComp);
+						
 						if (!getChckbxAgregarTributos().isSelected()) {
 							comprobante.getTributos().clear();
 						}
@@ -363,7 +367,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
 							if (comprobante.getId() == null) {
-								comprobanteBO.guardar(comprobante);								
+								comprobanteBO.guardar(comprobante);
 							} else {
 								comprobanteBO.actualizar(comprobante);
 							}
@@ -481,7 +485,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		}
 		return lblObservaciones;
 	}
-	
+
 	private JTextArea getTxaObservaciones() {
 		if (txaObservaciones == null) {
 			txaObservaciones = new JTextArea();
@@ -512,6 +516,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		if (txtNumComp == null) {
 			txtNumComp = new JTextField();
 			txtNumComp.setBounds(149, 14, 216, 25);
+			txtNumComp.setName(CAMPO_NRO_COMP);
 			txtNumComp.setHorizontalAlignment(SwingConstants.LEFT);
 			txtNumComp.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -555,36 +560,38 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		BigDecimal total = BigDecimal.ZERO;
 		BigDecimal totalTributo = BigDecimal.ZERO;
 		String numComp = null;
-		if (null != txtNumComp.getText() && txtNumComp.getText().trim().length() > 0){
+		if (null != txtNumComp.getText()
+				&& txtNumComp.getText().trim().length() > 0) {
 			numComp = txtNumComp.getText();
 		}
 		comprobante.setNroCompFormato(numComp);
-		
+
 		String cae = null;
-		if (null != txtCAE.getText() && txtCAE.getText().trim().length() > 0){
+		if (null != txtCAE.getText() && txtCAE.getText().trim().length() > 0) {
 			cae = txtCAE.getText();
 		}
 		comprobante.setCae(cae);
-		
-		WModel model = populateModel();		
-		String fechaCAE = model.getValue(CAMPO_FECHA_CAE);		
-		comprobante.setFechaCAE(WUtils.getDateFromString(fechaCAE));		
+
+		WModel model = populateModel();
+		String fechaCAE = model.getValue(CAMPO_FECHA_CAE);
+		comprobante.setFechaCAE(WUtils.getDateFromString(fechaCAE));
 
 		List<TributoComprobante> tributos = comprobante.getTributos();
 		for (TributoComprobante tributoComprobante : tributos) {
 			totalTributo = totalTributo.add(tributoComprobante.getImporte());
 		}
-		
-		if (null != txtGravados.getText() && txtGravados.getText().trim().length() > 0){
+
+		if (null != txtGravados.getText()
+				&& txtGravados.getText().trim().length() > 0) {
 			subtotal = new BigDecimal(txtGravados.getText());
 		}
-		if (null != txtIVA.getText() && txtIVA.getText().trim().length() > 0){
+		if (null != txtIVA.getText() && txtIVA.getText().trim().length() > 0) {
 			subtotalIVA = new BigDecimal(txtIVA.getText());
-		}		
+		}
 		total = subtotal.add(subtotalIVA).add(totalTributo);
 
 		comprobante.setSubtotal(subtotal);
-		comprobante.setTotalTributos(totalTributo);		
+		comprobante.setTotalTributos(totalTributo);
 		comprobante.setIva(subtotalIVA);
 		comprobante.setTotal(total);
 		getTxtTotalPesos().setText(String.valueOf(total));
@@ -628,7 +635,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		}
 		return panel_1;
 	}
-	
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -746,8 +753,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						 addModalIFrame(new TributoComprobanteVerIFrame(
-						 ComprobanteProveedorVerIFrame.this));
+						addModalIFrame(new TributoComprobanteVerIFrame(
+								ComprobanteProveedorVerIFrame.this));
 					}
 				}, "Nuevo", null);
 
@@ -761,8 +768,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 						Long selectedItem = tblTributos.getSelectedItemID();
 						if (null != selectedItem) {
 							TributoComprobante tributo = getTributoById(selectedItem);
-							 addModalIFrame(new TributoComprobanteVerIFrame(
-							 tributo, ComprobanteProveedorVerIFrame.this));
+							addModalIFrame(new TributoComprobanteVerIFrame(
+									tributo, ComprobanteProveedorVerIFrame.this));
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -819,8 +826,8 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			lblImporteOtrosTributos.setText("$ 0.00");
 			lblImporteOtrosTributos
 					.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblImporteOtrosTributos.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
-					Font.BOLD));
+			lblImporteOtrosTributos.setFont(WFrameUtils.getCustomFont(
+					FontSize.LARGE, Font.BOLD));
 			lblImporteOtrosTributos.setBounds(846, 94, 125, 25);
 		}
 		return lblImporteOtrosTributos;
@@ -862,7 +869,6 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 		}
 		return label_1;
 	}
-
 
 	@Override
 	protected JComponent getFocusComponent() {
@@ -1025,6 +1031,7 @@ public class ComprobanteProveedorVerIFrame extends WAbstractModelIFrame {
 			}
 		};
 	}
+
 	private JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();

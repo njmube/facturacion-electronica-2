@@ -25,16 +25,12 @@ public class ComprobanteProveedorModel extends WTableModel<Comprobante> {
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.11, 0.12, 0.09, 0.08, 0.10, 0.10, 0.10, 0.10};
+		return new double[] { 0.11, 0.12, 0.09, 0.08, 0.10, 0.10, 0.10, 0.10 };
 	}
 
 	@Override
 	protected Object[] getRow(Comprobante t, Object[] fila) {
-		fila[0] = ((WUtils.isNotEmpty(t.getNroCompFormato())) ? t
-				.getTipoComprobante().getValue() + t.getNroCompFormato()
-				: (WUtils.isNotEmpty(t.getNroComprobante()) ? t
-						.getTipoComprobante().getValue()
-						+ t.getNroComprobante() : ""));
+		fila[0] = t.getTipoComprobante().getValue() + t.getNroCompFormato();
 		fila[1] = t.getCae();
 		fila[2] = WUtils.getStringFromDate(t.getFechaCAE());
 		fila[3] = WUtils.getStringFromDate(t.getFechaVenta());
@@ -49,8 +45,6 @@ public class ComprobanteProveedorModel extends WTableModel<Comprobante> {
 		fila[8] = t.getId();
 		return fila;
 	}
-
-
 
 	@Override
 	public ar.com.wuik.swing.components.table.WTableModel.Aligment getAligment(

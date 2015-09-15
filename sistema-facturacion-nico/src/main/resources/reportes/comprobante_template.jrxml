@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_template" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.24184264611831"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="697"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="COMP_LETRA" class="java.lang.String"/>
+	<parameter name="COMP_TIPO" class="java.lang.String"/>
+	<parameter name="RAZON_SOCIAL" class="java.lang.String"/>
+	<parameter name="DOMICILIO" class="java.lang.String"/>
+	<parameter name="COND_IVA" class="java.lang.String"/>
+	<parameter name="PTO_VTA" class="java.lang.String"/>
+	<parameter name="COMP_NRO" class="java.lang.String"/>
+	<parameter name="FECHA_EMISION" class="java.util.Date"/>
+	<parameter name="CUIT" class="java.lang.String"/>
+	<parameter name="ING_BRUTOS" class="java.lang.String"/>
+	<parameter name="INICIO_ATC" class="java.util.Date"/>
+	<parameter name="CLIENTE_CUIT" class="java.lang.String"/>
+	<parameter name="CLIENTE_COND_IVA" class="java.lang.String"/>
+	<parameter name="CLIENTE_RAZON" class="java.lang.String"/>
+	<parameter name="CLIENTE_DOM" class="java.lang.String"/>
+	<parameter name="REMITOS" class="java.lang.String"/>
+	<parameter name="SUBTOTAL" class="java.math.BigDecimal"/>
+	<parameter name="IVA_21" class="java.math.BigDecimal"/>
+	<parameter name="IVA_105" class="java.math.BigDecimal"/>
+	<parameter name="TOTAL" class="java.math.BigDecimal"/>
+	<parameter name="CAE" class="java.lang.String"/>
+	<parameter name="VTO_CAE" class="java.util.Date"/>
+	<parameter name="BG_IMG" class="java.io.InputStream"/>
+	<parameter name="COD_BARRAS" class="java.lang.String"/>
+	<parameter name="COPIA" class="java.lang.String"/>
+	<parameter name="OTROS_TRIBUTOS" class="java.math.BigDecimal"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-UTN\\atenea\\sigma\\sigma-web\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_OBJECT" class="java.lang.Object"/>
+	<parameter name="TRIBUTOS" class="java.lang.Object"/>
+	<parameter name="SUBTOTAL_CON_IVA" class="java.math.BigDecimal"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="producto" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="precioUnit" class="java.math.BigDecimal"/>
+	<field name="subtotal" class="java.math.BigDecimal"/>
+	<field name="alicuota" class="java.math.BigDecimal"/>
+	<field name="subtotalConIVA" class="java.math.BigDecimal"/>
+	<field name="comentario" class="java.lang.String"/>
+	<field name="precioUnitConIVA" class="java.math.BigDecimal"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="0" width="554" height="139"/>
+				<graphicElement>
+					<pen lineColor="#C6413A"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="1" y="144" width="554" height="70"/>
+				<graphicElement>
+					<pen lineColor="#C6413A"/>
+				</graphicElement>
+			</rectangle>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement x="13" y="4" width="236" height="64"/>
+				<imageExpression><![CDATA[$P{BG_IMG}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="420" y="122" width="51" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[01/05/2014]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="73" width="94" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razón Social:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="195" width="111" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición de venta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="122" width="131" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Inicio de Actividades:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="103" width="73" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ingresos Brutos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="73" width="167" height="26" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MARIA N. NOGUERA, MARIA JOSE FERRE Y SERGIO M. ROLDAN S.H.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="84" width="32" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUIT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="122" width="94" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición frente al IVA:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="277" y="36" width="1" height="103" forecolor="#C6413A"/>
+			</line>
+			<staticText>
+				<reportElement x="105" y="103" width="167" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[H. Yrigoyen 23 - Tel. Part. 02475 462419]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="44" width="73" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comp. Nro.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="169" width="111" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Condición frente al IVA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="169" width="94" height="15" forecolor="#C6413A"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Domicilio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="123" y="195" width="111" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Otra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="189" y="150" width="141" height="15" forecolor="#C6413A"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<text><![CDATA[Nombre y Apellido/Razón Social:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="84" width="99" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[30-71444607-6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="103" width="94" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Domicilio Comercial:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="258" y="0" width="39" height="36" forecolor="#C6413A"/>
+				<graphicElement>
+					<pen lineColor="#C6413A"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="150" width="65" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUIT/CUIL/DNI:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="122" width="167" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[IVA RESPONSABLE INSCRIPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="103" width="68" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[30-71444607-6]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="64" width="84" height="15" forecolor="#C6413A"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Emisión:]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="231" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="201" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

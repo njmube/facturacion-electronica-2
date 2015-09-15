@@ -1,7 +1,7 @@
 package ar.com.wuik.sistema.entities.enums;
 
 public enum TipoComprobante {
-	FACTURA("F", "FACTURA", 1), NOTA_CREDITO("NC", "NOTA CRÉDITO", 2), NOTA_DEBITO(
+	FACTURA("FC", "FACTURA", 1), NOTA_CREDITO("NC", "NOTA CRÉDITO", 2), NOTA_DEBITO(
 			"ND", "NOTA DÉBITO", 3);
 
 	private String value;

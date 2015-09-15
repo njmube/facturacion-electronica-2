@@ -37,12 +37,11 @@ public class ComprobanteReporte {
 					.obtenerDTO(idComprobante);
 			List<DetalleComprobanteDTO> detalles = comprobanteDTO.getDetalles();
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("COMP_LETRA", comprobanteDTO.getLetra());
 			parameters.put("COMP_TIPO", comprobanteDTO.getTipo());
-			parameters.put("PTO_VTA", comprobanteDTO.getPtoVta());
 			parameters.put("COMP_NRO", comprobanteDTO.getCompNro());
 			parameters.put("FECHA_EMISION", comprobanteDTO.getFechaEmision());
 			parameters.put("CLIENTE_CUIT", comprobanteDTO.getClienteCuit());
+			parameters.put("OBSERVACIONES", comprobanteDTO.getObservaciones());
 			parameters.put("CLIENTE_COND_IVA",
 					comprobanteDTO.getClienteCondIVA());
 			parameters.put("CLIENTE_RAZON",
@@ -69,10 +68,13 @@ public class ComprobanteReporte {
 			parameters.put("COPIA", "ORIGINAL");
 			parameters.put("BG_IMG", ComprobanteReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
+			
+			String reporte = comprobanteDTO.getLetra().equals("A") ? "comprobante_a.jasper"
+					: "comprobante_b.jasper";
 
 			JasperReport jasperReport = (JasperReport) JRLoader
 					.loadObject(ComprobanteReporte.class
-							.getResourceAsStream("/reportes/comprobante.jasper"));
+							.getResourceAsStream("/reportes/" + reporte));
 
 			// ORIGINAL
 			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(

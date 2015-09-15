@@ -535,6 +535,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		comprobanteDTO.setClienteCuit(cliente.getDocumento());
 		comprobanteDTO.setClienteDomicilio(cliente.getDireccion());
 		comprobanteDTO.setClienteRazonSocial(cliente.getRazonSocial());
+		comprobanteDTO.setObservaciones(comprobanteAfip.getObservaciones());
 
 		// DATOS REMITOS.
 		List<Remito> remitos = comprobanteAfip.getRemitos();
@@ -600,7 +601,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		comprobanteDTO.setDetalles(detallesDTO);
 		comprobanteDTO.setCae(comprobanteAfip.getCae());
 		comprobanteDTO.setVtoCAE(comprobanteAfip.getFechaCAE());
-		comprobanteDTO.setCompNro(comprobanteAfip.getNroComprobante());
+		comprobanteDTO.setCompNro(comprobanteAfip.getNroCompFormato());
 		comprobanteDTO.setFechaEmision(comprobanteAfip.getFechaVenta());
 		comprobanteDTO.setIva105(subtotalIVA105);
 		comprobanteDTO.setIva21(subtotalIVA21);
