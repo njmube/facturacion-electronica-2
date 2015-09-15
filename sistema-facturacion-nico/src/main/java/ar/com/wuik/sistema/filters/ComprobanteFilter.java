@@ -15,6 +15,7 @@ public class ComprobanteFilter {
 	private List<Long> idsToExclude;
 	private List<Long> idsToInclude;
 	private Boolean inicializarDetalles;
+	private Boolean inicializarTributos;
 	private EstadoFacturacion estadoFacturacion;
 	private Boolean paga;
 	private Date desde;
@@ -115,6 +116,14 @@ public class ComprobanteFilter {
 
 	public void setIdProveedor(Long idProveedor) {
 		this.idProveedor = idProveedor;
+	}
+
+	public Boolean getInicializarTributos() {
+		return inicializarTributos;
+	}
+
+	public void setInicializarTributos(Boolean inicializarTributos) {
+		this.inicializarTributos = inicializarTributos;
 	}
 
 }

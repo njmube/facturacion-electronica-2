@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -21,15 +22,15 @@ import javax.swing.border.TitledBorder;
 
 import org.apache.commons.beanutils.BeanComparator;
 
-import com.lowagie.text.Font;
-
 import ar.com.wuik.sistema.bo.ComprobanteBO;
 import ar.com.wuik.sistema.entities.Comprobante;
 import ar.com.wuik.sistema.entities.enums.EstadoFacturacion;
 import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
+import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.filters.ComprobanteFilter;
 import ar.com.wuik.sistema.model.ComprobanteIVAModel;
+import ar.com.wuik.sistema.reportes.SubdiarioIVAReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.table.WTablePanel;
@@ -40,6 +41,8 @@ import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
+
+import com.lowagie.text.Font;
 
 /**
  * 
@@ -71,6 +74,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 	private JLabel txtCompra;
 	private JLabel lblVenta;
 	private JLabel txtVenta;
+	private JButton btnImprimir;
 
 	public SubdiarioIvaIFrame() {
 		setBorder(new LineBorder(null, 1, true));
@@ -82,6 +86,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlParametros());
 		getContentPane().add(getBtnCancelar());
+		getContentPane().add(getBtnImprimir());
 
 		WModel model = populateModel();
 
@@ -176,6 +181,26 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 		}
 
 		WTooltipUtils.showMessages(messages, btnBuscar, MessageType.ERROR);
+
+		return WUtils.isEmpty(messages);
+	}
+	
+	@Override
+	protected boolean validateModel(WModel model, JComponent component) {
+		String fechaDesde = model.getValue(CAMPO_FECHA_DESDE);
+		String fechaHasta = model.getValue(CAMPO_FECHA_HASTA);
+
+		List<String> messages = new ArrayList<String>();
+
+		if (WUtils.isEmpty(fechaDesde)) {
+			messages.add("Debe seleccionar una Fecha Desde");
+		}
+
+		if (WUtils.isEmpty(fechaHasta)) {
+			messages.add("Debe seleccionar una Fecha Hasta");
+		}
+
+		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);
 
 		return WUtils.isEmpty(messages);
 	}
@@ -298,7 +323,7 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLabel_2() {
 		if (lblTotalIVA == null) {
-			lblTotalIVA = new JLabel("Total IVA Venta: $");
+			lblTotalIVA = new JLabel("Total IVA: $");
 			lblTotalIVA.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTotalIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE));
 			lblTotalIVA.setBounds(521, 408, 126, 34);
@@ -379,5 +404,31 @@ public class SubdiarioIvaIFrame extends WAbstractModelIFrame {
 			txtVenta.setBounds(401, 409, 103, 34);
 		}
 		return txtVenta;
+	}
+	private JButton getBtnImprimir() {
+		if (btnImprimir == null) {
+			btnImprimir = new JButton("Imprimir");
+			btnImprimir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					WModel model = populateModel();
+					if (validateModel(model, getBtnImprimir())) {
+
+						String fechaDesde = model.getValue(CAMPO_FECHA_DESDE);
+						String fechaHasta = model.getValue(CAMPO_FECHA_HASTA);
+						Date desde = WUtils.getDateFromString(fechaDesde);
+						Date hasta = WUtils.getDateFromString(fechaHasta);
+						try {
+							SubdiarioIVAReporte.generarReporte(desde, hasta);;
+						} catch (ReportException rexc) {
+							showGlobalErrorMsg(rexc.getMessage());
+						}
+					}
+
+				}
+			});
+			btnImprimir.setIcon(new ImageIcon(SubdiarioIvaIFrame.class.getResource("/icons/imprimir.png")));
+			btnImprimir.setBounds(10, 476, 103, 30);
+		}
+		return btnImprimir;
 	}
 }

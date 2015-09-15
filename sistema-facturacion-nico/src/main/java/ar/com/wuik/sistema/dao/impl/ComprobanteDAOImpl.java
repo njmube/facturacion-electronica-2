@@ -63,6 +63,12 @@ public class ComprobanteDAOImpl extends GenericCrudHBDAOImpl<Comprobante> implem
 						Hibernate.initialize(comprobante.getDetalles());
 					}
 				}
+				Boolean inicializarTributos = filter.getInicializarTributos();
+				if (null != inicializarTributos && inicializarTributos) {
+					for (Comprobante comprobante : comprobantes) {
+						Hibernate.initialize(comprobante.getTributos());
+					}
+				}
 			}
 			return comprobantes;
 		} catch (HibernateException hbexc) {

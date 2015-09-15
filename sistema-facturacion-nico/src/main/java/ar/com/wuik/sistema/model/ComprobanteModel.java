@@ -32,7 +32,7 @@ public class ComprobanteModel extends WTableModel<Comprobante> {
 
 	@Override
 	protected Object[] getRow(Comprobante t, Object[] fila) {
-		fila[0] = t.getTipoComprobante().getValue() + "-"
+		fila[0] = t.getTipoComprobante().getValue() + " "
 				+ ((WUtils.isNotEmpty(t.getNroCompFormato())) ? t
 						.getNroCompFormato() : (WUtils.isNotEmpty(t
 						.getNroComprobante()) ? t.getNroComprobante() : "0000-00000000"));
