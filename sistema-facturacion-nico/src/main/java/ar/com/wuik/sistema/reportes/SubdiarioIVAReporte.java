@@ -120,6 +120,12 @@ public class SubdiarioIVAReporte {
 		parameters.put("NETO_GRAVADO", neto);
 		parameters.put("IVA", iva);
 		parameters.put("TOTAL", neto.add(iva));
+		
+		JasperReport subReport = (JasperReport) JRLoader
+				.loadObject(SubdiarioIVAReporte.class
+						.getResourceAsStream("/reportes/subdiario_iva_venta_tproductos.jasper"));
+		
+		parameters.put("SUBREPORT", subReport);
 
 		JasperReport jasperReport = (JasperReport) JRLoader
 				.loadObject(SubdiarioIVAReporte.class

@@ -29,6 +29,7 @@
 		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-FE\\sistema-facturacion-nico\\src\\main\\resources\\reportes\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="TOTAL_TIPO_PRODUCTO" class="java.util.List"/>
+	<parameter name="SUBREPORT" class="java.lang.Object"/>
 	<field name="fecha" class="java.util.Date"/>
 	<field name="razonSocial" class="java.lang.String"/>
 	<field name="cuit" class="java.lang.String"/>
@@ -635,7 +636,7 @@
 			<subreport>
 				<reportElement x="1" y="123" width="400" height="100"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{TOTAL_TIPO_PRODUCTO})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subdiario_iva_venta_tproductos.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT}]]></subreportExpression>
 			</subreport>
 		</band>
 	</lastPageFooter>
