@@ -49,6 +49,7 @@ public class ResumenReporte {
 					resumenCuenta.getClienteRazonSocial());
 			parameters.put("CLIENTE_DOM", resumenCuenta.getClienteDomicilio());
 			parameters.put("SALDO", resumenCuenta.getSaldo());
+			parameters.put("SHOW_ALL", true);
 			parameters.put("BG_IMG", ResumenReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 

@@ -81,12 +81,24 @@ public class WApplication extends JFrame implements WSecure {
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE
 						&& e.getID() == KeyEvent.KEY_PRESSED) {
 					if (getDesktopPane().getComponentCount() > 0) {
-						JInternalFrame iFrame = getDesktopPane()
-								.getSelectedFrame();
-						if (null != iFrame) {
-							try {
-								iFrame.setClosed(true);
-							} catch (PropertyVetoException e1) {
+						JInternalFrame[] iframes = getDesktopPane()
+								.getAllFrames();
+
+						JInternalFrame iframeActive = null;
+						Integer index = 0;
+						for (JInternalFrame iframe : iframes) {
+							if (iframe.getLayer() >= index) {
+								index = iframe.getLayer();
+								iframeActive = iframe;
+							}
+						}
+
+						if (null != iframeActive) {
+							if (iframeActive instanceof WAbstractIFrame) {
+								try {
+									((WAbstractIFrame) iframeActive).setClosed(true);
+								} catch (PropertyVetoException e1) {
+								}
 							}
 						}
 					} else {

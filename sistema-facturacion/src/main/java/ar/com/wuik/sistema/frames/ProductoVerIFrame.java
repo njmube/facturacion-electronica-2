@@ -84,8 +84,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		initializate("Nuevo Producto");
 		this.comprobanteVerIFrame = comprobanteVerIFrame;
 		this.producto = new Producto();
-		this.producto.setDescripcion(texto);
-		getTxtDescripcion().setText(texto);
+		this.producto.setCodigo(texto);
+		getTxtCodigo().setText(texto);
 	}
 
 	public ProductoVerIFrame(RemitoVerIFrame remitoClienteVerIFrame) {
@@ -439,4 +439,5 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		}
 		return btnNewButton;
 	}
+
 }

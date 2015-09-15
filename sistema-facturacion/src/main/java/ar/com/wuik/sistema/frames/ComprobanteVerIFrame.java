@@ -106,7 +106,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JLabel lblTipoComp;
 	private JLabel lblImporteOtrosTributos;
 	private JLabel lblOtrosTributos;
-	private JButton btnNuevoProducto;
 	private JLabel lblFacturado;
 	private JLabel lblEstado;
 	private ClienteIFrame clienteIFrame;
@@ -196,6 +195,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
 			lblTipoComp.setText("FACTURA");
+			getTablePanel().setVisible(Boolean.FALSE);
 			break;
 		case NOTA_CREDITO:
 			titulo = "Nueva Nota de Crédito";
@@ -254,6 +254,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
 			lblTipoComp.setText("FACTURA");
+			getTablePanel().setVisible(Boolean.FALSE);
 			break;
 		case NOTA_CREDITO:
 			titulo = "Nueva Nota de Crédito";
@@ -848,7 +849,27 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 				@Override
 				public void keyReleased(KeyEvent e) {
-					search();
+					if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+						if (WUtils.isEmpty(productos)) {
+							addModalIFrame(new ProductoVerIFrame(
+									ComprobanteVerIFrame.this, textField
+											.getText()));
+						} else {
+							if (productos.size() == 1) {
+								Long idProducto = productos.get(0).getId();
+								if (existeDetalleProducto(idProducto)) {
+									addDetalle(idProducto);
+								} else {
+									addModalIFrame(new DetalleComprobanteIFrame(
+											idProducto,
+											ComprobanteVerIFrame.this));
+								}
+							}
+						}
+					} else {
+						search();
+					}
+
 				}
 			});
 			textField.setDocument(new WTextFieldLimit(100));
@@ -856,6 +877,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		}
 		return textField;
 	}
+
+	private List<Producto> productos = null;
 
 	public void search() {
 		String toSearch = textField.getText();
@@ -865,12 +888,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			ProductoFilter filter = new ProductoFilter();
 			filter.setDescripcionCodigo(toSearch);
 			try {
-				List<Producto> productos = productoBO.buscar(filter);
+				productos = productoBO.buscar(filter);
 				getTblProducto().addData(productos);
 			} catch (BusinessException e1) {
 			}
 		} else {
-			getTblProducto().addData(new ArrayList<Producto>());
+			getTblProducto().addData(productos);
 		}
 	}
 
@@ -983,7 +1006,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			panel.add(getTblProducto());
 			panel.add(getLblBuscar());
 			panel.add(getTextField());
-			panel.add(getBtnNuevoProducto());
 		}
 		return panel;
 	}
@@ -1068,7 +1090,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class,
 					"Comprobantes asociados");
-			tablePanel.setVisible(false);
 			tablePanel.addToolbarButtons(getToolbarButtonsComprobantes());
 			tablePanel.setBounds(695, 289, 296, 160);
 		}
@@ -1193,22 +1214,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			lblOtrosTributos.setBounds(687, 118, 140, 25);
 		}
 		return lblOtrosTributos;
-	}
-
-	private JButton getBtnNuevoProducto() {
-		if (btnNuevoProducto == null) {
-			btnNuevoProducto = new JButton("Nuevo Producto");
-			btnNuevoProducto.setIcon(new ImageIcon(ComprobanteVerIFrame.class
-					.getResource("/icons/add.png")));
-			btnNuevoProducto.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ProductoVerIFrame(
-							ComprobanteVerIFrame.this, getTextField().getText()));
-				}
-			});
-			btnNuevoProducto.setBounds(524, 11, 141, 25);
-		}
-		return btnNuevoProducto;
 	}
 
 	private JLabel getLblFacturado() {

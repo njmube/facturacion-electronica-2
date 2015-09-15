@@ -338,7 +338,8 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 		if (lblPorcIVA == null) {
 			lblPorcIVA = new JLabel("");
 			lblPorcIVA.setBounds(141, 93, 121, 25);
-			lblPorcIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
+			lblPorcIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return lblPorcIVA;
 	}
@@ -347,8 +348,14 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 		if (lblProducto == null) {
 			lblProducto = new JLabel("");
 			lblProducto.setBounds(141, 21, 331, 25);
-			lblProducto.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
+			lblProducto.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return lblProducto;
+	}
+
+	@Override
+	public void enterPressed() {
+		getBtnGuardar().doClick();
 	}
 }

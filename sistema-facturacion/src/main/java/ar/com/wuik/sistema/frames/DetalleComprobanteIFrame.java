@@ -84,8 +84,10 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			model.addValue(CAMPO_IVA, detalle.getTipoIVA().getDescripcion());
 			model.addValue(
 					CAMPO_PRODUCTO,
-					(null != detalle.getProducto()) ? detalle.getProducto().getCodigo()
-							+ " "+ detalle.getProducto().getDescripcion() : detalle
+					(null != detalle.getProducto()) ? detalle.getProducto()
+							.getCodigo()
+							+ " "
+							+ detalle.getProducto().getDescripcion() : detalle
 							.getDetalle());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
@@ -236,7 +238,8 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			txtProductoSeleccionado = new JLabel();
 			txtProductoSeleccionado.setBounds(141, 21, 331, 25);
 			txtProductoSeleccionado.setName(CAMPO_PRODUCTO);
-			txtProductoSeleccionado.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
+			txtProductoSeleccionado.setFont(WFrameUtils.getCustomFont(
+					FontSize.LARGE, Font.BOLD));
 		}
 		return txtProductoSeleccionado;
 	}
@@ -289,7 +292,8 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			txtTotal = new JLabel();
 			txtTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtTotal.setBounds(141, 167, 121, 25);
-			txtTotal.setFont(WFrameUtils.getCustomFont(FontSize.LARGE, Font.BOLD));
+			txtTotal.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
 		}
 		return txtTotal;
 	}
@@ -324,5 +328,10 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			txtIVA.setBounds(141, 57, 219, 25);
 		}
 		return txtIVA;
+	}
+
+	@Override
+	public void enterPressed() {
+		getBtnGuardar().doClick();
 	}
 }
