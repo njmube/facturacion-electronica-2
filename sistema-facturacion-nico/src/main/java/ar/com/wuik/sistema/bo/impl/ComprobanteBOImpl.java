@@ -515,6 +515,35 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 	}
 
 	@Override
+	public void eliminar(Long id) throws BusinessException {
+		try {
+			HibernateUtil.startTransaction();
+			Comprobante comprobante = comprobanteDAO.getById(id);
+			
+			List<Remito> remitos = comprobante.getRemitos();
+			if (null != remitos) {
+				for (Remito remito : remitos) {
+					remito.setComprobante(null);
+					remitoDAO.saveOrUpdate(remito);
+				}
+				comprobante.getRemitos().clear();
+			}
+			
+			comprobanteDAO.delete(comprobante.getId());
+			HibernateUtil.commitTransaction();
+		} catch (DataAccessException daexc) {
+			HibernateUtil.rollbackTransaction();
+			LOGGER.error("eliminar() - Error al eliminar comprobante",
+					daexc);
+			throw new BusinessException(daexc,
+					"Error al eliminar comprobante");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+
+	
+	@Override
 	public ComprobanteDTO obtenerDTO(Long id) throws BusinessException {
 		try {
 			Comprobante comprobanteAfip = comprobanteDAO.getById(id);

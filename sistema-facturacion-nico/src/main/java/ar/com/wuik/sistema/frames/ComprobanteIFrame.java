@@ -166,7 +166,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 						}
 					}
 				}, "Editar", null);
-		WToolbarButton buttonAnular = new WToolbarButton("Anular Comprobante",
+		WToolbarButton buttonAnular = new WToolbarButton("Anular/Eliminar Comprobante",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/anular.png")),
 				new ActionListener() {
@@ -179,7 +179,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 								int result = JOptionPane
 										.showConfirmDialog(
 												getParent(),
-												"¿Desea anular el Comprobante seleccionado?",
+												"¿Desea anular/eliminar el Comprobante seleccionado?",
 												"Alerta",
 												JOptionPane.OK_CANCEL_OPTION,
 												JOptionPane.WARNING_MESSAGE);
@@ -191,7 +191,10 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 											.obtener(selectedItem);
 
 									if (comprobante.isActivo()) {
-										if (!comprobante
+										if (comprobante.getEstadoFacturacion().equals(EstadoFacturacion.SIN_FACTURAR)){
+											comprobanteBO.eliminar(selectedItem);
+											search();
+										}else if (!comprobante
 												.getEstadoFacturacion()
 												.equals(EstadoFacturacion.FACTURADO_ERROR)) {
 											comprobanteBO
@@ -226,7 +229,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 											MessageType.ALERTA);
 						}
 					}
-				}, "Anular", null);
+				}, "Anular/Eliminar", null);
 
 		WToolbarButton buttonVer = new WToolbarButton("Ver Comprobante",
 				new ImageIcon(WCalendarIFrame.class

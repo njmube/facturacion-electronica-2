@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
 import ar.com.wuik.sistema.bo.ComprobanteBO;
@@ -168,11 +169,50 @@ public class ComprobanteProveedorIFrame extends WAbstractModelIFrame implements
 					}
 				}, "Ver", null);
 
-				if (isProveedorActivo()) {
+		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Comprobante",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/anular.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							int result = JOptionPane
+									.showConfirmDialog(
+											getParent(),
+											"¿Desea eliminar el Comprobante seleccionado?",
+											"Alerta",
+											JOptionPane.OK_CANCEL_OPTION,
+											JOptionPane.WARNING_MESSAGE);
+							if (result == JOptionPane.OK_OPTION) {
+								ComprobanteBO comprobanteProveedorBO = AbstractFactory
+										.getInstance(ComprobanteBO.class);
+								try {
+									Comprobante comprobante = (Comprobante) comprobanteProveedorBO
+											.obtener(selectedItem);
+									comprobanteProveedorBO.eliminar(comprobante.getId());
+									search();
+								} catch (BusinessException bexc) {
+									showGlobalErrorMsg(bexc.getMessage());
+								}
+							}
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar un solo Comprobante.",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Eliminar", null);
+
+		if (isProveedorActivo()) {
 			// toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
 		}
 		toolbarButtons.add(buttonVer);
+		toolbarButtons.add(buttonDelete);
 		return toolbarButtons;
 	}
 
