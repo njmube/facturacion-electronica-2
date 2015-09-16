@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.frames;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -28,6 +29,8 @@ import ar.com.wuik.swing.components.WTextFieldDecimal;
 import ar.com.wuik.swing.components.WTextFieldLimit;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
+import ar.com.wuik.swing.utils.WFrameUtils;
+import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
@@ -56,6 +59,8 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 	private JLabel lblPrecio;
 	private JComboBox cmbTipoIva;
 	private JLabel lblIva;
+	private JLabel lblPorcIVA;
+	private JLabel lblProducto;
 
 	/**
 	 * @wbp.parser.constructor
@@ -69,18 +74,37 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
 		model.addValue(CAMPO_PRECIO, WUtils.getValue(detalle.getPrecioConIVA()));
 		model.addValue(CAMPO_IVA, detalle.getTipoIVA().getId());
-		model.addValue(
-				CAMPO_PRODUCTO,
-				(null != detalle.getProducto()) ? detalle.getProducto().getDescripcion() : detalle
-						.getDetalle());
+		model.addValue(CAMPO_PRODUCTO,
+				(null != detalle.getProducto()) ? detalle.getProducto()
+						.getDescripcion() : detalle.getDetalle());
 		editaDetalle = null == detalle.getProducto();
 		if (editaDetalle) {
-			getLblProductoSeleccionado().setText("* Detalle:");
-			getTxtProductoSeleccionado().setEditable(Boolean.TRUE);
-			getLblIva().setText("* " + getLblIva().getText());
-			getCmbTipoIva().setEditable(Boolean.TRUE);
+			showDetalleGenerico();
+		} else {
+			showDetalleProducto();
 		}
 		populateComponents(model);
+		getLblPorcIVA().setText(detalle.getTipoIVA().getDescripcion());
+		getLblProducto().setText((String) model.getValue(CAMPO_PRODUCTO));
+	}
+
+	private void showDetalleProducto() {
+		getLblProductoSeleccionado().setText("Producto:");
+		getTxtProductoSeleccionado().setEditable(Boolean.TRUE);
+		getLblPorcIVA().setVisible(Boolean.TRUE);
+		getCmbTipoIva().setVisible(Boolean.FALSE);
+		getLblProducto().setVisible(Boolean.TRUE);
+		getTxtProductoSeleccionado().setVisible(Boolean.FALSE);
+	}
+
+	private void showDetalleGenerico() {
+		getLblProductoSeleccionado().setText("* Detalle:");
+		getTxtProductoSeleccionado().setEditable(Boolean.TRUE);
+		getLblIva().setText("* " + getLblIva().getText());
+		getLblPorcIVA().setVisible(Boolean.FALSE);
+		getLblCantidad().setVisible(Boolean.FALSE);
+		getTxfCantidad().setVisible(Boolean.FALSE);
+		getLblProducto().setVisible(Boolean.FALSE);
 	}
 
 	private void initialize(String title) {
@@ -120,8 +144,8 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 		if (WUtils.isEmpty(cantidad)) {
 			messages.add("Debe ingresar una Cantidad");
 		} else {
-			Integer cantidadProducto = Integer.valueOf(cantidad);
-			if (cantidadProducto == 0) {
+			BigDecimal cantidadProducto = WUtils.getValue(cantidad);
+			if (cantidadProducto.doubleValue() == 0) {
 				messages.add("Debe ingresar una Cantidad mayor a 0");
 			}
 		}
@@ -162,6 +186,8 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getLblPrecio());
 			pnlBusqueda.add(getCmbTipoIva());
 			pnlBusqueda.add(getLblIva());
+			pnlBusqueda.add(getLblPorcIVA());
+			pnlBusqueda.add(getLblProducto());
 		}
 		return pnlBusqueda;
 	}
@@ -206,16 +232,19 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 									.getValue().intValue()));
 						}
 
-						BigDecimal importeDecimal =BigDecimal.valueOf(100).add(detalle.getTipoIVA().getImporte());
+						BigDecimal importeDecimal = BigDecimal.valueOf(100)
+								.add(detalle.getTipoIVA().getImporte());
 
 						BigDecimal totalConIVA = WUtils.getValue(precioTxt);
 
-						BigDecimal total = totalConIVA.multiply(BigDecimal.valueOf(100)).divide(importeDecimal, 4, RoundingMode.HALF_UP);
+						BigDecimal total = totalConIVA.multiply(
+								BigDecimal.valueOf(100)).divide(importeDecimal,
+								4, RoundingMode.HALF_UP);
 
-						detalle.setPrecio(WUtils.getValue(total.toEngineeringString(), 4));
-						detalle.setCantidad(WUtils.getValue(cantidad)
-								.intValue());
-						
+						detalle.setPrecio(WUtils.getValue(
+								total.toEngineeringString(), 4));
+						detalle.setCantidad(WUtils.getValue(cantidad));
+
 						comprobanteVerIFrame.refreshDetalles();
 						hideFrame();
 					}
@@ -252,7 +281,6 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtProductoSeleccionado() {
 		if (txtProductoSeleccionado == null) {
 			txtProductoSeleccionado = new JTextField();
-			txtProductoSeleccionado.setEditable(Boolean.FALSE);
 			txtProductoSeleccionado.setBounds(141, 21, 331, 25);
 			txtProductoSeleccionado.setColumns(10);
 			txtProductoSeleccionado.setName(CAMPO_PRODUCTO);
@@ -292,7 +320,6 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 	private JComboBox getCmbTipoIva() {
 		if (cmbTipoIva == null) {
 			cmbTipoIva = new JComboBox();
-			cmbTipoIva.setEditable(false);
 			cmbTipoIva.setName(CAMPO_IVA);
 			cmbTipoIva.setBounds(141, 93, 121, 25);
 		}
@@ -306,5 +333,30 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 			lblIva.setBounds(10, 93, 121, 25);
 		}
 		return lblIva;
+	}
+
+	private JLabel getLblPorcIVA() {
+		if (lblPorcIVA == null) {
+			lblPorcIVA = new JLabel("");
+			lblPorcIVA.setBounds(141, 93, 121, 25);
+			lblPorcIVA.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
+		}
+		return lblPorcIVA;
+	}
+
+	private JLabel getLblProducto() {
+		if (lblProducto == null) {
+			lblProducto = new JLabel("");
+			lblProducto.setBounds(141, 21, 331, 25);
+			lblProducto.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
+					Font.BOLD));
+		}
+		return lblProducto;
+	}
+
+	@Override
+	public void enterPressed() {
+		getBtnGuardar().doClick();
 	}
 }

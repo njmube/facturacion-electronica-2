@@ -1,6 +1,7 @@
 package ar.com.wuik.sistema.entities;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ public class DetalleComprobante extends BaseEntity {
 	@JoinColumn(name = "ID_PRODUCTO", nullable = true)
 	private Producto producto;
 	@Column(name = "CANTIDAD")
-	private Integer cantidad;
+	private BigDecimal cantidad;
 	@Column(name = "PRECIO")
 	private BigDecimal precio;
 	@Enumerated(EnumType.ORDINAL)
@@ -47,21 +48,16 @@ public class DetalleComprobante extends BaseEntity {
 		this.producto = producto;
 	}
 
-	public Integer getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Integer cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 
 	public BigDecimal getPrecio() {
 		return precio;
-	}
-	
-	public BigDecimal getPrecioConIVA() {
-		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
-		return getPrecio().multiply(iva).divide(new BigDecimal(100), 4, RoundingMode.HALF_UP);
 	}
 
 	public void setPrecio(BigDecimal precio) {
@@ -77,12 +73,13 @@ public class DetalleComprobante extends BaseEntity {
 	}
 
 	public BigDecimal getSubtotal() {
-		return getPrecio().multiply(new BigDecimal(getCantidad()));
+		return getPrecio().multiply(getCantidad());
 	}
 
 	public BigDecimal getTotal() {
 		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
-		return getSubtotal().multiply(iva).divide(new BigDecimal(100), 4 , RoundingMode.HALF_UP);
+		return getSubtotal().multiply(iva).divide(new BigDecimal(100), 2,
+				RoundingMode.HALF_UP);
 	}
 
 	public BigDecimal getTotalIVA() {
@@ -125,8 +122,9 @@ public class DetalleComprobante extends BaseEntity {
 		this.comentario = comentario;
 	}
 
-	public BigDecimal getSubtotalConIVA() {
-		return getPrecioConIVA().multiply(new BigDecimal(getCantidad()));
+	public BigDecimal getPrecioConIVA() {
+		return getPrecio().multiply(getTipoIVA().getImporteDecimal(),
+				new MathContext(2, RoundingMode.HALF_UP));
 	}
 
 }

@@ -6,7 +6,7 @@ public class DetalleComprobanteDTO {
 
 	private String codigo;
 	private String producto;
-	private int cantidad;
+	private BigDecimal cantidad;
 	private BigDecimal precioUnit;
 	private BigDecimal precioUnitConIVA;
 	private BigDecimal subtotal;
@@ -30,11 +30,11 @@ public class DetalleComprobanteDTO {
 		this.producto = producto;
 	}
 
-	public int getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(int cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 

@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.entities;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +37,7 @@ public class Remito extends BaseEntity {
 	@Column(name = "OBSERVACIONES")
 	private String observaciones;
 	@Formula(value = "(SELECT sum(dr.CANTIDAD) FROM detalles_remitos dr WHERE dr.ID_REMITO = ID)")
-	private int cantidad;
+	private BigDecimal cantidad;
 	@Column(name = "ACTIVO")
 	private boolean activo;
 
@@ -101,11 +102,11 @@ public class Remito extends BaseEntity {
 		this.observaciones = observaciones;
 	}
 
-	public int getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(int cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 

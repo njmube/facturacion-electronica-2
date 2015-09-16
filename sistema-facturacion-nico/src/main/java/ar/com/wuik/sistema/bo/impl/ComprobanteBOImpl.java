@@ -1,6 +1,7 @@
 package ar.com.wuik.sistema.bo.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -369,7 +370,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 				totalIVA105 = totalIVA105.add(detalleComprobante.getTotalIVA());
 			}
 		}
-		
+
 		subtotal21 = WUtils.getRoundedValue(subtotal21);
 		totalIVA21 = WUtils.getRoundedValue(totalIVA21);
 		subtotal105 = WUtils.getRoundedValue(subtotal105);
@@ -414,16 +415,16 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 	private TipoTributoEnum getTipoTributo(TipoTributo tributo) {
 		switch (tributo) {
-//		case IMP_INTERNOS:
-//			return TipoTributoEnum.IMP_INTERNO;
-//		case IMP_MUNIC:
-//			return TipoTributoEnum.IMP_MUNICIPAL;
-//		case PER_RET_IMP_GANANCIAS:
-//			return TipoTributoEnum.OTRO;
+		// case IMP_INTERNOS:
+		// return TipoTributoEnum.IMP_INTERNO;
+		// case IMP_MUNIC:
+		// return TipoTributoEnum.IMP_MUNICIPAL;
+		// case PER_RET_IMP_GANANCIAS:
+		// return TipoTributoEnum.OTRO;
 		case PER_RET_ING_BRUTOS:
 			return TipoTributoEnum.OTRO;
-//		case PER_RET_IVA:
-//			return TipoTributoEnum.OTRO;
+			// case PER_RET_IVA:
+			// return TipoTributoEnum.OTRO;
 		case OTROS:
 			return TipoTributoEnum.OTRO;
 		}
@@ -492,7 +493,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			HibernateUtil.startTransaction();
 			Comprobante comprobanteAfip = comprobanteDAO.getById(id);
 			comprobanteAfip.setActivo(Boolean.FALSE);
-			
+
 			List<Remito> remitos = comprobanteAfip.getRemitos();
 			if (null != remitos) {
 				for (Remito remito : remitos) {
@@ -500,7 +501,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 					remitoDAO.saveOrUpdate(remito);
 				}
 			}
-			
+
 			comprobanteDAO.saveOrUpdate(comprobanteAfip);
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
@@ -519,7 +520,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		try {
 			HibernateUtil.startTransaction();
 			Comprobante comprobante = comprobanteDAO.getById(id);
-			
+
 			List<Remito> remitos = comprobante.getRemitos();
 			if (null != remitos) {
 				for (Remito remito : remitos) {
@@ -528,21 +529,18 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 				}
 				comprobante.getRemitos().clear();
 			}
-			
+
 			comprobanteDAO.delete(comprobante.getId());
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("eliminar() - Error al eliminar comprobante",
-					daexc);
-			throw new BusinessException(daexc,
-					"Error al eliminar comprobante");
+			LOGGER.error("eliminar() - Error al eliminar comprobante", daexc);
+			throw new BusinessException(daexc, "Error al eliminar comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}
 	}
 
-	
 	@Override
 	public ComprobanteDTO obtenerDTO(Long id) throws BusinessException {
 		try {
@@ -612,14 +610,14 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			detalleComprobanteDTO.setCantidad(detallecomprobante.getCantidad());
 			detalleComprobanteDTO.setCodigo("");
 			detalleComprobanteDTO.setPrecioUnit(detallecomprobante.getPrecio());
-			detalleComprobanteDTO.setPrecioUnitConIVA(detallecomprobante
-					.getPrecioConIVA());
+			detalleComprobanteDTO
+					.setPrecioUnitConIVA(WUtils.getRoundedValue(detallecomprobante.getPrecioConIVA()));
 			detalleComprobanteDTO.setProducto((null != detallecomprobante
 					.getProducto()) ? detallecomprobante.getProducto()
 					.getDescripcion() : detallecomprobante.getDetalle());
-			detalleComprobanteDTO.setSubtotal(detallecomprobante.getSubtotal());
-			detalleComprobanteDTO.setSubtotalConIVA(detallecomprobante
-					.getSubtotalConIVA());
+			detalleComprobanteDTO.setSubtotal(WUtils.getRoundedValue(detallecomprobante.getSubtotal()));
+			detalleComprobanteDTO.setSubtotalConIVA(WUtils.getRoundedValue(detallecomprobante
+					.getTotal()));
 			detallesDTO.add(detalleComprobanteDTO);
 
 			if (detallecomprobante.getTipoIVA().equals(
@@ -637,8 +635,8 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		comprobanteDTO.setVtoCAE(comprobanteAfip.getFechaCAE());
 		comprobanteDTO.setCompNro(comprobanteAfip.getNroCompFormato());
 		comprobanteDTO.setFechaEmision(comprobanteAfip.getFechaVenta());
-		comprobanteDTO.setIva105(subtotalIVA105);
-		comprobanteDTO.setIva21(subtotalIVA21);
+		comprobanteDTO.setIva105(WUtils.getRoundedValue(subtotalIVA105));
+		comprobanteDTO.setIva21(WUtils.getRoundedValue(subtotalIVA21));
 		comprobanteDTO.setLetra(comprobanteAfip.getTipoLetraComprobante()
 				.name());
 		comprobanteDTO.setPtoVta(comprobanteAfip.getPtoVenta().toString());

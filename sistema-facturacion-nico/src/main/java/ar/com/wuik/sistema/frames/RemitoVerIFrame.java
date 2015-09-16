@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,7 +82,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JTextField txtEstado;
 	private WTablePanel<Producto> tblProducto;
 	private JTextField textField;
-	private JButton btnAgregar;
 	private JLabel lblBuscar;
 
 	/**
@@ -204,7 +204,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtEstado());
 			pnlBusqueda.add(getTblProducto());
 			pnlBusqueda.add(getTextField());
-			pnlBusqueda.add(getBtnAgregar());
 			pnlBusqueda.add(getLblBuscar());
 		}
 		return pnlBusqueda;
@@ -293,7 +292,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 	@Override
 	protected JComponent getFocusComponent() {
-		return getTxtNro();
+		return getTextField();
 	}
 
 	private JButton getBtnFechaEmision() {
@@ -333,6 +332,8 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JLabel getLblObservaciones() {
 		if (lblObservaciones == null) {
 			lblObservaciones = new JLabel("Observaciones:");
+			lblObservaciones.setIcon(new ImageIcon(RemitoVerIFrame.class
+					.getResource("/icons/observaciones.png")));
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblObservaciones.setBounds(10, 462, 93, 25);
 		}
@@ -360,27 +361,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 	private List<WToolbarButton> getToolbarButtonsDetalles() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Detalle",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
-							DetalleRemito detalle = getDetalleById(selectedItem);
-							addModalIFrame(new EditarDetalleRemitoIFrame(
-									detalle, RemitoVerIFrame.this));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un Detalle",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Editar", null);
 		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Detalle",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
@@ -390,11 +370,13 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tblDetalle.getSelectedItemID();
 						if (null != selectedItem) {
-							int result = JOptionPane.showConfirmDialog(
-									getParent(),
-									"¿Desea eliminar los Detalles seleccionados?",
-									"Alerta", JOptionPane.OK_CANCEL_OPTION,
-									JOptionPane.WARNING_MESSAGE);
+							int result = JOptionPane
+									.showConfirmDialog(
+											getParent(),
+											"¿Desea eliminar los Detalles seleccionados?",
+											"Alerta",
+											JOptionPane.OK_CANCEL_OPTION,
+											JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
 								DetalleRemito detalle = getDetalleById(selectedItem);
 								remito.getDetalles().remove(detalle);
@@ -403,14 +385,13 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Item",
+											"Debe seleccionar al menos un Detalle",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
 					}
 				}, "Eliminar", null);
 
-		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonEliminar);
 		return toolbarButtons;
 	}
@@ -453,6 +434,20 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			tblDetalle = new WTablePanel(DetalleRemitoModel.class, "Detalles");
 			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
 			tblDetalle.setBounds(10, 266, 714, 185);
+			tblDetalle.addWTableListener(new WTableListener() {
+
+				@Override
+				public void singleClickListener(Object[] selectedItem) {
+				}
+
+				@Override
+				public void doubleClickListener(Object[] selectedItem) {
+					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
+					DetalleRemito detalle = getDetalleById(selectedId);
+					addModalIFrame(new EditarDetalleRemitoIFrame(detalle,
+							RemitoVerIFrame.this));
+				}
+			});
 		}
 		return tblDetalle;
 	}
@@ -488,7 +483,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 				@Override
 				public void doubleClickListener(Object[] selectedItem) {
 					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-					addDetalle(selectedId);
+					addDetalleProducto(selectedId);
 				}
 			});
 			tblProducto.setBounds(10, 131, 714, 131);
@@ -496,7 +491,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		return tblProducto;
 	}
 
-	protected void addDetalle(Long selectedId) {
+	protected void addDetalle(Long selectedId, BigDecimal cantidad) {
 		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
 		try {
 			Producto producto = productoBO.obtener(selectedId);
@@ -504,13 +499,13 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			boolean existeEnDetalle = false;
 			for (DetalleRemito detalleRemito : detalles) {
 				if (detalleRemito.getProducto().getId().equals(selectedId)) {
-					detalleRemito.setCantidad(detalleRemito.getCantidad() + 1);
+					detalleRemito.setCantidad(detalleRemito.getCantidad().add(cantidad));
 					existeEnDetalle = true;
 				}
 			}
 			if (!existeEnDetalle) {
 				DetalleRemito detalle = new DetalleRemito();
-				detalle.setCantidad(1);
+				detalle.setCantidad(cantidad);
 				detalle.setRemito(remito);
 				detalle.setProducto(producto);
 				detalle.setTemporalId(System.currentTimeMillis());
@@ -521,6 +516,14 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
+	}
+
+	protected void addDetalle(DetalleRemito detalle) {
+		detalle.setRemito(remito);
+		List<DetalleRemito> detalles = remito.getDetalles();
+		detalles.add(detalle);
+		getTblDetalle().addData(detalles);
+		refreshDetalles();
 	}
 
 	private JTextField getTextField() {
@@ -540,6 +543,27 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		return textField;
 	}
 
+	protected void addDetalleProducto(Long selectedId) {
+		if (existeDetalleProducto(selectedId)) {
+			addDetalle(selectedId, BigDecimal.ONE);
+		} else {
+			addModalIFrame(new DetalleRemitoIFrame(selectedId,
+					RemitoVerIFrame.this));
+		}
+	}
+
+	protected boolean existeDetalleProducto(Long selectedId) {
+		List<DetalleRemito> detalles = remito.getDetalles();
+		for (DetalleRemito detalleRemito : detalles) {
+			if (detalleRemito.getProducto().getId().equals(selectedId)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private List<Producto> productos = null;
+
 	public void search() {
 		String toSearch = textField.getText();
 		if (WUtils.isNotEmpty(toSearch)) {
@@ -548,36 +572,20 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			ProductoFilter filter = new ProductoFilter();
 			filter.setDescripcionCodigo(toSearch);
 			try {
-				List<Producto> productos = productoBO.buscar(filter);
+				productos = productoBO.buscar(filter);
 				getTblProducto().addData(productos);
 			} catch (BusinessException e1) {
 			}
 		} else {
-			getTblProducto().addData(new ArrayList<Producto>());
+			getTblProducto().addData(productos);
 		}
-	}
-
-	private JButton getBtnAgregar() {
-		if (btnAgregar == null) {
-			btnAgregar = new JButton("Nuevo Producto");
-			btnAgregar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new ProductoVerIFrame(RemitoVerIFrame.this,
-							getTextField().getText()));
-				}
-			});
-			btnAgregar.setIcon(new ImageIcon(RemitoVerIFrame.class
-					.getResource("/icons/add.png")));
-			btnAgregar.setBounds(420, 95, 146, 25);
-		}
-		return btnAgregar;
 	}
 
 	private void calcularTotales() {
-		int cantidad = 0;
+		double cantidad = 0;
 		List<DetalleRemito> detalles = remito.getDetalles();
 		for (DetalleRemito detalleRemito : detalles) {
-			cantidad += detalleRemito.getCantidad();
+			cantidad += detalleRemito.getCantidad().doubleValue();
 		}
 		getTxtCantidad().setText(cantidad + "");
 	}
@@ -594,5 +602,21 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			lblBuscar.setBounds(10, 95, 121, 25);
 		}
 		return lblBuscar;
+	}
+
+	@Override
+	public void enterPressed() {
+
+		if (getTextField().hasFocus()) {
+			if (WUtils.isEmpty(productos)) {
+				addModalIFrame(new ProductoVerIFrame(RemitoVerIFrame.this,
+						textField.getText()));
+			} else {
+				if (productos.size() == 1) {
+					Long idProducto = productos.get(0).getId();
+					addDetalleProducto(idProducto);
+				}
+			}
+		}
 	}
 }

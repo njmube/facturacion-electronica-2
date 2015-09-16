@@ -157,7 +157,7 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 
 			if (null != comprobanteVerIFrame) {
 				DetalleComprobante detalle = new DetalleComprobante();
-				detalle.setCantidad(1);
+				detalle.setCantidad(BigDecimal.ONE);
 				detalle.setDetalle(descripcion);
 				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue()
 						.intValue()));

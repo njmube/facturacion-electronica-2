@@ -1,11 +1,13 @@
 package ar.com.wuik.sistema.reportes.entities;
 
+import java.math.BigDecimal;
+
 
 public class DetalleRemitoDTO {
 
 	private String codigo;
 	private String producto;
-	private int cantidad;
+	private BigDecimal cantidad;
 
 	public String getCodigo() {
 		return codigo;
@@ -23,11 +25,11 @@ public class DetalleRemitoDTO {
 		this.producto = producto;
 	}
 
-	public int getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(int cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 

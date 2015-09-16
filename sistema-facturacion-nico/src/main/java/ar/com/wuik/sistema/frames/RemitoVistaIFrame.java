@@ -18,10 +18,8 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.bo.RemitoBO;
 import ar.com.wuik.sistema.entities.DetalleRemito;
-import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.model.DetalleRemitoModel;
@@ -281,38 +279,12 @@ public class RemitoVistaIFrame extends WAbstractModelIFrame {
 		return txtEstado;
 	}
 
-	protected void addDetalle(Long selectedId) {
-		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
-		try {
-			Producto producto = productoBO.obtener(selectedId);
-			List<DetalleRemito> detalles = remito.getDetalles();
-			boolean existeEnDetalle = false;
-			for (DetalleRemito detalleRemito : detalles) {
-				if (detalleRemito.getProducto().getId().equals(selectedId)) {
-					detalleRemito.setCantidad(detalleRemito.getCantidad() + 1);
-					existeEnDetalle = true;
-				}
-			}
-			if (!existeEnDetalle) {
-				DetalleRemito detalle = new DetalleRemito();
-				detalle.setCantidad(1);
-				detalle.setRemito(remito);
-				detalle.setProducto(producto);
-				detalle.setTemporalId(System.currentTimeMillis());
-				detalles.add(detalle);
-			}
-			getTblDetalle().addData(detalles);
-			calcularTotales();
-		} catch (BusinessException bexc) {
-			showGlobalErrorMsg(bexc.getMessage());
-		}
-	}
 
 	private void calcularTotales() {
-		int cantidad = 0;
+		double cantidad = 0;
 		List<DetalleRemito> detalles = remito.getDetalles();
 		for (DetalleRemito detalleRemito : detalles) {
-			cantidad += detalleRemito.getCantidad();
+			cantidad += detalleRemito.getCantidad().doubleValue();
 		}
 		getTxtCantidad().setText(cantidad + "");
 	}

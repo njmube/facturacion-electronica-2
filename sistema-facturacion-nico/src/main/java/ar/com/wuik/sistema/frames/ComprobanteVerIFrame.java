@@ -788,7 +788,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
 
 					if (existeDetalleProducto(selectedId)) {
-						addDetalle(selectedId);
+						addDetalle(selectedId, BigDecimal.ONE);
 					} else {
 						addModalIFrame(new DetalleComprobanteIFrame(selectedId,
 								ComprobanteVerIFrame.this));
@@ -810,7 +810,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return false;
 	}
 
-	protected void addDetalle(Long selectedId) {
+	protected void addDetalle(Long selectedId, BigDecimal cantidad) {
 		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
 		try {
 			Producto producto = productoBO.obtener(selectedId);
@@ -820,14 +820,14 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				if (null != detalleFactura.getProducto()
 						&& detalleFactura.getProducto().getId()
 								.equals(selectedId)) {
-					detalleFactura
-							.setCantidad(detalleFactura.getCantidad() + 1);
+					detalleFactura.setCantidad(detalleFactura.getCantidad()
+							.add(cantidad));
 					existeEnDetalle = true;
 				}
 			}
 			if (!existeEnDetalle) {
 				DetalleComprobante detalle = new DetalleComprobante();
-				detalle.setCantidad(1);
+				detalle.setCantidad(cantidad);
 				detalle.setComprobante(comprobante);
 				detalle.setTipoIVA(producto.getTipoIVA());
 				detalle.setPrecio(BigDecimal.ZERO);
@@ -900,13 +900,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		for (TributoComprobante tributoComprobante : tributos) {
 			totalTributo = totalTributo.add(tributoComprobante.getImporte());
 		}
-		
+
 		comprobante.setSubtotal(WUtils.getRoundedValue(subtotal));
 		comprobante.setTotalTributos(WUtils.getRoundedValue(totalTributo));
 		comprobante.setTotal(WUtils.getRoundedValue(total));
 		comprobante.setIva(WUtils.getRoundedValue(total.subtract(subtotal)));
 
-		
 		getTxtSubtotalPesos().setText(
 				WUtils.getValue(comprobante.getSubtotal())
 						.toEngineeringString());
@@ -950,9 +949,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			if (!comprobante.getRemitos().contains(remito)) {
 				List<DetalleRemito> detallesRemito = remito.getDetalles();
 				for (DetalleRemito detalleRemito : detallesRemito) {
-					for (int i = 0; i < detalleRemito.getCantidad(); i++) {
-						addDetalle(detalleRemito.getProducto().getId());
-					}
+					addDetalle(detalleRemito.getProducto().getId(), detalleRemito.getCantidad());
 				}
 				remito.setComprobante(comprobante);
 				comprobante.getRemitos().add(remito);
@@ -1062,7 +1059,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 	private WTablePanel<Comprobante> getTablePanel() {
 		if (tablePanel == null) {
-			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class, "Comprobantes asociados");
+			tablePanel = new WTablePanel(DetalleComprobantesAsocModel.class,
+					"Comprobantes asociados");
 			tablePanel.addToolbarButtons(getToolbarButtonsComprobantes());
 			tablePanel.setBounds(695, 136, 296, 142);
 		}

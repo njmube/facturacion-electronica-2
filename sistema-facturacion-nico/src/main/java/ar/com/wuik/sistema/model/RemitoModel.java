@@ -28,7 +28,7 @@ public class RemitoModel extends WTableModel<Remito> {
 	protected Object[] getRow(Remito t, Object[] fila) {
 		fila[0] = t.getNumero();
 		fila[1] = WUtils.getStringFromDate(t.getFecha());
-		fila[2] = t.getCantidad();
+		fila[2] = WUtils.getValue(t.getCantidad());
 
 		if (null != t.getComprobante()) {
 			fila[3] = (WUtils

@@ -1,5 +1,7 @@
 package ar.com.wuik.sistema.entities;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +21,7 @@ public class DetalleRemito extends BaseEntity {
 	@JoinColumn(name = "ID_PRODUCTO", nullable = true)
 	private Producto producto;
 	@Column(name = "CANTIDAD")
-	private Integer cantidad;
+	private BigDecimal cantidad;
 	@Column(name = "DETALLE")
 	private String detalle;
 	@Transient
@@ -41,11 +43,11 @@ public class DetalleRemito extends BaseEntity {
 		this.producto = producto;
 	}
 
-	public Integer getCantidad() {
+	public BigDecimal getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(Integer cantidad) {
+	public void setCantidad(BigDecimal cantidad) {
 		this.cantidad = cantidad;
 	}
 

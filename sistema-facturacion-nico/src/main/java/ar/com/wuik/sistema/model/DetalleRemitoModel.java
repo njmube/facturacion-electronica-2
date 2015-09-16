@@ -2,6 +2,7 @@ package ar.com.wuik.sistema.model;
 
 import ar.com.wuik.sistema.entities.DetalleRemito;
 import ar.com.wuik.swing.components.table.WTableModel;
+import ar.com.wuik.swing.utils.WUtils;
 
 public class DetalleRemitoModel extends WTableModel<DetalleRemito> {
 
@@ -22,7 +23,7 @@ public class DetalleRemitoModel extends WTableModel<DetalleRemito> {
 	@Override
 	protected Object[] getRow(DetalleRemito t, Object[] fila) {
 		fila[0] = t.getProducto().getDescripcion();
-		fila[1] = t.getCantidad();
+		fila[1] = WUtils.getValue(t.getCantidad());
 		fila[2] = t.getCoalesceId();
 		return fila;
 	}

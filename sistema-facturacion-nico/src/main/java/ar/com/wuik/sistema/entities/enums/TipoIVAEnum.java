@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public enum TipoIVAEnum {
 
-	IVA_105(1, "10.5 %", BigDecimal.valueOf(10.5), BigDecimal.valueOf(0.105)), IVA_21(
-			2, "21 %", BigDecimal.valueOf(21), BigDecimal.valueOf(0.21));
+	IVA_105(1, "10.5 %", BigDecimal.valueOf(10.5), BigDecimal.valueOf(1.105)), IVA_21(
+			2, "21 %", BigDecimal.valueOf(21), BigDecimal.valueOf(1.21));
 
 	private String descripcion;
 	private BigDecimal importe;

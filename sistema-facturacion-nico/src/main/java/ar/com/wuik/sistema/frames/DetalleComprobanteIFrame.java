@@ -50,7 +50,7 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_PRECIO = "precio";
 	private static final String CAMPO_IVA = "iva";
 	private JLabel lblCantidad;
-	private WTextFieldNumeric txfCantidad;
+	private WTextFieldDecimal txfCantidad;
 	private JTextField txtProductoSeleccionado;
 	private JLabel lblProductoSeleccionado;
 	private ComprobanteVerIFrame comprobanteVerIFrame;
@@ -74,7 +74,7 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			Producto producto = productoBO.obtener(idProducto);
 			detalle.setProducto(producto);
 			detalle.setTipoIVA(producto.getTipoIVA());
-			detalle.setCantidad(1);
+			detalle.setCantidad(BigDecimal.ONE);
 			this.comprobanteVerIFrame = comprobanteVerIFrame;
 			initialize("Nuevo Detalle Producto");
 			WModel model = populateModel();
@@ -114,8 +114,8 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 		if (WUtils.isEmpty(cantidad)) {
 			messages.add("Debe ingresar una Cantidad");
 		} else {
-			Integer cantidadProducto = Integer.valueOf(cantidad);
-			if (cantidadProducto == 0) {
+			BigDecimal cantidadProducto = WUtils.getValue(cantidad);
+			if (cantidadProducto.doubleValue() == 0) {
 				messages.add("Debe ingresar una Cantidad mayor a 0");
 			}
 		}
@@ -180,15 +180,15 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						String precioTxt = model.getValue(CAMPO_PRECIO);
 
-						BigDecimal importeDecimal =BigDecimal.valueOf(100).add(detalle.getTipoIVA().getImporte());
+						BigDecimal importeDecimal = detalle.getTipoIVA()
+								.getImporteDecimal();
 
 						BigDecimal totalConIVA = WUtils.getValue(precioTxt);
 
-						BigDecimal total = totalConIVA.multiply(BigDecimal.valueOf(100)).divide(importeDecimal, 4, RoundingMode.HALF_UP);
+						BigDecimal total = totalConIVA.divide(importeDecimal, 2 , RoundingMode.HALF_UP);
 
-						detalle.setPrecio(WUtils.getValue(total.toEngineeringString(), 4));
-						detalle.setCantidad(WUtils.getValue(cantidad)
-								.intValue());
+						detalle.setPrecio(WUtils.getRoundedValue(total));
+						detalle.setCantidad(WUtils.getRoundedValue(cantidad));
 						comprobanteVerIFrame.addDetalle(detalle);
 						hideFrame();
 					}
@@ -213,9 +213,9 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 		return lblCantidad;
 	}
 
-	private WTextFieldNumeric getTxfCantidad() {
+	private WTextFieldDecimal getTxfCantidad() {
 		if (txfCantidad == null) {
-			txfCantidad = new WTextFieldNumeric();
+			txfCantidad = new WTextFieldDecimal(8, 2);
 			txfCantidad.setBounds(141, 129, 121, 25);
 			txfCantidad.setName(CAMPO_CANTIDAD);
 			txfCantidad.addKeyListener(new KeyAdapter() {
