@@ -900,12 +900,13 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		for (TributoComprobante tributoComprobante : tributos) {
 			totalTributo = totalTributo.add(tributoComprobante.getImporte());
 		}
+		
+		comprobante.setSubtotal(WUtils.getRoundedValue(subtotal));
+		comprobante.setTotalTributos(WUtils.getRoundedValue(totalTributo));
+		comprobante.setTotal(WUtils.getRoundedValue(total));
+		comprobante.setIva(WUtils.getRoundedValue(total.subtract(subtotal)));
 
-		comprobante.setSubtotal(WUtils.getValue(subtotal));
-		comprobante.setTotalTributos(WUtils.getValue(totalTributo));
-		comprobante.setTotal(WUtils.getValue(total));
-		comprobante.setIva(WUtils.getValue(total.subtract(subtotal)));
-
+		
 		getTxtSubtotalPesos().setText(
 				WUtils.getValue(comprobante.getSubtotal())
 						.toEngineeringString());

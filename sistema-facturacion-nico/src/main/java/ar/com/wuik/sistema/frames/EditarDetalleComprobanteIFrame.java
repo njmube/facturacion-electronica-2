@@ -67,12 +67,11 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 		initialize("Editar Detalle");
 		WModel model = populateModel();
 		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
-		model.addValue(CAMPO_PRECIO, detalle.getPrecio());
+		model.addValue(CAMPO_PRECIO, WUtils.getValue(detalle.getPrecioConIVA()));
 		model.addValue(CAMPO_IVA, detalle.getTipoIVA().getId());
 		model.addValue(
 				CAMPO_PRODUCTO,
-				(null != detalle.getProducto()) ? detalle.getProducto()
-						+ detalle.getProducto().getDescripcion() : detalle
+				(null != detalle.getProducto()) ? detalle.getProducto().getDescripcion() : detalle
 						.getDetalle());
 		editaDetalle = null == detalle.getProducto();
 		if (editaDetalle) {
@@ -198,18 +197,6 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						String precioTxt = model.getValue(CAMPO_PRECIO);
 
-						BigDecimal iva = detalle.getTipoIVA().getImporte()
-								.add(new BigDecimal(100));
-
-						BigDecimal precio = WUtils.getValue(precioTxt);
-
-						BigDecimal total = precio.multiply(new BigDecimal(100))
-								.divide(iva, 2, RoundingMode.HALF_UP);
-
-						detalle.setPrecio(WUtils.getValue(total));
-						detalle.setCantidad(WUtils.getValue(cantidad)
-								.intValue());
-
 						if (editaDetalle) {
 							String detalleDescripcion = model
 									.getValue(CAMPO_PRODUCTO);
@@ -219,6 +206,16 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 									.getValue().intValue()));
 						}
 
+						BigDecimal importeDecimal =BigDecimal.valueOf(100).add(detalle.getTipoIVA().getImporte());
+
+						BigDecimal totalConIVA = WUtils.getValue(precioTxt);
+
+						BigDecimal total = totalConIVA.multiply(BigDecimal.valueOf(100)).divide(importeDecimal, 4, RoundingMode.HALF_UP);
+
+						detalle.setPrecio(WUtils.getValue(total.toEngineeringString(), 4));
+						detalle.setCantidad(WUtils.getValue(cantidad)
+								.intValue());
+						
 						comprobanteVerIFrame.refreshDetalles();
 						hideFrame();
 					}

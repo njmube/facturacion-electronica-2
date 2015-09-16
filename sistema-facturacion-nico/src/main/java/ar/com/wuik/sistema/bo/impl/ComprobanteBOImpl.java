@@ -369,6 +369,11 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 				totalIVA105 = totalIVA105.add(detalleComprobante.getTotalIVA());
 			}
 		}
+		
+		subtotal21 = WUtils.getRoundedValue(subtotal21);
+		totalIVA21 = WUtils.getRoundedValue(totalIVA21);
+		subtotal105 = WUtils.getRoundedValue(subtotal105);
+		totalIVA105 = WUtils.getRoundedValue(totalIVA105);
 
 		// IVA DEL 21%
 		if (subtotal21.doubleValue() > 0) {

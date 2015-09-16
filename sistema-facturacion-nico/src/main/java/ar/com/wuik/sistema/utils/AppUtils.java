@@ -104,4 +104,8 @@ public class AppUtils {
 	public static String formatPeso(BigDecimal value) {
 		return "$ " + WUtils.getValue(value).toEngineeringString();
 	}
+	
+	public static String formatPesoConDecimales(BigDecimal value) {
+		return "$ " + value.toEngineeringString();
+	}
 }

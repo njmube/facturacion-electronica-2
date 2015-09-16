@@ -180,13 +180,13 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						String precioTxt = model.getValue(CAMPO_PRECIO);
 
-						BigDecimal importeDecimal =BigDecimal.ONE.subtract(detalle.getTipoIVA().getImporteDecimal());
+						BigDecimal importeDecimal =BigDecimal.valueOf(100).add(detalle.getTipoIVA().getImporte());
 
 						BigDecimal totalConIVA = WUtils.getValue(precioTxt);
 
-						BigDecimal total = totalConIVA.multiply(importeDecimal);
+						BigDecimal total = totalConIVA.multiply(BigDecimal.valueOf(100)).divide(importeDecimal, 4, RoundingMode.HALF_UP);
 
-						detalle.setPrecio(WUtils.getValue(total));
+						detalle.setPrecio(WUtils.getValue(total.toEngineeringString(), 4));
 						detalle.setCantidad(WUtils.getValue(cantidad)
 								.intValue());
 						comprobanteVerIFrame.addDetalle(detalle);

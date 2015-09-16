@@ -29,10 +29,10 @@ public class DetalleComprobanteModel extends WTableModel<DetalleComprobante> {
 		fila[0] = (null != t.getProducto()) ? t.getProducto().getDescripcion()
 				: t.getDetalle();
 		fila[1] = t.getCantidad();
-		fila[2] = AppUtils.formatPeso(t.getPrecio());
-		fila[3] = AppUtils.formatPeso(WUtils.getValue(t.getSubtotal()));
+		fila[2] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getPrecio()));
+		fila[3] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getSubtotal()));
 		fila[4] = t.getTipoIVA().getDescripcion();
-		fila[5] = AppUtils.formatPeso(WUtils.getValue(t.getTotal()));
+		fila[5] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getTotal()));
 		fila[6] = t.getCoalesceId();
 		return fila;
 	}

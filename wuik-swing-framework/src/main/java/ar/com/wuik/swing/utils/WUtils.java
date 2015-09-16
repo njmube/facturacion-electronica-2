@@ -204,8 +204,8 @@ public final class WUtils {
 					tokens[1] = rightPadding(tokens[1], decimals, "0");
 
 					BigDecimal decimalRounded = new BigDecimal(
-							"0." + tokens[1], new MathContext(1,
-									RoundingMode.HALF_UP));
+							"0." + tokens[1]);
+					decimalRounded = decimalRounded.setScale(decimals, RoundingMode.HALF_UP);
 					BigDecimal nonDecimalPart = new BigDecimal(tokens[0]);
 					if (nonDecimalPart.doubleValue() < 0) {
 						return decimalRounded.add(

@@ -495,23 +495,13 @@ public class ComprobanteVistaIFrame extends WAbstractModelIFrame {
 			total = total.add(detalleFactura.getTotal());
 		}
 
-		List<TributoComprobante> tributos = comprobante.getTributos();
-		for (TributoComprobante tributoComprobante : tributos) {
-			totalTributo = totalTributo.add(tributoComprobante.getImporte());
-		}
-
-		comprobante.setSubtotal(subtotal);
-		comprobante.setTotalTributos(totalTributo);
-		comprobante.setTotal(total);
-		comprobante.setIva(total.subtract(subtotal));
-
 		getTxtSubtotalPesos().setText(
 				WUtils.getValue(comprobante.getSubtotal())
 						.toEngineeringString());
 		getTxtIVA10().setText(
-				WUtils.getValue(subtotalIVA105).toEngineeringString());
+				WUtils.getRoundedValue(subtotalIVA105).toEngineeringString());
 		getTxtIVA21().setText(
-				WUtils.getValue(subtotalIVA21).toEngineeringString());
+				WUtils.getRoundedValue(subtotalIVA21).toEngineeringString());
 		getTxtTotalPesos().setText(
 				WUtils.getValue(comprobante.getTotal().add(totalTributo))
 						.toEngineeringString());
