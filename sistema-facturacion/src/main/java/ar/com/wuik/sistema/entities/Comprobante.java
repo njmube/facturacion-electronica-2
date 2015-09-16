@@ -43,7 +43,7 @@ public class Comprobante extends BaseEntity {
 	private String cae;
 	@Column(name = "ACTIVO")
 	private boolean activo = Boolean.TRUE;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "comprobante", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "comprobante", cascade = CascadeType.ALL, orphanRemoval = false)
 	private List<Remito> remitos;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "comprobante", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DetalleComprobante> detalles;

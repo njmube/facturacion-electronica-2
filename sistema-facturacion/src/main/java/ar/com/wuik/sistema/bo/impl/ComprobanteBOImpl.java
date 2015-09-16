@@ -295,7 +295,8 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 		// DATOS DEL CLIENTE.
 		comprobanteAfip.setDocNro(Long.valueOf(documento));
-		comprobanteAfip.setDocTipo(getTipoDocumento(cliente.getTipoDocumento()));
+		comprobanteAfip
+				.setDocTipo(getTipoDocumento(cliente.getTipoDocumento()));
 
 		// COTIZACION LA TOMA DEL TIPO DE MONEDA PORQUE ES EN PESOS.
 		comprobanteAfip.setTipoMoneda(TipoMonedaEnum.PESOS_ARGENTINOS);
@@ -395,14 +396,14 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 	private TipoDocumentoEnum getTipoDocumento(TipoDocumento tipoDocumento) {
 		switch (tipoDocumento) {
-//		case CUIL:
-//			return TipoDocumentoEnum.CUIL;
+		// case CUIL:
+		// return TipoDocumentoEnum.CUIL;
 		case CUIT:
 			return TipoDocumentoEnum.CUIT;
-//		case DNI:
-//			return TipoDocumentoEnum.DNI;
-//		case OTROS:
-//			return TipoDocumentoEnum.OTROS;
+			// case DNI:
+			// return TipoDocumentoEnum.DNI;
+			// case OTROS:
+			// return TipoDocumentoEnum.OTROS;
 		}
 		return null;
 	}
@@ -487,16 +488,22 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			HibernateUtil.startTransaction();
 			Comprobante comprobanteAfip = comprobanteDAO.getById(id);
 			comprobanteAfip.setActivo(Boolean.FALSE);
-			
+
 			List<Remito> remitos = comprobanteAfip.getRemitos();
 			if (null != remitos) {
 				for (Remito remito : remitos) {
 					remito.setComprobante(null);
 					remitoDAO.saveOrUpdate(remito);
 				}
+				comprobanteAfip.getRemitos().clear();
 			}
-			
-			comprobanteDAO.saveOrUpdate(comprobanteAfip);
+
+			if (comprobanteAfip.getEstadoFacturacion().equals(
+					EstadoFacturacion.SIN_FACTURAR)) {
+				comprobanteDAO.delete(id);
+			} else {
+				comprobanteDAO.saveOrUpdate(comprobanteAfip);
+			}
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
