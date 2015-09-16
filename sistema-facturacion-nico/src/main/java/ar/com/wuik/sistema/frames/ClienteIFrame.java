@@ -1,5 +1,6 @@
 package ar.com.wuik.sistema.frames;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -179,8 +180,23 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long idCliente = tablePanel.getSelectedItemID();
 						if (null != idCliente) {
-							addModalIFrame(new ClienteVerIFrame(idCliente,
-									ClienteIFrame.this));
+							ClienteBO clienteBO = AbstractFactory
+									.getInstance(ClienteBO.class); 
+							try {
+								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
+									JOptionPane.showMessageDialog(getParent(), "Este usuario no es editable.");
+								} else {
+									addModalIFrame(new ClienteVerIFrame(idCliente,
+											ClienteIFrame.this));
+								}
+							} catch (HeadlessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (BusinessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -199,26 +215,31 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						Long idCliente = tablePanel.getSelectedItemID();
+						ClienteBO clienteBO = AbstractFactory
+								.getInstance(ClienteBO.class);
 						if (null != idCliente) {
 							try {
-								int result = JOptionPane
-										.showConfirmDialog(
-												getParent(),
-												"¿Desea Eliminar el Cliente seleccionado?",
-												"Alerta",
-												JOptionPane.OK_CANCEL_OPTION,
-												JOptionPane.WARNING_MESSAGE);
-								if (result == JOptionPane.OK_OPTION) {
-									ClienteBO clienteBO = AbstractFactory
-											.getInstance(ClienteBO.class);
-
-									boolean enUso = clienteBO
-											.estaEnUso(idCliente);
-									if (enUso) {
-										showGlobalMsg("El Cliente se encuentra en uso");
-									} else {
-										clienteBO.eliminar(idCliente);
-										search();
+								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
+									JOptionPane.showMessageDialog(getParent(), "Este usuario no es editable.");
+								} else {
+									int result = JOptionPane
+											.showConfirmDialog(
+													getParent(),
+													"¿Desea Eliminar el Cliente seleccionado?",
+													"Alerta",
+													JOptionPane.OK_CANCEL_OPTION,
+													JOptionPane.WARNING_MESSAGE);
+									if (result == JOptionPane.OK_OPTION) {
+										
+	
+										boolean enUso = clienteBO
+												.estaEnUso(idCliente);
+										if (enUso) {
+											showGlobalMsg("El Cliente se encuentra en uso");
+										} else {
+											clienteBO.eliminar(idCliente);
+											search();
+										}
 									}
 								}
 							} catch (BusinessException bexc) {
@@ -263,8 +284,23 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					public void actionPerformed(ActionEvent e) {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
-							addModalIFrame(new RemitoIFrame(selectedItem));
-						} else {
+							ClienteBO clienteBO = AbstractFactory
+									.getInstance(ClienteBO.class); 						
+								try {
+									if (clienteBO.obtener(selectedItem).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
+										JOptionPane.showMessageDialog(getParent(), "Este usuario no posee remitos.");
+									} else {
+										addModalIFrame(new RemitoIFrame(selectedItem));
+									}
+								} catch (HeadlessException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								} catch (BusinessException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
+						 else {
 							WTooltipUtils
 									.showMessage(
 											"Debe seleccionar un solo Cliente",
@@ -436,9 +472,25 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnRemito.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
-					if (null != selectedItem) {
-						addModalIFrame(new RemitoVerIFrame(selectedItem));
-					} else {
+					ClienteBO clienteBO = AbstractFactory
+							.getInstance(ClienteBO.class); 				
+					
+							
+					if (null != selectedItem) {	
+						try {
+							if (clienteBO.obtener(selectedItem).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
+								JOptionPane.showMessageDialog(getParent(), "No es posible agregar remitos para este usuario.");
+							} else {
+							addModalIFrame(new RemitoVerIFrame(selectedItem));
+}
+						} catch (HeadlessException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (BusinessException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
