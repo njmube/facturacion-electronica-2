@@ -1,6 +1,7 @@
 package ar.com.wuik.sistema.entities;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -80,8 +81,8 @@ public class DetalleComprobante extends BaseEntity {
 	}
 
 	public BigDecimal getTotal() {
-		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
-		return getSubtotal().multiply(iva).divide(new BigDecimal(100));
+		BigDecimal importeDecimal =new BigDecimal(100).subtract(getTipoIVA().getImporte());
+		return getSubtotal().multiply(new BigDecimal(100)).divide(importeDecimal, RoundingMode.HALF_UP);
 	}
 
 	public BigDecimal getTotalIVA() {

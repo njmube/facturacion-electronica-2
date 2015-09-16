@@ -2,6 +2,7 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,15 +153,25 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 
 			String descripcion = model.getValue(CAMPO_DESCRIPCION);
 			WOption tipoIva = model.getValue(CAMPO_IVA);
-			String precio = model.getValue(CAMPO_PRECIO);
+			String precioTxt = model.getValue(CAMPO_PRECIO);
 
 			if (null != comprobanteVerIFrame) {
 				DetalleComprobante detalle = new DetalleComprobante();
 				detalle.setCantidad(1);
 				detalle.setDetalle(descripcion);
-				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue().intValue()));
-				detalle.setPrecio(WUtils.getValue(precio));
+				detalle.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue()
+						.intValue()));
 				detalle.setTemporalId(System.currentTimeMillis());
+
+				BigDecimal importeDecimal = BigDecimal.ONE.subtract(detalle
+						.getTipoIVA().getImporteDecimal());
+
+				BigDecimal totalConIVA = WUtils.getValue(precioTxt);
+
+				BigDecimal total = totalConIVA.multiply(importeDecimal);
+
+				detalle.setPrecio(WUtils.getValue(total));
+
 				comprobanteVerIFrame.addDetalle(detalle);
 			} else if (null != remitoClienteVerIFrame) {
 				remitoClienteVerIFrame.search();
@@ -240,5 +251,10 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 			txfPrecio.setBounds(148, 99, 125, 25);
 		}
 		return txfPrecio;
+	}
+
+	@Override
+	public void enterPressed() {
+		getBtnGuardar().doClick();
 	}
 }

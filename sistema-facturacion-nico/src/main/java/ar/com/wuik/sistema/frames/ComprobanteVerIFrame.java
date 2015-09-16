@@ -143,6 +143,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			lblTipoComp.setText("FACTURA");
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
+			getTablePanel().setVisible(Boolean.FALSE);
 			break;
 		case NOTA_CREDITO:
 			titulo = "Editar Nota de Crédito";
@@ -193,6 +194,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
 			lblTipoComp.setText("FACTURA");
+			getTablePanel().setVisible(Boolean.FALSE);
 			break;
 		case NOTA_CREDITO:
 			titulo = "Nueva Nota de Crédito";
@@ -250,6 +252,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			icon = new ImageIcon(
 					ComprobanteIFrame.class.getResource("/icons/facturas.png"));
 			lblTipoComp.setText("FACTURA");
+			getTablePanel().setVisible(Boolean.FALSE);
 			break;
 		case NOTA_CREDITO:
 			titulo = "Nueva Nota de Crédito";
@@ -614,27 +617,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 	private List<WToolbarButton> getToolbarButtonsDetalles() {
 		List<WToolbarButton> toolbarButtons = new ArrayList<WToolbarButton>();
-		WToolbarButton buttonEdit = new WToolbarButton("Editar Detalle",
-				new ImageIcon(WCalendarIFrame.class
-						.getResource("/icons/edit.png")),
-				new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
-						if (null != selectedItem) {
-							DetalleComprobante detalle = getDetalleById(selectedItem);
-							addModalIFrame(new EditarDetalleComprobanteIFrame(
-									detalle, ComprobanteVerIFrame.this));
-						} else {
-							WTooltipUtils
-									.showMessage(
-											"Debe seleccionar un solo Item",
-											(JButton) e.getSource(),
-											MessageType.ALERTA);
-						}
-					}
-				}, "Editar", null);
 		WToolbarButton buttonEliminar = new WToolbarButton("Eliminar Detalle",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
@@ -679,7 +661,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				}, "Nuevo Detalle", null);
 
 		toolbarButtons.add(buttonNuevoDetalle);
-		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonEliminar);
 		return toolbarButtons;
 	}
@@ -763,6 +744,21 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 					"Detalles");
 			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
 			tblDetalle.setBounds(10, 289, 675, 160);
+			tblDetalle.addWTableListener(new WTableListener() {
+
+				@Override
+				public void singleClickListener(Object[] selectedItem) {
+				}
+
+				@Override
+				public void doubleClickListener(Object[] selectedItem) {
+					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
+
+					DetalleComprobante detalle = getDetalleById(selectedId);
+					addModalIFrame(new EditarDetalleComprobanteIFrame(detalle,
+							ComprobanteVerIFrame.this));
+				}
+			});
 		}
 		return tblDetalle;
 	}
@@ -1034,6 +1030,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	}
 
 	public void addDetalle(DetalleComprobante detalle) {
+		detalle.setTemporalId(System.currentTimeMillis());
 		detalle.setComprobante(comprobante);
 		List<DetalleComprobante> detalles = comprobante.getDetalles();
 		detalles.add(detalle);

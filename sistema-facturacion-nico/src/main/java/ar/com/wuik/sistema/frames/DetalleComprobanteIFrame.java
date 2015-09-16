@@ -80,11 +80,9 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			WModel model = populateModel();
 			model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
 			model.addValue(CAMPO_IVA, detalle.getTipoIVA().getDescripcion());
-			model.addValue(
-					CAMPO_PRODUCTO,
+			model.addValue(CAMPO_PRODUCTO,
 					(null != detalle.getProducto()) ? detalle.getProducto()
-							+ detalle.getProducto().getDescripcion() : detalle
-							.getDetalle());
+							.getDescripcion() : detalle.getDetalle());
 			populateComponents(model);
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
@@ -181,13 +179,13 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 					if (validateModel(model)) {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						String precioTxt = model.getValue(CAMPO_PRECIO);
-						
-						BigDecimal iva = detalle.getTipoIVA().getImporte().add(new BigDecimal(100));
-						
-						BigDecimal precio = WUtils.getValue(precioTxt);
-						
-						BigDecimal total = precio.multiply(new BigDecimal(100)).divide(iva, 2, RoundingMode.HALF_UP);
-						
+
+						BigDecimal importeDecimal =BigDecimal.ONE.subtract(detalle.getTipoIVA().getImporteDecimal());
+
+						BigDecimal totalConIVA = WUtils.getValue(precioTxt);
+
+						BigDecimal total = totalConIVA.multiply(importeDecimal);
+
 						detalle.setPrecio(WUtils.getValue(total));
 						detalle.setCantidad(WUtils.getValue(cantidad)
 								.intValue());
@@ -324,5 +322,10 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 			txtIVA.setBounds(141, 57, 219, 25);
 		}
 		return txtIVA;
+	}
+
+	@Override
+	public void enterPressed() {
+		getBtnGuardar().doClick();
 	}
 }
