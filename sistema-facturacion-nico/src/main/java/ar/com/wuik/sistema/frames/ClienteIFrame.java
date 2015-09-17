@@ -34,6 +34,7 @@ import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
+import ar.com.wuik.swing.utils.WUtils;
 
 public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 
@@ -56,6 +57,9 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton btnNotaDeDbito;
 	private JButton btnVenta;
 	private JButton btnRemito;
+	private JButton btnVentaCF;
+	private JButton btnNotaDeCreditoCF;
+	private JButton btnNotaDeDebitoCF;
 
 	/**
 	 * Create the frame.
@@ -75,6 +79,9 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 		getContentPane().add(getBtnNotaDeDbito());
 		getContentPane().add(getBtnVenta());
 		getContentPane().add(getBtnRemito());
+		getContentPane().add(getBtnVentaCF());
+		getContentPane().add(getBtnNotaDeCreditoCF());
+		getContentPane().add(getBtnNotaDeDebitoCF());
 	}
 
 	/**
@@ -181,13 +188,16 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						Long idCliente = tablePanel.getSelectedItemID();
 						if (null != idCliente) {
 							ClienteBO clienteBO = AbstractFactory
-									.getInstance(ClienteBO.class); 
+									.getInstance(ClienteBO.class);
 							try {
-								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase(Cliente.CONS_FINAL)){
-									JOptionPane.showMessageDialog(getParent(), "Este usuario no es editable.");
+								if (clienteBO.obtener(idCliente)
+										.getRazonSocial()
+										.equalsIgnoreCase(Cliente.CONS_FINAL)) {
+									JOptionPane.showMessageDialog(getParent(),
+											"Este usuario no es editable.");
 								} else {
-									addModalIFrame(new ClienteVerIFrame(idCliente,
-											ClienteIFrame.this));
+									addModalIFrame(new ClienteVerIFrame(
+											idCliente, ClienteIFrame.this));
 								}
 							} catch (HeadlessException e1) {
 								// TODO Auto-generated catch block
@@ -196,7 +206,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							
+
 						} else {
 							WTooltipUtils
 									.showMessage(
@@ -219,8 +229,11 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 								.getInstance(ClienteBO.class);
 						if (null != idCliente) {
 							try {
-								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase(Cliente.CONS_FINAL)){
-									JOptionPane.showMessageDialog(getParent(), "Este usuario no es editable.");
+								if (clienteBO.obtener(idCliente)
+										.getRazonSocial()
+										.equalsIgnoreCase(Cliente.CONS_FINAL)) {
+									JOptionPane.showMessageDialog(getParent(),
+											"Este usuario no es editable.");
 								} else {
 									int result = JOptionPane
 											.showConfirmDialog(
@@ -230,8 +243,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 													JOptionPane.OK_CANCEL_OPTION,
 													JOptionPane.WARNING_MESSAGE);
 									if (result == JOptionPane.OK_OPTION) {
-										
-	
+
 										boolean enUso = clienteBO
 												.estaEnUso(idCliente);
 										if (enUso) {
@@ -285,22 +297,25 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						Long selectedItem = tablePanel.getSelectedItemID();
 						if (null != selectedItem) {
 							ClienteBO clienteBO = AbstractFactory
-									.getInstance(ClienteBO.class); 						
-								try {
-									if (clienteBO.obtener(selectedItem).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
-										JOptionPane.showMessageDialog(getParent(), "Este usuario no posee remitos.");
-									} else {
-										addModalIFrame(new RemitoIFrame(selectedItem));
-									}
-								} catch (HeadlessException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								} catch (BusinessException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
+									.getInstance(ClienteBO.class);
+							try {
+								if (clienteBO.obtener(selectedItem)
+										.getRazonSocial()
+										.equalsIgnoreCase("CONS FINAL")) {
+									JOptionPane.showMessageDialog(getParent(),
+											"Este usuario no posee remitos.");
+								} else {
+									addModalIFrame(new RemitoIFrame(
+											selectedItem));
 								}
+							} catch (HeadlessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (BusinessException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
-						 else {
+						} else {
 							WTooltipUtils
 									.showMessage(
 											"Debe seleccionar un solo Cliente",
@@ -309,7 +324,6 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 						}
 					}
 				}, "Ver Remitos", null);
-
 
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
@@ -413,7 +427,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}
 			});
-			btnNotaDeCredito.setBounds(178, 146, 147, 46);
+			btnNotaDeCredito.setBounds(679, 141, 147, 46);
 		}
 		return btnNotaDeCredito;
 	}
@@ -423,7 +437,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnNotaDeDbito = new JButton("Nota de D\u00E9bito");
 			btnNotaDeDbito.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons32/notas_debito.png")));
-			btnNotaDeDbito.setBounds(347, 146, 147, 46);
+			btnNotaDeDbito.setBounds(848, 141, 147, 46);
 			btnNotaDeDbito.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
@@ -446,7 +460,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 			btnVenta = new JButton("Venta");
 			btnVenta.setIcon(new ImageIcon(ClienteIFrame.class
 					.getResource("/icons32/facturas.png")));
-			btnVenta.setBounds(10, 146, 147, 46);
+			btnVenta.setBounds(511, 141, 147, 46);
 			btnVenta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
@@ -473,32 +487,127 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 				public void actionPerformed(ActionEvent e) {
 					Long selectedItem = tablePanel.getSelectedItemID();
 					ClienteBO clienteBO = AbstractFactory
-							.getInstance(ClienteBO.class); 				
-					
-							
-					if (null != selectedItem) {	
+							.getInstance(ClienteBO.class);
+
+					if (null != selectedItem) {
 						try {
-							if (clienteBO.obtener(selectedItem).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
-								JOptionPane.showMessageDialog(getParent(), "No es posible agregar remitos para este usuario.");
+							if (clienteBO.obtener(selectedItem)
+									.getRazonSocial()
+									.equalsIgnoreCase("CONS FINAL")) {
+								JOptionPane
+										.showMessageDialog(getParent(),
+												"No es posible agregar remitos para este usuario.");
 							} else {
-							addModalIFrame(new RemitoVerIFrame(selectedItem));
-}
+								addModalIFrame(new RemitoVerIFrame(selectedItem));
+							}
 						} catch (HeadlessException e1) {
-							// TODO Auto-generated catch block
+							showGlobalErrorMsg(e1.getMessage());
 							e1.printStackTrace();
-						} catch (BusinessException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+						} catch (BusinessException bexc) {
+							showGlobalErrorMsg(bexc.getMessage());
 						}
-						} else {
+					} else {
 						WTooltipUtils.showMessage(
 								"Debe seleccionar un Cliente",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
 			});
-			btnRemito.setBounds(516, 146, 147, 46);
+			btnRemito.setBounds(1017, 141, 147, 46);
 		}
 		return btnRemito;
+	}
+
+	private JButton getBtnVentaCF() {
+		if (btnVentaCF == null) {
+			btnVentaCF = new JButton("Cons. Final Vta.");
+			btnVentaCF.setIcon(new ImageIcon(ClienteIFrame.class.getResource("/icons32/facturas.png")));
+			btnVentaCF.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ClienteBO clienteBO = AbstractFactory
+							.getInstance(ClienteBO.class);
+					ClienteFilter filter = new ClienteFilter();
+					filter.setDocumento("0");
+					try {
+						List<Cliente> clientes = clienteBO.buscar(filter);
+						if (WUtils.isNotEmpty(clientes)) {
+							addModalIFrame(new ComprobanteVerIFrame(clientes
+									.get(0).getId(), TipoComprobante.FACTURA));
+						} else {
+							WTooltipUtils.showMessage(
+									"No existe usuario Consumidor Final. Contacte al Administrador.",
+									(JButton) e.getSource(), MessageType.ALERTA);
+						}
+
+					} catch (BusinessException bexc) {
+						showGlobalErrorMsg(bexc.getMessage());
+					}
+				}
+			});
+			btnVentaCF.setBounds(10, 141, 147, 46);
+		}
+		return btnVentaCF;
+	}
+
+	private JButton getBtnNotaDeCreditoCF() {
+		if (btnNotaDeCreditoCF == null) {
+			btnNotaDeCreditoCF = new JButton("Cons. Final NC");
+			btnNotaDeCreditoCF.setIcon(new ImageIcon(ClienteIFrame.class.getResource("/icons32/notas_credito.png")));
+			btnNotaDeCreditoCF.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ClienteBO clienteBO = AbstractFactory
+							.getInstance(ClienteBO.class);
+					ClienteFilter filter = new ClienteFilter();
+					filter.setDocumento("0");
+					try {
+						List<Cliente> clientes = clienteBO.buscar(filter);
+						if (WUtils.isNotEmpty(clientes)) {
+							addModalIFrame(new ComprobanteVerIFrame(clientes
+									.get(0).getId(), TipoComprobante.NOTA_CREDITO));
+						} else {
+							WTooltipUtils.showMessage(
+									"No existe usuario Consumidor Final. Contacte al Administrador.",
+									(JButton) e.getSource(), MessageType.ALERTA);
+						}
+
+					} catch (BusinessException bexc) {
+						showGlobalErrorMsg(bexc.getMessage());
+					}
+				}
+			});
+			btnNotaDeCreditoCF.setBounds(178, 141, 147, 46);
+		}
+		return btnNotaDeCreditoCF;
+	}
+
+	private JButton getBtnNotaDeDebitoCF() {
+		if (btnNotaDeDebitoCF == null) {
+			btnNotaDeDebitoCF = new JButton("Cons. Final ND");
+			btnNotaDeDebitoCF.setIcon(new ImageIcon(ClienteIFrame.class.getResource("/icons32/notas_debito.png")));
+			btnNotaDeDebitoCF.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ClienteBO clienteBO = AbstractFactory
+							.getInstance(ClienteBO.class);
+					ClienteFilter filter = new ClienteFilter();
+					filter.setDocumento("0");
+					try {
+						List<Cliente> clientes = clienteBO.buscar(filter);
+						if (WUtils.isNotEmpty(clientes)) {
+							addModalIFrame(new ComprobanteVerIFrame(clientes
+									.get(0).getId(), TipoComprobante.NOTA_DEBITO));
+						} else {
+							WTooltipUtils.showMessage(
+									"No existe usuario Consumidor Final. Contacte al Administrador.",
+									(JButton) e.getSource(), MessageType.ALERTA);
+						}
+
+					} catch (BusinessException bexc) {
+						showGlobalErrorMsg(bexc.getMessage());
+					}
+				}
+			});
+			btnNotaDeDebitoCF.setBounds(342, 141, 147, 46);
+		}
+		return btnNotaDeDebitoCF;
 	}
 }
