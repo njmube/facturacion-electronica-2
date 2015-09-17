@@ -349,14 +349,17 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						ClienteBO clienteBO = AbstractFactory
 								.getInstance(ClienteBO.class);
 						try {
+							String msg = "";
 							if (cliente.getId() == null) {
 								clienteBO.guardar(cliente);
+								msg = "Cliente agregado exitosamente";
 								
 							} else {
 								clienteBO.actualizar(cliente);
+								msg = "Cliente modificado exitosamente";
 							}
 							hideFrame();
-							showGlobalMsg("Cliente agregado exitosamente");
+							showGlobalMsg(msg);
 							clienteIFrame.search();
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
