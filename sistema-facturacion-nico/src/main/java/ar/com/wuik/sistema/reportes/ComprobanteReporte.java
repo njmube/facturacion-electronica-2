@@ -93,21 +93,20 @@ public class ComprobanteReporte {
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
 
-			// TRIPLICADO
-			parameters.put("COPIA", "TRIPLICADO");
-			parameters
-			.put("TRIBUTOS",
-					new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
-							comprobanteDTO.getTributos()));
-			parameters.put("BG_IMG", ComprobanteReporte.class
-					.getResourceAsStream("/reportes/bg-comprobante_a.png"));
-			JasperPrint jasperPrintTriplicado = JasperFillManager.fillReport(
-					jasperReport, parameters, new JRBeanCollectionDataSource(
-							detalles));
+//			// TRIPLICADO
+//			parameters.put("COPIA", "TRIPLICADO");
+//			parameters
+//			.put("TRIBUTOS",
+//					new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+//							comprobanteDTO.getTributos()));
+//			parameters.put("BG_IMG", ComprobanteReporte.class
+//					.getResourceAsStream("/reportes/bg-comprobante_a.png"));
+//			JasperPrint jasperPrintTriplicado = JasperFillManager.fillReport(
+//					jasperReport, parameters, new JRBeanCollectionDataSource(
+//							detalles));
 
 			JasperPrint jasperPrint = WJasperUtils.concatReports(
-					jasperPrintOriginal, jasperPrintDuplicado,
-					jasperPrintTriplicado);
+					jasperPrintOriginal, jasperPrintDuplicado);
 
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {
@@ -119,6 +118,6 @@ public class ComprobanteReporte {
 	}
 
 	public static void main(String[] args) throws Exception {
-		generarImpresion(14L);
+		generarImpresion(16L);
 	}
 }

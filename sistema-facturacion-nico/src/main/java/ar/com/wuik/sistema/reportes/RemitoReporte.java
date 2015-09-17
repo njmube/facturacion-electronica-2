@@ -17,6 +17,7 @@ import ar.com.wuik.sistema.exceptions.ReportException;
 import ar.com.wuik.sistema.reportes.entities.DetalleRemitoDTO;
 import ar.com.wuik.sistema.reportes.entities.RemitoDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
+import ar.com.wuik.swing.utils.WJasperUtils;
 
 public class RemitoReporte {
 
@@ -42,12 +43,19 @@ public class RemitoReporte {
 					.loadObject(RemitoReporte.class
 							.getResourceAsStream("/reportes/remito.jasper"));
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(
+			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
+			
+			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
+					jasperReport, parameters, new JRBeanCollectionDataSource(
+							detalles));
+		
+			JasperPrint jasperPrint = WJasperUtils.concatReports(
+					jasperPrintOriginal, jasperPrintDuplicado);
 
-			// JasperPrintManager.printReport(jasperPrint, Boolean.TRUE);
 			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
+			// JasperPrintManager.printReport(jasperPrint, Boolean.TRUE);
 		} catch (BusinessException bexc) {
 			throw new ReportException(bexc, "Error al obtener Factura");
 		} catch (JRException jrexc) {
