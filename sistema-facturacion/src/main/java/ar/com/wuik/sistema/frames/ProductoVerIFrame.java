@@ -93,8 +93,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		initializate("Nuevo Producto");
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
 		this.producto = new Producto();
-		this.producto.setDescripcion(texto);
-		getTxtDescripcion().setText(texto);
+		this.producto.setCodigo(texto);
+		getTxtCodigo().setText(texto);
 	}
 
 	public ProductoVerIFrame(Long idProducto, ProductoIFrame productoIFrame) {

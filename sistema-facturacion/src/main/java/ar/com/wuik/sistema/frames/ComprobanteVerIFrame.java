@@ -733,7 +733,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				@Override
 				public void doubleClickListener(Object[] selectedItem) {
 					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-
 					DetalleComprobante detalle = getDetalleById(selectedId);
 					addModalIFrame(new EditarDetalleComprobanteIFrame(detalle,
 							ComprobanteVerIFrame.this));
@@ -833,20 +832,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 				@Override
 				public void keyReleased(KeyEvent e) {
-					if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-						if (WUtils.isEmpty(productos)) {
-							addModalIFrame(new ProductoVerIFrame(
-									ComprobanteVerIFrame.this, textField
-											.getText()));
-						} else {
-							if (productos.size() == 1) {
-								Long idProducto = productos.get(0).getId();
-								addDetalleProducto(idProducto);
-							}
-						}
-					} else {
-						search();
-					}
+					search();
 
 				}
 			});
@@ -1233,6 +1219,21 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			lblFacturado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/sin_facturar.png")));
 			break;
+		}
+	}
+
+	@Override
+	public void enterPressed() {
+		if (getTextField().hasFocus()) {
+			if (WUtils.isEmpty(productos)) {
+				addModalIFrame(new ProductoVerIFrame(ComprobanteVerIFrame.this,
+						textField.getText()));
+			} else {
+				if (productos.size() == 1) {
+					Long idProducto = productos.get(0).getId();
+					addDetalleProducto(idProducto);
+				}
+			}
 		}
 	}
 }

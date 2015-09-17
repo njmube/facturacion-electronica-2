@@ -17,7 +17,11 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import ar.com.wuik.sistema.bo.ProductoBO;
 import ar.com.wuik.sistema.entities.DetalleRemito;
+import ar.com.wuik.sistema.entities.Producto;
+import ar.com.wuik.sistema.exceptions.BusinessException;
+import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldNumeric;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
@@ -25,7 +29,7 @@ import ar.com.wuik.swing.utils.WTooltipUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 import ar.com.wuik.swing.utils.WUtils;
 
-public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
+public class DetalleRemitoIFrame extends WAbstractModelIFrame {
 	/**
 	 * Serial UID.
 	 */
@@ -47,24 +51,32 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public EditarDetalleRemitoIFrame(DetalleRemito detalle,
+	public DetalleRemitoIFrame(Long idProducto,
 			RemitoVerIFrame remitoClienteVerIFrame) {
-		this.detalle = detalle;
+
+		initialize("Nuevo Detalle");
+		this.detalle = new DetalleRemito();
+		ProductoBO productoBO = AbstractFactory.getInstance(ProductoBO.class);
+		try {
+			Producto producto = productoBO.obtener(idProducto);
+			this.detalle.setProducto(producto);
+			WModel model = populateModel();
+			model.addValue(CAMPO_PRODUCTO, producto.getCodigo() + " "
+					+ producto.getDescripcion());
+			populateComponents(model);
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+		this.detalle.setTemporalId(System.currentTimeMillis());
 		this.remitoClienteVerIFrame = remitoClienteVerIFrame;
-		initialize("Editar Detalle");
-		WModel model = populateModel();
-		model.addValue(CAMPO_CANTIDAD, detalle.getCantidad());
-		model.addValue(CAMPO_PRODUCTO, detalle.getProducto().getCodigo() + " "
-				+ detalle.getProducto().getDescripcion());
-		populateComponents(model);
+
 	}
 
 	private void initialize(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
-				EditarDetalleRemitoIFrame.class
-						.getResource("/icons/productos.png")));
+				DetalleRemitoIFrame.class.getResource("/icons/productos.png")));
 		setBounds(0, 0, 508, 181);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
@@ -126,7 +138,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 					hideFrame();
 				}
 			});
-			btnCerrar.setIcon(new ImageIcon(EditarDetalleRemitoIFrame.class
+			btnCerrar.setIcon(new ImageIcon(DetalleRemitoIFrame.class
 					.getResource("/icons/cancel.png")));
 			btnCerrar.setBounds(280, 117, 103, 30);
 		}
@@ -136,7 +148,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 	private JButton getBtnGuardar() {
 		if (btnGuardar == null) {
 			btnGuardar = new JButton("Guardar");
-			btnGuardar.setIcon(new ImageIcon(EditarDetalleRemitoIFrame.class
+			btnGuardar.setIcon(new ImageIcon(DetalleRemitoIFrame.class
 					.getResource("/icons/ok.png")));
 			btnGuardar.setBounds(393, 117, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
@@ -146,7 +158,7 @@ public class EditarDetalleRemitoIFrame extends WAbstractModelIFrame {
 						String cantidad = model.getValue(CAMPO_CANTIDAD);
 						detalle.setCantidad(WUtils.getValue(cantidad)
 								.intValue());
-						remitoClienteVerIFrame.refreshDetalles();
+						remitoClienteVerIFrame.addDetalle(detalle);
 						hideFrame();
 					}
 
