@@ -1017,12 +1017,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 										.getId());
 							} catch (ReportException rexc) {
 								showGlobalErrorMsg(rexc.getMessage());
-							}
-							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
+							}							
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						} finally {
 							hideFrame();
+							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							}
