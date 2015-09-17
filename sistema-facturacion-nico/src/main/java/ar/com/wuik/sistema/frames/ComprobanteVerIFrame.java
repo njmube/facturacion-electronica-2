@@ -108,6 +108,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JButton btnNuevoProducto;
 	private JLabel lblFacturado;
 	private JLabel lblEstado;
+	private Cliente cliente;
 
 	/**
 	 * @wbp.parser.constructor
@@ -289,6 +290,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	}
 
 	private void loadCliente(Cliente cliente) {
+		this.cliente = cliente;
 		getTxtCliente().setText(cliente.getRazonSocial());
 		getTxtCondIVA().setText(cliente.getCondicionIVA().getDenominacion());
 		if (comprobante.getTipoLetraComprobante()
@@ -327,6 +329,10 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isEmpty(comprobante.getDetalles())) {
 			messages.add("Debe ingresar al menos un Detalle");
+		}
+		
+		if (comprobante.getTotal().doubleValue() > 1000 && cliente.getDocumento().equals("0") ){
+			messages.add("El monto total de la factura no debe superar los $1000. Cree un nuevo cliente con sus respectivos datos.");
 		}
 
 		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);
@@ -837,7 +843,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				detalles.add(detalle);
 			}
 			getTblDetalle().addData(detalles);
-			calcularTotales();
+			calcularTotales();			
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
