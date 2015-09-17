@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_data" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="647"/>
+	<property name="ireport.y" value="201"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -369,9 +369,9 @@ FRANCISCO NICOLAS]]></text>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="26" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="0" width="43" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="1" y="0" width="43" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -384,7 +384,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[CODIGO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="42" y="0" width="191" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="42" y="0" width="191" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -397,7 +397,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[PRODUCTO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="233" y="0" width="56" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="233" y="0" width="56" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -410,7 +410,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[CANTIDAD]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="420" y="0" width="135" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="420" y="0" width="135" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -423,7 +423,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[SUBTOTAL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="289" y="0" width="131" height="26" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Opaque" x="289" y="0" width="131" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -438,16 +438,9 @@ FRANCISCO NICOLAS]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="1" y="0" width="41" height="20" forecolor="#000000"/>
-				<box>
-					<pen lineStyle="Dashed"/>
-					<topPen lineStyle="Dashed"/>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement mode="Transparent" x="1" y="0" width="41" height="14" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph leftIndent="4"/>
@@ -455,16 +448,9 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="42" y="0" width="191" height="20" forecolor="#000000">
+				<reportElement mode="Transparent" x="42" y="0" width="191" height="14" forecolor="#000000">
 					<printWhenExpression><![CDATA[(null != $F{producto})]]></printWhenExpression>
 				</reportElement>
-				<box>
-					<pen lineStyle="Dashed"/>
-					<topPen lineStyle="Dashed"/>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph leftIndent="4"/>
@@ -472,14 +458,7 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$F{producto} + ((null != $F{comentario}) ? " - " + $F{comentario} : "")]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="233" y="0" width="56" height="20" forecolor="#000000"/>
-				<box>
-					<pen lineStyle="Dashed"/>
-					<topPen lineStyle="Dashed"/>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement mode="Transparent" x="233" y="0" width="56" height="14" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph rightIndent="4"/>
@@ -487,16 +466,9 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="289" y="0" width="131" height="20" forecolor="#000000">
+				<reportElement mode="Transparent" x="289" y="0" width="131" height="14" forecolor="#000000">
 					<printWhenExpression><![CDATA[]]></printWhenExpression>
 				</reportElement>
-				<box>
-					<pen lineStyle="Dashed"/>
-					<topPen lineStyle="Dashed"/>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph rightIndent="4"/>
@@ -504,16 +476,9 @@ FRANCISCO NICOLAS]]></text>
 				<textFieldExpression><![CDATA[$F{precioUnitConIVA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="420" y="0" width="135" height="20" forecolor="#000000">
+				<reportElement mode="Transparent" x="420" y="0" width="135" height="14" forecolor="#000000">
 					<printWhenExpression><![CDATA[]]></printWhenExpression>
 				</reportElement>
-				<box>
-					<pen lineStyle="Dashed"/>
-					<topPen lineStyle="Dashed"/>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph rightIndent="4"/>

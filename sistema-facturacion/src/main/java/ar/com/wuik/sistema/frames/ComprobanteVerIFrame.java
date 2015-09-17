@@ -1149,7 +1149,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 	private JLabel getLblImporteOtrosTributos() {
 		if (lblImporteOtrosTributos == null) {
 			lblImporteOtrosTributos = new JLabel();
-			lblImporteOtrosTributos.setText("$ 0.00");
+			lblImporteOtrosTributos.setText("0.00");
 			lblImporteOtrosTributos
 					.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblImporteOtrosTributos.setFont(WFrameUtils.getCustomFont(

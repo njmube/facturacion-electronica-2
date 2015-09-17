@@ -306,9 +306,9 @@ FRANCISCO NICOLAS]]></text>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="26" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="67" height="26"/>
+				<reportElement x="0" y="0" width="67" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -321,7 +321,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[FECHA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="67" y="0" width="154" height="26"/>
+				<reportElement x="67" y="0" width="154" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -334,7 +334,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[NRO. COMP.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="221" y="0" width="72" height="26"/>
+				<reportElement x="221" y="0" width="72" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -347,7 +347,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[FECHA VTO.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="0" width="100" height="26"/>
+				<reportElement x="455" y="0" width="100" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -360,7 +360,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[SALDO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="293" y="0" width="80" height="26"/>
+				<reportElement x="293" y="0" width="80" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -373,7 +373,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[DEBE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="373" y="0" width="82" height="26"/>
+				<reportElement x="373" y="0" width="82" height="20"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -388,72 +388,42 @@ FRANCISCO NICOLAS]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="67" height="20"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement x="0" y="0" width="67" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="67" y="0" width="154" height="20"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement x="67" y="0" width="154" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nroComprobante}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="221" y="0" width="72" height="20"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement x="221" y="0" width="72" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaVto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="455" y="0" width="100" height="20"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement x="455" y="0" width="100" height="14"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<paragraph rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="293" y="0" width="80" height="20"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement x="293" y="0" width="80" height="14"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<paragraph rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{debe}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="373" y="0" width="82" height="20"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
+				<reportElement x="373" y="0" width="82" height="14"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<paragraph rightIndent="4"/>
 				</textElement>

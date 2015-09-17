@@ -27,22 +27,22 @@ public class ModeloComprobanteReporte {
 							.getResourceAsStream("/reportes/comprobante_template.jasper"));
 			
 			
-			JasperReport jasperReport2 = (JasperReport) JRLoader
-					.loadObject(ModeloComprobanteReporte.class
-							.getResourceAsStream("/reportes/resumen_cuenta_template.jasper"));
+//			JasperReport jasperReport2 = (JasperReport) JRLoader
+//					.loadObject(ModeloComprobanteReporte.class
+//							.getResourceAsStream("/reportes/resumen_cuenta_template.jasper"));
 
 			JasperPrint jasperPrint1 = JasperFillManager.fillReport(
 					jasperReport, parameters, new JREmptyDataSource());
 			
 			parameters.put("BG_IMG", ModeloComprobanteReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
-			JasperPrint jasperPrint2 = JasperFillManager.fillReport(
-					jasperReport2, parameters, new JREmptyDataSource());
+//			JasperPrint jasperPrint2 = JasperFillManager.fillReport(
+//					jasperReport2, parameters, new JREmptyDataSource());
 
-			JasperPrint jasperPrint = WJasperUtils.concatReports(
-					jasperPrint1, jasperPrint2);
+//			JasperPrint jasperPrint = WJasperUtils.concatReports(
+//					jasperPrint1, jasperPrint2);
 
-			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
+			JasperViewer.viewReport(jasperPrint1, Boolean.FALSE);
 
 		} catch (JRException jrexc) {
 			throw new ReportException(jrexc, "Error al generar Modelo de Comprobante");
