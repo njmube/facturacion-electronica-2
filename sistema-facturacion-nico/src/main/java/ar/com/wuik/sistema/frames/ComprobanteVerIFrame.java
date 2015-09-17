@@ -859,6 +859,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		return textField;
 	}
 
+	private List<Producto> productos = null;
+
 	public void search() {
 		String toSearch = textField.getText();
 		if (WUtils.isNotEmpty(toSearch)) {
@@ -867,12 +869,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			ProductoFilter filter = new ProductoFilter();
 			filter.setDescripcionCodigo(toSearch);
 			try {
-				List<Producto> productos = productoBO.buscar(filter);
+				productos = productoBO.buscar(filter);
 				getTblProducto().addData(productos);
 			} catch (BusinessException e1) {
 			}
 		} else {
-			getTblProducto().addData(new ArrayList<Producto>());
+			getTblProducto().addData(productos);
 		}
 	}
 
@@ -1209,6 +1211,30 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			lblFacturado.setIcon(new ImageIcon(ComprobanteVistaIFrame.class
 					.getResource("/icons/sin_facturar.png")));
 			break;
+		}
+	}
+	
+	@Override
+	public void enterPressed() {
+		if (getTextField().hasFocus()) {
+			if (WUtils.isEmpty(productos)) {
+				addModalIFrame(new ProductoVerIFrame(ComprobanteVerIFrame.this,
+						textField.getText()));
+			} else {
+				if (productos.size() == 1) {
+					Long idProducto = productos.get(0).getId();
+					addDetalleProducto(idProducto);
+				}
+			}
+		}
+	}
+	
+	protected void addDetalleProducto(Long selectedId) {
+		if (existeDetalleProducto(selectedId)) {
+			addDetalle(selectedId, BigDecimal.ONE);
+		} else {
+			addModalIFrame(new DetalleComprobanteIFrame(selectedId,
+					ComprobanteVerIFrame.this));
 		}
 	}
 }

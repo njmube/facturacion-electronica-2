@@ -352,4 +352,9 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		}
 		return btnNewButton;
 	}
+
+	@Override
+	public void enterPressed() {
+		getBtnGuardar().doClick();
+	}
 }
