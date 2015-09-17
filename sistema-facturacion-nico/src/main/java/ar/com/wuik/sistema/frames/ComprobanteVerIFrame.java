@@ -329,12 +329,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isEmpty(comprobante.getDetalles())) {
 			messages.add("Debe ingresar al menos un Detalle");
+		} else {
+			if (comprobante.getTotal().doubleValue() > 1000 && cliente.getDocumento().equals("0") ){
+				messages.add("El monto total de la factura no debe superar los $1000. Cree un nuevo cliente con sus respectivos datos.");
+			}
 		}
 		
-		if (comprobante.getTotal().doubleValue() > 1000 && cliente.getDocumento().equals("0") ){
-			messages.add("El monto total de la factura no debe superar los $1000. Cree un nuevo cliente con sus respectivos datos.");
-		}
-
 		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);
 
 		return WUtils.isEmpty(messages);
