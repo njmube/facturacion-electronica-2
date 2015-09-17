@@ -16,6 +16,8 @@ import ar.com.wuik.sistema.entities.enums.TipoDocumento;
 @Table(name = "clientes")
 public class Cliente extends BaseEntity {
 
+	public static final String CONS_FINAL = "CONS FINAL";
+	
 	@Column(name = "RAZON_SOCIAL")
 	private String razonSocial;
 	@Column(name = "DIRECCION")

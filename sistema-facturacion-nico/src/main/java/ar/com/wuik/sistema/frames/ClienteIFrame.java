@@ -183,7 +183,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 							ClienteBO clienteBO = AbstractFactory
 									.getInstance(ClienteBO.class); 
 							try {
-								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
+								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase(Cliente.CONS_FINAL)){
 									JOptionPane.showMessageDialog(getParent(), "Este usuario no es editable.");
 								} else {
 									addModalIFrame(new ClienteVerIFrame(idCliente,
@@ -219,7 +219,7 @@ public class ClienteIFrame extends WAbstractModelIFrame implements WSecure {
 								.getInstance(ClienteBO.class);
 						if (null != idCliente) {
 							try {
-								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase("CONS FINAL")){
+								if (clienteBO.obtener(idCliente).getRazonSocial().equalsIgnoreCase(Cliente.CONS_FINAL)){
 									JOptionPane.showMessageDialog(getParent(), "Este usuario no es editable.");
 								} else {
 									int result = JOptionPane
