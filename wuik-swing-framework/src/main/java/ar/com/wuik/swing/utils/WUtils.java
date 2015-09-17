@@ -205,7 +205,7 @@ public final class WUtils {
 
 					BigDecimal decimalRounded = new BigDecimal(
 							"0." + tokens[1]);
-					decimalRounded = decimalRounded.setScale(decimals, RoundingMode.HALF_UP);
+					decimalRounded = decimalRounded.setScale(decimals, RoundingMode.HALF_EVEN);
 					BigDecimal nonDecimalPart = new BigDecimal(tokens[0]);
 					if (nonDecimalPart.doubleValue() < 0) {
 						return decimalRounded.add(
@@ -517,6 +517,7 @@ public final class WUtils {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(getRoundedValue(new BigDecimal("0.")));
+		System.out.println(getRoundedValue(new BigDecimal("4.545454")));
 	}
+
 }
