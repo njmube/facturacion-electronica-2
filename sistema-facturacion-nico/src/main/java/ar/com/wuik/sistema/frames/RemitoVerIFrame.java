@@ -334,8 +334,8 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			lblObservaciones = new JLabel("Observaciones:");
 			lblObservaciones.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/observaciones.png")));
-			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(10, 462, 93, 25);
+			lblObservaciones.setHorizontalAlignment(SwingConstants.LEFT);
+			lblObservaciones.setBounds(10, 462, 121, 25);
 		}
 		return lblObservaciones;
 	}
@@ -353,7 +353,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(113, 461, 192, 60);
+			scrollPane.setBounds(115, 461, 192, 60);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
