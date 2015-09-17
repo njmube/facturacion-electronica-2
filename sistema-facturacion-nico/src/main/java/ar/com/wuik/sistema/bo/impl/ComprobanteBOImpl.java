@@ -284,7 +284,11 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		Cliente cliente = clienteDAO.getById(comprobante.getIdCliente());
 		long nrocomprobante = Long.valueOf(comprobante.getNroComprobante());
 
-		String documento = cliente.getDocumento().replaceAll("-", "");
+		Long documento = null;
+		if (cliente.getRazonSocial().equalsIgnoreCase(Cliente.CONS_FINAL)) {
+			documento = Long
+					.valueOf(cliente.getDocumento().replaceAll("-", ""));
+		}
 		Date fechaComprobante = comprobante.getFechaVenta();
 		BigDecimal subtotal = comprobante.getSubtotal();
 		BigDecimal iva = comprobante.getIva();
@@ -294,8 +298,9 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		FEV1.dif.afip.gov.ar.entities.Comprobante comprobanteAfip = new FEV1.dif.afip.gov.ar.entities.Comprobante();
 
 		// DATOS DEL CLIENTE.
-		comprobanteAfip.setDocNro(Long.valueOf(documento));
-		comprobanteAfip.setDocTipo(getTipoDocumento(cliente.getTipoDocumento()));
+		comprobanteAfip.setDocNro(documento);
+		comprobanteAfip
+				.setDocTipo(getTipoDocumento(cliente.getTipoDocumento()));
 
 		// COTIZACION LA TOMA DEL TIPO DE MONEDA PORQUE ES EN PESOS.
 		comprobanteAfip.setTipoMoneda(TipoMonedaEnum.PESOS_ARGENTINOS);
@@ -399,15 +404,17 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 	}
 
 	private TipoDocumentoEnum getTipoDocumento(TipoDocumento tipoDocumento) {
-		switch (tipoDocumento) {
-		case CUIL:
-			return TipoDocumentoEnum.CUIL;
-		case CUIT:
-			return TipoDocumentoEnum.CUIT;
-		case DNI:
-			return TipoDocumentoEnum.DNI;
-		case OTROS:
-			return TipoDocumentoEnum.OTROS;
+		if (null != tipoDocumento) {
+			switch (tipoDocumento) {
+			case CUIL:
+				return TipoDocumentoEnum.CUIL;
+			case CUIT:
+				return TipoDocumentoEnum.CUIT;
+			case DNI:
+				return TipoDocumentoEnum.DNI;
+			case OTROS:
+				return TipoDocumentoEnum.OTROS;
+			}
 		}
 		return null;
 	}
@@ -609,14 +616,15 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			detalleComprobanteDTO.setCantidad(detallecomprobante.getCantidad());
 			detalleComprobanteDTO.setCodigo("");
 			detalleComprobanteDTO.setPrecioUnit(detallecomprobante.getPrecio());
-			detalleComprobanteDTO
-					.setPrecioUnitConIVA(WUtils.getRoundedValue(detallecomprobante.getPrecioConIVA()));
+			detalleComprobanteDTO.setPrecioUnitConIVA(WUtils
+					.getRoundedValue(detallecomprobante.getPrecioConIVA()));
 			detalleComprobanteDTO.setProducto((null != detallecomprobante
 					.getProducto()) ? detallecomprobante.getProducto()
 					.getDescripcion() : detallecomprobante.getDetalle());
-			detalleComprobanteDTO.setSubtotal(WUtils.getRoundedValue(detallecomprobante.getSubtotal()));
-			detalleComprobanteDTO.setSubtotalConIVA(WUtils.getRoundedValue(detallecomprobante
-					.getTotal()));
+			detalleComprobanteDTO.setSubtotal(WUtils
+					.getRoundedValue(detallecomprobante.getSubtotal()));
+			detalleComprobanteDTO.setSubtotalConIVA(WUtils
+					.getRoundedValue(detallecomprobante.getTotal()));
 			detallesDTO.add(detalleComprobanteDTO);
 
 			if (detallecomprobante.getTipoIVA().equals(
