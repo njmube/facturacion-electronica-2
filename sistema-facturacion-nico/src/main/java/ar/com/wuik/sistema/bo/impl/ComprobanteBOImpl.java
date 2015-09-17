@@ -284,11 +284,8 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		Cliente cliente = clienteDAO.getById(comprobante.getIdCliente());
 		long nrocomprobante = Long.valueOf(comprobante.getNroComprobante());
 
-		Long documento = null;
-		if (cliente.getRazonSocial().equalsIgnoreCase(Cliente.CONS_FINAL)) {
-			documento = Long
-					.valueOf(cliente.getDocumento().replaceAll("-", ""));
-		}
+		Long documento = Long
+				.valueOf(cliente.getDocumento().replaceAll("-", ""));
 		Date fechaComprobante = comprobante.getFechaVenta();
 		BigDecimal subtotal = comprobante.getSubtotal();
 		BigDecimal iva = comprobante.getIva();

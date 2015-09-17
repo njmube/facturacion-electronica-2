@@ -403,6 +403,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 								comprobanteBO.actualizar(comprobante);
 							}
 							hideFrame();
+							showGlobalMsg("Comprobante GUARDADO exitosamente");
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							}
@@ -1011,6 +1012,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							} catch (ReportException rexc) {
 								showGlobalErrorMsg(rexc.getMessage());
 							}
+							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						} finally {
