@@ -220,7 +220,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 				messages.add("Debe ingresar un Documento válido");
 			}
 		} else {
-			if (WUtils.isEmpty(documento2)) {
+			if (WUtils.isEmpty(documento2) || documento2.equals("0")) {
 				messages.add("Debe ingresar un Documento válido");
 			}
 		}

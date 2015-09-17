@@ -16,12 +16,12 @@ public class DetalleComprobanteModel extends WTableModel<DetalleComprobante> {
 
 	public DetalleComprobanteModel() {
 		super(new String[] { "PRODUCTO/DETALLE", "CANT.",
-				"PRECIO X U", "SUBTOTAL", "% IVA", "TOTAL" });
+				"PRECIO X U", "PRECIO C/IVA", "SUBTOTAL", "% IVA", "TOTAL" });
 	}
 
 	@Override
 	public double[] getColumnPercentSize() {
-		return new double[] { 0.57, 0.05, 0.10, 0.10, 0.08, 0.10 };
+		return new double[] { 0.47, 0.05, 0.10, 0.10, 0.10, 0.08, 0.10 };
 	}
 
 	@Override
@@ -30,10 +30,11 @@ public class DetalleComprobanteModel extends WTableModel<DetalleComprobante> {
 				: t.getDetalle();
 		fila[1] = t.getCantidad();
 		fila[2] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getPrecio()));
-		fila[3] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getSubtotal()));
-		fila[4] = t.getTipoIVA().getDescripcion();
-		fila[5] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getTotal()));
-		fila[6] = t.getCoalesceId();
+		fila[3] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getPrecioConIVA()));
+		fila[4] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getSubtotal()));
+		fila[5] = t.getTipoIVA().getDescripcion();
+		fila[6] = AppUtils.formatPeso(WUtils.getRoundedValue(t.getTotal()));
+		fila[7] = t.getCoalesceId();
 		return fila;
 	}
 
@@ -53,6 +54,8 @@ public class DetalleComprobanteModel extends WTableModel<DetalleComprobante> {
 		case 5:
 			return BigDecimal.class;
 		case 6:
+			return BigDecimal.class;
+		case 7:
 			return BigDecimal.class;
 		}
 		return Object.class;

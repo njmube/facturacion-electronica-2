@@ -326,20 +326,6 @@
 				</textElement>
 				<text><![CDATA[Remito(s):]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="12" y="195" width="111" height="15" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Condición de venta:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="123" y="195" width="111" height="15" forecolor="#000000"/>
-				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Otra]]></text>
-			</staticText>
 		</band>
 	</title>
 	<pageHeader>
