@@ -185,7 +185,7 @@ public class DetalleComprobanteIFrame extends WAbstractModelIFrame {
 
 						BigDecimal totalConIVA = WUtils.getValue(precioTxt);
 
-						BigDecimal total = totalConIVA.divide(importeDecimal, 2 , RoundingMode.HALF_EVEN);
+						BigDecimal total = totalConIVA.divide(importeDecimal, 2 , RoundingMode.HALF_UP);
 
 						detalle.setPrecio(WUtils.getRoundedValue(total));
 						detalle.setCantidad(WUtils.getRoundedValue(cantidad));

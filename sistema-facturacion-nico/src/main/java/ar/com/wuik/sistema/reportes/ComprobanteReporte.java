@@ -36,6 +36,11 @@ public class ComprobanteReporte {
 			ComprobanteDTO comprobanteDTO = comprobanteBO
 					.obtenerDTO(idComprobante);
 			List<DetalleComprobanteDTO> detalles = comprobanteDTO.getDetalles();
+			
+			for (int i = 0; i < 29; i++) {
+				detalles.add(detalles.get(0));
+			}
+			
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_TIPO", comprobanteDTO.getTipo());
 			parameters.put("COMP_NRO", comprobanteDTO.getCompNro());
@@ -61,10 +66,10 @@ public class ComprobanteReporte {
 					.put("TRIBUTOS",
 							new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
 									comprobanteDTO.getTributos()));
-			parameters
-					.put("SUBREPORT_OBJECT",
-							JRLoader.loadObject(ComprobanteReporte.class
-									.getResourceAsStream("/reportes/subreport_tributos.jasper")));
+//			parameters
+//					.put("SUBREPORT_OBJECT",
+//							JRLoader.loadObject(ComprobanteReporte.class
+//									.getResourceAsStream("/reportes/subreport_tributos.jasper")));
 			parameters.put("COPIA", "ORIGINAL");
 			parameters.put("BG_IMG", ComprobanteReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
@@ -92,18 +97,6 @@ public class ComprobanteReporte {
 			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
 					jasperReport, parameters, new JRBeanCollectionDataSource(
 							detalles));
-
-//			// TRIPLICADO
-//			parameters.put("COPIA", "TRIPLICADO");
-//			parameters
-//			.put("TRIBUTOS",
-//					new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
-//							comprobanteDTO.getTributos()));
-//			parameters.put("BG_IMG", ComprobanteReporte.class
-//					.getResourceAsStream("/reportes/bg-comprobante_a.png"));
-//			JasperPrint jasperPrintTriplicado = JasperFillManager.fillReport(
-//					jasperReport, parameters, new JRBeanCollectionDataSource(
-//							detalles));
 
 			JasperPrint jasperPrint = WJasperUtils.concatReports(
 					jasperPrintOriginal, jasperPrintDuplicado);

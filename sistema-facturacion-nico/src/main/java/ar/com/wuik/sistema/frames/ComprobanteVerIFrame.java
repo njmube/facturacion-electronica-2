@@ -330,11 +330,15 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 		if (WUtils.isEmpty(comprobante.getDetalles())) {
 			messages.add("Debe ingresar al menos un Detalle");
 		} else {
-			if (comprobante.getTotal().doubleValue() > 1000 && cliente.getDocumento().equals("0") ){
+			if (comprobante.getTotal().doubleValue() > 1000
+					&& cliente.getDocumento().equals("0")) {
 				messages.add("El monto total de la factura no debe superar los $1000. Cree un nuevo cliente con sus respectivos datos.");
 			}
+			if (comprobante.getDetalles().size() > 30) {
+				messages.add("El total máximo de Detalles es de 30");
+			}
 		}
-		
+
 		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);
 
 		return WUtils.isEmpty(messages);
@@ -843,7 +847,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 				detalles.add(detalle);
 			}
 			getTblDetalle().addData(detalles);
-			calcularTotales();			
+			calcularTotales();
 		} catch (BusinessException bexc) {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
@@ -958,7 +962,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			if (!comprobante.getRemitos().contains(remito)) {
 				List<DetalleRemito> detallesRemito = remito.getDetalles();
 				for (DetalleRemito detalleRemito : detallesRemito) {
-					addDetalle(detalleRemito.getProducto().getId(), detalleRemito.getCantidad());
+					addDetalle(detalleRemito.getProducto().getId(),
+							detalleRemito.getCantidad());
 				}
 				remito.setComprobante(comprobante);
 				comprobante.getRemitos().add(remito);
@@ -1017,12 +1022,12 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 										.getId());
 							} catch (ReportException rexc) {
 								showGlobalErrorMsg(rexc.getMessage());
-							}							
+							}
+							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						} finally {
 							hideFrame();
-							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							}
@@ -1221,7 +1226,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			break;
 		}
 	}
-	
+
 	@Override
 	public void enterPressed() {
 		if (getTextField().hasFocus()) {
@@ -1236,7 +1241,7 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 			}
 		}
 	}
-	
+
 	protected void addDetalleProducto(Long selectedId) {
 		if (existeDetalleProducto(selectedId)) {
 			addDetalle(selectedId, BigDecimal.ONE);

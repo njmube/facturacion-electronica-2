@@ -239,7 +239,7 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 
 						BigDecimal total = totalConIVA.multiply(
 								BigDecimal.valueOf(100)).divide(importeDecimal,
-								2, RoundingMode.HALF_EVEN);
+								2, RoundingMode.HALF_UP);
 
 						detalle.setPrecio(WUtils.getValue(
 								total.toEngineeringString(), 4));

@@ -79,7 +79,7 @@ public class DetalleComprobante extends BaseEntity {
 	public BigDecimal getTotal() {
 		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
 		return getSubtotal().multiply(iva).divide(new BigDecimal(100), 2,
-				RoundingMode.HALF_EVEN);
+				RoundingMode.HALF_UP);
 	}
 
 	public BigDecimal getTotalIVA() {
@@ -124,7 +124,7 @@ public class DetalleComprobante extends BaseEntity {
 
 	public BigDecimal getPrecioConIVA() {
 		return getPrecio().multiply(getTipoIVA().getImporteDecimal(),
-				new MathContext(2, RoundingMode.HALF_EVEN));
+				new MathContext(2, RoundingMode.HALF_UP));
 	}
 
 }
