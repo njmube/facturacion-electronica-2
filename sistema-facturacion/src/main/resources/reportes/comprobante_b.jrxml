@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_data" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.24184264611831"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="201"/>
+	<property name="ireport.y" value="93"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -30,7 +30,9 @@
 	<parameter name="BG_IMG" class="java.io.InputStream"/>
 	<parameter name="COD_BARRAS" class="java.lang.String"/>
 	<parameter name="COPIA" class="java.lang.String"/>
-	<parameter name="OTROS_TRIBUTOS" class="java.math.BigDecimal"/>
+	<parameter name="OTROS_TRIBUTOS" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\juan.vazquez\\Documents\\Workspace-UTN\\atenea\\sigma\\sigma-web\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
 	</parameter>
@@ -338,7 +340,7 @@ FRANCISCO NICOLAS]]></text>
 					<printWhenExpression><![CDATA[null != $P{REMITOS}]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Remito(s):]]></text>
 			</staticText>
@@ -352,14 +354,14 @@ FRANCISCO NICOLAS]]></text>
 			<staticText>
 				<reportElement x="11" y="195" width="111" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Condición de venta:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="122" y="195" width="111" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Otra]]></text>
 			</staticText>
@@ -459,38 +461,33 @@ FRANCISCO NICOLAS]]></text>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="233" y="0" width="56" height="14" forecolor="#000000"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
-					<paragraph rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="289" y="0" width="131" height="14" forecolor="#000000">
-					<printWhenExpression><![CDATA[]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="420" y="0" width="135" height="14"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
-					<paragraph rightIndent="4"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{precioUnitConIVA}]]></textFieldExpression>
-			</textField>
-			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="420" y="0" width="135" height="14" forecolor="#000000">
-					<printWhenExpression><![CDATA[]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font size="8"/>
 					<paragraph rightIndent="4"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subtotalConIVA}]]></textFieldExpression>
 			</textField>
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="289" y="0" width="131" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precioUnitConIVA}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="56" splitType="Stretch">
+		<band height="42" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="77" y="8" width="457" height="41"/>
+				<reportElement x="77" y="8" width="457" height="30"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -541,7 +538,7 @@ FRANCISCO NICOLAS]]></text>
 				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{OTROS_TRIBUTOS}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[java.math.BigDecimal.ZERO]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="454" y="146" width="99" height="15" forecolor="#000000"/>

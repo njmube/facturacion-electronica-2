@@ -2,8 +2,7 @@ package ar.com.wuik.sistema.entities.enums;
 
 public enum TipoDocumento {
 
-	CUIT(1);
-//	CUIL(2), DNI(3), OTROS(4);
+	CUIT(1), CUIL(2), DNI(3), OTROS(4);
 
 	private int id;
 
@@ -19,12 +18,12 @@ public enum TipoDocumento {
 		switch (docTipo) {
 		case 1:
 			return CUIT;
-//		case 2:
-//			return CUIL;
-//		case 3:
-//			return DNI;
-//		case 4:
-//			return OTROS;
+			 case 2:
+			 return CUIL;
+			 case 3:
+			 return DNI;
+			 case 4:
+			 return OTROS;
 		}
 		return null;
 	}

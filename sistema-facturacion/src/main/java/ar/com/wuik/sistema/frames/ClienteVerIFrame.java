@@ -210,24 +210,24 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 		TipoDocumento tipoDocumento = TipoDocumento.fromValue(tipoDoc
 				.getValue().intValue());
 
-//		if (tipoDocumento.equals(TipoDocumento.CUIL)
-//				|| tipoDocumento.equals(TipoDocumento.CUIT)) {
+		if (tipoDocumento.equals(TipoDocumento.CUIL)
+				|| tipoDocumento.equals(TipoDocumento.CUIT)) {
 			if (!AppUtils.esValidoCUIT(documento)) {
-				messages.add("Debe ingresar un CUIT válido");
+				messages.add("Debe ingresar un Documento válido");
 			}
-//		} else {
-//			if (WUtils.isEmpty(documento2)) {
-//				messages.add("Debe ingresar un Documento válido");
-//			}
-//		}
+		} else {
+			if (WUtils.isEmpty(documento2) || documento2.equals("0")) {
+				messages.add("Debe ingresar un Documento válido");
+			}
+		}
 
 		if (WUtils.isEmpty(direccion)) {
 			messages.add("Debe ingresar una Dirección");
 		}
 
-		if (WUtils.isEmpty(telefono)) {
-			messages.add("Debe ingresar un Teléfono");
-		}
+//		if (WUtils.isEmpty(telefono)) {
+//			messages.add("Debe ingresar un Teléfono");
+//		}
 
 		if (WOption.getIdWOptionSeleccion().equals(localidad.getValue())) {
 			messages.add("Debe seleccionar una Localidad");
@@ -458,7 +458,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblDocumento() {
 		if (lblDocumento == null) {
-			lblDocumento = new JLabel("* CUIT:");
+			lblDocumento = new JLabel("* Documento:");
 			lblDocumento.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblDocumento.setBounds(10, 95, 121, 25);
 		}
@@ -513,7 +513,7 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 
 	private JLabel getLblTelefono() {
 		if (lblTelefono == null) {
-			lblTelefono = new JLabel("* Tel\u00E9fono:");
+			lblTelefono = new JLabel("Tel\u00E9fono:");
 			lblTelefono.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblTelefono.setBounds(10, 167, 121, 25);
 		}
@@ -542,14 +542,14 @@ public class ClienteVerIFrame extends WAbstractModelIFrame {
 						WOption selectedOption = (WOption) e.getItem();
 						TipoDocumento tipoDocumento = TipoDocumento
 								.fromValue(selectedOption.getValue().intValue());
-//						if (tipoDocumento.equals(TipoDocumento.CUIL)
-//								|| tipoDocumento.equals(TipoDocumento.CUIT)) {
+						if (tipoDocumento.equals(TipoDocumento.CUIL)
+								|| tipoDocumento.equals(TipoDocumento.CUIT)) {
 							getTxtDNIOtros().setText("");
 							getTxfCuit().setVisible(Boolean.TRUE);
-//						} else {
-//							getTxfCuit().setText("");
-//							getTxtDNIOtros().setVisible(Boolean.TRUE);
-//						}
+						} else {
+							getTxfCuit().setText("");
+							getTxtDNIOtros().setVisible(Boolean.TRUE);
+						}
 					}
 				}
 			});

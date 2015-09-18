@@ -44,6 +44,7 @@ public class ComprobanteReporte {
 					.obtenerDTO(idComprobante);
 
 			List<DetalleComprobanteDTO> detalles = comprobanteDTO.getDetalles();
+			
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_TIPO", comprobanteDTO.getTipo());
 			parameters.put("COMP_NRO", comprobanteDTO.getCompNro());
@@ -139,6 +140,7 @@ public class ComprobanteReporte {
 			parameters.put("SUBTOTAL", comprobanteDTO.getSubtotal());
 			parameters.put("IVA_21", comprobanteDTO.getIva21());
 			parameters.put("IVA_105", comprobanteDTO.getIva105());
+			parameters.put("SHOW_ALL", Boolean.TRUE);
 			parameters.put("OTROS_TRIBUTOS", comprobanteDTO.getOtrosTributos());
 			parameters.put("SUBTOTAL_CON_IVA",
 					comprobanteDTO.getSubtotalConIVA());

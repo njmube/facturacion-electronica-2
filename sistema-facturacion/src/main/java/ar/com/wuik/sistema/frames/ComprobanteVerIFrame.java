@@ -323,6 +323,10 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isEmpty(comprobante.getDetalles())) {
 			messages.add("Debe ingresar al menos un Detalle");
+		} else {
+			if (comprobante.getDetalles().size() > 20) {
+				messages.add("El total máximo de Detalles es de 20");
+			}
 		}
 
 		WTooltipUtils.showMessages(messages, component, MessageType.ERROR);

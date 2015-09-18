@@ -169,6 +169,10 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 		if (WUtils.isEmpty(remito.getDetalles())) {
 			messages.add("Debe ingresar al menos un Detalle");
+		} else {
+			if (remito.getDetalles().size() > 20) {
+				messages.add("El total máximo de Detalles es de 20");
+			}
 		}
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);

@@ -396,14 +396,14 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 	private TipoDocumentoEnum getTipoDocumento(TipoDocumento tipoDocumento) {
 		switch (tipoDocumento) {
-		// case CUIL:
-		// return TipoDocumentoEnum.CUIL;
+		case CUIL:
+			return TipoDocumentoEnum.CUIL;
 		case CUIT:
 			return TipoDocumentoEnum.CUIT;
-			// case DNI:
-			// return TipoDocumentoEnum.DNI;
-			// case OTROS:
-			// return TipoDocumentoEnum.OTROS;
+		case DNI:
+			return TipoDocumentoEnum.DNI;
+		case OTROS:
+			return TipoDocumentoEnum.OTROS;
 		}
 		return null;
 	}

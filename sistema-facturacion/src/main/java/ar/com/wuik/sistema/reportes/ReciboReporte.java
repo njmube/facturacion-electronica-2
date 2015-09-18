@@ -1,6 +1,7 @@
 package ar.com.wuik.sistema.reportes;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
@@ -13,6 +14,8 @@ import net.sf.jasperreports.view.JasperViewer;
 import ar.com.wuik.sistema.bo.ReciboBO;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.exceptions.ReportException;
+import ar.com.wuik.sistema.reportes.entities.DetalleReciboDTO;
+import ar.com.wuik.sistema.reportes.entities.LiquidacionDTO;
 import ar.com.wuik.sistema.reportes.entities.ReciboDTO;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.utils.WJasperUtils;
@@ -24,7 +27,9 @@ public class ReciboReporte {
 		try {
 			ReciboBO reciboBO = AbstractFactory.getInstance(ReciboBO.class);
 			ReciboDTO reciboDTO = reciboBO.obtenerDTO(idRecibo);
-
+			
+			List<LiquidacionDTO> liquidaciones = reciboDTO.getLiquidaciones();
+			
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_NRO", reciboDTO.getCompNro());
 			parameters.put("FECHA_EMISION", reciboDTO.getFechaEmision());
@@ -37,7 +42,7 @@ public class ReciboReporte {
 			parameters.put("TOTAL", reciboDTO.getTotal());
 			parameters.put("TOTAL_LETRAS", reciboDTO.getTotalLetras());
 			parameters.put("OBSERVACIONES", reciboDTO.getObservaciones());
-			parameters.put("LIQUIDACIONES", reciboDTO.getLiquidaciones());
+			parameters.put("LIQUIDACIONES", liquidaciones);
 			parameters.put("BG_IMG", ReciboReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 			parameters.put("COPIA", "ORIGINAL");
@@ -52,15 +57,17 @@ public class ReciboReporte {
 			
 			parameters.put("SUBREPORT", subReport);
 			
+			List<DetalleReciboDTO>detalles = reciboDTO.getDetalles();
+			
 			JasperPrint jasperPrintOriginal = JasperFillManager.fillReport(
-					jasperReport, parameters, new JRBeanCollectionDataSource(reciboDTO.getDetalles()));
+					jasperReport, parameters, new JRBeanCollectionDataSource(detalles));
 			
 			// DUPLICADO
 			parameters.put("COPIA", "DUPLICADO");
 			parameters.put("BG_IMG", ReciboReporte.class
 					.getResourceAsStream("/reportes/bg-comprobante.png"));
 			JasperPrint jasperPrintDuplicado = JasperFillManager.fillReport(
-					jasperReport, parameters, new JRBeanCollectionDataSource(reciboDTO.getDetalles()));
+					jasperReport, parameters, new JRBeanCollectionDataSource(detalles));
 
 			
 			JasperPrint jasperPrint = WJasperUtils.concatReports(

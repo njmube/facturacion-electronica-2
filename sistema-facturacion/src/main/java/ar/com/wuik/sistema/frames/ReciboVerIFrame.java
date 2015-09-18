@@ -208,6 +208,16 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 
 		if (null == total || total.doubleValue() == 0) {
 			messages.add("Debe ingresar al menos monto en Efectivo o Cheque");
+		} else {
+			if (recibo.getPagosCheque().size() > 10) {
+				messages.add("El total máximo de Cheques es de 10");
+			}
+		}
+		
+		if (WUtils.isNotEmpty(recibo.getComprobantes())) {
+			if (recibo.getComprobantes().size() > 8) {
+				messages.add("El total máximo de Comprobantes a liquidar es de 10");
+			}
 		}
 
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);

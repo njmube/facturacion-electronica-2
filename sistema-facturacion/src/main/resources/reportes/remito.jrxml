@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="remito" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="180"/>
+	<property name="ireport.y" value="221"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -309,14 +309,14 @@ FRANCISCO NICOLAS]]></text>
 			<staticText>
 				<reportElement x="13" y="189" width="111" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Condición de venta:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="123" y="189" width="111" height="15" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Otra]]></text>
 			</staticText>
@@ -379,11 +379,6 @@ FRANCISCO NICOLAS]]></text>
 		<band height="14" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="61" y="0" width="85" height="14" forecolor="#000000"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph leftIndent="4"/>
@@ -394,11 +389,6 @@ FRANCISCO NICOLAS]]></text>
 				<reportElement mode="Transparent" x="146" y="0" width="409" height="14" forecolor="#000000">
 					<printWhenExpression><![CDATA[(null != $F{producto})]]></printWhenExpression>
 				</reportElement>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph leftIndent="4"/>
@@ -407,12 +397,7 @@ FRANCISCO NICOLAS]]></text>
 			</textField>
 			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="1" y="0" width="60" height="14" forecolor="#000000"/>
-				<box>
-					<leftPen lineWidth="0.5" lineStyle="Dotted"/>
-					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
-					<rightPen lineWidth="0.5" lineStyle="Dotted"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 					<paragraph rightIndent="4"/>
 				</textElement>
@@ -421,7 +406,7 @@ FRANCISCO NICOLAS]]></text>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="56" splitType="Stretch">
+		<band height="47" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="8" width="77" height="20"/>
 				<textElement verticalAlignment="Top">
@@ -430,7 +415,7 @@ FRANCISCO NICOLAS]]></text>
 				<text><![CDATA[Observaciones:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="77" y="8" width="457" height="41"/>
+				<reportElement x="77" y="8" width="457" height="30"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
