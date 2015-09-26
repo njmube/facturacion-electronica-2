@@ -22,6 +22,7 @@ import ar.com.wuik.sistema.entities.Parametro;
 import ar.com.wuik.sistema.entities.Permiso;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Proveedor;
+import ar.com.wuik.sistema.entities.Provincia;
 import ar.com.wuik.sistema.entities.Recibo;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.entities.StockProducto;
@@ -116,6 +117,7 @@ public class HibernateUtil {
 		cfg.addAnnotatedClass(TipoProducto.class);
 		cfg.addAnnotatedClass(TributoComprobante.class);
 		cfg.addAnnotatedClass(Usuario.class);
+		cfg.addAnnotatedClass(Provincia.class);
 	}
 
 }

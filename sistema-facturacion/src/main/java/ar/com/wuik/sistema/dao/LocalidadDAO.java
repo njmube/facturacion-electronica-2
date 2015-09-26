@@ -1,7 +1,13 @@
 package ar.com.wuik.sistema.dao;
 
-import ar.com.wuik.sistema.entities.Localidad;
+import java.util.List;
 
-public interface LocalidadDAO extends GenericCrudDAO<Localidad>{
+import ar.com.wuik.sistema.entities.Localidad;
+import ar.com.wuik.sistema.exceptions.DataAccessException;
+import ar.com.wuik.sistema.filters.LocalidadFilter;
+
+public interface LocalidadDAO extends GenericCrudDAO<Localidad> {
+
+	List<Localidad> search(LocalidadFilter filter) throws DataAccessException;
 
 }

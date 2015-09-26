@@ -991,15 +991,14 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							} catch (ReportException rexc) {
 								showGlobalErrorMsg(rexc.getMessage());
 							}
-						} catch (BusinessException bexc) {
-							showGlobalErrorMsg(bexc.getMessage());
-						} finally {
 							hideFrame();
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							} else if (null != clienteIFrame) {
 								clienteIFrame.search();
 							}
+						} catch (BusinessException bexc) {
+							showGlobalErrorMsg(bexc.getMessage());
 						}
 					}
 				}
