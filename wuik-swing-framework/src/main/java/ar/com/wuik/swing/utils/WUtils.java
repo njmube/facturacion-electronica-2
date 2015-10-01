@@ -3,7 +3,6 @@ package ar.com.wuik.swing.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -205,7 +204,7 @@ public final class WUtils {
 
 					BigDecimal decimalRounded = new BigDecimal(
 							"0." + tokens[1]);
-					decimalRounded = decimalRounded.setScale(decimals, RoundingMode.HALF_EVEN);
+					decimalRounded = decimalRounded.setScale(decimals, RoundingMode.HALF_UP);
 					BigDecimal nonDecimalPart = new BigDecimal(tokens[0]);
 					if (nonDecimalPart.doubleValue() < 0) {
 						return decimalRounded.add(
