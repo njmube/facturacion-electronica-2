@@ -82,7 +82,8 @@
 								<resource>
 									<directory>${project.basedir}</directory>
 									<includes>
-										<include>alias.p12</include>
+										<include>auth_homo.p12</include>
+										<include>auth_prod.p12</include>
 										<include>keystore.jks</include>
 										<include>wsaa_client.properties</include>
 									</includes>
