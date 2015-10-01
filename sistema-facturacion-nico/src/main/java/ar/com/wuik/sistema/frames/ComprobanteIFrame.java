@@ -274,6 +274,7 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 										try {
 											ComprobanteReporte
 													.generarImpresion(selectedItem);
+											showGlobalMsg("El comprobante se registró en AFIP exitosamente");
 										} catch (ReportException rexc) {
 											showGlobalErrorMsg(rexc
 													.getMessage());

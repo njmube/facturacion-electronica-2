@@ -412,8 +412,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							} else {
 								comprobanteBO.actualizar(comprobante);
 							}
+							showGlobalMsg("El comprobante se guardó exitosamente");
 							hideFrame();
-							showGlobalMsg("Comprobante GUARDADO exitosamente");
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							}
@@ -1020,10 +1020,10 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							try {
 								ComprobanteReporte.generarImpresion(comprobante
 										.getId());
+								showGlobalMsg("El comprobante se guardó y registró en AFIP exitosamente");
 							} catch (ReportException rexc) {
 								showGlobalErrorMsg(rexc.getMessage());
 							}
-							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
 
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
