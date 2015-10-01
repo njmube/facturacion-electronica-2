@@ -1,0 +1,9 @@
+1- Abrir CMD:
+cd C:\OpenSSL-Win32\bin
+
+2 - openssl genrsa -out privadaNico 1024 
+3 - openssl req -new -key privadaNico -subj "/C=AR/O=NICOREPRESENTACIONES/CN=NICOREPRESENTACIONES/serialNumber=CUIT 30714446076" -out pedidoNico -config openssl.cfg
+4 - openssl pkcs12 -export -inkey privadaNico -name "NICOREPRESENTACIONES" -in certificado.crt -out alias.p12
+
+* keytool -import -keystore keystore.jks -file wsaahomo.afip.gov.ar.crt -alias 
+ 

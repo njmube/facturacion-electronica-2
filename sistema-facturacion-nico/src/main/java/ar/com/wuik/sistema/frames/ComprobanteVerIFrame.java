@@ -1024,13 +1024,14 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 								showGlobalErrorMsg(rexc.getMessage());
 							}
 							showGlobalMsg("Comprobante GUARDADO y FACTURADO exitosamente");
+
+							if (null != comprobanteIFrame) {
+								comprobanteIFrame.search();
+							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
 						} finally {
 							hideFrame();
-							if (null != comprobanteIFrame) {
-								comprobanteIFrame.search();
-							}
 						}
 					}
 				}

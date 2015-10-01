@@ -395,8 +395,10 @@ public class MainFrame extends WApplication {
 	 */
 	@Override
 	protected String getApplicationName() {
+		String env = System.getProperty("env", "homo");
 		return "Administración " + AppUtils.getAppVersion() + " :: "
-				+ usuarioLogin.getNombre();
+				+ usuarioLogin.getNombre() + ((env.equals("homo") ? " [Homologación]" : " [Producción]"));
+		
 	}
 
 	public void logout(boolean confirmacion) {

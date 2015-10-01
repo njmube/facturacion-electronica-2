@@ -991,7 +991,6 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							} catch (ReportException rexc) {
 								showGlobalErrorMsg(rexc.getMessage());
 							}
-							hideFrame();
 							if (null != comprobanteIFrame) {
 								comprobanteIFrame.search();
 							} else if (null != clienteIFrame) {
@@ -999,6 +998,8 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 							}
 						} catch (BusinessException bexc) {
 							showGlobalErrorMsg(bexc.getMessage());
+						} finally {
+							hideFrame();
 						}
 					}
 				}

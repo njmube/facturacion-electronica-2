@@ -37,10 +37,6 @@ public class ComprobanteReporte {
 					.obtenerDTO(idComprobante);
 			List<DetalleComprobanteDTO> detalles = comprobanteDTO.getDetalles();
 			
-			for (int i = 0; i < 29; i++) {
-				detalles.add(detalles.get(0));
-			}
-			
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("COMP_TIPO", comprobanteDTO.getTipo());
 			parameters.put("COMP_NRO", comprobanteDTO.getCompNro());
