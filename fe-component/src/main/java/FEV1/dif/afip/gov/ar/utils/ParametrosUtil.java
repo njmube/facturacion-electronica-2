@@ -37,11 +37,12 @@ public class ParametrosUtil {
 	}
 
 	public static String getProperty(final String key) {
+		String keyEnv = key + "." + System.getProperty("env", "homo");
 		String value = null;
 		final Properties properties = getProperties();
 		if (null != properties) {
-			if (null != key) {
-				value = (String) properties.get(key);
+			if (null != keyEnv) {
+				value = (String) properties.get(keyEnv);
 			}
 		}
 		return value;
