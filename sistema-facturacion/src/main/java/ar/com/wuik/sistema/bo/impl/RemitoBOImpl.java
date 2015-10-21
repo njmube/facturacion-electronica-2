@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import FEV1.dif.afip.gov.ar.utils.AbstractFactory;
 import ar.com.wuik.sistema.bo.ParametroBO;
 import ar.com.wuik.sistema.bo.RemitoBO;
-import ar.com.wuik.sistema.dao.ParametroDAO;
 import ar.com.wuik.sistema.dao.RemitoDAO;
 import ar.com.wuik.sistema.entities.Cliente;
 import ar.com.wuik.sistema.entities.DetalleRemito;
@@ -26,12 +25,12 @@ public class RemitoBOImpl implements RemitoBO {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(RemitoBOImpl.class);
 	private RemitoDAO remitoDAO;
-	private ParametroDAO parametroDAO;
+//	private ParametroDAO parametroDAO;
 	private ParametroBO parametroBO;
 
 	public RemitoBOImpl() {
 		remitoDAO = AbstractFactory.getInstance(RemitoDAO.class);
-		parametroDAO = AbstractFactory.getInstance(ParametroDAO.class);
+//		parametroDAO = AbstractFactory.getInstance(ParametroDAO.class);
 		parametroBO = AbstractFactory.getInstance(ParametroBO.class);
 	}
 
@@ -62,11 +61,11 @@ public class RemitoBOImpl implements RemitoBO {
 	@Override
 	public void guardar(Remito remito) throws BusinessException {
 		try {
-			String nroRemito = parametroBO.getNroRemito();
-			remito.setNumero(nroRemito);
+//			String nroRemito = parametroBO.getNroRemito();
+//			remito.setNumero(nroRemito);
 			HibernateUtil.startTransaction();
 			remitoDAO.saveOrUpdate(remito);
-			parametroDAO.incrementarNroRemito();
+//			parametroDAO.incrementarNroRemito();
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();

@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Proveedor;
+import ar.com.wuik.sistema.entities.enums.TipoComprobante;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.filters.ProveedorFilter;
 import ar.com.wuik.sistema.model.ProveedorModel;
@@ -47,6 +48,9 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Proveedor> tablePanel;
 	private JButton btnCerrar;
 	private JTextField txtRazonSocial;
+	private JButton btnFactura;
+	private JButton btnNotaCred;
+	private JButton btnNotaDeb;
 
 	/**
 	 * Create the frame.
@@ -62,6 +66,9 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 		getContentPane().add(getPnlBusqueda());
 		getContentPane().add(getTablePanel());
 		getContentPane().add(getBtnCerrar());
+		getContentPane().add(getBtnFactura());
+		getContentPane().add(getBtnNotaCred());
+		getContentPane().add(getBtnNotaDeb());
 	}
 
 	/**
@@ -137,7 +144,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private WTablePanel<Proveedor> getTablePanel() {
 		if (tablePanel == null) {
 			tablePanel = new WTablePanel(ProveedorModel.class, Boolean.FALSE);
-			tablePanel.setBounds(10, 119, 884, 329);
+			tablePanel.setBounds(10, 193, 884, 250);
 			tablePanel.addToolbarButtons(getToolbarButtons());
 		}
 		return tablePanel;
@@ -178,7 +185,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Editar", null);
 
-		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Cliente",
+		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Proveedor",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
 				new ActionListener() {
@@ -201,11 +208,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 									boolean enUso = proveedorBO
 											.estaEnUso(idProveedor);
 									if (enUso) {
-										WTooltipUtils
-												.showMessage(
-														"El Proveedor se encuentra en uso",
-														(JButton) e.getSource(),
-														MessageType.ERROR);
+										showGlobalMsg("El Proveedor se encuentra en uso");
 									} else {
 										proveedorBO.eliminar(idProveedor);
 										search();
@@ -224,9 +227,31 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Eliminar", null);
 
+		WToolbarButton buttonFacturas = new WToolbarButton("Comprobantes",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/comprobantes.png")),
+				new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						Long selectedItem = tablePanel.getSelectedItemID();
+						if (null != selectedItem) {
+							addModalIFrame(new ComprobanteProveedorIFrame(selectedItem));
+						} else {
+							WTooltipUtils
+									.showMessage(
+											"Debe seleccionar un solo Proveedor",
+											(JButton) e.getSource(),
+											MessageType.ALERTA);
+						}
+					}
+				}, "Ver Comprobantes", null);
+
+		
 		toolbarButtons.add(buttonAdd);
 		toolbarButtons.add(buttonEdit);
 		toolbarButtons.add(buttonDelete);
+		toolbarButtons.add(buttonFacturas);
 		return toolbarButtons;
 	}
 
@@ -288,5 +313,76 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 			txtRazonSocial.setName(CAMPO_RAZON_SOCIAL);
 		}
 		return txtRazonSocial;
+	}
+	private JButton getBtnFactura() {
+		if (btnFactura == null) {
+			btnFactura = new JButton("Factura");
+			btnFactura.setIcon(new ImageIcon(ProveedorIFrame.class
+					.getResource("/icons32/facturas.png")));
+			btnFactura.setBounds(10, 125, 147, 46);
+			btnFactura.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Long selectedItem = tablePanel.getSelectedItemID();
+					if (null != selectedItem) {
+						addModalIFrame(new ComprobanteProveedorVerIFrame(selectedItem,
+								TipoComprobante.FACTURA));
+					} else {
+						WTooltipUtils.showMessage(
+								"Debe seleccionar un solo Proveedor",
+								(JButton) e.getSource(), MessageType.ALERTA);
+					}
+				}
+			});
+		}
+		return btnFactura;
+		
+		
+	}
+	private JButton getBtnNotaCred() {			
+		if (btnNotaCred == null) {
+			btnNotaCred = new JButton("Nota de Cr\u00E9dito");
+			btnNotaCred.setIcon(new ImageIcon(ProveedorIFrame.class
+					.getResource("/icons32/notas_credito.png")));
+			btnNotaCred.setBounds(178, 125, 147, 46);
+			btnNotaCred.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Long selectedItem = tablePanel.getSelectedItemID();
+					if (null != selectedItem) {
+						addModalIFrame(new ComprobanteProveedorVerIFrame(selectedItem,
+								TipoComprobante.NOTA_CREDITO));
+					} else {
+						WTooltipUtils.showMessage(
+								"Debe seleccionar un Proveedor",
+								(JButton) e.getSource(), MessageType.ALERTA);
+					}
+				}
+			});
+		}
+		return btnNotaCred;
+		
+		
+	}
+	private JButton getBtnNotaDeb() {
+		if (btnNotaDeb == null) {
+			btnNotaDeb = new JButton("Nota de  D\u00E9bito");
+			btnNotaDeb.setIcon(new ImageIcon(ProveedorIFrame.class
+					.getResource("/icons32/notas_debito.png")));
+			btnNotaDeb.setBounds(347, 125, 147, 46);
+			btnNotaDeb.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Long selectedItem = tablePanel.getSelectedItemID();
+					if (null != selectedItem) {
+						addModalIFrame(new ComprobanteProveedorVerIFrame(selectedItem,
+								TipoComprobante.NOTA_DEBITO));
+					} else {
+						WTooltipUtils.showMessage(
+								"Debe seleccionar un Proveedor",
+								(JButton) e.getSource(), MessageType.ALERTA);
+					}
+				}
+			});
+		}
+		return btnNotaDeb;
+		
 	}
 }

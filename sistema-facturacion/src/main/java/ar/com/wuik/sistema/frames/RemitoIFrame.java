@@ -269,7 +269,7 @@ public class RemitoIFrame extends WAbstractModelIFrame implements
 //			toolbarButtons.add(buttonAdd);
 			toolbarButtons.add(buttonEdit);
 			toolbarButtons.add(buttonAnular);
-			toolbarButtons.add(buttonImprimir);
+//			toolbarButtons.add(buttonImprimir);
 		}
 		toolbarButtons.add(buttonVer);
 		return toolbarButtons;

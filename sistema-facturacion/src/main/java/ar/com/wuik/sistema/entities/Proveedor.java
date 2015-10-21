@@ -2,10 +2,14 @@ package ar.com.wuik.sistema.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import ar.com.wuik.sistema.entities.enums.CondicionIVA;
 
 @Entity
 @Table(name = "proveedores")
@@ -28,6 +32,9 @@ public class Proveedor extends BaseEntity {
 	private String cuit;
 	@Column(name = "ACTIVO")
 	private boolean activo = Boolean.TRUE;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "COND_IVA")
+	private CondicionIVA condicionIVA;
 
 	public String getRazonSocial() {
 		return razonSocial;
@@ -91,6 +98,14 @@ public class Proveedor extends BaseEntity {
 
 	public void setIdLocalidad(Long idLocalidad) {
 		this.idLocalidad = idLocalidad;
+	}
+
+	public CondicionIVA getCondicionIVA() {
+		return condicionIVA;
+	}
+
+	public void setCondicionIVA(CondicionIVA condicionIVA) {
+		this.condicionIVA = condicionIVA;
 	}
 
 }

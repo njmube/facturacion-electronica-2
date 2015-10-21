@@ -81,6 +81,11 @@ public class Comprobante extends BaseEntity {
 	private TipoComprobante tipoComprobante;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "comprobante", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TributoComprobante> tributos;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID_PROVEEDOR", nullable = false, insertable = false, updatable = false)
+	private Proveedor proveedor;
+	@Column(name = "ID_PROVEEDOR")
+	private Long idProveedor;
 
 	public Comprobante() {
 		this.detalles = new ArrayList<DetalleComprobante>();
@@ -281,6 +286,22 @@ public class Comprobante extends BaseEntity {
 
 	public void setTotalTributos(BigDecimal totalTributos) {
 		this.totalTributos = totalTributos;
+	}
+
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	public Long getIdProveedor() {
+		return idProveedor;
+	}
+
+	public void setIdProveedor(Long idProveedor) {
+		this.idProveedor = idProveedor;
 	}
 
 }

@@ -59,6 +59,7 @@ public class ComprobanteDAOImpl extends GenericCrudHBDAOImpl<Comprobante> implem
 		Criteria criteria = getSession().createCriteria(Comprobante.class);
 
 		Long idCliente = filter.getIdCliente();
+		Long idProveedor = filter.getIdProveedor();
 		Boolean asignado = filter.getAsignado();
 		Boolean activo = filter.getActivo();
 		List<Long> idsToExclude = filter.getIdsToExclude();
@@ -70,6 +71,10 @@ public class ComprobanteDAOImpl extends GenericCrudHBDAOImpl<Comprobante> implem
 
 		if (null != idCliente) {
 			criteria.add(Restrictions.eq("idCliente", idCliente));
+		}
+		
+		if (null != idProveedor) {
+			criteria.add(Restrictions.eq("idProveedor", idProveedor));
 		}
 		
 		if (null != tipo) {

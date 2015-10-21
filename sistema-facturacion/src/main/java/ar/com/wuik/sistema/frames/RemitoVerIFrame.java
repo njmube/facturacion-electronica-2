@@ -160,8 +160,13 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	protected boolean validateModel(WModel model) {
 
 		String fechaEmision = model.getValue(CAMPO_FECHA_EMISION);
+		String nro = model.getValue(CAMPO_NRO_COMP);
 
 		List<String> messages = new ArrayList<String>();
+
+		if (WUtils.isEmpty(nro)) {
+			messages.add("Debe ingresar un Nro. de Remito");
+		}
 
 		if (WUtils.isEmpty(fechaEmision)) {
 			messages.add("Debe ingresar una Fecha de Emisión");
@@ -217,7 +222,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JTextField getTxtNro() {
 		if (txtNro == null) {
 			txtNro = new JTextField();
-			txtNro.setEditable(false);
 			txtNro.setName(CAMPO_NRO_COMP);
 			txtNro.setDocument(new WTextFieldLimit(50));
 			txtNro.setBounds(141, 23, 141, 25);
@@ -254,21 +258,23 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 						String fechaVenta = model.getValue(CAMPO_FECHA_EMISION);
 						String observaciones = model
 								.getValue(CAMPO_OBSERVACIONES);
+						String numero = model.getValue(CAMPO_NRO_COMP);
 
 						remito.setFecha(WUtils.getDateFromString(fechaVenta));
 						remito.setObservaciones(observaciones);
 						remito.setIdCliente(idCliente);
+						remito.setNumero(numero);
 
 						try {
 							RemitoBO remitoBO = AbstractFactory
 									.getInstance(RemitoBO.class);
 							if (remito.getId() == null) {
 								remitoBO.guardar(remito);
-								try {
-									RemitoReporte.generarRemito(remito.getId());
-								} catch (ReportException rexc) {
-									showGlobalErrorMsg(rexc.getMessage());
-								}
+//								try {
+//									RemitoReporte.generarRemito(remito.getId());
+//								} catch (ReportException rexc) {
+//									showGlobalErrorMsg(rexc.getMessage());
+//								}
 							} else {
 								remitoBO.actualizar(remito);
 							}

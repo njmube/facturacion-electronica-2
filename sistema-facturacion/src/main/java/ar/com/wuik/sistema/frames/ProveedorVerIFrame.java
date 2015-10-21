@@ -2,6 +2,8 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import ar.com.wuik.sistema.bo.ParametricoBO;
 import ar.com.wuik.sistema.bo.ProveedorBO;
 import ar.com.wuik.sistema.entities.Localidad;
 import ar.com.wuik.sistema.entities.Proveedor;
+import ar.com.wuik.sistema.entities.Provincia;
 import ar.com.wuik.sistema.exceptions.BusinessException;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.AppUtils;
@@ -55,6 +58,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	private static final String CAMPO_DIRECCION = "direccion";
 	private static final String CAMPO_TELEFONO = "telefono";
 	private static final String CAMPO_LOCALIDAD = "localidad";
+	private static final String CAMPO_PROVINCIA = "provincia";
 	private static final String CAMPO_CUIT = "cuit";
 	private static final String CAMPO_MAIL = "mail";
 	private ProveedorIFrame proveedorIFrame;
@@ -68,6 +72,8 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 	private JComboBox cmbLocalidad;
 	private JLabel lblTelfono;
 	private JLabel label;
+	private JLabel lblProvincia;
+	private JComboBox cmbProvincia;
 
 	/**
 	 * Create the frame.
@@ -78,6 +84,15 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		initialize("Editar Proveedor");
 		this.proveedorIFrame = proveedorIFrame;
 		loadProveedor(idProveedor);
+		getCmbProvincia().addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					loadLocalidad(((WOption) e.getItem()).getValue(), null);
+				}
+			}
+		});
 	}
 
 	private void loadProveedor(Long idProveedor) {
@@ -97,11 +112,72 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			showGlobalErrorMsg(bexc.getMessage());
 		}
 	}
+	
+	private void loadLocalidad(Long idProvincia, Long defaultValue) {
+
+		getCmbLocalidad().removeAllItems();
+		getCmbLocalidad().addItem(WOption.getWOptionSelecione());
+
+		try {
+			ParametricoBO parametricoBO = AbstractFactory
+					.getInstance(ParametricoBO.class);
+			List<Localidad> localidades = parametricoBO
+					.obtenerLocalidadesPorProvincia(idProvincia);
+			if (WUtils.isNotEmpty(localidades)) {
+				for (Localidad localidad : localidades) {
+					getCmbLocalidad().addItem(
+							new WOption(localidad.getId(), localidad
+									.getNombre()));
+				}
+			}
+			if (null != defaultValue) {
+				getCmbLocalidad().setSelectedItem(new WOption(defaultValue));
+			}
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+	}
+
+	private void loadProvincia(Long defaultValue) {
+
+		getCmbProvincia().removeAllItems();
+		getCmbProvincia().addItem(WOption.getWOptionSelecione());
+
+		try {
+			ParametricoBO parametricoBO = AbstractFactory
+					.getInstance(ParametricoBO.class);
+			List<Provincia> provincias = parametricoBO.obtenerTodosProvincias();
+			if (WUtils.isNotEmpty(provincias)) {
+				for (Provincia provincia : provincias) {
+					getCmbProvincia().addItem(
+							new WOption(provincia.getId(), provincia
+									.getNombre()));
+				}
+			}
+			if (null != defaultValue) {
+				getCmbProvincia().setSelectedItem(new WOption(defaultValue));
+			}
+		} catch (BusinessException bexc) {
+			showGlobalErrorMsg(bexc.getMessage());
+		}
+	}
+
 
 	public ProveedorVerIFrame(ProveedorIFrame proveedorIFrame) {
 		initialize("Nuevo Proveedor");
 		this.proveedorIFrame = proveedorIFrame;
 		this.proveedor = new Proveedor();
+		loadProvincia(1L);
+		loadLocalidad(1L, 105L);
+		getCmbProvincia().addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					loadLocalidad(((WOption) e.getItem()).getValue(), null);
+				}
+			}
+		});
 	}
 
 	public ProveedorVerIFrame(
@@ -109,6 +185,17 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		initialize("Nuevo Proveedor");
 		this.movimientoProductoVerIFrame = movimientoProductoVerIFrame;
 		this.proveedor = new Proveedor();
+		loadProvincia(1L);
+		loadLocalidad(1L, 105L);
+		getCmbProvincia().addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					loadLocalidad(((WOption) e.getItem()).getValue(), null);
+				}
+			}
+		});
 	}
 
 	private void initialize(String title) {
@@ -116,7 +203,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ProveedorVerIFrame.class.getResource("/icons/proveedores.png")));
-		setBounds(0, 0, 470, 329);
+		setBounds(0, 0, 470, 426);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -180,7 +267,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 448, 242);
+			pnlBusqueda.setBounds(10, 11, 448, 336);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblRazonSocial());
 			pnlBusqueda.add(getTxtRazonSocial());
@@ -195,6 +282,8 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getCmbLocalidad());
 			pnlBusqueda.add(getLblTelfono());
 			pnlBusqueda.add(getLabel());
+			pnlBusqueda.add(getLblProvincia());
+			pnlBusqueda.add(getCmbProvincia());
 		}
 		return pnlBusqueda;
 	}
@@ -229,7 +318,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ProveedorVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(242, 264, 103, 30);
+			btnCerrar.setBounds(242, 358, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -239,7 +328,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ClienteVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(355, 264, 103, 30);
+			btnGuardar.setBounds(355, 358, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -376,7 +465,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		if (lblLocalidad == null) {
 			lblLocalidad = new JLabel("* Localidad:");
 			lblLocalidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblLocalidad.setBounds(10, 203, 121, 25);
+			lblLocalidad.setBounds(10, 239, 121, 25);
 		}
 		return lblLocalidad;
 	}
@@ -395,7 +484,7 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 		if (cmbLocalidad == null) {
 			cmbLocalidad = new JComboBox();
 			cmbLocalidad.setName(CAMPO_LOCALIDAD);
-			cmbLocalidad.setBounds(141, 203, 219, 25);
+			cmbLocalidad.setBounds(141, 239, 219, 25);
 		}
 		return cmbLocalidad;
 	}
@@ -414,5 +503,24 @@ public class ProveedorVerIFrame extends WAbstractModelIFrame {
 			label.setBounds(296, 59, 26, 25);
 		}
 		return label;
+	}
+	
+	
+	private JLabel getLblProvincia() {
+		if (lblProvincia == null) {
+			lblProvincia = new JLabel("* Provincia:");
+			lblProvincia.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblProvincia.setBounds(10, 203, 121, 25);
+		}
+		return lblProvincia;
+	}
+
+	private JComboBox getCmbProvincia() {
+		if (cmbProvincia == null) {
+			cmbProvincia = new JComboBox();
+			cmbProvincia.setName(CAMPO_PROVINCIA);
+			cmbProvincia.setBounds(141, 203, 164, 25);
+		}
+		return cmbProvincia;
 	}
 }

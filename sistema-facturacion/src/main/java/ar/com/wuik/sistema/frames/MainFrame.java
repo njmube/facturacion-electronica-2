@@ -292,7 +292,8 @@ public class MainFrame extends WApplication {
 					new ImageIcon(WCalendarIFrame.class
 							.getResource("/icons32/administraciones.png")),
 					getItemCliente(), getItemProducto(), getItemTipoProducto(),
-					getItemProveedor(), getItemCheque());
+					 getItemCheque());
+//			getItemProveedor(),
 		}
 		return menuAdministraciones;
 	}

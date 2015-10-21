@@ -24,6 +24,8 @@ public interface ComprobanteBO {
 	void actualizar(Comprobante comprobante) throws BusinessException;
 
 	void cancelar(Long id) throws BusinessException;
+	
+	void eliminar(Long id) throws BusinessException;
 
 	ComprobanteDTO obtenerDTO(Long id) throws BusinessException;
 

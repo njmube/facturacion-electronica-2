@@ -264,7 +264,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(ReciboVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(468, 438, 103, 30);
+			btnCerrar.setBounds(545, 438, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -274,7 +274,7 @@ public class ReciboVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ReciboVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(581, 438, 103, 30);
+			btnGuardar.setBounds(658, 438, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
