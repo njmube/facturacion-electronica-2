@@ -162,8 +162,6 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 				detalle.setPrecio(WUtils.getValue(precio));
 				detalle.setTemporalId(System.currentTimeMillis());
 				comprobanteVerIFrame.addDetalle(detalle);
-			} else if (null != remitoClienteVerIFrame) {
-				remitoClienteVerIFrame.search();
 			}
 			hideFrame();
 		}

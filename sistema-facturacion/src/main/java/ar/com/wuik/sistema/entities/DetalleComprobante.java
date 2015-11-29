@@ -38,6 +38,13 @@ public class DetalleComprobante extends BaseEntity {
 	@Transient
 	private Long temporalId;
 
+	public DetalleComprobante() {
+		this.cantidad = 1;
+		this.precio = BigDecimal.ZERO;
+		this.tipoIVA = TipoIVAEnum.IVA_21;
+		this.temporalId = System.currentTimeMillis();
+	}
+	
 	public Producto getProducto() {
 		return producto;
 	}
@@ -57,10 +64,13 @@ public class DetalleComprobante extends BaseEntity {
 	public BigDecimal getPrecio() {
 		return precio;
 	}
-	
+
 	public BigDecimal getPrecioConIVA() {
-		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
-		return getPrecio().multiply(iva).divide(new BigDecimal(100));
+		if (null != getTipoIVA() && null != getPrecio()) {
+			BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
+			return getPrecio().multiply(iva).divide(new BigDecimal(100));
+		}
+		return null;
 	}
 
 	public void setPrecio(BigDecimal precio) {
@@ -76,16 +86,26 @@ public class DetalleComprobante extends BaseEntity {
 	}
 
 	public BigDecimal getSubtotal() {
-		return getPrecio().multiply(new BigDecimal(getCantidad()));
+		if (null != getPrecio() && null != getCantidad()) {
+			return getPrecio().multiply(new BigDecimal(getCantidad()));
+		}
+		return null;
 	}
 
 	public BigDecimal getTotal() {
-		BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
-		return getSubtotal().multiply(iva).divide(new BigDecimal(100));
+		if (null != getTipoIVA() && null != getSubtotal()) {
+			BigDecimal iva = getTipoIVA().getImporte().add(new BigDecimal(100));
+			return getSubtotal().multiply(iva).divide(new BigDecimal(100));
+		}
+		return null;
 	}
 
 	public BigDecimal getTotalIVA() {
-		return getTotal().subtract(getSubtotal());
+		if (null != getTotal() && null != getSubtotal()) {
+			return getTotal().subtract(getSubtotal());
+		}
+
+		return null;
 	}
 
 	public Long getCoalesceId() {
@@ -125,7 +145,10 @@ public class DetalleComprobante extends BaseEntity {
 	}
 
 	public BigDecimal getSubtotalConIVA() {
-		return getPrecioConIVA().multiply(new BigDecimal(getCantidad()));
+		if (null != getPrecioConIVA() && null != getCantidad()) {
+			return getPrecioConIVA().multiply(new BigDecimal(getCantidad()));
+		}
+		return null;
 	}
 
 }

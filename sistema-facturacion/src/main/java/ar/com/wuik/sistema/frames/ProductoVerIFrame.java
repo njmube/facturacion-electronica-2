@@ -42,13 +42,10 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private JButton btnCancelar;
 	private JButton btnGuardar;
 	private JPanel panelDatos;
-	private JComboBox cmbTipoProd;
-	private JLabel lblTipoProd;
 	private JTextField txtDescripcion;
 	private JLabel lblDescripcion;
 
 	private static final String CAMPO_IVA = "iva";
-	private static final String CAMPO_TIPO_PROD = "tipoProducto";
 	private static final String CAMPO_DESCRIPCION = "descripcion";
 	private static final String CAMPO_CODIGO = "codigo";
 	private static final String CAMPO_UBICACION = "ubicacion";
@@ -62,7 +59,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	private JComboBox cmbTipoIva;
 	private JLabel lblUbicacion;
 	private JTextField txtUbicacion;
-	private JButton btnNewButton;
 
 	/**
 	 * @wbp.parser.constructor
@@ -107,7 +103,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			WModel model = populateModel();
 			model.addValue(CAMPO_CODIGO, producto.getCodigo());
 			model.addValue(CAMPO_IVA, producto.getTipoIVA().getId());
-			model.addValue(CAMPO_TIPO_PROD, producto.getTipoProducto().getId());
 			model.addValue(CAMPO_DESCRIPCION, producto.getDescripcion());
 			model.addValue(CAMPO_UBICACION, producto.getUbicacion());
 			populateComponents(model);
@@ -116,37 +111,17 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		}
 	}
 
-	public void loadTiposProducto(Long idTipoProducto) {
-		getCmbTipoProd().removeAllItems();
-		List<WOption> items = getTiposProducto();
-		if (WUtils.isNotEmpty(items)) {
-			for (WOption wOption : items) {
-				getCmbTipoProd().addItem(wOption);
-			}
-		} else {
-			getCmbTipoProd().addItem(WOption.getWOptionSelecione());
-		}
-		if (null != idTipoProducto) {
-			getCmbTipoProd().setSelectedItem(new WOption(idTipoProducto));
-		}
-	}
-
-	public void loadTiposProducto() {
-		loadTiposProducto(null);
-	}
-
 	private void initializate(String title) {
 		setTitle(title);
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				ClienteIFrame.class.getResource("/icons/productos.png")));
-		setBounds(0, 0, 452, 290);
+		setBounds(0, 0, 452, 256);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getBtnCancelar());
 		getContentPane().add(getBtnGuardar());
 		getContentPane().add(getPanelDatos());
-		loadTiposProducto();
 		loadTiposIva();
 	}
 
@@ -166,7 +141,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 	protected boolean validateModel(WModel model) {
 		String codigo = model.getValue(CAMPO_CODIGO);
 		String descripcion = model.getValue(CAMPO_DESCRIPCION);
-		WOption tipoProducto = model.getValue(CAMPO_TIPO_PROD);
 
 		List<String> messages = new ArrayList<String>();
 
@@ -193,10 +167,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			messages.add("Debe ingresar una Descripción");
 		}
 
-		if (WOption.getIdWOptionSeleccion().equals(tipoProducto.getValue())) {
-			messages.add("Debe seleccionar un Tipo Producto");
-		}
-
 		WTooltipUtils.showMessages(messages, btnGuardar, MessageType.ERROR);
 
 		return WUtils.isEmpty(messages);
@@ -217,7 +187,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCancelar.setIcon(new ImageIcon(ProductoVerIFrame.class
 					.getResource("/icons/cancel2.png")));
-			btnCancelar.setBounds(224, 222, 103, 30);
+			btnCancelar.setBounds(224, 187, 103, 30);
 		}
 		return btnCancelar;
 	}
@@ -227,7 +197,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(ProductoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(336, 222, 103, 30);
+			btnGuardar.setBounds(336, 187, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 
 				@Override
@@ -250,13 +220,11 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 				String codigo = model.getValue(CAMPO_CODIGO);
 				String descripcion = model.getValue(CAMPO_DESCRIPCION);
 				WOption tipoIva = model.getValue(CAMPO_IVA);
-				WOption tipoProducto = model.getValue(CAMPO_TIPO_PROD);
 				String ubicacion = model.getValue(CAMPO_UBICACION);
 
 				producto.setDescripcion(descripcion);
 				producto.setTipoIVA(TipoIVAEnum.fromValue(tipoIva.getValue()
 						.intValue()));
-				producto.setIdTipo(tipoProducto.getValue());
 				producto.setCodigo(codigo);
 				producto.setUbicacion(ubicacion);
 
@@ -268,11 +236,6 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 
 				if (null != productoIFrame) {
 					productoIFrame.search();
-				} else if (null != comprobanteVerIFrame) {
-					comprobanteVerIFrame.search();
-					comprobanteVerIFrame.addDetalleProducto(producto.getId());
-				} else if (null != remitoClienteVerIFrame) {
-					remitoClienteVerIFrame.search();
 				}
 				hideFrame();
 			} catch (BusinessException bexc) {
@@ -286,10 +249,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			panelDatos = new JPanel();
 			panelDatos.setBorder(new TitledBorder(null, "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDatos.setBounds(11, 8, 428, 203);
+			panelDatos.setBounds(11, 8, 428, 168);
 			panelDatos.setLayout(null);
-			panelDatos.add(getCmbTipoProd());
-			panelDatos.add(getLblTipoProd());
 			panelDatos.add(getTxtDescripcion());
 			panelDatos.add(getLblDescripcion());
 			panelDatos.add(getLblCodigo());
@@ -298,27 +259,8 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			panelDatos.add(getCmbTipoIva());
 			panelDatos.add(getLblUbicacion());
 			panelDatos.add(getTxtUbicacion());
-			panelDatos.add(getBtnNewButton());
 		}
 		return panelDatos;
-	}
-
-	private JComboBox getCmbTipoProd() {
-		if (cmbTipoProd == null) {
-			cmbTipoProd = new JComboBox();
-			cmbTipoProd.setBounds(148, 95, 230, 25);
-			cmbTipoProd.setName(CAMPO_TIPO_PROD);
-		}
-		return cmbTipoProd;
-	}
-
-	private JLabel getLblTipoProd() {
-		if (lblTipoProd == null) {
-			lblTipoProd = new JLabel("* Tipo:");
-			lblTipoProd.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblTipoProd.setBounds(10, 95, 128, 25);
-		}
-		return lblTipoProd;
 	}
 
 	private JTextField getTxtDescripcion() {
@@ -385,7 +327,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		if (lblIVA == null) {
 			lblIVA = new JLabel("* IVA: %");
 			lblIVA.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblIVA.setBounds(10, 131, 128, 25);
+			lblIVA.setBounds(10, 95, 128, 25);
 		}
 		return lblIVA;
 	}
@@ -394,7 +336,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		if (cmbTipoIva == null) {
 			cmbTipoIva = new JComboBox();
 			cmbTipoIva.setName(CAMPO_IVA);
-			cmbTipoIva.setBounds(148, 131, 125, 25);
+			cmbTipoIva.setBounds(148, 95, 125, 25);
 		}
 		return cmbTipoIva;
 	}
@@ -403,7 +345,7 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 		if (lblUbicacion == null) {
 			lblUbicacion = new JLabel("Ubicaci\u00F3n:");
 			lblUbicacion.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblUbicacion.setBounds(10, 167, 128, 25);
+			lblUbicacion.setBounds(10, 131, 128, 25);
 		}
 		return lblUbicacion;
 	}
@@ -414,25 +356,9 @@ public class ProductoVerIFrame extends WAbstractModelIFrame {
 			txtUbicacion.setName(CAMPO_UBICACION);
 			txtUbicacion.setColumns(10);
 			txtUbicacion.setDocument(new WTextFieldLimit(45));
-			txtUbicacion.setBounds(148, 167, 230, 25);
+			txtUbicacion.setBounds(148, 131, 230, 25);
 		}
 		return txtUbicacion;
-	}
-
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					addModalIFrame(new TipoProductoVerIFrame(
-							ProductoVerIFrame.this));
-				}
-			});
-			btnNewButton.setIcon(new ImageIcon(ProductoVerIFrame.class
-					.getResource("/icons/add.png")));
-			btnNewButton.setBounds(388, 96, 26, 25);
-		}
-		return btnNewButton;
 	}
 
 }

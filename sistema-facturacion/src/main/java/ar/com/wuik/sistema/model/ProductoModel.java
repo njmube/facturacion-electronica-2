@@ -24,9 +24,9 @@ public class ProductoModel extends WTableModel<Producto> {
 	protected Object[] getRow(Producto t, Object[] fila) {
 		fila[0] = t.getCodigo();
 		fila[1] = t.getDescripcion();
-		fila[2] = t.getTipoProducto().getNombre();
-		fila[3] = t.getUbicacion();
-		fila[4] = t.getTipoIVA().getDescripcion();
+//		fila[2] = t.getTipoProducto().getNombre();
+//		fila[3] = t.getUbicacion();
+//		fila[4] = t.getTipoIVA().getDescripcion();
 		fila[5] = t.getId();
 		return fila;
 	}

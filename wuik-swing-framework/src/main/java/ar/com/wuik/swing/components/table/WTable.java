@@ -1,5 +1,7 @@
 package ar.com.wuik.swing.components.table;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -15,6 +17,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -22,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ar.com.wuik.swing.events.WTableStatisticsUpdaterEvent;
+import ar.com.wuik.swing.listeners.WModelListener;
 import ar.com.wuik.swing.listeners.WTableListener;
 import ar.com.wuik.swing.utils.WUtils;
 
@@ -60,7 +64,6 @@ public final class WTable<T> extends JTable {
 					+ " ]", iaexc);
 		}
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
 
 		WTableModel<T> model = (WTableModel<T>) getModel();
 		int columnCount = getModel().getColumnCount();
@@ -79,7 +82,21 @@ public final class WTable<T> extends JTable {
 		}
 		resizeColumns();
 		resizeRows();
-//		showColumnsSize();
+		// showColumnsSize();
+	}
+
+	/**
+	 * @see javax.swing.JTable#changeSelection(int, int, boolean, boolean)
+	 */
+	@Override
+	public void changeSelection(int row, int column, boolean toggle,
+			boolean extend) {
+		super.changeSelection(row, column, toggle, extend);
+
+		if (editCellAt(row, column)) {
+			Component editor = getEditorComponent();
+			editor.requestFocusInWindow();
+		}
 	}
 
 	/**
@@ -309,6 +326,20 @@ public final class WTable<T> extends JTable {
 		}
 	}
 
+	@Override
+	public Component prepareRenderer(TableCellRenderer renderer, int row,
+			int col) {
+		Component comp = super.prepareRenderer(renderer, row, col);
+
+		WTableModel<T> model = (WTableModel<T>) getModel();
+		if (model.isColumnColored(col)) {
+			Color columnColor = model.getColumnColor(row, col);
+			Object value = getModel().getValueAt(row, col);
+			comp.setBackground(columnColor);
+		}
+		return comp;
+	}
+
 	/**
 	 * Obtiene todos los Items de la WTable.
 	 * 
@@ -317,5 +348,30 @@ public final class WTable<T> extends JTable {
 	public List<Object[]> getItems() {
 		WTableModel<T> model = getWTableModel();
 		return model.getItems();
+	}
+
+	/**
+	 * //TODO: Describir el metodo removeSelection
+	 */
+	public void removeSelection() {
+		WTableModel<T> model = getWTableModel();
+		int[] selection = getSelectedRows();
+		for (int index : selection) {
+			model.rows.remove(index);
+		}
+		model.fireTableStructureChanged();
+		resizeColumns();
+	}
+
+	/**
+	 * //TODO: Describir el metodo addWModelListener
+	 * 
+	 * @param modelListener
+	 */
+	public void addWModelListener(WModelListener modelListener) {
+		if (null != modelListener) {
+			WTableModel<T> model = getWTableModel();
+			model.addModelListener(modelListener);
+		}
 	}
 }

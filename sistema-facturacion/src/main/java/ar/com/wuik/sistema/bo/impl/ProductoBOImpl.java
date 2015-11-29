@@ -15,6 +15,7 @@ import ar.com.wuik.sistema.exceptions.DataAccessException;
 import ar.com.wuik.sistema.filters.ProductoFilter;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.sistema.utils.HibernateUtil;
+import ar.com.wuik.swing.utils.WUtils;
 
 public class ProductoBOImpl implements ProductoBO {
 
@@ -118,8 +119,7 @@ public class ProductoBOImpl implements ProductoBO {
 		try {
 			return productoDAO.estaEnUso(id);
 		} catch (DataAccessException daexc) {
-			LOGGER.error(
-					"estaEnUso() - Error al verificar el uso de Producto",
+			LOGGER.error("estaEnUso() - Error al verificar el uso de Producto",
 					daexc);
 			throw new BusinessException(daexc,
 					"Error al verificar el uso de Producto");
@@ -232,6 +232,24 @@ public class ProductoBOImpl implements ProductoBO {
 					daexc);
 			throw new BusinessException(daexc,
 					"Error al actualizar Stock de Producto");
+		} finally {
+			HibernateUtil.closeSession();
+		}
+	}
+
+	@Override
+	public Producto obtenerPorCodigo(String codigo) throws BusinessException {
+		try {
+			ProductoFilter filter = new ProductoFilter();
+			filter.setCodigo(codigo);
+			List<Producto> productos = productoDAO.search(filter);
+			if (WUtils.isNotEmpty(productos)) {
+				return productos.get(0);
+			}
+			return null;
+		} catch (DataAccessException daexc) {
+			LOGGER.error("buscar() - Error al buscar Productos", daexc);
+			throw new BusinessException(daexc, "Error al buscar Productos");
 		} finally {
 			HibernateUtil.closeSession();
 		}

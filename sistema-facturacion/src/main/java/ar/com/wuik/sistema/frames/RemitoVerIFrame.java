@@ -2,8 +2,6 @@ package ar.com.wuik.sistema.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,11 +28,7 @@ import ar.com.wuik.sistema.entities.DetalleRemito;
 import ar.com.wuik.sistema.entities.Producto;
 import ar.com.wuik.sistema.entities.Remito;
 import ar.com.wuik.sistema.exceptions.BusinessException;
-import ar.com.wuik.sistema.exceptions.ReportException;
-import ar.com.wuik.sistema.filters.ProductoFilter;
 import ar.com.wuik.sistema.model.DetalleRemitoModel;
-import ar.com.wuik.sistema.model.ProductoDetalleModel;
-import ar.com.wuik.sistema.reportes.RemitoReporte;
 import ar.com.wuik.sistema.utils.AbstractFactory;
 import ar.com.wuik.swing.components.WModel;
 import ar.com.wuik.swing.components.WTextFieldLimit;
@@ -42,6 +36,7 @@ import ar.com.wuik.swing.components.table.WTablePanel;
 import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
+import ar.com.wuik.swing.listeners.WModelListener;
 import ar.com.wuik.swing.listeners.WTableListener;
 import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
@@ -76,9 +71,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private Long idCliente;
 	private JLabel lblCantidad;
 	private WTablePanel<DetalleRemito> tblDetalle;
-	private WTablePanel<Producto> tblProducto;
-	private JTextField textField;
-	private JLabel lblBuscar;
 
 	/**
 	 * @wbp.parser.constructor
@@ -148,7 +140,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		setBorder(new LineBorder(null, 1, true));
 		setFrameIcon(new ImageIcon(
 				RemitoVerIFrame.class.getResource("/icons/remitos.png")));
-		setBounds(0, 0, 758, 619);
+		setBounds(0, 0, 758, 458);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnlBusqueda());
@@ -191,7 +183,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.setBorder(new TitledBorder(UIManager
 					.getBorder("TitledBorder.border"), "Datos",
 					TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlBusqueda.setBounds(10, 11, 734, 531);
+			pnlBusqueda.setBounds(10, 11, 734, 368);
 			pnlBusqueda.setLayout(null);
 			pnlBusqueda.add(getLblNro());
 			pnlBusqueda.add(getTxtNro());
@@ -203,9 +195,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			pnlBusqueda.add(getTxtCantidad());
 			pnlBusqueda.add(getLblCantidad());
 			pnlBusqueda.add(getTblDetalle());
-			pnlBusqueda.add(getTblProducto());
-			pnlBusqueda.add(getTextField());
-			pnlBusqueda.add(getLblBuscar());
 		}
 		return pnlBusqueda;
 	}
@@ -240,7 +229,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			});
 			btnCerrar.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/cancel.png")));
-			btnCerrar.setBounds(528, 553, 103, 30);
+			btnCerrar.setBounds(528, 390, 103, 30);
 		}
 		return btnCerrar;
 	}
@@ -250,7 +239,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			btnGuardar = new JButton("Guardar");
 			btnGuardar.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/ok.png")));
-			btnGuardar.setBounds(641, 553, 103, 30);
+			btnGuardar.setBounds(641, 390, 103, 30);
 			btnGuardar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					WModel model = populateModel();
@@ -294,7 +283,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 	@Override
 	protected JComponent getFocusComponent() {
-		return getTextField();
+		return null;
 	}
 
 	private JButton getBtnFechaEmision() {
@@ -337,7 +326,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			lblObservaciones.setIcon(new ImageIcon(RemitoVerIFrame.class
 					.getResource("/icons/observaciones.png")));
 			lblObservaciones.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblObservaciones.setBounds(10, 462, 121, 25);
+			lblObservaciones.setBounds(10, 291, 121, 25);
 		}
 		return lblObservaciones;
 	}
@@ -355,7 +344,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
-			scrollPane.setBounds(142, 462, 192, 60);
+			scrollPane.setBounds(142, 291, 192, 60);
 			scrollPane.setViewportView(getTxaObservaciones());
 		}
 		return scrollPane;
@@ -370,7 +359,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						Long selectedItem = tblDetalle.getSelectedItemID();
+						Object[] selectedItem = tblDetalle.getSelectedItem();
 						if (null != selectedItem) {
 							int result = JOptionPane
 									.showConfirmDialog(
@@ -380,9 +369,9 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 											JOptionPane.OK_CANCEL_OPTION,
 											JOptionPane.WARNING_MESSAGE);
 							if (result == JOptionPane.OK_OPTION) {
-								DetalleRemito detalle = getDetalleById(selectedItem);
-								remito.getDetalles().remove(detalle);
+								remito.getDetalles().remove(selectedItem[3]);
 								refreshDetalles();
+								tblDetalle.removeSelection();
 							}
 						} else {
 							WTooltipUtils
@@ -393,7 +382,24 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 						}
 					}
 				}, "Eliminar", null);
+		
+		WToolbarButton buttonNuevo = new WToolbarButton("Nuevo Detalle",
+				new ImageIcon(WCalendarIFrame.class
+						.getResource("/icons/add.png")),
+				new ActionListener() {
 
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						DetalleRemito detalle = new DetalleRemito();
+						detalle.setRemito(remito);
+						List<DetalleRemito> data = new ArrayList<DetalleRemito>();
+						data.add(detalle);
+						remito.getDetalles().add(detalle);
+						getTblDetalle().addDataNoRemove(data);
+					}
+				}, "Nunevo", null);
+
+		toolbarButtons.add(buttonNuevo);
 		toolbarButtons.add(buttonEliminar);
 		return toolbarButtons;
 	}
@@ -414,7 +420,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 			txtCantidad.setText("0");
 			txtCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
 			txtCantidad.setEditable(false);
-			txtCantidad.setBounds(594, 496, 125, 25);
+			txtCantidad.setBounds(599, 291, 125, 25);
 			txtCantidad.setColumns(10);
 			txtCantidad.setFont(WFrameUtils.getCustomFont(FontSize.LARGE,
 					Font.BOLD));
@@ -426,7 +432,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		if (lblCantidad == null) {
 			lblCantidad = new JLabel("Cantidad:");
 			lblCantidad.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblCantidad.setBounds(508, 496, 76, 25);
+			lblCantidad.setBounds(513, 291, 76, 25);
 		}
 		return lblCantidad;
 	}
@@ -435,7 +441,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		if (tblDetalle == null) {
 			tblDetalle = new WTablePanel(DetalleRemitoModel.class, "Detalles");
 			tblDetalle.addToolbarButtons(getToolbarButtonsDetalles());
-			tblDetalle.setBounds(10, 266, 714, 185);
+			tblDetalle.setBounds(10, 95, 714, 185);
 			tblDetalle.addWTableListener(new WTableListener() {
 
 				@Override
@@ -450,28 +456,22 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 							RemitoVerIFrame.this));
 				}
 			});
-		}
-		return tblDetalle;
-	}
-
-	private WTablePanel<Producto> getTblProducto() {
-		if (tblProducto == null) {
-			tblProducto = new WTablePanel(ProductoDetalleModel.class);
-			tblProducto.addWTableListener(new WTableListener() {
+			tblDetalle.addWModelListener(new WModelListener() {
 
 				@Override
-				public void singleClickListener(Object[] selectedItem) {
+				public void genericEvent(Object o) {
+					String codigo = (String) o;
+					addModalIFrame(new ProductoVerIFrame(
+							RemitoVerIFrame.this, codigo));
 				}
 
 				@Override
-				public void doubleClickListener(Object[] selectedItem) {
-					Long selectedId = (Long) selectedItem[selectedItem.length - 1];
-					addDetalle(selectedId);
+				public void dataUpdated() {
+					calcularTotales();
 				}
 			});
-			tblProducto.setBounds(10, 131, 714, 131);
 		}
-		return tblProducto;
+		return tblDetalle;
 	}
 
 	protected void addDetalle(Long selectedId) {
@@ -509,24 +509,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		refreshDetalles();
 	}
 
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.addKeyListener(new KeyAdapter() {
-
-				@Override
-				public void keyReleased(KeyEvent e) {
-					search();
-
-				}
-			});
-			textField.setDocument(new WTextFieldLimit(100));
-			textField.setBounds(141, 95, 272, 25);
-			textField.setColumns(10);
-		}
-		return textField;
-	}
-
 	protected void addDetalleProducto(Long selectedId) {
 		if (existeDetalleProducto(selectedId)) {
 			addDetalle(selectedId);
@@ -546,25 +528,6 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		return false;
 	}
 
-	private List<Producto> productos = null;
-
-	public void search() {
-		String toSearch = textField.getText();
-		if (WUtils.isNotEmpty(toSearch)) {
-			ProductoBO productoBO = AbstractFactory
-					.getInstance(ProductoBO.class);
-			ProductoFilter filter = new ProductoFilter();
-			filter.setDescripcionCodigo(toSearch);
-			try {
-				productos = productoBO.buscar(filter);
-				getTblProducto().addData(productos);
-			} catch (BusinessException e1) {
-			}
-		} else {
-			getTblProducto().addData(productos);
-		}
-	}
-
 	private void calcularTotales() {
 		int cantidad = 0;
 		List<DetalleRemito> detalles = remito.getDetalles();
@@ -579,28 +542,7 @@ public class RemitoVerIFrame extends WAbstractModelIFrame {
 		calcularTotales();
 	}
 
-	private JLabel getLblBuscar() {
-		if (lblBuscar == null) {
-			lblBuscar = new JLabel("B\u00FAsqueda:");
-			lblBuscar.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblBuscar.setBounds(10, 95, 121, 25);
-		}
-		return lblBuscar;
-	}
-
 	@Override
 	public void enterPressed() {
-
-		if (getTextField().hasFocus()) {
-			if (WUtils.isEmpty(productos)) {
-				addModalIFrame(new ProductoVerIFrame(RemitoVerIFrame.this,
-						textField.getText()));
-			} else {
-				if (productos.size() == 1) {
-					Long idProducto = productos.get(0).getId();
-					addDetalleProducto(idProducto);
-				}
-			}
-		}
 	}
 }

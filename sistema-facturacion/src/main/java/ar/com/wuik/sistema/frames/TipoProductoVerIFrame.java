@@ -161,7 +161,6 @@ public class TipoProductoVerIFrame extends WAbstractModelIFrame {
 				if (null != tipoProductoIFrame) {
 					tipoProductoIFrame.search();
 				} else if (null != productoVerIFrame) {
-					productoVerIFrame.loadTiposProducto(tipoProducto.getId());
 				}
 				hideFrame();
 			} catch (BusinessException bexc) {

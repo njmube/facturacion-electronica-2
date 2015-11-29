@@ -39,4 +39,27 @@ public enum TipoIVAEnum {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return this.getDescripcion();
+	}
+
+	public static TipoIVAEnum fromValue(String aValue) {
+		if (aValue.equals(IVA_21.descripcion)) {
+			return TipoIVAEnum.IVA_21;
+		} else if (aValue.equals(IVA_105.descripcion)) {
+			return TipoIVAEnum.IVA_105;
+		}
+		return null;
+	}
+
+	public static TipoIVAEnum fromMonto(BigDecimal aValue) {
+		if (IVA_105.importe.equals(aValue)) {
+			return IVA_105;
+		} else if (IVA_21.importe.equals(aValue)) {
+			return IVA_21;
+		}
+		return null;
+	}
+
 }

@@ -10,6 +10,8 @@ import ar.com.wuik.sistema.filters.ProductoFilter;
 public interface ProductoBO {
 
 	Producto obtener(Long id) throws BusinessException;
+	
+	Producto obtenerPorCodigo(String codigo) throws BusinessException;
 
 	List<Producto> buscar(ProductoFilter filter) throws BusinessException;
 

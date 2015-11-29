@@ -31,12 +31,17 @@ public class RemitoModel extends WTableModel<Remito> {
 		fila[2] = t.getCantidad();
 
 		if (null != t.getComprobante()) {
-			fila[3] = (WUtils
+			String nroComprobante = (WUtils
 					.isNotEmpty(t.getComprobante().getNroCompFormato()) ? t
 					.getComprobante().getNroCompFormato() : t.getComprobante()
 					.getNroComprobante());
+			if (WUtils.isEmpty(nroComprobante)) {
+				fila[3] = "SIN FACTURAR";
+			} else {
+				fila[3] = nroComprobante;
+			}
 		} else {
-			fila[3] = "";
+			fila[3] = "SIN COMPROBANTE";
 		}
 		fila[4] = t.isActivo() ? new ImageIcon(this.getClass().getResource(
 				"/icons/activo.png")) : new ImageIcon(this.getClass()

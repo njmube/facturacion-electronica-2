@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import ar.com.wuik.swing.components.security.WSecure;
 import ar.com.wuik.swing.events.WTableStatisticsUpdaterEvent;
+import ar.com.wuik.swing.listeners.WModelListener;
 import ar.com.wuik.swing.listeners.WTableListener;
 import ar.com.wuik.swing.utils.WFrameUtils;
 import ar.com.wuik.swing.utils.WFrameUtils.FontSize;
@@ -130,6 +131,10 @@ public final class WTablePanel<T> extends JPanel implements WSecure {
 	public void addWTableListener(WTableListener tableListener) {
 		table.addWListener(tableListener);
 	}
+	
+	public void addWModelListener(WModelListener modelListener){
+		table.addWModelListener(modelListener);
+	}
 
 	/**
 	 * Agrega los registros a la WTable.
@@ -148,6 +153,10 @@ public final class WTablePanel<T> extends JPanel implements WSecure {
 		} else {
 			table.addData(new ArrayList<T>(), Boolean.FALSE);
 		}
+	}
+	
+	public void removeSelection(){
+		table.removeSelection();
 	}
 
 	public void addDataNoRemove(List<T> data) {
@@ -219,4 +228,5 @@ public final class WTablePanel<T> extends JPanel implements WSecure {
 			}
 		}
 	}
+	
 }

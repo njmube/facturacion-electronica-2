@@ -25,6 +25,11 @@ public class DetalleRemito extends BaseEntity {
 	@Transient
 	private Long temporalId;
 
+	public DetalleRemito() {
+		this.cantidad = 1;
+		this.temporalId = System.currentTimeMillis();
+	}
+
 	public Remito getRemito() {
 		return remito;
 	}
@@ -56,8 +61,8 @@ public class DetalleRemito extends BaseEntity {
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
-	
-	public Long getCoalesceId(){
+
+	public Long getCoalesceId() {
 		return (null != getId()) ? getId() : temporalId;
 	}
 

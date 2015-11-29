@@ -23,7 +23,7 @@ public class ProductoDetalleModel extends WTableModel<Producto> {
 	protected Object[] getRow(Producto t, Object[] fila) {
 		fila[0] = t.getCodigo();
 		fila[1] = t.getDescripcion();
-		fila[2] = t.getUbicacion();
+//		fila[2] = t.getUbicacion();
 		fila[3] = t.getId();
 		return fila;
 	}
