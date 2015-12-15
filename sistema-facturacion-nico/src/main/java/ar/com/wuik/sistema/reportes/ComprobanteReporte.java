@@ -7,6 +7,7 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -96,8 +97,10 @@ public class ComprobanteReporte {
 
 			JasperPrint jasperPrint = WJasperUtils.concatReports(
 					jasperPrintOriginal, jasperPrintDuplicado);
-
-			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
+			
+			JasperPrintManager.printReport(jasperPrint, Boolean.TRUE);
+			
+//			JasperViewer.viewReport(jasperPrint, Boolean.FALSE);
 		} catch (BusinessException bexc) {
 			throw new ReportException(bexc, "Error al obtener Comprobante");
 		} catch (JRException jrexc) {

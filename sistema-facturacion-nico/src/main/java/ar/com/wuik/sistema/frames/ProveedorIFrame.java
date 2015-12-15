@@ -185,7 +185,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 					}
 				}, "Editar", null);
 
-		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Cliente",
+		WToolbarButton buttonDelete = new WToolbarButton("Eliminar Proveedor",
 				new ImageIcon(WCalendarIFrame.class
 						.getResource("/icons/delete.png")),
 				new ActionListener() {
@@ -240,7 +240,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 						} else {
 							WTooltipUtils
 									.showMessage(
-											"Debe seleccionar un solo Cliente",
+											"Debe seleccionar un solo Proveedor",
 											(JButton) e.getSource(),
 											MessageType.ALERTA);
 						}
@@ -317,7 +317,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnFactura() {
 		if (btnFactura == null) {
 			btnFactura = new JButton("Factura");
-			btnFactura.setIcon(new ImageIcon(ClienteIFrame.class
+			btnFactura.setIcon(new ImageIcon(ProveedorIFrame.class
 					.getResource("/icons32/facturas.png")));
 			btnFactura.setBounds(10, 125, 147, 46);
 			btnFactura.addActionListener(new ActionListener() {
@@ -328,7 +328,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 								TipoComprobante.FACTURA));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un solo Cliente",
+								"Debe seleccionar un solo Proveedor",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
@@ -341,7 +341,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnNotaCred() {			
 		if (btnNotaCred == null) {
 			btnNotaCred = new JButton("Nota de Cr\u00E9dito");
-			btnNotaCred.setIcon(new ImageIcon(ClienteIFrame.class
+			btnNotaCred.setIcon(new ImageIcon(ProveedorIFrame.class
 					.getResource("/icons32/notas_credito.png")));
 			btnNotaCred.setBounds(178, 125, 147, 46);
 			btnNotaCred.addActionListener(new ActionListener() {
@@ -352,7 +352,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 								TipoComprobante.NOTA_CREDITO));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un Cliente",
+								"Debe seleccionar un Proveedor",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}
@@ -365,7 +365,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 	private JButton getBtnNotaDeb() {
 		if (btnNotaDeb == null) {
 			btnNotaDeb = new JButton("Nota de  D\u00E9bito");
-			btnNotaDeb.setIcon(new ImageIcon(ClienteIFrame.class
+			btnNotaDeb.setIcon(new ImageIcon(ProveedorIFrame.class
 					.getResource("/icons32/notas_debito.png")));
 			btnNotaDeb.setBounds(347, 125, 147, 46);
 			btnNotaDeb.addActionListener(new ActionListener() {
@@ -376,7 +376,7 @@ public class ProveedorIFrame extends WAbstractModelIFrame implements WSecure {
 								TipoComprobante.NOTA_DEBITO));
 					} else {
 						WTooltipUtils.showMessage(
-								"Debe seleccionar un Cliente",
+								"Debe seleccionar un Proveedor",
 								(JButton) e.getSource(), MessageType.ALERTA);
 					}
 				}

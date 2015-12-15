@@ -1016,7 +1016,11 @@ public class ComprobanteVerIFrame extends WAbstractModelIFrame {
 						try {
 							ComprobanteBO comprobanteBO = AbstractFactory
 									.getInstance(ComprobanteBO.class);
-							comprobanteBO.guardarRegistrarAFIP(comprobante);
+							String observacionesAfip = comprobanteBO
+									.guardarRegistrarAFIP(comprobante);
+							if (WUtils.isNotEmpty(observacionesAfip)) {
+								showGlobalMsg(observacionesAfip);
+							}
 							try {
 								ComprobanteReporte.generarImpresion(comprobante
 										.getId());

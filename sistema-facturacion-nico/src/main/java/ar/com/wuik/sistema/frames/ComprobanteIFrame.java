@@ -36,6 +36,7 @@ import ar.com.wuik.swing.components.table.WToolbarButton;
 import ar.com.wuik.swing.frames.WAbstractModelIFrame;
 import ar.com.wuik.swing.frames.WCalendarIFrame;
 import ar.com.wuik.swing.utils.WTooltipUtils;
+import ar.com.wuik.swing.utils.WUtils;
 import ar.com.wuik.swing.utils.WTooltipUtils.MessageType;
 
 public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
@@ -269,8 +270,13 @@ public class ComprobanteIFrame extends WAbstractModelIFrame implements WSecure {
 								if (!comprobante.getEstadoFacturacion().equals(
 										EstadoFacturacion.FACTURADO)) {
 									if (comprobante.isActivo()) {
-										comprobanteBO
+										String observaciones = comprobanteBO
 												.registrarAFIP(comprobante);
+										
+										if (WUtils.isNotEmpty(observaciones)) {
+											showGlobalMsg(observaciones);
+										}
+										
 										try {
 											ComprobanteReporte
 													.generarImpresion(selectedItem);

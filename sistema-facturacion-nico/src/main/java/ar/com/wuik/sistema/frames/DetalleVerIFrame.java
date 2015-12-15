@@ -3,6 +3,7 @@ package ar.com.wuik.sistema.frames;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,14 +164,15 @@ public class DetalleVerIFrame extends WAbstractModelIFrame {
 						.intValue()));
 				detalle.setTemporalId(System.currentTimeMillis());
 
-				BigDecimal importeDecimal = BigDecimal.ONE.subtract(detalle
-						.getTipoIVA().getImporteDecimal());
+				
+				BigDecimal importeDecimal = detalle.getTipoIVA()
+						.getImporteDecimal();
 
 				BigDecimal totalConIVA = WUtils.getValue(precioTxt);
 
-				BigDecimal total = totalConIVA.multiply(importeDecimal);
+				BigDecimal total = totalConIVA.divide(importeDecimal, 2 , RoundingMode.HALF_UP);
 
-				detalle.setPrecio(WUtils.getValue(total));
+				detalle.setPrecio(WUtils.getRoundedValue(total));
 
 				comprobanteVerIFrame.addDetalle(detalle);
 			} else if (null != remitoClienteVerIFrame) {

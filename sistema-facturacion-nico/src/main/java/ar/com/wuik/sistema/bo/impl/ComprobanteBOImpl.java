@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import FEV1.dif.afip.gov.ar.entities.AlicuotaIVA;
 import FEV1.dif.afip.gov.ar.entities.ComprobanteAsociado;
 import FEV1.dif.afip.gov.ar.entities.Resultado;
+import FEV1.dif.afip.gov.ar.entities.Resultado.Estado;
 import FEV1.dif.afip.gov.ar.entities.TipoComprobanteEnum;
 import FEV1.dif.afip.gov.ar.entities.TipoConceptoEnum;
 import FEV1.dif.afip.gov.ar.entities.TipoDocumentoEnum;
@@ -74,8 +75,7 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			return comprobanteDAO.getById(id);
 		} catch (DataAccessException daexc) {
 			LOGGER.error("obtener() - Error al obtener Comprobante", daexc);
-			throw new BusinessException(daexc,
-					"Error al obtener Comprobante");
+			throw new BusinessException(daexc, "Error al obtener Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -103,17 +103,18 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
 			LOGGER.error("guardar() - Error al guardar Comprobante", daexc);
-			throw new BusinessException(daexc,
-					"Error al guardar Comprobante");
+			throw new BusinessException(daexc, "Error al guardar Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}
 	}
 
 	@Override
-	public void guardarRegistrarAFIP(Comprobante comprobante)
+	public String guardarRegistrarAFIP(Comprobante comprobante)
 			throws BusinessException {
 
+		String observaciones = "";
+		
 		try {
 			HibernateUtil.startTransaction();
 
@@ -139,12 +140,18 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 				errorServicios = Boolean.TRUE;
 			}
 
-			// Si existen errores en el resultado los retorno como Exception.
-			if (null != resultado && WUtils.isNotEmpty(resultado.getErrores())) {
-				HibernateUtil.rollbackTransaction();
-				HibernateUtil.closeSession();
-				LOGGER.error("guardarRegistrarAFIP() - Error al registrar Comprobante");
-				throw new BusinessException(resultado.getMensajeErrores());
+			if (!resultado.getEstado().equals(Estado.A)) {
+				// Si existen errores en el resultado los retorno como
+				// Exception.
+				if (null != resultado
+						&& WUtils.isNotEmpty(resultado.getErrores())) {
+					HibernateUtil.rollbackTransaction();
+					HibernateUtil.closeSession();
+					LOGGER.error("guardarRegistrarAFIP() - Error al registrar Comprobante");
+					throw new BusinessException(resultado.getMensajeErrores());
+				}
+			} else {
+				observaciones = resultado.getMensajeErrores();
 			}
 
 			// Si hubo errores en los Servicios, marco el Comprobante con
@@ -179,15 +186,18 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			LOGGER.error(
 					"guardarRegistrarAFIP() - Error al registrar Comprobante",
 					daexc);
-			throw new BusinessException(daexc,
-					"Error al registrar Comprobante");
+			throw new BusinessException(daexc, "Error al registrar Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}
+		return observaciones;
 	}
 
 	@Override
-	public void registrarAFIP(Comprobante comprobante) throws BusinessException {
+	public String registrarAFIP(Comprobante comprobante) throws BusinessException {
+		
+		String obvervaciones = "";
+		
 		try {
 			HibernateUtil.startTransaction();
 
@@ -232,12 +242,17 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 					errorServicios = Boolean.TRUE;
 				}
 			}
+			
+			if (!resultado.getEstado().equals(Estado.A)) {
 
 			// Si existen errores en el resultado los retorno como Exception.
 			if (null != resultado && WUtils.isNotEmpty(resultado.getErrores())) {
 				HibernateUtil.rollbackTransaction();
 				LOGGER.error("registrarAFIP() - Error al registrar Comprobante");
 				throw new BusinessException(resultado.getMensajeErrores());
+			}
+			} else {
+				obvervaciones = resultado.getMensajeErrores();
 			}
 
 			// Si hubo errores en los Servicios, marco el Comprobante con
@@ -268,14 +283,13 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error(
-					"registrarAFIP() - Error al registrar Comprobante",
+			LOGGER.error("registrarAFIP() - Error al registrar Comprobante",
 					daexc);
-			throw new BusinessException(daexc,
-					"Error al registrar Comprobante");
+			throw new BusinessException(daexc, "Error al registrar Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}
+		return obvervaciones;
 	}
 
 	private FEV1.dif.afip.gov.ar.entities.Comprobante crearComprobante(
@@ -509,10 +523,8 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			HibernateUtil.commitTransaction();
 		} catch (DataAccessException daexc) {
 			HibernateUtil.rollbackTransaction();
-			LOGGER.error("cancelar() - Error al cancelar Comprobante",
-					daexc);
-			throw new BusinessException(daexc,
-					"Error al cancelar Comprobante");
+			LOGGER.error("cancelar() - Error al cancelar Comprobante", daexc);
+			throw new BusinessException(daexc, "Error al cancelar Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}
@@ -550,10 +562,8 @@ public class ComprobanteBOImpl implements ComprobanteBO {
 			Comprobante comprobanteAfip = comprobanteDAO.getById(id);
 			return convertToDTO(comprobanteAfip);
 		} catch (DataAccessException daexc) {
-			LOGGER.error("obtenerDTO() - Error al obtener Comprobante",
-					daexc);
-			throw new BusinessException(daexc,
-					"Error al obtener Comprobante");
+			LOGGER.error("obtenerDTO() - Error al obtener Comprobante", daexc);
+			throw new BusinessException(daexc, "Error al obtener Comprobante");
 		} finally {
 			HibernateUtil.closeSession();
 		}

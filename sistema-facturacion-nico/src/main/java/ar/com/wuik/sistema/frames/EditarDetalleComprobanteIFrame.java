@@ -152,13 +152,9 @@ public class EditarDetalleComprobanteIFrame extends WAbstractModelIFrame {
 
 		if (editaDetalle) {
 			String detalle = model.getValue(CAMPO_PRODUCTO);
-			String iva = model.getValue(CAMPO_IVA);
 			String precio = model.getValue(CAMPO_PRECIO);
 			if (WUtils.isEmpty(detalle)) {
 				messages.add("Debe ingresar un Detalle");
-			}
-			if (WUtils.isEmpty(iva)) {
-				messages.add("Debe ingresar un % de IVA");
 			}
 			if (WUtils.isEmpty(precio)) {
 				messages.add("Debe ingresar un Precio");

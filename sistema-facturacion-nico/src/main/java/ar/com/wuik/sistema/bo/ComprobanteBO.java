@@ -17,9 +17,9 @@ public interface ComprobanteBO {
 
 	void guardar(Comprobante comprobante) throws BusinessException;
 
-	void guardarRegistrarAFIP(Comprobante comprobante) throws BusinessException;
+	String guardarRegistrarAFIP(Comprobante comprobante) throws BusinessException;
 
-	void registrarAFIP(Comprobante comprobante) throws BusinessException;
+	String registrarAFIP(Comprobante comprobante) throws BusinessException;
 
 	void actualizar(Comprobante comprobante) throws BusinessException;
 
