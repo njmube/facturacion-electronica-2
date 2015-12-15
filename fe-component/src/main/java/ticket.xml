@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<loginTicketRequest version="1.0">
+	<header>
+		<source>C=AR, O=VANDERBEKENFRANCISCO, SERIALNUMBER=CUIT 20049746181,
+			CN=VANDERBEKENFRANCISCO</source>
+		<destination>cn=wsaahomo,o=afip,c=ar,serialNumber=CUIT 33693450239</destination>
+		<uniqueId>1444249034</uniqueId>
+		<generationTime>2015-10-07T18:17:12.540-03:00</generationTime>
+		<expirationTime>2015-10-07T18:17:14.325-03:00</expirationTime>
+	</header>
+	<service>wsfe</service>
+</loginTicketRequest>

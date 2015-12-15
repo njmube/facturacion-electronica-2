@@ -187,6 +187,15 @@ public class ServiceRequestParser {
 				.getCotizacion().doubleValue() : comprobante.getTipoMoneda()
 				.getCotizacion().doubleValue());
 
+		if (TipoConceptoEnum.SERVICIO.equals(comprobante.getTipoConcepto())) {
+			detalle.setFchServDesde(Utils.getStringFromDate(
+					comprobante.getFechaDesdeServ(), "yyyyMMdd"));
+			detalle.setFchServHasta(Utils.getStringFromDate(
+					comprobante.getFechaHastaServ(), "yyyyMMdd"));
+			detalle.setFchVtoPago(Utils.getStringFromDate(
+					comprobante.getFechaVtoPago(), "yyyyMMdd"));
+		}
+
 		// Comprobantes Asociados.
 		List<ComprobanteAsociado> comprobantesAsoc = comprobante
 				.getComprobantesAsociados();
@@ -329,11 +338,9 @@ public class ServiceRequestParser {
 					.getImpIVA()));
 			comprobante.setTipoConcepto(TipoConceptoEnum
 					.fromValue(datosComprobante.getConcepto()));
-			comprobante.setImporteSubtotal(BigDecimal.valueOf(
-					datosComprobante.getImpNeto()).subtract(
-					BigDecimal.valueOf(datosComprobante.getImpIVA())));
+			comprobante.setImporteSubtotal(BigDecimal.valueOf(datosComprobante.getImpNeto()));
 			comprobante.setImporteTotal(BigDecimal.valueOf(datosComprobante
-					.getImpNeto()));
+					.getImpTotal()));
 		}
 		return comprobante;
 	}
@@ -409,6 +416,7 @@ public class ServiceRequestParser {
 
 	private static Resultado parseFECAEDetResponse(FECAEDetResponse detalle,
 			FECAECabResponse cabecera, String estado, FECAEResponse response) {
+		
 		Resultado resultado = new Resultado();
 		resultado.setCae(detalle.getCAE());
 		resultado.setNroComprobante(detalle.getCbteDesde());

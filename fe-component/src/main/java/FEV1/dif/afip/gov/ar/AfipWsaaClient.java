@@ -132,7 +132,7 @@ public class AfipWsaaClient {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		try {
 		//
 		// Create XML Message
 		//
@@ -142,7 +142,7 @@ public class AfipWsaaClient {
 		//
 		// Create CMS Message
 		//
-		try {
+		
 			// Create a new empty CMS Message
 			CMSSignedDataGenerator gen = new CMSSignedDataGenerator();
 
@@ -173,15 +173,26 @@ public class AfipWsaaClient {
 	// Create XML Message for AFIP wsaa
 	//
 	public static String create_LoginTicketRequest(String SignerDN,
-			String dstDN, String service, Long TicketTime) {
+			String dstDN, String service, Long TicketTime) throws Exception {
 
 		String LoginTicketRequest_xml;
-
+		
+//		String serverTime = ParametrosUtil.getProperty("time.afip.gov.ar");   
+//		NTPUDPClient timeClient = new NTPUDPClient();
+//		InetAddress inetAddress = InetAddress.getByName(serverTime);
+//		TimeInfo timeInfo = timeClient.getTime(inetAddress);
+//		long returnTime = timeInfo.getMessage().getTransmitTimeStamp().getTime();
+//		Date GenTime = new Date(returnTime);
+		
 		Date GenTime = new Date();
 		GregorianCalendar gentime = new GregorianCalendar();
+		gentime.setTime(GenTime);
 		GregorianCalendar exptime = new GregorianCalendar();
+		exptime.setTime(GenTime);
 		String UniqueId = new Long(GenTime.getTime() / 1000).toString();
 
+		
+		
 		exptime.setTime(new Date(GenTime.getTime() + TicketTime));
 
 		XMLGregorianCalendarImpl XMLGenTime = new XMLGregorianCalendarImpl(
@@ -213,7 +224,7 @@ public class AfipWsaaClient {
 				+ "</service>"
 				+ "</loginTicketRequest>";
 
-		// System.out.println("TRA: " + LoginTicketRequest_xml);
+		 System.out.println("TRA: " + LoginTicketRequest_xml);
 
 		return (LoginTicketRequest_xml);
 	}

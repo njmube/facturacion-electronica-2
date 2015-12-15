@@ -153,6 +153,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 		// Autorizacion.
 		FEAuthRequest authRequest = AuthorizationUtil.getAuthorization();
 
+		System.out.println("TOKEN{" + authRequest.getToken() +"}");
+		System.out.println("SIGN{" + authRequest.getSign() + "}");
+		
 		try {
 
 			// Resultado de los Comprobantes.

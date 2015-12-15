@@ -8,6 +8,9 @@ public final class Comprobante {
 
 	private TipoComprobanteEnum tipoComprobante;
 	private Date fechaComprobante;
+	private Date fechaVtoPago;
+	private Date fechaDesdeServ;
+	private Date fechaHastaServ;
 	private Long docNro;
 	private long nroComprobante;
 	private TipoDocumentoEnum docTipo;
@@ -217,6 +220,30 @@ public final class Comprobante {
 
 	public void setImporteTributos(BigDecimal importeTributos) {
 		this.importeTributos = importeTributos;
+	}
+
+	public Date getFechaVtoPago() {
+		return fechaVtoPago;
+	}
+
+	public void setFechaVtoPago(Date fechaVtoPago) {
+		this.fechaVtoPago = fechaVtoPago;
+	}
+
+	public Date getFechaDesdeServ() {
+		return fechaDesdeServ;
+	}
+
+	public void setFechaDesdeServ(Date fechaDesdeServ) {
+		this.fechaDesdeServ = fechaDesdeServ;
+	}
+
+	public Date getFechaHastaServ() {
+		return fechaHastaServ;
+	}
+
+	public void setFechaHastaServ(Date fechaHastaServ) {
+		this.fechaHastaServ = fechaHastaServ;
 	}
 
 }

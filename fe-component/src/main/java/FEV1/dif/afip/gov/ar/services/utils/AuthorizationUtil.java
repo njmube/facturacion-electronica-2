@@ -99,6 +99,7 @@ public class AuthorizationUtil {
 
 	public static void main(String[] args) throws Exception {
 		
+		System.setProperty("env", "homo");
 		
 //		FacturacionService facturacionService = AbstractFactory
 //				.getInstance(FacturacionService.class);
